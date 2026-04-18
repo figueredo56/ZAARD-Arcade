@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ZAARD HD 6x6</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser-arcade-physics.min.js"></script>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; touch-action: none; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <div id="game-container"></div>
+
+<script>
+    class ZaardMemory extends Phaser.Scene {
+        constructor() { super('ZaardMemory'); }
+
+        preload() {
+            // Imagen Trasera (Logo ZAARD)
+            this.load.image('trasera', 'https://gateway.pinata.cloud/ipfs/bafybeihwgutss2majkvanadmm4rwbp6kpcgywebs3cgpgwdcs45ut3srd4');
+            
+            // CIDs de la colección ZAARD
+            const cids = [
+                'bafybeihehm24qpw57c23mjjomwwka4hngagf34zmkwvfedskn6ze7vf7e4',
+                'bafybeihhyafas5pi3a2vn7tyqodntpuhxrupsxvxrm6vd2gimx7ryzvvn4',
+                'bafybeia5slhxaenhai5i3xnpavjtvdqor2e7oq5pi4vhsukvme6os6qagu',
+                'bafybeidtruvvmesv453nctol23nrn2v7sqt4s75vdydzy4doxrqs32x45i',
+                'bafybeibkz6jikut6rsmj2grzuwlbm42g52ahg7o2kfiwrjvlo4u6byyxtm'
+            ];
+            
+            for (let i = 0; i < 18; i++) {
+                this.load.image(`card${i}`, `https://gateway.pinata.cloud/ipfs/${cids[i % cids.length]}`);
+            }
+
+            let loadingText = this.add.text(window.innerWidth/2, window.innerHeight/2, 'CARGANDO HD...', { fill: '#FFD700' }).setOrigin(0.5);
+            this.load.on('complete', () => loadingText.destroy());
+        }
+
+        create() {
+            this.attemptsFailed = 0;
+            this.matchesFound = 0;
+            this.firstCard = null;
+            this.canMove = true;
+
+            // UI ZAARD INNOVATION
+            this.statusText = this.add.text(25, 50, 'FALLOS: 0/3', { 
+                fontSize: '32px', fill: '#FFD700', fontStyle: 'bold', stroke: '#000', strokeThickness: 6 
+            }).setDepth(10);
+
+            let deck = [];
+            for (let i = 0; i < 18; i++) { deck.push(`card${i}`, `card${i}`); }
+            Phaser.Utils.Array.Shuffle(deck);
+
+            const cols = 6;
+            const spacing = 10;
+            const viewWidth = this.cameras.main.width;
+            const cardSize = (viewWidth - (spacing * (cols + 1))) / cols;
+            
+            const startX = (viewWidth - (cardSize * cols + spacing * (cols - 1))) / 2 + cardSize / 2;
+            const startY = 180 + cardSize / 2;
+
+            for (let i = 0; i < deck.length; i++) {
+                const col = i % cols;
+                const row = Math.floor(i / cols);
+                const x = startX + (col * (cardSize + spacing));
+                const y = startY + (row * (cardSize + spacing));
+                
+                let container = this.add.container(x, y);
+                
+                let back = this.add.image(0, 0, 'trasera').setDisplaySize(cardSize, cardSize);
+                let front = this.add.image(0, 0, deck[i]).setDisplaySize(cardSize, cardSize).setVisible(false);
+                let border = this.add.rectangle(0, 0, cardSize, cardSize).setStrokeStyle(4, 0xFFD700);
+
+                container.add([back, front, border]);
+                container.symbol = deck[i];
+                container.isMatched = false;
+                container.setSize(cardSize, cardSize).setInteractive();
+
+                container.on('pointerdown', () => this.handleFlip(container));
+            }
+        }
+
+        handleFlip(card) {
+            if (!this.canMove || card.isMatched || card === this.firstCard) return;
+            card.list[0].setVisible(false);
+            card.list[1].setVisible(true);
+            if (!this.firstCard) { this.firstCard = card; } 
+            else { this.checkMatch(card); }
+        }
+
+        checkMatch(secondCard) {
+            this.canMove = false;
+            if (this.firstCard.symbol === secondCard.symbol) {
+                this.time.delayedCall(300, () => {
+                    this.firstCard.setAlpha(0.3);
+                    secondCard.setAlpha(0.3);
+                    this.firstCard.isMatched = true;
+                    secondCard.isMatched = true;
+                    this.matchesFound += 2;
+                    this.firstCard = null;
+                    this.canMove = true;
+                    if (this.matchesFound === 36) { 
+                        alert("¡MAESTRO ZAARD! Has completado el reto."); 
+                        location.reload(); 
+                    }
+                });
+            } else {
+                this.time.delayedCall(600, () => {
+                    this.firstCard.list[0].setVisible(true);
+                    this.firstCard.list[1].setVisible(false);
+                    secondCard.list[0].setVisible(true);
+                    secondCard.list[1].setVisible(false);
+                    this.attemptsFailed++;
+                    this.statusText.setText(`FALLOS: ${this.attemptsFailed}/3`);
+                    if (this.attemptsFailed >= 3) { 
+                        alert("GAME OVER - Inténtalo de nuevo"); 
+                        location.reload(); 
+                    }
+                    this.firstCard = null;
+                    this.canMove = true;
+                });
+            }
+        }
+    }
+
+    const config = {
+        type: Phaser.AUTO,
+        width: window.innerWidth * (window.devicePixelRatio || 1),
+        height: window.innerHeight * (window.devicePixelRatio || 1),
+        parent: 'game-container',
+        antialias: false, 
+        pixelArt: true,
+        roundPixels: true,
+        scene: ZaardMemory,
+        backgroundColor: '#000000',
+        scale: {
+            mode: Phaser.Scale.FIT,
+            autoCenter: Phaser.Scale.CENTER_BOTH
+        }
+    };
+
+    new Phaser.Game(config);
+</script>
+</body>
+</html>

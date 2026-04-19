@@ -30,7 +30,7 @@
     <script>
         const config = {
             type: Phaser.AUTO,
-            width: 800, height: 1000, // Formato mÃ¡s vertical para mÃ³viles
+            width: 800, height: 1000, // Formato más vertical para móviles
             backgroundColor: '#050515',
             scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
             scene: { preload: preload, create: create }
@@ -40,14 +40,14 @@
         let firstCard = null, secondCard = null, canMove = false, matches = 0;
 
         function preload() {
-            // Activos Visuales (AquÃ­ pones tus CIDs de Pinata)
+            // Activos Visuales (Aquí pones tus CIDs de Pinata)
             this.load.image('trasera', 'https://via.placeholder.com/150x210/00fbff/050515?text=ZAARD');
             this.load.image('c1', 'https://via.placeholder.com/150x210/ff00ff/ffffff?text=MAGESTUOSO');
             this.load.image('c2', 'https://via.placeholder.com/150x210/7000ff/ffffff?text=ORO');
             this.load.image('c3', 'https://via.placeholder.com/150x210/00ff00/ffffff?text=PLATA');
             this.load.image('c4', 'https://via.placeholder.com/150x210/ffff00/000000?text=COMUN');
 
-            // Sonidos (Placeholder - funcionarÃ¡n cuando subas tus mp3)
+            // Sonidos (Placeholder - funcionarán cuando subas tus mp3)
             this.load.audio('flip', ['https://labs.phaser.io/assets/audio/SoundEffects/key.wav']);
             this.load.audio('success', ['https://labs.phaser.io/assets/audio/SoundEffects/p-ping.mp3']);
         }
@@ -65,7 +65,7 @@
                 fontSize: '30px', fill: '#ffffff' 
             }).setOrigin(0.5).setDepth(21).setInteractive();
 
-            // AnimaciÃ³n de brillo al texto
+            // Animación de brillo al texto
             this.tweens.add({ targets: txtStart, alpha: 0.3, duration: 800, yoyo: true, loop: -1 });
 
             txtStart.on('pointerdown', () => {
@@ -80,7 +80,7 @@
             Phaser.Utils.Array.Shuffle(deck);
 
             for (let i = 0; i < 8; i++) {
-                let x = 220 + (i % 2) * 360; // Ajustado a 2 columnas para mÃ³vil
+                let x = 220 + (i % 2) * 360; // Ajustado a 2 columnas para móvil
                 let y = 250 + Math.floor(i / 2) * 230;
                 
                 let card = this.add.sprite(x, y, 'trasera').setInteractive().setScale(1.5);
@@ -110,7 +110,7 @@
                 this.tweens.add({ targets: [firstCard, secondCard], alpha: 0, duration: 500 });
                 firstCard = null; secondCard = null; canMove = true;
                 if (matches === 4) {
-                    this.add.text(400, 500, 'Â¡VICTORIA!\nZAARD.2 RECOMPENSADO', { fontSize: '50px', fill: '#00fbff', align: 'center' }).setOrigin(0.5);
+                    this.add.text(400, 500, '¡VICTORIA!\nZAARD.2 RECOMPENSADO', { fontSize: '50px', fill: '#00fbff', align: 'center' }).setOrigin(0.5);
                 }
             } else {
                 this.time.delayedCall(800, () => {

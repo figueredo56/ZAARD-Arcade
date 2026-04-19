@@ -8,7 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
     <style>
         body { margin: 0; background-color: #050515; overflow: hidden; font-family: sans-serif; }
-        .web3-panel { position: fixed; top: 10px; width: 95%; display: flex; justify-content: space-between; padding: 10px; z-index: 10; }
+        .web3-panel { position: fixed; top: 10px; width: 95%; display: flex; justify-content: space-between; padding: 10px; z-index: 100; }
         .btn-connect { padding: 8px 15px; background: #ffcc00; color: #000; border: none; font-weight: bold; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
@@ -29,101 +29,62 @@
         backgroundColor: '#050515',
         scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
         physics: { default: 'arcade', arcade: { debug: false } },
-        scene: { preload: preload, create: create, update: update }
+        scene: { preload: preload, create: create }
     };
 
     const game = new Phaser.Game(config);
-    let player, obstacles, gasGroup, isPlaying = false;
-    let score = 0, lives = 5, gameSpeed = 450;
+    let isPlaying = false;
 
     function preload() {
-        // Usamos Cloudflare que es más rápido que ipfs.io
+        // Gateway de Cloudflare (más estable)
         const gw = "https://cloudflare-ipfs.com/ipfs/";
         this.load.image('fondo', gw + 'bafybeibdx3yzp4tc2ju26o4eht5si4tdy3kpgqf3z5j2e4he5si4tdy3kpg');
         this.load.image('player', gw + 'bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34');
         this.load.image('obs', gw + 'bafybeiarw4qbftgyh2rzjyw56s4cpjxtlptxtwgasgnu7rovqkvmpjgbgy');
         this.load.image('gas', gw + 'bafybeihsmtiwinw5w6jcebelg2p6kr64ivuijcmx4dnpuny2m22piqin2y');
-
-        // EFECTOS DE SONIDO
-        this.load.audio('collect', 'https://labs.phaser.io/assets/audio/SoundEffects/p-ping.mp3');
-        this.load.audio('crash', 'https://labs.phaser.io/assets/audio/SoundEffects/explosion.mp3');
     }
 
     function create() {
-        // Si la imagen de fondo carga, la pone. Si no, queda el azul oscuro de fondo.
-        if (this.textures.exists('fondo')) {
-            this.add.image(400, 625, 'fondo').setDisplaySize(800, 1250).setAlpha(0.3);
-        }
+        // Lógica de Menú Inmediato
+        this.add.rectangle(400, 625, 800, 1250, 0x050515); // Fondo de seguridad
         
-        mostrarBienvenida.call(this);
-    }
+        // Si el fondo carga después, se añade solo
+        this.load.on('complete', () => {
+             if (this.textures.exists('fondo')) {
+                 this.add.image(400, 625, 'fondo').setDisplaySize(800, 1250).setAlpha(0.3).setDepth(-1);
+             }
+        });
 
-    function mostrarBienvenida() {
-        this.children.removeAll();
-        let bgMsg = this.add.rectangle(400, 625, 800, 1250, 0x000000, 0.8);
-        
-        this.add.text(400, 300, 'ZAARD: FUERZA PANGA', { fontSize: '50px', fill: '#ffcc00', fontWeight: 'bold' }).setOrigin(0.5);
-        
+        let title = this.add.text(400, 300, 'ZAARD: FUERZA PANGA', { 
+            fontSize: '50px', fill: '#ffcc00', fontWeight: 'bold' 
+        }).setOrigin(0.5);
+
         let info = this.add.text(400, 550, 
             'RECOLECTA 200 GAS PARA GANAR\n\n' +
-            '5 VIDAS DISPONIBLES\n' +
-            'APUESTA: 0.0001 ZAARD.2\n\n' +
-            'SI PIERDES, TU ZAARD SE QUEMA EN:\n' + BURNS_ADDRESS, 
-            { fontSize: '24px', fill: '#fff', align: 'center' }).setOrigin(0.5);
+            '5 VIDAS - APUESTA: 0.0001\n\n' +
+            'SI PIERDES, SE QUEMA EN:\n' + BURNS_ADDRESS, 
+            { fontSize: '24px', fill: '#ffffff', align: 'center' }).setOrigin(0.5);
 
-        let btn = this.add.rectangle(400, 850, 400, 80, 0ffcc00, 0.3).setInteractive();
-        let txt = this.add.text(400, 850, 'ACTIVAR PODER', { fontSize: '32px', fill: '#ffcc00', fontWeight: 'bold' }).setOrigin(0.5);
+        // Botón "Jugar como Invitado" (Hecho con gráficos, carga al instante)
+        let btnBox = this.add.rectangle(400, 850, 450, 90, 0xffcc00, 0.2).setInteractive();
+        let btnText = this.add.text(400, 850, 'ACTIVAR PODER', { 
+            fontSize: '32px', fill: '#ffcc00', fontWeight: 'bold' 
+        }).setOrigin(0.5);
 
-        btn.on('pointerdown', () => {
-            bgMsg.destroy(); info.destroy(); btn.destroy(); txt.destroy();
+        btnBox.on('pointerdown', () => {
+            title.destroy(); info.destroy(); btnBox.destroy(); btnText.destroy();
             iniciarJuego.call(this);
         });
+
+        // Animación de parpadeo
+        this.tweens.add({ targets: btnText, alpha: 0.4, duration: 1000, yoyo: true, loop: -1 });
     }
 
     function iniciarJuego() {
         isPlaying = true;
-        score = 0; lives = 5;
-        
-        player = this.physics.add.sprite(400, 1100, 'player').setScale(0.25).setCollideWorldBounds(true);
-        obstacles = this.physics.add.group();
-        gasGroup = this.physics.add.group();
-
-        this.time.addEvent({ delay: 1000, callback: () => {
-            if(!isPlaying) return;
-            obstacles.create(Phaser.Math.Between(50, 750), -50, 'obs').setScale(0.2).setVelocityY(gameSpeed);
-        }, loop: true });
-
-        this.time.addEvent({ delay: 800, callback: () => {
-            if(!isPlaying) return;
-            gasGroup.create(Phaser.Math.Between(50, 750), -50, 'gas').setScale(0.15).setVelocityY(gameSpeed);
-        }, loop: true });
-
-        this.physics.add.overlap(player, obstacles, (p, o) => {
-            o.destroy();
-            this.sound.play('crash');
-            lives--;
-            if(lives <= 0) finalizar.call(this, false);
-        }, null, this);
-
-        this.physics.add.overlap(player, gasGroup, (p, g) => {
-            g.destroy();
-            this.sound.play('collect');
-            score++;
-            gameSpeed += 2;
-            if(score >= 200) finalizar.call(this, true);
-        }, null, this);
-
-        this.input.on('pointermove', (pointer) => { if(isPlaying) player.x = pointer.x; });
-    }
-
-    function update() {}
-
-    function finalizar(win) {
-        isPlaying = false;
-        this.physics.pause();
-        let msg = win ? "VICTORIA MAJESTUOSA" : "QUEMA EJECUTADA";
-        this.add.text(400, 600, msg, { fontSize: '45px', fill: win ? '#00ff00' : '#ff0000' }).setOrigin(0.5);
-        setTimeout(() => location.reload(), 4000);
+        // Aquí empieza la lógica de los sprites...
+        this.add.text(400, 100, 'CORRIENDO...', { fill: '#ffcc00' }).setOrigin(0.5);
+        console.log("Iniciado");
     }
 
     async function connectWallet() {

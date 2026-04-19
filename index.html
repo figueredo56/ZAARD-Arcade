@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>ZAARD Arcade - Una Sola Oportunidad</title>
+    <title>ZAARD Arcade - Web3 Experience</title>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser-arcade-physics.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
     <style>
         body { margin: 0; background-color: #050515; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
         .web3-panel { position: fixed; top: 10px; width: 95%; display: flex; justify-content: space-between; padding: 10px; z-index: 100; }
-        .btn-connect { padding: 8px 12px; background: rgba(0, 251, 255, 0.1); border: 1px solid #00fbff; color: #00fbff; border-radius: 5px; font-size: 10px; font-weight: bold; cursor: pointer; }
+        .btn-connect { padding: 8px 12px; background: rgba(0, 251, 255, 0.1); border: 1px solid #00fbff; color: #00fbff; border-radius: 5px; font-size: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; border: 1px solid #00fbff; }
     </style>
 </head>
 <body>
     <div class="web3-panel">
-        <div style="color: #00fbff; font-weight: bold; text-shadow: 0 0 5px #00fbff;">ZAARD INFINIT</div>
+        <div style="color: #00fbff; font-weight: bold; text-shadow: 0 0 5px #00fbff; letter-spacing: 1px;">ZAARD INFINIT</div>
         <button id="connectBtn" class="btn-connect" onclick="connectWallet()">CONECTAR WALLET</button>
     </div>
 
@@ -29,9 +29,10 @@
 
         const game = new Phaser.Game(config);
         let firstCard = null, secondCard = null, canMove = false, matches = 0, errors = 0;
-        const MAX_ERRORS = 5;
+        const MAX_ERRORS = 7; // Actualizado a 7 intentos para mayor equilibrio
 
         function preload() {
+            // Activos Visuales e IPFS
             this.load.image('fondo', 'https://ipfs.io/ipfs/bafkreifeqxh3foulnfp2fjdof2qmfgznpsbpphrfogltth5hs6e2uyiqya');
             this.load.image('trasera', 'https://ipfs.io/ipfs/bafybeiaaz2ebmyfezamhs3x7jqz5yujnhbru4v6cufyurjokddsb6bjxbu');
             this.load.image('c1', 'https://ipfs.io/ipfs/bafybeihehm24qpw57c23mjjomwwka4hngagf34zmkwvfedskn6ze7vf7e4');
@@ -39,6 +40,8 @@
             this.load.image('c3', 'https://ipfs.io/ipfs/bafybeia5slhxaenhai5i3xnpavjtvdqor2e7oq5pi4vhsukvme6os6qagu');
             this.load.image('c4', 'https://ipfs.io/ipfs/bafybeibkz6jikut6rsmj2grzuwlbm42g52ahg7o2kfiwrjvlo4u6byyxtm');
             this.load.image('c5', 'https://ipfs.io/ipfs/bafybeihwgutss2majkvanadmm4rwbp6kpcgywebs3cgpgwdcs45ut3srd4');
+            
+            // Efectos de Sonido
             this.load.audio('flip', ['https://labs.phaser.io/assets/audio/SoundEffects/key.wav']);
             this.load.audio('win', ['https://labs.phaser.io/assets/audio/SoundEffects/p-ping.mp3']);
             this.load.audio('fail', ['https://labs.phaser.io/assets/audio/SoundEffects/explosion.mp3']);
@@ -49,25 +52,26 @@
         }
 
         function mostrarMenuPrincipal() {
-            this.children.removeAll(); // Limpiar pantalla
+            this.children.removeAll();
             canMove = false;
             
             this.add.image(400, 625, 'fondo').setDisplaySize(800, 1250).setAlpha(0.6);
-            this.add.graphics().fillStyle(0x050515, 0.7).fillRect(0, 0, 800, 1250);
+            this.add.graphics().fillStyle(0x050515, 0.75).fillRect(0, 0, 800, 1250);
             
+            // Bienvenida Emotiva y Larga
             this.add.text(400, 350, 'HAS LLEGADO AL LUGAR\nDONDE LA INNOVACIÓN\nSE CONVIERTE EN PODER', { 
-                fontSize: '40px', fill: '#00fbff', align: 'center', fontWeight: 'bold', stroke: '#000000', strokeThickness: 8
+                fontSize: '42px', fill: '#00fbff', align: 'center', fontWeight: 'bold', stroke: '#000000', strokeThickness: 8
             }).setOrigin(0.5);
 
-            this.add.text(400, 520, 'Sumérgete en el Ecosistema ZAARD.\nDemuestra tu enfoque y gana recompensas.\n\nCada apuesta es una única oportunidad.\nSi fallas 5 veces, el Vault reclama tu ZAARD.', { 
-                fontSize: '22px', fill: '#ffffff', align: 'center', fontStyle: 'italic'
+            this.add.text(400, 540, 'Sumérgete en el Ecosistema ZAARD.\nDemuestra tu enfoque, domina la mente\ny cosecha recompensas reales en ZAARD.2.\n\nCada apuesta es una única oportunidad.\nTienes 7 vidas para vencer al Vault.\nSi fallas, el Vault reclama tu ZAARD.', { 
+                fontSize: '24px', fill: '#ffffff', align: 'center', fontStyle: 'italic', lineSpacing: 10
             }).setOrigin(0.5);
 
-            let txtStart = this.add.text(400, 780, '[ APOSTAR 0.0001 ZAARD ]', { 
-                fontSize: '32px', fill: '#00fbff', fontWeight: 'bold'
+            let txtStart = this.add.text(400, 820, '[ APOSTAR 0.0001 ZAARD ]', { 
+                fontSize: '34px', fill: '#00fbff', fontWeight: 'bold', stroke: '#000000', strokeThickness: 4
             }).setOrigin(0.5).setInteractive();
             
-            this.tweens.add({ targets: txtStart, alpha: 0.4, duration: 800, yoyo: true, loop: -1 });
+            this.tweens.add({ targets: txtStart, alpha: 0.3, duration: 1000, yoyo: true, loop: -1 });
 
             txtStart.on('pointerdown', () => {
                 iniciarPartida.call(this);
@@ -76,20 +80,23 @@
 
         function iniciarPartida() {
             this.children.removeAll();
-            this.add.image(400, 625, 'fondo').setDisplaySize(800, 1250).setAlpha(0.15);
+            this.add.image(400, 625, 'fondo').setDisplaySize(800, 1250).setAlpha(0.2);
             
             errors = 0; matches = 0; canMove = true;
-            let errorText = this.add.text(400, 150, 'ERRORES: 0 / 5', { fontSize: '30px', fill: '#ff4444', fontWeight: 'bold' }).setOrigin(0.5);
+            let errorText = this.add.text(400, 160, 'ERRORES: 0 / 7', { 
+                fontSize: '32px', fill: '#ff4444', fontWeight: 'bold', stroke: '#000000', strokeThickness: 5
+            }).setOrigin(0.5);
             
             let items = ['c1','c2','c3','c4','c5','c1'];
             let deck = [];
             for(let i=0; i<6; i++) { for(let j=0; j<6; j++) { deck.push(items[i]); } }
             Phaser.Utils.Array.Shuffle(deck);
 
+            // Generación de Tablero 6x6 con escala ajustada
             for (let i = 0; i < 36; i++) {
                 let col = i % 6;
                 let row = Math.floor(i / 6);
-                let card = this.add.sprite(115 + col * 115, 340 + row * 130, 'trasera').setInteractive().setScale(0.25);
+                let card = this.add.sprite(115 + col * 115, 360 + row * 130, 'trasera').setInteractive().setScale(0.25);
                 card.setData('value', deck[i]);
                 
                 card.on('pointerdown', function() {
@@ -106,20 +113,20 @@
                             this.tweens.add({ targets: [firstCard, secondCard], alpha: 0, duration: 400 });
                             firstCard = null; secondCard = null; canMove = true;
                             if (matches === 18) {
-                                terminarPartida.call(this, "¡VICTORIA!\nRECOMPENSA ENVIADA", "#00fbff");
+                                terminarPartida.call(this, "¡VICTORIA MAGESTUOSA!\nRECOMPENSA ENVIADA", "#00fbff");
                             }
                         } else {
                             errors++;
-                            errorText.setText(`ERRORES: ${errors} / 5`);
+                            errorText.setText(`ERRORES: ${errors} / 7`);
                             if (errors >= MAX_ERRORS) {
                                 this.sound.play('fail');
-                                terminarPartida.call(this, "INTENTOS AGOTADOS\nZAARD RECOLECTADO", "#ff4444");
+                                terminarPartida.call(this, "INTENTOS AGOTADOS\nVAULT RECOLECTADO", "#ff4444");
                             } else {
                                 setTimeout(() => { 
                                     if(firstCard) firstCard.setTexture('trasera'); 
                                     if(secondCard) secondCard.setTexture('trasera'); 
                                     firstCard = null; secondCard = null; canMove = true; 
-                                }, 700);
+                                }, 750);
                             }
                         }
                     }
@@ -129,16 +136,20 @@
 
         function terminarPartida(mensaje, color) {
             canMove = false;
-            this.add.graphics().fillStyle(0x050515, 0.8).fillRect(0, 0, 800, 1250).setDepth(50);
+            let overlay = this.add.graphics().fillStyle(0x050515, 0.85).fillRect(0, 0, 800, 1250).setDepth(100);
+            
             this.add.text(400, 600, mensaje, { 
-                fontSize: '50px', fill: color, align: 'center', fontWeight: 'bold' 
-            }).setOrigin(0.5).setDepth(51);
+                fontSize: '55px', fill: color, align: 'center', fontWeight: 'bold', stroke: '#000000', strokeThickness: 10
+            }).setOrigin(0.5).setDepth(101);
 
-            this.add.text(400, 800, "Regresando al menú principal...", { fontSize: '20px', fill: '#ffffff' }).setOrigin(0.5).setDepth(51);
+            this.add.text(400, 800, "Preparando nueva sesión...", { 
+                fontSize: '22px', fill: '#ffffff' 
+            }).setOrigin(0.5).setDepth(101);
 
+            // Regreso al menú principal tras el resultado
             setTimeout(() => {
                 mostrarMenuPrincipal.call(this);
-            }, 4000); // 4 segundos de pausa antes de volver al inicio
+            }, 4500);
         }
 
         async function connectWallet() {
@@ -146,8 +157,9 @@
                 try {
                     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                     document.getElementById('connectBtn').innerText = accounts[0].substring(0,6) + '...';
+                    console.log("Wallet Conectada: " + accounts[0]);
                 } catch (err) { console.error(err); }
-            } else { alert("Por favor instala MetaMask"); }
+            } else { alert("Por favor, abre este link dentro de MetaMask Browser."); }
         }
     </script>
 </body>

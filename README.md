@@ -4,7 +4,7 @@
 
 ## 🌌 LA VISIÓN: MÁS ALLÁ DE LOS LÍMITES DEL GAMING TRADICIONAL
 
-**ZAARD INNOVATION** no nace para seguir tendencias; nace para dictarlas. Bajo la dirección técnica de **Figueredo56**, hemos consolidado un ecosistema donde la escasez digital, la seguridad matemática y la jugabilidad de alta fidelidad convergen en un solo punto: el protocolo **ZAARD.2**.
+**ZAARD INNOVATION** no nace para seguir tendencias; nace para dictarlas. Bajo la dirección técnica de **PANGA**, hemos consolidado un ecosistema donde la escasez digital, la seguridad matemática y la jugabilidad de alta fidelidad convergen en un solo punto: el protocolo **ZAARD INNOVATION**.
 
 ---
 

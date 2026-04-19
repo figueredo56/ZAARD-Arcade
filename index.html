@@ -6,118 +6,78 @@
     <title>ZAARD Arcade - Memoria HD</title>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser-arcade-physics.min.js"></script>
     <style>
-        body { margin: 0; background-color: #050515; display: flex; flex-direction: column; height: 100vh; overflow: hidden; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-        canvas { box-shadow: 0 0 40px rgba(0, 251, 255, 0.3); border-radius: 10px; }
-        .web3-panel {
-            position: fixed; top: 10px; width: 90%; display: flex; justify-content: space-between; 
-            padding: 10px; z-index: 100; pointer-events: none;
-        }
-        .btn-web3 {
-            padding: 8px 15px; background: rgba(0, 251, 255, 0.1); border: 1px solid #00fbff;
-            color: #00fbff; border-radius: 5px; font-size: 12px; pointer-events: auto; text-decoration: none;
-            transition: 0.3s;
-        }
-        .btn-web3:hover { background: #00fbff; color: #000; }
+        body { margin: 0; background-color: #050515; display: flex; flex-direction: column; height: 100vh; overflow: hidden; font-family: sans-serif; }
+        .web3-panel { position: fixed; top: 10px; width: 90%; display: flex; justify-content: space-between; padding: 10px; z-index: 100; }
+        .btn-web3 { padding: 8px 15px; background: rgba(0, 251, 255, 0.1); border: 1px solid #00fbff; color: #00fbff; border-radius: 5px; text-decoration: none; font-size: 12px; }
     </style>
 </head>
 <body>
-
     <div class="web3-panel">
         <div style="color: #00fbff; font-weight: bold; text-shadow: 0 0 5px #00fbff;">ZAARD.2 ARCADE</div>
         <a href="https://zaard-innovation.github.io/ZAARD.token/" class="btn-web3">WEB OFICIAL</a>
     </div>
-
     <script>
         const config = {
             type: Phaser.AUTO,
-            width: 800, height: 1000, // Formato más vertical para móviles
+            width: 800, height: 1000,
             backgroundColor: '#050515',
             scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
             scene: { preload: preload, create: create }
         };
-
         const game = new Phaser.Game(config);
         let firstCard = null, secondCard = null, canMove = false, matches = 0;
 
         function preload() {
-            // Activos Visuales (Aquí pones tus CIDs de Pinata)
+            // ImÃ¡genes base
             this.load.image('trasera', 'https://via.placeholder.com/150x210/00fbff/050515?text=ZAARD');
             this.load.image('c1', 'https://via.placeholder.com/150x210/ff00ff/ffffff?text=MAGESTUOSO');
             this.load.image('c2', 'https://via.placeholder.com/150x210/7000ff/ffffff?text=ORO');
             this.load.image('c3', 'https://via.placeholder.com/150x210/00ff00/ffffff?text=PLATA');
             this.load.image('c4', 'https://via.placeholder.com/150x210/ffff00/000000?text=COMUN');
-
-            // Sonidos (Placeholder - funcionarán cuando subas tus mp3)
+            // Sonidos integrados
             this.load.audio('flip', ['https://labs.phaser.io/assets/audio/SoundEffects/key.wav']);
-            this.load.audio('success', ['https://labs.phaser.io/assets/audio/SoundEffects/p-ping.mp3']);
+            this.load.audio('win', ['https://labs.phaser.io/assets/audio/SoundEffects/p-ping.mp3']);
         }
 
         function create() {
             let self = this;
-
-            // Pantalla de Inicio
             let bgIntro = this.add.graphics().fillStyle(0x050515, 1).fillRect(0, 0, 800, 1000).setDepth(20);
-            let txtTitle = this.add.text(400, 400, 'ZAARD INNOVATION\nMEMORIA HD', { 
-                fontSize: '55px', fill: '#00fbff', align: 'center', fontWeight: 'bold' 
-            }).setOrigin(0.5).setDepth(21);
-
-            let txtStart = this.add.text(400, 600, '>> TOCAR PARA INICIAR <<', { 
-                fontSize: '30px', fill: '#ffffff' 
-            }).setOrigin(0.5).setDepth(21).setInteractive();
-
-            // Animación de brillo al texto
+            let txtTitle = this.add.text(400, 400, 'ZAARD INNOVATION\nMEMORIA HD', { fontSize: '50px', fill: '#00fbff', align: 'center', fontWeight: 'bold' }).setOrigin(0.5).setDepth(21);
+            let txtStart = this.add.text(400, 600, '>> TOCAR PARA INICIAR <<', { fontSize: '30px', fill: '#ffffff' }).setOrigin(0.5).setDepth(21).setInteractive();
+            
             this.tweens.add({ targets: txtStart, alpha: 0.3, duration: 800, yoyo: true, loop: -1 });
 
             txtStart.on('pointerdown', () => {
                 bgIntro.destroy(); txtTitle.destroy(); txtStart.destroy();
                 canMove = true;
-                iniciarTablero.call(self);
+                let deck = ['c1', 'c1', 'c2', 'c2', 'c3', 'c3', 'c4', 'c4'];
+                Phaser.Utils.Array.Shuffle(deck);
+                for (let i = 0; i < 8; i++) {
+                    let x = 220 + (i % 2) * 360;
+                    let y = 250 + Math.floor(i / 2) * 230;
+                    let card = this.add.sprite(x, y, 'trasera').setInteractive().setScale(1.5);
+                    card.setData('value', deck[i]);
+                    card.on('pointerdown', function() {
+                        if (!canMove || card === firstCard || card.alpha < 1) return;
+                        self.sound.play('flip');
+                        card.setTexture(card.getData('value'));
+                        if (!firstCard) { firstCard = card; } 
+                        else { secondCard = card; check(self); }
+                    });
+                }
             });
         }
 
-        function iniciarTablero() {
-            let deck = ['c1', 'c1', 'c2', 'c2', 'c3', 'c3', 'c4', 'c4'];
-            Phaser.Utils.Array.Shuffle(deck);
-
-            for (let i = 0; i < 8; i++) {
-                let x = 220 + (i % 2) * 360; // Ajustado a 2 columnas para móvil
-                let y = 250 + Math.floor(i / 2) * 230;
-                
-                let card = this.add.sprite(x, y, 'trasera').setInteractive().setScale(1.5);
-                card.setData('value', deck[i]);
-                
-                card.on('pointerdown', function() {
-                    if (!canMove || card === firstCard || card.alpha < 1) return;
-                    
-                    this.sound.play('flip');
-                    card.setTexture(card.getData('value'));
-
-                    if (!firstCard) { firstCard = card; } 
-                    else { 
-                        secondCard = card; 
-                        validarPareja.call(this); 
-                    }
-                }, this);
-            }
-        }
-
-        function validarPareja() {
+        function check(scene) {
             canMove = false;
             if (firstCard.getData('value') === secondCard.getData('value')) {
-                this.sound.play('success');
+                scene.sound.play('win');
                 matches++;
-                // Efecto de desaparecer pareja
-                this.tweens.add({ targets: [firstCard, secondCard], alpha: 0, duration: 500 });
+                scene.tweens.add({ targets: [firstCard, secondCard], alpha: 0, duration: 500 });
                 firstCard = null; secondCard = null; canMove = true;
-                if (matches === 4) {
-                    this.add.text(400, 500, '¡VICTORIA!\nZAARD.2 RECOMPENSADO', { fontSize: '50px', fill: '#00fbff', align: 'center' }).setOrigin(0.5);
-                }
+                if (matches === 4) scene.add.text(400, 500, 'Â¡VICTORIA!\nZAARD.2 LISTO', { fontSize: '50px', fill: '#00fbff', align: 'center' }).setOrigin(0.5);
             } else {
-                this.time.delayedCall(800, () => {
-                    firstCard.setTexture('trasera');
-                    secondCard.setTexture('trasera');
-                    firstCard = null; secondCard = null; canMove = true;
-                });
+                setTimeout(() => { firstCard.setTexture('trasera'); secondCard.setTexture('trasera'); firstCard = null; secondCard = null; canMove = true; }, 800);
             }
         }
     </script>

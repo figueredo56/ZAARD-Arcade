@@ -6,9 +6,9 @@
     <title>ZAARD Arcade - Memoria HD</title>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser-arcade-physics.min.js"></script>
     <style>
-        body { margin: 0; background-color: #050515; display: flex; flex-direction: column; height: 100vh; overflow: hidden; font-family: sans-serif; }
+        body { margin: 0; background-color: #050515; display: flex; flex-direction: column; height: 100vh; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
         .web3-panel { position: fixed; top: 10px; width: 95%; display: flex; justify-content: space-between; padding: 10px; z-index: 100; }
-        .btn-web3 { padding: 8px 12px; background: rgba(0, 251, 255, 0.1); border: 1px solid #00fbff; color: #00fbff; border-radius: 5px; text-decoration: none; font-size: 10px; font-weight: bold; text-transform: uppercase; }
+        .btn-web3 { padding: 8px 12px; background: rgba(0, 251, 255, 0.1); border: 1px solid #00fbff; color: #00fbff; border-radius: 5px; text-decoration: none; font-size: 10px; font-weight: bold; text-transform: uppercase; box-shadow: 0 0 10px rgba(0, 251, 255, 0.3); }
     </style>
 </head>
 <body>
@@ -30,10 +30,8 @@
         let firstCard = null, secondCard = null, canMove = false, matches = 0;
 
         function preload() {
-            // IMAGEN DE FONDO ÉPICA
+            // Fondo y Activos de IPFS
             this.load.image('fondo', 'https://ipfs.io/ipfs/bafkreifeqxh3foulnfp2fjdof2qmfgznpsbpphrfogltth5hs6e2uyiqya');
-            
-            // Cartas con tus CIDs
             this.load.image('trasera', 'https://ipfs.io/ipfs/bafybeiaaz2ebmyfezamhs3x7jqz5yujnhbru4v6cufyurjokddsb6bjxbu');
             this.load.image('c1', 'https://ipfs.io/ipfs/bafybeihehm24qpw57c23mjjomwwka4hngagf34zmkwvfedskn6ze7vf7e4');
             this.load.image('c2', 'https://ipfs.io/ipfs/bafybeihhyafas5pi3a2vn7tyqodntpuhxrupsxvxrm6vd2gimx7ryzvvn4');
@@ -41,57 +39,52 @@
             this.load.image('c4', 'https://ipfs.io/ipfs/bafybeibkz6jikut6rsmj2grzuwlbm42g52ahg7o2kfiwrjvlo4u6byyxtm');
             this.load.image('c5', 'https://ipfs.io/ipfs/bafybeihwgutss2majkvanadmm4rwbp6kpcgywebs3cgpgwdcs45ut3srd4');
 
+            // Sonidos
             this.load.audio('flip', ['https://labs.phaser.io/assets/audio/SoundEffects/key.wav']);
             this.load.audio('win', ['https://labs.phaser.io/assets/audio/SoundEffects/p-ping.mp3']);
         }
 
         function create() {
             let self = this;
-
-            // Colocar el fondo (ajustado al tamaño de pantalla)
             let imgFondo = this.add.image(400, 625, 'fondo').setDisplaySize(800, 1250).setAlpha(0.6);
+            let bgIntro = this.add.graphics().fillStyle(0x050515, 0.5).fillRect(0, 0, 800, 1250).setDepth(20);
             
-            // Capa de bienvenida
-            let bgIntro = this.add.graphics().fillStyle(0x050515, 0.4).fillRect(0, 0, 800, 1250).setDepth(20);
-            
-            let txtWelcome = this.add.text(400, 400, 'BIENVENIDO AL ECOSISTEMA\nZAARD INFINIT', { 
-                fontSize: '42px', fill: '#00fbff', align: 'center', fontWeight: 'bold', stroke: '#000000', strokeThickness: 6
+            let txtWelcome = this.add.text(400, 420, 'BIENVENIDO AL ECOSISTEMA\nZAARD INFINIT', { 
+                fontSize: '45px', fill: '#00fbff', align: 'center', fontWeight: 'bold', stroke: '#000000', strokeThickness: 8
             }).setOrigin(0.5).setDepth(21);
 
-            let txtSlogan = this.add.text(400, 520, 'DÉJATE LLEVAR POR LA EXPERIENCIA', { 
+            let txtSlogan = this.add.text(400, 540, 'DÉJATE LLEVAR POR LA EXPERIENCIA', { 
                 fontSize: '24px', fill: '#ffffff', fontStyle: 'italic', stroke: '#000000', strokeThickness: 4
             }).setOrigin(0.5).setDepth(21);
 
-            let txtStart = this.add.text(400, 750, '[ INICIAR EXPERIENCIA ]', { 
-                fontSize: '35px', fill: '#00fbff', fontWeight: 'bold'
+            let txtStart = this.add.text(400, 780, '[ INICIAR EXPERIENCIA ]', { 
+                fontSize: '38px', fill: '#00fbff', fontWeight: 'bold', stroke: '#000000', strokeThickness: 4
             }).setOrigin(0.5).setDepth(21).setInteractive();
             
-            this.tweens.add({ targets: txtStart, alpha: 0.5, duration: 800, yoyo: true, loop: -1 });
+            this.tweens.add({ targets: txtStart, alpha: 0.4, duration: 800, yoyo: true, loop: -1 });
 
             txtStart.on('pointerdown', () => {
                 bgIntro.destroy(); txtWelcome.destroy(); txtSlogan.destroy(); txtStart.destroy();
-                // Dejamos el fondo con menos brillo durante el juego para que se vean las cartas
-                imgFondo.setAlpha(0.2); 
+                imgFondo.setAlpha(0.15); 
                 canMove = true;
-                iniciarTablero.call(self);
+                iniciarJuego.call(self);
             });
         }
 
-        function iniciarTablero() {
+        function iniciarJuego() {
             let items = ['c1','c2','c3','c4','c5','c1'];
             let deck = [];
-            for(let i=0; i<6; i++) { 
-                for(let j=0; j<6; j++) { deck.push(items[i]); }
-            }
+            for(let i=0; i<6; i++) { for(let j=0; j<6; j++) { deck.push(items[i]); } }
             Phaser.Utils.Array.Shuffle(deck);
 
+            // Matriz 6x6 ajustada para visibilidad móvil
             for (let i = 0; i < 36; i++) {
                 let col = i % 6;
                 let row = Math.floor(i / 6);
-                let x = 95 + col * 122;
-                let y = 220 + row * 165;
+                let x = 90 + col * 124; 
+                let y = 240 + row * 160; 
                 
-                let card = this.add.sprite(x, y, 'trasera').setInteractive().setScale(0.75);
+                let card = this.add.sprite(x, y, 'trasera').setInteractive().setScale(0.42);
                 card.setData('value', deck[i]);
                 
                 card.on('pointerdown', function() {
@@ -99,12 +92,12 @@
                     this.sound.play('flip');
                     card.setTexture(card.getData('value'));
                     if (!firstCard) { firstCard = card; } 
-                    else { secondCard = card; check(this); }
+                    else { secondCard = card; checkCards(this); }
                 }, this);
             }
         }
 
-        function check(scene) {
+        function checkCards(scene) {
             canMove = false;
             if (firstCard.getData('value') === secondCard.getData('value')) {
                 scene.sound.play('win');
@@ -113,7 +106,7 @@
                 firstCard = null; secondCard = null; canMove = true;
                 if (matches === 18) {
                     scene.add.text(400, 650, 'ZAARD INFINIT\nCOMPLETADO', { 
-                        fontSize: '60px', fill: '#00fbff', align: 'center', fontWeight: 'bold', stroke: '#000000', strokeThickness: 8
+                        fontSize: '65px', fill: '#00fbff', align: 'center', fontWeight: 'bold', stroke: '#000000', strokeThickness: 10 
                     }).setOrigin(0.5);
                 }
             } else {
@@ -121,7 +114,7 @@
                     if(firstCard) firstCard.setTexture('trasera'); 
                     if(secondCard) secondCard.setTexture('trasera'); 
                     firstCard = null; secondCard = null; canMove = true; 
-                }, 700);
+                }, 750);
             }
         }
     </script>

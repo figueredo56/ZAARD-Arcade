@@ -53,7 +53,7 @@ Para construir el futuro, utilizamos las herramientas de los dioses del código:
 ---
 
 ## 👑 SOBRE EL FUNDADOR
-**ZAARD INNOVATION** es el resultado de la visión disruptiva de **Figueredo56**, un desarrollador comprometido con la descentralización absoluta y la creación de valor real en la Web3.
+**ZAARD INNOVATION** es el resultado de la visión disruptiva de **ZAARD**, un desarrollador comprometido con la descentralización absoluta y la creación de valor real en la Web3.
 
 > *"En el código confiamos, en la innovación avanzamos."*
 

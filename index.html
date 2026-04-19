@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZAARD Arcade - Memoria HD</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser-arcade-physics.min.js"></script>
+    <style>
+        body { margin: 0; background-color: #000; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        canvas { box-shadow: 0 0 25px rgba(0, 251, 255, 0.4); border-radius: 12px; }
+    </style>
+</head>
+<body>
+    <script>
+        const config = {
+            type: Phaser.AUTO,
+            width: 800,
+            height: 600,
+            backgroundColor: '#050515',
+            scene: { preload: preload, create: create }
+        };
+
+        const game = new Phaser.Game(config);
+        let firstCard = null;
+        let secondCard = null;
+        let canMove = true;
+        let matches = 0;
+
+        function preload() {
+            // Imagen trasera (Logo ZAARD o Placeholder brillante)
+            this.load.image('trasera', 'https://via.placeholder.com/100x140/00fbff/050515?text=ZAARD');
+            // 4 Colores que representan los diferentes niveles de activos (Magestuoso, etc.)
+            this.load.image('c1', 'https://via.placeholder.com/100x140/ff00ff/ffffff?text=MAGESTUOSO');
+            this.load.image('c2', 'https://via.placeholder.com/100x140/7000ff/ffffff?text=ORO');
+            this.load.image('c3', 'https://via.placeholder.com/100x140/00ff00/ffffff?text=PLATA');
+            this.load.image('c4', 'https://via.placeholder.com/100x140/ffff00/000000?text=COMUN');
+        }
+
+        function create() {
+            this.add.text(400, 40, 'ZAARD MEMORIA HD', { fontSize: '36px', fill: '#00fbff', fontFamily: 'Arial' }).setOrigin(0.5);
+            
+            // Creamos los pares de cartas
+            let deck = ['c1', 'c1', 'c2', 'c2', 'c3', 'c3', 'c4', 'c4'];
+            Phaser.Utils.Array.Shuffle(deck); // Mezclar cartas
+
+            for (let i = 0; i < 8; i++) {
+                let x = 150 + (i % 4) * 160;
+                let y = 220 + Math.floor(i / 4) * 200;
+                
+                let card = this.add.sprite(x, y, 'trasera').setInteractive();
+                card.setData('value', deck[i]); // Guardamos qué carta es
+                
+                card.on('pointerdown', function() {
+                    if (!canMove || card === firstCard) return;
+
+                    card.setTexture(card.getData('value')); // Voltear carta
+
+                    if (!firstCard) {
+                        firstCard = card;
+                    } else {
+                        secondCard = card;
+                        checkForMatch();
+                    }
+                });
+            }
+        }
+
+        function checkForMatch() {
+            canMove = false;
+            if (firstCard.getData('value') === secondCard.getData('value')) {
+                // ¡Hay pareja!
+                matches++;
+                firstCard = null;
+                secondCard = null;
+                canMove = true;
+                if (matches === 4) console.log("¡Victoria! Reclamando recompensas ZAARD.2...");
+            } else {
+                // No son iguales, se voltean de nuevo tras 1 segundo
+                setTimeout(() => {
+                    firstCard.setTexture('trasera');
+                    secondCard.setTexture('trasera');
+                    firstCard = null;
+                    secondCard = null;
+                    canMove = true;
+                }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>

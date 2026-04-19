@@ -1,6 +1,6 @@
 # 🏛️ ZAARD INNOVATION: ARQUITECTURA DEL ENTRETENIMIENTO SOBERANO
 
-![Banner Hero ZAARD](https://ipfs.io/ipfs/bafkreifeqxh3foulnfp2fjdof2qmfpoznpsbpphrfogltth5hs6e2uyiqya)
+![ZAARD INNOVATION](https://ipfs.io/ipfs/bafkreifeqxh3foulnfp2fjdof2qmfgznpsbpphrfogltth5hs6e2uyiqya)
 
 ## 🌌 LA VISIÓN: MÁS ALLÁ DE LOS LÍMITES DEL GAMING TRADICIONAL
 
@@ -10,8 +10,7 @@
 
 ## ⚡ PILARES DE UN ECOSISTEMA VALIOSO
 
-Estamos construyendo sobre cimientos de acero digital. Cada paso está calculado para maximizar el valor de nuestra comunidad:
-
+Estamos construyendo sobre cimientos de acero digital. Cada paso está calculado para maximizar el valor de nuestra comunidad.
 ### 🛡️ 1. SEGURIDAD INQUEBRANTABLE (THE TRUST PROTOCOL)
 La confianza no se pide, se programa. 
 * **Liquidez Blindada:** El 97.60% del suministro está bloqueado en **Mudra**, eliminando cualquier riesgo de inestabilidad y garantizando un mercado sólido para nuestros inversores.

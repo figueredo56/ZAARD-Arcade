@@ -50,6 +50,24 @@ Donde la destreza se transforma en activos. No jugamos por puntos, jugamos por s
 ## 🏛️ LA FILOSOFÍA DE LA ASCENSIÓN
 El **Efecto Fénix** no pide permiso. Es un ascenso calculado, un crecimiento orgánico impulsado por la fuerza bruta de la innovación. **PANGA** no construye para hoy; programa para la eternidad. Quien posee ZAARD, posee una pieza del futuro.
 
+## 🌐 Our Official Digital Presence
+
+Stay connected with the true source of ZAARD innovation.
+
+* **🏠 Official Website:** [zaard.carrd.co](https://zaard.carrd.co)
+* **🐦 Official X (Twitter):** [@ZAARD_666](https://x.com/ZAARD_666)
+* **💰 Binance User Profile (Founder/DAO):** [View on Binance](https://account.binance.com/register?ref=776427353&?registerChannel=user_center) (User ref: 776427353)
+
+---
+
+> **⚠ CAUTION: Disclaimer ⚠**
+> This repository is for code review and transparent verification. Interacting with smart contracts involves risk. Ensure you are using the officially verified website and channels. This code is not an invitation to invest.
+
+- **Red:** BNB Smart Chain (BSC)
+- **Contrato:** `0xd9e66399a7017c6Fb5b624D491Bb96a4a736D2Bb`
+- 
+
+
 **"GRANDES PASOS, POCO TIEMPO."**
 
 ---

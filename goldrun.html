@@ -21,7 +21,6 @@
 
 <script>
     const BURNS_ADDRESS = "0x0000000000000000000000000000000000000000";
-    const APUESTA = "0.0001";
     const GW = "https://cloudflare-ipfs.com/ipfs/";
 
     const config = {
@@ -40,16 +39,15 @@
     let scoreText, livesText;
 
     function preload() {
-        // Imágenes
+        // Forzamos la carga asíncrona para evitar pantalla negra
         this.load.image('fondo_pres', GW + 'bafybeibdx3yzp4tc2ju26olduf3fpnfjlehprjnok34ieultowkfwvxjaa');
         this.load.image('player', GW + 'bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34');
         this.load.image('obs', GW + 'bafybeiarw4qbftgyh2rzjyw56s4cpjxtlptxtwgasgnu7rovqkvmpjgbgy');
         this.load.image('gas', GW + 'bafybeihsmtiwinw5w6jcebelg2p6kr64ivuijcmx4dnpuny2m22piqin2y');
-
-        // SONIDOS (Usando librerías estables de Phaser)
+        
+        // Sonidos
         this.load.audio('collect', 'https://labs.phaser.io/assets/audio/SoundEffects/p-ping.mp3');
         this.load.audio('crash', 'https://labs.phaser.io/assets/audio/SoundEffects/explosion.mp3');
-        this.load.audio('win_sound', 'https://labs.phaser.io/assets/audio/SoundEffects/securica_2.mp3');
     }
 
     function create() {
@@ -58,31 +56,30 @@
 
     function mostrarBienvenida() {
         this.children.removeAll();
-        if (this.textures.exists('fondo_pres')) {
-            this.add.image(400, 625, 'fondo_pres').setDisplaySize(800, 1250).setAlpha(0.5);
-        }
-        this.add.rectangle(400, 625, 800, 1250, 0x000000, 0.6);
         
+        // Renderizado inmediato del fondo (si ya cargó) o color sólido de respaldo
+        if (this.textures.exists('fondo_pres')) {
+            this.add.image(400, 625, 'fondo_pres').setDisplaySize(800, 1250).setAlpha(0.6);
+        } else {
+            this.add.rectangle(400, 625, 800, 1250, 0x050515);
+        }
+
         this.add.text(400, 250, 'ZAARD: GOLD RUN', { fontSize: '60px', fill: '#ffcc00', fontWeight: 'bold' }).setOrigin(0.5);
         
         this.add.text(400, 550, 
             'INSTRUCCIONES:\n\n' +
             '• RECOLECTA LOS TOKENS VERDES PARA GANAR.\n' +
             '• EVITA SER TOCADO POR LOS ROJOS.\n\n' +
-            'OBJETIVO: 200 GAS\n' +
-            'VIDAS: 5\n' +
-            'APUESTA: ' + APUESTA + ' ZAARD\n\n' +
-            'SI PIERDES, TU APUESTA VA A QUEMA:\n' + BURNS_ADDRESS, 
+            'OBJETIVO: 200 GAS | VIDAS: 5\n' +
+            'APUESTA: 0.0001 ZAARD\n\n' +
+            'QUEMA: ' + BURNS_ADDRESS.substring(0,20) + '...', 
             { fontSize: '26px', fill: '#ffffff', align: 'center', lineSpacing: 10 }).setOrigin(0.5);
 
-        let btn = this.add.rectangle(400, 900, 450, 90, 0xffcc00, 0.2).setInteractive();
-        let txt = this.add.text(400, 900, 'ACTIVAR PODER', { fontSize: '35px', fill: '#ffcc00', fontWeight: 'bold' }).setOrigin(0.5);
+        let btn = this.add.rectangle(400, 900, 450, 90, 0xffcc00, 0.8).setInteractive();
+        let txt = this.add.text(400, 900, 'ACTIVAR PODER', { fontSize: '35px', fill: '#000000', fontWeight: 'bold' }).setOrigin(0.5);
 
         btn.on('pointerdown', () => {
-            // Activar el contexto de audio (necesario en móviles)
-            if (this.sound.context.state === 'suspended') {
-                this.sound.context.resume();
-            }
+            if (this.sound.context.state === 'suspended') this.sound.context.resume();
             this.children.removeAll();
             iniciarJuego.call(this);
         });
@@ -92,7 +89,15 @@
         isPlaying = true;
         score = 0; lives = 5; gameSpeed = 500;
         
-        player = this.physics.add.sprite(400, 1100, 'player').setScale(0.25).setCollideWorldBounds(true);
+        // Si el sprite falla, usamos un bloque de color para que el juego no se detenga
+        if (this.textures.exists('player')) {
+            player = this.physics.add.sprite(400, 1100, 'player').setScale(0.25);
+        } else {
+            player = this.add.rectangle(400, 1100, 60, 100, 0x00ff00);
+            this.physics.add.existing(player);
+        }
+        player.setCollideWorldBounds(true);
+
         obstacles = this.physics.add.group();
         gasGroup = this.physics.add.group();
 
@@ -102,23 +107,19 @@
         this.time.addEvent({ delay: 1000, callback: spawnObstacle, callbackScope: this, loop: true });
         this.time.addEvent({ delay: 800, callback: spawnGas, callbackScope: this, loop: true });
 
-        // Colisión con Obstáculo (Rojo)
         this.physics.add.overlap(player, obstacles, (p, o) => {
             o.destroy();
-            this.sound.play('crash', { volume: 0.5 }); // SONIDO DE CHOQUE
+            this.sound.play('crash', { volume: 0.5 });
             lives--;
             livesText.setText('VIDAS: ' + lives);
-            this.cameras.main.shake(100, 0.01);
             if(lives <= 0) finalizar.call(this, false);
         }, null, this);
 
-        // Colisión con Gas (Verde)
         this.physics.add.overlap(player, gasGroup, (p, g) => {
             g.destroy();
-            this.sound.play('collect', { volume: 0.6 }); // SONIDO DE RECOLECCIÓN
+            this.sound.play('collect', { volume: 0.5 });
             score++;
             scoreText.setText('GAS: ' + score + '/200');
-            gameSpeed += 3;
             if(score >= 200) finalizar.call(this, true);
         }, null, this);
 
@@ -127,12 +128,16 @@
 
     function spawnObstacle() {
         if(!isPlaying) return;
-        obstacles.create(Phaser.Math.Between(50, 750), -50, 'obs').setScale(0.2).setVelocityY(gameSpeed);
+        let x = Phaser.Math.Between(50, 750);
+        let obs = this.textures.exists('obs') ? obstacles.create(x, -50, 'obs').setScale(0.2) : obstacles.add(this.add.rectangle(x, -50, 50, 50, 0xff0000));
+        obs.body.setVelocityY(gameSpeed);
     }
 
     function spawnGas() {
         if(!isPlaying) return;
-        gasGroup.create(Phaser.Math.Between(50, 750), -50, 'gas').setScale(0.15).setVelocityY(gameSpeed);
+        let x = Phaser.Math.Between(50, 750);
+        let gas = this.textures.exists('gas') ? gasGroup.create(x, -50, 'gas').setScale(0.15) : gasGroup.add(this.add.rectangle(x, -50, 30, 30, 0x00ff00));
+        gas.body.setVelocityY(gameSpeed);
     }
 
     function update() {}
@@ -140,12 +145,9 @@
     function finalizar(win) {
         isPlaying = false;
         this.physics.pause();
-        if(win) this.sound.play('win_sound');
-        
-        let msg = win ? "VICTORIA MAJESTUOSA" : "QUEMA EJECUTADA";
         this.add.rectangle(400, 625, 800, 1250, 0x000000, 0.8);
-        this.add.text(400, 600, msg, { fontSize: '50px', fill: win ? '#00ff00' : '#ff0000', fontWeight: 'bold' }).setOrigin(0.5);
-        setTimeout(() => location.reload(), 5000);
+        this.add.text(400, 600, win ? "VICTORIA" : "QUEMA EJECUTADA", { fontSize: '50px', fill: win ? '#00ff00' : '#ff0000' }).setOrigin(0.5);
+        setTimeout(() => location.reload(), 3000);
     }
 
     async function connectWallet() {

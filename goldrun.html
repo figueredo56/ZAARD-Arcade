@@ -1,162 +1,124 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>ZAARD GOLD RUN - PANGA EDITION</title>
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser-arcade-physics.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
-    <style>
-        body { margin: 0; background-color: #050515; overflow: hidden; font-family: sans-serif; }
-        .web3-panel { position: fixed; top: 10px; width: 95%; display: flex; justify-content: space-between; padding: 10px; z-index: 100; }
-        .btn-connect { padding: 8px 15px; background: #ffcc00; color: #000; border: none; font-weight: bold; border-radius: 5px; cursor: pointer; }
-    </style>
-</head>
-<body>
+const config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 400,
+    parent: 'game-container',
+    physics: {
+        default: 'arcade',
+        arcade: { gravity: { y: 900 }, debug: false }
+    },
+    scene: { preload: preload, create: create, update: update }
+};
 
-<div class="web3-panel">
-    <div style="color: #ffcc00; font-weight: bold;">ESTADO: <span id="status">DESCONECTADO</span></div>
-    <button id="connectBtn" class="btn-connect" onclick="connectWallet()">CONECTAR WALLET</button>
-</div>
+const game = new Phaser.Game(config);
 
-<script>
-    const BURNS_ADDRESS = "0x0000000000000000000000000000000000000000";
-    const GW = "https://cloudflare-ipfs.com/ipfs/";
+// Variables de Juego
+let player, obstacles, gasItems, cursors;
+let lives = 5;
+let gasCount = 0;
+let gameSpeed = -300;
+let isGameOver = false;
 
-    const config = {
-        type: Phaser.AUTO,
-        width: 800,
-        height: 1250,
-        backgroundColor: '#050515',
-        scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
-        physics: { default: 'arcade', arcade: { debug: false } },
-        scene: { preload: preload, create: create, update: update }
-    };
+// Billetera de Quema Oficial (Dead Address)
+const BURN_WALLET = "0x0000000000000000000000000000000000000000";
+const STAKE_AMOUNT = "0.0001";
 
-    const game = new Phaser.Game(config);
-    let player, obstacles, gasGroup, isPlaying = false;
-    let score = 0, lives = 5, gameSpeed = 500;
-    let scoreText, livesText;
+function preload() {
+    // Assets desde tus CIDs de IPFS (usando gateway de cloudflare para velocidad)
+    this.load.image('background', 'https://cloudflare-ipfs.com/ipfs/bafybeibbjca3baec45r7rd3ggks2i7pcxliv3ntdy3u3s26mffrcwr4kwu');
+    this.load.image('player', 'https://cloudflare-ipfs.com/ipfs/bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34');
+    this.load.image('obstacle', 'https://cloudflare-ipfs.com/ipfs/bafybeiarw4qbftgyh2rzjyw56s4cpjxtlptxtwgasgnu7rovqkvmpjgbgy');
+    this.load.image('gas', 'https://cloudflare-ipfs.com/ipfs/bafybeihsmtiwinw5w6jcebelg2p6kr64ivuijcmx4dnpuny2m22piqin2y');
+    
+    // Sonidos (Asegúrate de tener estos archivos o cámbialos por tus links)
+    this.load.audio('jump', 'https://labs.phaser.io/assets/audio/SoundEffects/p-ping.mp3');
+    this.load.audio('collect', 'https://labs.phaser.io/assets/audio/SoundEffects/pickup.wav');
+}
 
-    function preload() {
-        // Forzamos la carga asíncrona para evitar pantalla negra
-        this.load.image('fondo_pres', GW + 'bafybeibdx3yzp4tc2ju26olduf3fpnfjlehprjnok34ieultowkfwvxjaa');
-        this.load.image('player', GW + 'bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34');
-        this.load.image('obs', GW + 'bafybeiarw4qbftgyh2rzjyw56s4cpjxtlptxtwgasgnu7rovqkvmpjgbgy');
-        this.load.image('gas', GW + 'bafybeihsmtiwinw5w6jcebelg2p6kr64ivuijcmx4dnpuny2m22piqin2y');
-        
-        // Sonidos
-        this.load.audio('collect', 'https://labs.phaser.io/assets/audio/SoundEffects/p-ping.mp3');
-        this.load.audio('crash', 'https://labs.phaser.io/assets/audio/SoundEffects/explosion.mp3');
+function create() {
+    this.add.image(400, 200, 'background').setDisplaySize(800, 400);
+
+    player = this.physics.add.sprite(100, 300, 'player').setScale(0.5);
+    player.setCollideWorldBounds(true);
+
+    obstacles = this.physics.add.group();
+    gasItems = this.physics.add.group();
+
+    // UI
+    this.statsText = this.add.text(16, 16, `Vidas: 5 | Gas: 0/200`, { fontSize: '20px', fill: '#fff', backgroundColor: '#000' });
+    this.msgText = this.add.text(400, 50, '', { fontSize: '24px', fill: '#00ff00' }).setOrigin(0.5);
+
+    cursors = this.input.keyboard.createCursorKeys();
+
+    // Generadores
+    this.time.addEvent({ delay: 2000, callback: spawnObstacle, callbackScope: this, loop: true });
+    this.time.addEvent({ delay: 3000, callback: spawnGas, callbackScope: this, loop: true });
+    
+    // Frases de ánimo
+    const frases = ["¡Dale Panga!", "¡ZAARD al frente!", "¡No te detengas!", "¡Casi llegas!"];
+    this.time.addEvent({ 
+        delay: 5000, 
+        callback: () => { if(!isGameOver) this.msgText.setText(Phaser.Utils.Array.GetRandom(frases)); }, 
+        loop: true 
+    });
+
+    // Colisiones
+    this.physics.add.overlap(player, obstacles, hitObstacle, null, this);
+    this.physics.add.overlap(player, gasItems, collectGas, null, this);
+}
+
+function update() {
+    if (isGameOver) return;
+
+    if ((cursors.up.isDown || cursors.space.isDown) && player.body.blocked.down) {
+        player.setVelocityY(-500);
+        this.sound.play('jump');
     }
 
-    function create() {
-        mostrarBienvenida.call(this);
+    // Aumento de velocidad progresivo
+    gameSpeed -= 0.1;
+}
+
+function spawnObstacle() {
+    let obs = obstacles.create(850, 350, 'obstacle').setScale(0.4);
+    obs.setVelocityX(gameSpeed);
+}
+
+function spawnGas() {
+    let g = gasItems.create(850, Phaser.Math.Between(150, 300), 'gas').setScale(0.3);
+    g.body.allowGravity = false;
+    g.setVelocityX(gameSpeed);
+}
+
+function hitObstacle(player, obstacle) {
+    obstacle.destroy();
+    lives--;
+    this.statsText.setText(`Vidas: ${lives} | Gas: ${gasCount}/200`);
+    this.cameras.main.shake(200, 0.01);
+
+    if (lives <= 0) endGame(false, this);
+}
+
+function collectGas(player, gas) {
+    gas.destroy();
+    gasCount++;
+    this.sound.play('collect');
+    this.statsText.setText(`Vidas: ${lives} | Gas: ${gasCount}/200`);
+
+    if (gasCount >= 200) endGame(true, this);
+}
+
+function endGame(won, scene) {
+    isGameOver = true;
+    scene.physics.pause();
+    
+    let resultText = won ? "¡GANASTE 0.0001 ZAARD!" : "PERDISTE. 0.0001 QUEMADO";
+    let color = won ? "#00ff00" : "#ff0000";
+
+    scene.add.text(400, 200, resultText, { fontSize: '40px', fill: color }).setOrigin(0.5);
+    
+    if (!won) {
+        console.log(`Enviando apuesta a la billetera de quema: ${BURN_WALLET}`);
+        // Aquí iría la llamada a tu contrato para ejecutar la quema
     }
-
-    function mostrarBienvenida() {
-        this.children.removeAll();
-        
-        // Renderizado inmediato del fondo (si ya cargó) o color sólido de respaldo
-        if (this.textures.exists('fondo_pres')) {
-            this.add.image(400, 625, 'fondo_pres').setDisplaySize(800, 1250).setAlpha(0.6);
-        } else {
-            this.add.rectangle(400, 625, 800, 1250, 0x050515);
-        }
-
-        this.add.text(400, 250, 'ZAARD: GOLD RUN', { fontSize: '60px', fill: '#ffcc00', fontWeight: 'bold' }).setOrigin(0.5);
-        
-        this.add.text(400, 550, 
-            'INSTRUCCIONES:\n\n' +
-            '• RECOLECTA LOS TOKENS VERDES PARA GANAR.\n' +
-            '• EVITA SER TOCADO POR LOS ROJOS.\n\n' +
-            'OBJETIVO: 200 GAS | VIDAS: 5\n' +
-            'APUESTA: 0.0001 ZAARD\n\n' +
-            'QUEMA: ' + BURNS_ADDRESS.substring(0,20) + '...', 
-            { fontSize: '26px', fill: '#ffffff', align: 'center', lineSpacing: 10 }).setOrigin(0.5);
-
-        let btn = this.add.rectangle(400, 900, 450, 90, 0xffcc00, 0.8).setInteractive();
-        let txt = this.add.text(400, 900, 'ACTIVAR PODER', { fontSize: '35px', fill: '#000000', fontWeight: 'bold' }).setOrigin(0.5);
-
-        btn.on('pointerdown', () => {
-            if (this.sound.context.state === 'suspended') this.sound.context.resume();
-            this.children.removeAll();
-            iniciarJuego.call(this);
-        });
-    }
-
-    function iniciarJuego() {
-        isPlaying = true;
-        score = 0; lives = 5; gameSpeed = 500;
-        
-        // Si el sprite falla, usamos un bloque de color para que el juego no se detenga
-        if (this.textures.exists('player')) {
-            player = this.physics.add.sprite(400, 1100, 'player').setScale(0.25);
-        } else {
-            player = this.add.rectangle(400, 1100, 60, 100, 0x00ff00);
-            this.physics.add.existing(player);
-        }
-        player.setCollideWorldBounds(true);
-
-        obstacles = this.physics.add.group();
-        gasGroup = this.physics.add.group();
-
-        scoreText = this.add.text(20, 80, 'GAS: 0/200', { fontSize: '32px', fill: '#00ff00', fontWeight: 'bold' });
-        livesText = this.add.text(20, 130, 'VIDAS: 5', { fontSize: '32px', fill: '#ff0000', fontWeight: 'bold' });
-
-        this.time.addEvent({ delay: 1000, callback: spawnObstacle, callbackScope: this, loop: true });
-        this.time.addEvent({ delay: 800, callback: spawnGas, callbackScope: this, loop: true });
-
-        this.physics.add.overlap(player, obstacles, (p, o) => {
-            o.destroy();
-            this.sound.play('crash', { volume: 0.5 });
-            lives--;
-            livesText.setText('VIDAS: ' + lives);
-            if(lives <= 0) finalizar.call(this, false);
-        }, null, this);
-
-        this.physics.add.overlap(player, gasGroup, (p, g) => {
-            g.destroy();
-            this.sound.play('collect', { volume: 0.5 });
-            score++;
-            scoreText.setText('GAS: ' + score + '/200');
-            if(score >= 200) finalizar.call(this, true);
-        }, null, this);
-
-        this.input.on('pointermove', (pointer) => { if(isPlaying) player.x = pointer.x; });
-    }
-
-    function spawnObstacle() {
-        if(!isPlaying) return;
-        let x = Phaser.Math.Between(50, 750);
-        let obs = this.textures.exists('obs') ? obstacles.create(x, -50, 'obs').setScale(0.2) : obstacles.add(this.add.rectangle(x, -50, 50, 50, 0xff0000));
-        obs.body.setVelocityY(gameSpeed);
-    }
-
-    function spawnGas() {
-        if(!isPlaying) return;
-        let x = Phaser.Math.Between(50, 750);
-        let gas = this.textures.exists('gas') ? gasGroup.create(x, -50, 'gas').setScale(0.15) : gasGroup.add(this.add.rectangle(x, -50, 30, 30, 0x00ff00));
-        gas.body.setVelocityY(gameSpeed);
-    }
-
-    function update() {}
-
-    function finalizar(win) {
-        isPlaying = false;
-        this.physics.pause();
-        this.add.rectangle(400, 625, 800, 1250, 0x000000, 0.8);
-        this.add.text(400, 600, win ? "VICTORIA" : "QUEMA EJECUTADA", { fontSize: '50px', fill: win ? '#00ff00' : '#ff0000' }).setOrigin(0.5);
-        setTimeout(() => location.reload(), 3000);
-    }
-
-    async function connectWallet() {
-        if (window.ethereum) {
-            const acc = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            document.getElementById('status').innerText = "CONECTADO";
-            document.getElementById('connectBtn').innerText = acc[0].substring(0,6)+"...";
-        }
-    }
-</script>
-</body>
-</html>
+}

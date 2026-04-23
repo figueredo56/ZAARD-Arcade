@@ -2,37 +2,23 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZAARD GOLD RUN - Arcade</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ZAARD GOLD RUN - Oficial</title>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
     <style>
-        /* Efecto Cine: Fondo negro y centrado */
         body {
             margin: 0;
-            padding: 0;
-            background-color: #000;
+            background-color: #000; /* Fondo negro puro */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             overflow: hidden;
-            color: white;
-            font-family: Arial, sans-serif;
         }
-
-        /* Contenedor del juego con franjas negras */
         #game-container {
-            width: 100%;
-            max-width: 800px;
-            height: 600px;
-            border-top: 2px solid #f3ba2f;
-            border-bottom: 2px solid #f3ba2f;
-            box-shadow: 0 0 20px rgba(243, 186, 47, 0.2);
-            position: relative;
-        }
-
-        canvas {
-            display: block;
+            box-shadow: 0 0 30px rgba(243, 186, 47, 0.3);
+            border-top: 3px solid #f3ba2f;
+            border-bottom: 3px solid #f3ba2f;
         }
     </style>
 </head>
@@ -43,119 +29,91 @@
 <script>
     const config = {
         type: Phaser.AUTO,
-        width: 800,
-        height: 600,
+        width: 360,   // Ancho tipo móvil
+        height: 640,  // Alto tipo móvil
         parent: 'game-container',
+        mode: Phaser.Scale.FIT, // ESTO arregla el estiramiento
+        autoCenter: Phaser.Scale.CENTER_BOTH,
         physics: {
             default: 'arcade',
-            arcade: { gravity: { y: 800 }, debug: false }
+            arcade: { gravity: { y: 900 }, debug: false }
         },
-        scene: {
-            preload: preload,
-            create: create,
-            update: update
-        }
+        scene: { preload, create, update }
     };
 
     const game = new Phaser.Game(config);
-    let player;
-    let cursors;
-    let coins;
-    let score = 0;
-    let scoreText;
-    let bgMusic;
+    let player, coins, bgMusic, score = 0, scoreText;
 
     function preload() {
-        // Carga de imágenes (asegúrate de tener estas rutas correctas en tu GitHub)
-        this.load.image('sky', 'assets/fondo_zaard.png'); // Tu fondo personalizado
-        this.load.image('ground', 'assets/platform.png');
+        // Fondo: Asegúrate de que el nombre coincida con tu archivo en assets
+        this.load.image('background', 'assets/fondo_zaard.png'); 
         
-        // Generamos un círculo blanco para las monedas dinámicamente si no tienes el asset
-        let circle = this.make.graphics({x: 0, y: 0, add: false});
-        circle.fillStyle(0xf3ba2f, 1);
-        circle.fillCircle(15, 15, 15);
-        circle.generateTexture('coin', 30, 30);
+        // Creamos la moneda REDONDA dinámicamente
+        let graphics = this.make.graphics({x: 0, y: 0, add: false});
+        graphics.fillStyle(0xf3ba2f, 1);
+        graphics.fillCircle(15, 15, 15);
+        graphics.generateTexture('coin', 30, 30);
 
-        // Personaje (usaremos un rectángulo si no hay asset, cámbialo por tu PNG)
+        // Personaje (usamos un cuadro blanco temporal si no carga el sprite)
         this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
-
-        // Música (Sustituye por tu link de audio)
-        this.load.audio('gameTheme', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'); 
+        
+        // Música
+        this.load.audio('theme', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3');
     }
 
     function create() {
-        // Fondo centrado para dar efecto de profundidad
-        let bg = this.add.image(400, 300, 'sky');
-        bg.setDisplaySize(800, 600);
-        bg.setAlpha(0.6); // Un poco oscuro para que resalten las monedas
+        // Fondo ajustado para que no se vea estirado
+        let bg = this.add.image(180, 320, 'background');
+        bg.setDisplaySize(360, 640);
+        bg.setAlpha(0.7);
 
-        // Música con interacción de usuario
-        bgMusic = this.sound.add('gameTheme', { loop: true, volume: 0.5 });
-        this.input.on('pointerdown', () => {
-            if (!bgMusic.isPlaying) bgMusic.play();
-        });
+        // Audio
+        bgMusic = this.sound.add('theme', { loop: true, volume: 0.5 });
+        this.input.on('pointerdown', () => { if(!bgMusic.isPlaying) bgMusic.play(); });
 
-        // Suelo invisible
-        let platforms = this.physics.add.staticGroup();
-        platforms.create(400, 580, 'ground').setScale(2).refreshBody().setAlpha(0);
+        // Suelo
+        let ground = this.add.rectangle(180, 630, 360, 20, 0x000000, 0);
+        this.physics.add.existing(ground, true);
 
         // Jugador
-        player = this.physics.add.sprite(100, 450, 'dude');
-        player.setBounce(0.1);
+        player = this.physics.add.sprite(180, 500, 'dude');
         player.setCollideWorldBounds(true);
+        this.physics.add.collider(player, ground);
 
-        // Monedas redondas (Gas)
-        coins = this.physics.add.group({
-            key: 'coin',
-            repeat: 5,
-            setXY: { x: 300, y: 0, stepX: 120 }
-        });
+        // Grupo de Monedas (Gas)
+        coins = this.physics.add.group();
+        spawnCoins();
 
-        coins.children.iterate(function (child) {
-            child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-            child.setCircle(15); // Hace que la colisión sea redonda
-        });
-
-        // Colisiones
-        this.physics.add.collider(player, platforms);
-        this.physics.add.collider(coins, platforms);
         this.physics.add.overlap(player, coins, collectCoin, null, this);
 
-        // UI
-        scoreText = this.add.text(16, 16, 'ZAARD Pts: 0', { fontSize: '32px', fill: '#f3ba2f', fontStyle: 'bold' });
-        cursors = this.input.keyboard.createCursorKeys();
-
-        // Mensaje de inicio
-        this.add.text(250, 20, 'Haz clic para activar SONIDO 🔊', { fontSize: '16px', fill: '#ffffff' });
+        // Texto
+        scoreText = this.add.text(20, 20, 'ZAARD: 0', { fontSize: '24px', fill: '#f3ba2f', fontStyle: 'bold' });
+        this.add.text(60, 600, 'Toca para saltar y activar sonido', { fontSize: '12px', fill: '#fff' });
     }
 
     function update() {
-        if (cursors.left.isDown) {
-            player.setVelocityX(-200);
-        } else if (cursors.right.isDown) {
-            player.setVelocityX(200);
-        } else {
-            player.setVelocityX(0);
+        // Control táctil simple para saltar
+        if (this.input.activePointer.isDown && player.body.touching.down) {
+            player.setVelocityY(-450);
         }
+    }
 
-        if (cursors.up.isDown && player.body.touching.down) {
-            player.setVelocityY(-500);
+    function spawnCoins() {
+        for (let i = 0; i < 4; i++) {
+            let x = Phaser.Math.Between(50, 310);
+            let y = Phaser.Math.Between(-100, -500);
+            let coin = coins.create(x, y, 'coin');
+            coin.setVelocityY(Phaser.Math.Between(100, 200));
+            coin.setCircle(15);
         }
     }
 
     function collectCoin(player, coin) {
-        coin.disableBody(true, true);
+        coin.destroy();
         score += 10;
-        scoreText.setText('ZAARD Pts: ' + score);
-
-        // Respawn de monedas para que sea infinito
-        if (coins.countActive(true) === 0) {
-            coins.children.iterate(function (child) {
-                child.enableBody(true, child.x, 0, true, true);
-            });
-        }
+        scoreText.setText('ZAARD: ' + score);
+        if (coins.countActive() === 0) spawnCoins();
     }
 </script>
-
 </body>
 </html>

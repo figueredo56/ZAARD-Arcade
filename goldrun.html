@@ -6,8 +6,8 @@
     <title>ZAARD RUN - Innovation</title>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
     <style>
-        body { margin: 0; background-color: #000; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; font-family: Arial, sans-serif; }
-        canvas { border: 2px solid #ffcc00; }
+        body { margin: 0; background-color: #000; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        #game-container { border: 3px solid #ffcc00; }
     </style>
 </head>
 <body>
@@ -21,126 +21,116 @@
             parent: 'game-container',
             physics: {
                 default: 'arcade',
-                arcade: { gravity: { y: 900 }, debug: false }
+                arcade: { gravity: { y: 1200 }, debug: false }
             },
             scene: { preload: preload, create: create, update: update }
         };
 
         const game = new Phaser.Game(config);
 
-        let player, obstacles, gasItems, cursors, statsText, msgText;
+        let player, obstacles, gasItems, cursors, statsText;
         let lives = 5;
         let gasCount = 0;
-        let gameSpeed = -300;
+        let gameSpeed = -350;
+        let isStarted = false;
         let isGameOver = false;
 
         function preload() {
-            // Usamos el gateway de Pinata directamente para asegurar que carguen
+            // Assets con Gateways estables
             this.load.image('background', 'https://gateway.pinata.cloud/ipfs/bafybeibbjca3baec45r7rd3ggks2i7pcxliv3ntdy3u3s26mffrcwr4kwu');
             this.load.image('player', 'https://gateway.pinata.cloud/ipfs/bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34');
             this.load.image('obstacle', 'https://gateway.pinata.cloud/ipfs/bafybeiarw4qbftgyh2rzjyw56s4cpjxtlptxtwgasgnu7rovqkvmpjgbgy');
             this.load.image('gas', 'https://gateway.pinata.cloud/ipfs/bafybeihsmtiwinw5w6jcebelg2p6kr64ivuijcmx4dnpuny2m22piqin2y');
-            
-            // Sonidos de respaldo
             this.load.audio('jump', 'https://labs.phaser.io/assets/audio/SoundEffects/p-ping.mp3');
-            this.load.audio('collect', 'https://labs.phaser.io/assets/audio/SoundEffects/pickup.wav');
         }
 
         function create() {
-            // Fondo adaptado al tamaño
-            let bg = this.add.image(400, 200, 'background');
-            bg.setDisplaySize(800, 400);
+            // 1. Fondo estirado correctamente
+            this.add.image(400, 200, 'background').setDisplaySize(800, 400).setDepth(0);
 
-            // Jugador con física
-            player = this.physics.add.sprite(100, 300, 'player');
-            player.setScale(0.2); // Ajustado por si la imagen es muy grande
+            // 2. Jugador: Ajusté la escala a 0.15 para que no sea gigante
+            player = this.physics.add.sprite(150, 200, 'player').setScale(0.15).setDepth(5);
             player.setCollideWorldBounds(true);
+            player.body.setAllowGravity(false); 
 
             obstacles = this.physics.add.group();
             gasItems = this.physics.add.group();
 
-            // Interfaz
-            statsText = this.add.text(16, 16, 'Vidas: 5 | Gas: 0/200', { fontSize: '20px', fill: '#fff', backgroundColor: '#000' });
-            msgText = this.add.text(400, 50, '¡DALE PANGA!', { fontSize: '24px', fill: '#00ff00' }).setOrigin(0.5);
+            // 3. UI
+            statsText = this.add.text(16, 16, '', { fontSize: '22px', fill: '#ffcc00', stroke: '#000', strokeThickness: 5 }).setDepth(10);
+
+            // 4. Pantalla de Bienvenida (Reglas)
+            let overlay = this.add.rectangle(400, 200, 800, 400, 0x000000, 0.85).setDepth(20);
+            let title = this.add.text(400, 100, 'ZAARD RUN: INNOVATION', { fontSize: '40px', fill: '#ffcc00', fontWeight: 'bold' }).setOrigin(0.5).setDepth(21);
+            
+            let rules = this.add.text(400, 210, 
+                'REGLAS DEL JUEGO:\n\n' +
+                '• 5 VIDAS: No choques con los obstáculos.\n' +
+                '• META: Recolecta 200 de GAS para ganar.\n' +
+                '• APUESTA: 0.0001 ZAARD (Se queman si pierdes).\n' +
+                '• CONTROL: Flecha Arriba o Espacio para saltar.', 
+                { fontSize: '18px', fill: '#ffffff', align: 'center', lineSpacing: 10 }
+            ).setOrigin(0.5).setDepth(21);
+
+            let btn = this.add.rectangle(400, 330, 220, 50, 0xffcc00).setInteractive().setDepth(21);
+            let btnTxt = this.add.text(400, 330, 'ACEPTAR Y JUGAR', { fontSize: '20px', fill: '#000', fontWeight: 'bold' }).setOrigin(0.5).setDepth(22);
+
+            btn.on('pointerdown', () => {
+                overlay.destroy(); title.destroy(); rules.destroy(); btn.destroy(); btnTxt.destroy();
+                isStarted = true;
+                player.body.setAllowGravity(true);
+                statsText.setText(`VIDAS: ${lives} | GAS: ${gasCount}/200`);
+                startSpawning(this);
+            });
 
             cursors = this.input.keyboard.createCursorKeys();
+        }
 
-            // Eventos de tiempo
-            this.time.addEvent({ delay: 2000, callback: spawnObstacle, callbackScope: this, loop: true });
-            this.time.addEvent({ delay: 3000, callback: spawnGas, callbackScope: this, loop: true });
+        function startSpawning(scene) {
+            scene.time.addEvent({ delay: 1800, callback: () => spawnObstacle(scene), loop: true });
+            scene.time.addEvent({ delay: 2200, callback: () => spawnGas(scene), loop: true });
+            
+            // Colisiones
+            scene.physics.add.overlap(player, obstacles, (p, o) => { o.destroy(); lives--; updateUI(scene); }, null, scene);
+            scene.physics.add.overlap(player, gasItems, (p, g) => { g.destroy(); gasCount++; updateUI(scene); }, null, scene);
+        }
 
-            // Colisiones corregidas
-            this.physics.add.overlap(player, obstacles, hitObstacle, null, this);
-            this.physics.add.overlap(player, gasItems, collectGas, null, this);
+        function updateUI(scene) {
+            statsText.setText(`VIDAS: ${lives} | GAS: ${gasCount}/200`);
+            scene.cameras.main.shake(100, 0.005);
+            if (lives <= 0) endGame(false, scene);
+            if (gasCount >= 200) endGame(true, scene);
         }
 
         function update() {
-            if (isGameOver) return;
-
-            // Control de salto
+            if (!isStarted || isGameOver) return;
             if ((cursors.up.isDown || cursors.space.isDown) && player.body.blocked.down) {
-                player.setVelocityY(-500);
-                if (this.sound.get('jump')) this.sound.play('jump');
+                player.setVelocityY(-600);
+                this.sound.play('jump');
             }
-
-            // Aumento de dificultad lenta
-            gameSpeed -= 0.05;
+            gameSpeed -= 0.05; // Dificultad progresiva
         }
 
-        function spawnObstacle() {
+        function spawnObstacle(scene) {
             if (isGameOver) return;
-            let obs = obstacles.create(850, 340, 'obstacle');
-            obs.setScale(0.15);
+            let obs = obstacles.create(850, 345, 'obstacle').setScale(0.12).setDepth(4);
             obs.setVelocityX(gameSpeed);
-            obs.checkWorldBounds = true;
-            obs.outOfBoundsKill = true;
+            obs.body.allowGravity = false;
         }
 
-        function spawnGas() {
+        function spawnGas(scene) {
             if (isGameOver) return;
-            let g = gasItems.create(850, Phaser.Math.Between(150, 280), 'gas');
-            g.setScale(0.1);
+            let g = gasItems.create(850, Phaser.Math.Between(160, 300), 'gas').setScale(0.08).setDepth(4);
             g.body.allowGravity = false;
             g.setVelocityX(gameSpeed);
-        }
-
-        function hitObstacle(player, obstacle) {
-            obstacle.destroy();
-            lives--;
-            statsText.setText(`Vidas: ${lives} | Gas: ${gasCount}/200`);
-            this.cameras.main.shake(200, 0.01);
-
-            if (lives <= 0) endGame(false, this);
-        }
-
-        function collectGas(player, gas) {
-            gas.destroy();
-            gasCount++;
-            if (this.sound.get('collect')) this.sound.play('collect');
-            statsText.setText(`Vidas: ${lives} | Gas: ${gasCount}/200`);
-
-            if (gasCount >= 200) endGame(true, this);
         }
 
         function endGame(won, scene) {
             isGameOver = true;
             scene.physics.pause();
-            
-            const txt = won ? "¡VICTORIA ZAARD!" : "DERROTA - QUEMANDO 0.0001";
-            scene.add.text(400, 200, txt, { 
-                fontSize: '40px', 
-                fill: won ? '#00ff00' : '#ff0000',
-                backgroundColor: '#000' 
-            }).setOrigin(0.5);
-
-            // Reinicio automático tras 3 segundos
-            scene.time.delayedCall(3000, () => {
-                lives = 5;
-                gasCount = 0;
-                gameSpeed = -300;
-                isGameOver = false;
-                scene.scene.restart();
-            });
+            let txt = won ? "¡VICTORIA! +0.0001 ZAARD" : "GAME OVER - TOKENS QUEMADOS";
+            scene.add.text(400, 200, txt, { fontSize: '38px', fill: won ? '#00ff00' : '#ff0000', backgroundColor: '#000', padding: 10 }).setOrigin(0.5).setDepth(30);
+            scene.time.delayedCall(4000, () => { location.reload(); });
         }
     </script>
 </body>

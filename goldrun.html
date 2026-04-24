@@ -7,9 +7,9 @@
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.8.1/dist/web3.min.js"></script>
     <style>
-        * { touch-action: none; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
-        body { margin: 0; background-color: #000; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; position: fixed; width: 100%; font-family: sans-serif; }
-        #game-container { border: 2px solid #f3ba2f; box-shadow: 0 0 20px #f3ba2f; }
+        * { touch-action: none; -webkit-touch-callout: none; user-select: none; }
+        body { margin: 0; background-color: #000; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; position: fixed; width: 100%; font-family: 'Courier New', Courier, monospace; }
+        #game-container { border: 2px solid #f3ba2f; box-shadow: 0 0 20px #f3ba2f; background: #000; }
     </style>
 </head>
 <body>
@@ -23,104 +23,106 @@
         width: 360,
         height: 640,
         parent: 'game-container',
-        backgroundColor: '#000011',
-        scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
+        transparent: true,
         physics: { default: 'arcade', arcade: { debug: false } },
         scene: { preload, create, update }
     };
 
     const game = new Phaser.Game(config);
-    let player, items, score = 0, scoreText, gameSpeed = 350, isPlaying = false, bgMusic, userAccount;
+    let player, items, score = 0, scoreText, gameSpeed = 350, isPlaying = false, bgMusic;
 
     function preload() {
         this.load.audio('music', 'https://cdn.pixabay.com/audio/2022/01/18/audio_d0a13f69d2.mp3');
         let g = this.make.graphics({x: 0, y: 0, add: false});
+        // Fenix
         g.fillStyle(0xf3ba2f, 1); g.fillTriangle(20, 0, 0, 40, 40, 40);
         g.fillStyle(0xffd700, 1); g.fillEllipse(20, 35, 60, 15);
         g.generateTexture('skin', 60, 50); g.clear();
+        // Elementos
         g.fillStyle(0xf3ba2f, 1); g.fillCircle(15, 15, 15); g.generateTexture('gas', 30, 30); g.clear();
         g.fillStyle(0xff0000, 1); g.fillTriangle(17, 0, 0, 35, 35, 35); g.generateTexture('obs', 35, 35);
     }
 
     function create() {
-        createStars.call(this);
-        try { bgMusic = this.sound.add('music', { loop: true, volume: 0.5 }); } catch(e){}
-        showMenu.call(this);
-    }
-
-    function createStars() {
-        for (let i = 0; i < 80; i++) {
-            this.add.circle(Phaser.Math.Between(0, 360), Phaser.Math.Between(0, 640), 1, 0xffffff, Phaser.Math.FloatBetween(0.3, 0.8));
+        this.stars = [];
+        for (let i = 0; i < 50; i++) {
+            this.add.circle(Phaser.Math.Between(0, 360), Phaser.Math.Between(0, 640), 1, 0xffffff, 0.5);
         }
-    }
 
-    function showMenu() {
-        this.menu = this.add.container(0, 0).setDepth(100);
-        const title = this.add.text(180, 80, 'ZAARD GOLD RUN', { fontSize: '30px', fill: '#f3ba2f', fontStyle: 'bold' }).setOrigin(0.5);
-        const infoBox = this.add.text(180, 220, 'RECOMPENSAS:\n• BRONCE: 100 GAS\n• PLATA: 200 GAS\n• ORO: 500 GAS\n\nApuesta: 0.0001 ZAARD', { fontSize: '15px', fill: '#ffffff', align: 'center', lineSpacing: 6 }).setOrigin(0.5);
-        
-        const btnP = this.add.rectangle(180, 460, 240, 50, 0x333333).setInteractive();
-        const txtP = this.add.text(180, 460, 'MODO PRÁCTICA', { fontSize: '16px', fill: '#fff' }).setOrigin(0.5);
+        try { bgMusic = this.sound.add('music', { loop: true, volume: 0.5 }); } catch(e){}
 
-        const btnA = this.add.rectangle(180, 530, 240, 50, 0xf3ba2f).setInteractive();
-        const txtA = this.add.text(180, 530, 'CONECTAR Y APOSTAR', { fontSize: '16px', fill: '#000', fontStyle: 'bold' }).setOrigin(0.5);
+        this.drawMenu();
 
-        this.menu.add([title, infoBox, btnP, txtP, btnA, txtA]);
-
-        btnP.on('pointerdown', () => start.call(this, false));
-        btnA.on('pointerdown', () => connectWallet.call(this));
-
-        scoreText = this.add.text(180, 40, 'GAS: 0', { fontSize: '28px', fill: '#f3ba2f', fontStyle: 'bold' }).setOrigin(0.5).setVisible(false).setDepth(10);
+        scoreText = this.add.text(180, 50, 'GAS: 0', { fontSize: '28px', fill: '#f3ba2f', fontStyle: 'bold' }).setOrigin(0.5).setVisible(false).setDepth(10);
         player = this.physics.add.sprite(180, 560, 'skin').setCollideWorldBounds(true).setVisible(false).setDepth(5);
         items = this.physics.add.group();
 
         this.physics.add.overlap(player, items, (p, item) => {
             if (item.texture.key === 'gas') {
-                item.destroy(); score++; gameSpeed += 5; scoreText.setText('GAS: ' + score);
-            } else { die.call(this); }
+                item.destroy(); score++; gameSpeed += 4; scoreText.setText('GAS: ' + score);
+            } else { this.gameOver(); }
         });
+
+        this.time.addEvent({ delay: 550, callback: spawn, callbackScope: this, loop: true });
     }
 
-    async connectWallet() {
+    this.drawMenu = function() {
+        if (this.menuContainer) this.menuContainer.destroy();
+        this.menuContainer = this.add.container(0, 0).setDepth(100);
+        
+        const rect = this.add.rectangle(180, 320, 320, 500, 0x000000, 0.8).setStrokeStyle(2, 0xf3ba2f);
+        const title = this.add.text(180, 120, 'ZAARD GOLD RUN', { fontSize: '28px', fill: '#f3ba2f', fontStyle: 'bold' }).setOrigin(0.5);
+        
+        const info = this.add.text(180, 250, '100 GAS = BRONCE\n200 GAS = PLATA\n500 GAS = ORO\n\nVAULT: ' + VAULT.slice(0,6)+'...'+VAULT.slice(-4), { fontSize: '14px', fill: '#fff', align: 'center' }).setOrigin(0.5);
+
+        const btnP = this.add.rectangle(180, 400, 200, 50, 0x333333).setInteractive();
+        const txtP = this.add.text(180, 400, 'PRÁCTICA', { fontSize: '18px', fill: '#fff' }).setOrigin(0.5);
+
+        const btnA = this.add.rectangle(180, 470, 200, 50, 0xf3ba2f).setInteractive();
+        const txtA = this.add.text(180, 470, 'APOSTAR', { fontSize: '18px', fill: '#000', fontStyle: 'bold' }).setOrigin(0.5);
+
+        this.menuContainer.add([rect, title, info, btnP, txtP, btnA, txtA]);
+
+        btnP.on('pointerdown', () => this.startGame(false));
+        btnA.on('pointerdown', () => this.connectAndStart());
+    };
+
+    this.connectAndStart = async function() {
         if (window.ethereum) {
             try {
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                userAccount = accounts[0];
-                alert("Conectado: " + userAccount.substring(0,6) + "...");
-                start.call(this, true);
-            } catch (err) { alert("Error al conectar"); }
-        } else { alert("Abre este link en el navegador de MetaMask/TrustWallet"); }
-    }
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                this.startGame(true);
+            } catch (e) { alert("Conexión rechazada"); }
+        } else { alert("Usa el navegador de MetaMask"); }
+    };
 
-    function start(bet) {
-        if(this.menu) this.menu.destroy();
+    this.startGame = function(isBet) {
+        this.menuContainer.setVisible(false);
         isPlaying = true; score = 0; gameSpeed = 350;
         scoreText.setVisible(true).setText('GAS: 0');
         player.setVisible(true).setX(180);
-        if (bgMusic && !bgMusic.isPlaying) { this.sound.resumeAll(); bgMusic.play(); }
-    }
+        if (bgMusic) { this.sound.resumeAll(); if(!bgMusic.isPlaying) bgMusic.play(); }
+    };
 
     function spawn() {
         if (!isPlaying) return;
         let x = Phaser.Math.Between(40, 320);
-        let isGas = Phaser.Math.Between(0, 100) > 60; 
-        let item = items.create(x, -50, isGas ? 'gas' : 'obs');
+        let item = items.create(x, -50, Phaser.Math.Between(0, 100) > 65 ? 'gas' : 'obs');
         item.setVelocityY(gameSpeed);
     }
 
-    function die() {
+    this.gameOver = function() {
         isPlaying = false;
         if (bgMusic) bgMusic.stop();
         items.clear(true, true);
         player.setVisible(false);
-        scoreText.setVisible(false);
         alert("¡FIN DEL JUEGO!\nGAS: " + score);
-        this.scene.restart(); // Esto limpia y vuelve al create()
-    }
+        this.menuContainer.setVisible(true); // En lugar de reiniciar escena, solo mostramos menú
+    };
 
     function update() {
         if (isPlaying && this.input.activePointer.isDown) {
-            player.x = Phaser.Math.Linear(player.x, this.input.activePointer.x, 0.25);
+            player.x = Phaser.Math.Linear(player.x, this.input.activePointer.x, 0.2);
         }
         items.children.iterate(c => { if (c && c.y > 680) c.destroy(); });
     }

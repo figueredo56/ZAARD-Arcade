@@ -3,99 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZAARD GOLD RUN - Fuerza PANGA</title>
+    <title>ZAARD GOLD RUN - Web3 Betting</title>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.1/dist/web3.min.js"></script>
     <style>
-        body { margin: 0; background-color: #000; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-        #game-container { border: 2px solid #f3ba2f; }
+        body { margin: 0; background-color: #000; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; font-family: sans-serif; }
+        #game-container { border: 2px solid #f3ba2f; box-shadow: 0 0 15px #f3ba2f; }
     </style>
 </head>
 <body>
 <div id="game-container"></div>
 <script>
+    const VAULT_CONTRACT = "0xbC71465eD3e4B395fe8ed46Bac764Cb4b8BbAed2";
+    const BURN_ADDRESS = "0x000000000000000000000000000000000000dEaD";
+    const ZAARD_TOKEN = "0xd9e66399a7017c6fb5b624d491bb96a4a736d2bb";
+
     const config = {
         type: Phaser.AUTO,
         width: 360,
         height: 640,
         parent: 'game-container',
-        backgroundColor: '#000000',
+        backgroundColor: '#000',
         scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
         physics: { default: 'arcade', arcade: { debug: false } },
         scene: { preload, create, update }
     };
 
     const game = new Phaser.Game(config);
-    let player, items, score = 0, scoreText, gameSpeed = 360, isPlaying = false, bgMusic;
+    let player, items, score = 0, scoreText, gameSpeed = 360, isPlaying = false, isBetting = false, bgMusic;
 
     function preload() {
-        // IPFS con pasarela de respaldo
-        this.load.image('welcomeBg', 'https://ipfs.io/ipfs/bafybeigcq6o2axe2fcz3jk4timmuq2xkow5kdgd5msasbnyzaup4lmjui4');
+        this.load.image('bg', 'https://cloudflare-ipfs.com/ipfs/bafybeigcq6o2axe2fcz3jk4timmuq2xkow5kdgd5msasbnyzaup4lmjui4');
+        this.load.audio('music', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3');
         
-        // Generar texturas básicas de inmediato (sin esperar archivos)
         let g = this.make.graphics({x: 0, y: 0, add: false});
-        g.fillStyle(0xffffff, 1); g.fillTriangle(0, 40, 20, 0, 40, 40);
-        g.generateTexture('player', 40, 40); g.clear();
-        g.fillStyle(0xf3ba2f, 1); g.fillCircle(15, 15, 15);
-        g.generateTexture('gas', 30, 30); g.clear();
-        g.fillStyle(0xff0000, 1); g.fillRect(0, 0, 35, 35);
-        g.generateTexture('obs', 35, 35);
+        g.fillStyle(0xffffff, 1); g.fillTriangle(0, 40, 20, 0, 40, 40); g.generateTexture('player', 40, 40); g.clear();
+        g.fillStyle(0xf3ba2f, 1); g.fillCircle(15, 15, 15); g.generateTexture('gas', 30, 30); g.clear();
+        g.fillStyle(0xff0000, 1); g.fillRect(0, 0, 35, 35); g.generateTexture('obs', 35, 35);
     }
 
     function create() {
-        // Capa de Bienvenida
-        this.welcomeLayer = this.add.container(0, 0).setDepth(100);
+        bgMusic = this.sound.add('music', { loop: true, volume: 0.4 });
+        this.menu = this.add.container(0, 0).setDepth(100);
         
-        // Fondo (se muestra solo si carga)
-        const bgImg = this.add.image(180, 320, 'welcomeBg').setDisplaySize(360, 640).setAlpha(0.6);
-        
-        const title = this.add.text(180, 150, 'ZAARD GOLD RUN', { fontSize: '34px', fill: '#f3ba2f', fontStyle: 'bold' }).setOrigin(0.5);
-        const rules = this.add.text(180, 300, 'REGLAS:\n\n- Atrapa el GAS (Dorado)\n- Esquiva Obstáculos (Rojo)\n- ¡Velocidad nivel PANGA!', { fontSize: '18px', fill: '#ffffff', align: 'center' }).setOrigin(0.5);
-        
-        const btnBg = this.add.rectangle(180, 480, 280, 70, 0xf3ba2f).setInteractive();
-        const btnText = this.add.text(180, 480, 'PRUEBA TU FUERZA PANGA', { fontSize: '18px', fill: '#000', fontStyle: 'bold' }).setOrigin(0.5);
+        this.add.image(180, 320, 'bg').setDisplaySize(360, 640).setAlpha(0.5);
+        const title = this.add.text(180, 100, 'ZAARD GOLD RUN', { fontSize: '30px', fill: '#f3ba2f', fontStyle: 'bold' }).setOrigin(0.5);
 
-        this.welcomeLayer.add([bgImg, title, rules, btnBg, btnText]);
+        // Botón Practicar
+        const btn1 = this.add.rectangle(180, 250, 240, 50, 0x555555).setInteractive();
+        const txt1 = this.add.text(180, 250, 'MODO PRÁCTICA', { fontSize: '16px', fill: '#fff' }).setOrigin(0.5);
 
-        // Elementos de juego (Ocultos hasta el click)
-        scoreText = this.add.text(180, 50, 'ZAARD GAS: 0', { fontSize: '28px', fill: '#f3ba2f', fontStyle: 'bold' }).setOrigin(0.5).setVisible(false);
+        // Botón Apostar (0.0001 ZAARD)
+        const btn2 = this.add.rectangle(180, 330, 240, 50, 0xf3ba2f).setInteractive();
+        const txt2 = this.add.text(180, 330, 'APOSTAR 0.0001 ZAARD', { fontSize: '16px', fill: '#000', fontStyle: 'bold' }).setOrigin(0.5);
+
+        const rules = this.add.text(180, 450, '100 GAS = Bronce\n200 GAS = Plata\n500 GAS = ORO', { fontSize: '14px', fill: '#aaa', align: 'center' }).setOrigin(0.5);
+
+        this.menu.add([title, btn1, txt1, btn2, txt2, rules]);
+
+        scoreText = this.add.text(180, 40, 'GAS: 0', { fontSize: '24px', fill: '#f3ba2f', fontStyle: 'bold' }).setOrigin(0.5).setVisible(false);
         player = this.physics.add.sprite(180, 560, 'player').setCollideWorldBounds(true).setVisible(false);
         items = this.physics.add.group();
 
-        btnBg.on('pointerdown', () => {
-            this.welcomeLayer.setVisible(false);
-            isPlaying = true;
-            score = 0;
-            gameSpeed = 360;
-            scoreText.setVisible(true).setText('ZAARD GAS: 0');
-            player.setVisible(true).setX(180);
-        });
+        btn1.on('pointerdown', () => startLevel(false));
+        btn2.on('pointerdown', () => startLevel(true));
 
         this.physics.add.overlap(player, items, (p, item) => {
             if (item.texture.key === 'gas') {
-                item.destroy();
-                score += 10;
-                gameSpeed += 25; // Aumento agresivo
-                scoreText.setText('ZAARD GAS: ' + score);
+                item.destroy(); score += 1;
+                gameSpeed += 5;
+                scoreText.setText('GAS: ' + score);
             } else {
-                this.scene.restart();
-                isPlaying = false;
+                gameOver();
             }
-        }, null, this);
+        });
 
-        this.time.addEvent({ delay: 600, callback: () => {
-            if (!isPlaying) return;
-            let x = Phaser.Math.Between(40, 320);
-            let isGas = Phaser.Math.Between(0, 100) > 85; // 85% obstáculos
-            let item = items.create(x, -50, isGas ? 'gas' : 'obs');
-            item.setVelocityY(gameSpeed);
-        }, loop: true });
+        this.time.addEvent({ delay: 600, callback: spawn, loop: true });
+    }
+
+    async function startLevel(bet) {
+        if (bet) {
+            if (typeof window.ethereum !== 'undefined') {
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                isBetting = true;
+            } else {
+                alert("Instala Metamask para apostar"); return;
+            }
+        }
+        game.scene.scenes[0].menu.setVisible(false);
+        if (!bgMusic.isPlaying) bgMusic.play();
+        isPlaying = true; score = 0; gameSpeed = 360;
+        scoreText.setVisible(true); player.setVisible(true);
+    }
+
+    function spawn() {
+        if (!isPlaying) return;
+        let x = Phaser.Math.Between(40, 320);
+        let isGas = Phaser.Math.Between(0, 100) > 85;
+        let item = items.create(x, -50, isGas ? 'gas' : 'obs');
+        item.setVelocityY(gameSpeed);
+    }
+
+    function gameOver() {
+        isPlaying = false;
+        bgMusic.stop();
+        if (isBetting && score < 100) {
+            alert("Perdiste tu apuesta. ZAARD enviado a la billetera de quema.");
+            // Aquí se ejecutaría la lógica del contrato para transferir al BURN_ADDRESS
+        } else if (isBetting && score >= 100) {
+            let rank = score >= 500 ? "ORO" : (score >= 200 ? "PLATA" : "BRONCE");
+            alert("¡FUERZA PANGA! Ganaste rango " + rank + ". El Vaul te recompensará.");
+        }
+        game.scene.scenes[0].scene.restart();
     }
 
     function update() {
         if (isPlaying && this.input.activePointer.isDown) {
             player.x = Phaser.Math.Linear(player.x, this.input.activePointer.x, 0.2);
         }
-        items.children.iterate(c => { if (c && c.y > 680) c.destroy(); });
     }
 </script>
 </body>

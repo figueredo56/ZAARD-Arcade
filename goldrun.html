@@ -28,41 +28,44 @@
     let player, items, score = 0, scoreText, gameSpeed = 350, isPlaying = false, bgMusic;
 
     function preload() {
-        // Fondo y Corredor Personalizado (CIDs)
-        this.load.image('bg', 'https://cloudflare-ipfs.com/ipfs/bafybeigcq6o2axe2fcz3jk4timmuq2xkow5kdgd5msasbnyzaup4lmjui4');
-        this.load.image('skin', 'https://cloudflare-ipfs.com/ipfs/bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34');
+        // Imágenes con Gateways alternativos para asegurar que carguen
+        this.load.image('bg', 'https://gateway.pinata.cloud/ipfs/bafybeigcq6o2axe2fcz3jk4timmuq2xkow5kdgd5msasbnyzaup4lmjui4');
+        this.load.image('skin', 'https://gateway.pinata.cloud/ipfs/bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34');
         
-        // Audio
-        this.load.audio('music', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+        // Sonido (Enlace directo estable)
+        this.load.audio('music', 'https://cdn.pixabay.com/audio/2022/03/15/audio_7306263b84.mp3');
         
-        // Gráficos básicos para GAS y Obstáculos
+        // Gráficos de respaldo por si falla la red
         let g = this.make.graphics({x: 0, y: 0, add: false});
+        g.fillStyle(0x00ff00, 1); g.fillRect(0,0,40,40); g.generateTexture('fallbackSkin', 40, 40); g.clear();
         g.fillStyle(0xf3ba2f, 1); g.fillCircle(15, 15, 15); g.generateTexture('gas', 30, 30); g.clear();
         g.fillStyle(0xff0000, 1); g.fillRect(0, 0, 35, 35); g.generateTexture('obs', 35, 35);
     }
 
     function create() {
-        this.background = this.add.image(180, 320, 'bg').setDisplaySize(360, 640).setAlpha(0.4).setDepth(0);
+        // Fondo con fallback
+        this.add.image(180, 320, 'bg').setDisplaySize(360, 640).setAlpha(0.4);
         
         // Música
-        try { bgMusic = this.sound.add('music', { loop: true, volume: 0.5 }); } catch(e) {}
+        bgMusic = this.sound.add('music', { loop: true, volume: 0.5 });
 
         // Menú
         this.menu = this.add.container(0, 0).setDepth(100);
         const title = this.add.text(180, 120, 'ZAARD GOLD RUN', { fontSize: '32px', fill: '#f3ba2f', fontStyle: 'bold' }).setOrigin(0.5);
-        
         const btnP = this.add.rectangle(180, 260, 260, 60, 0x333333).setInteractive();
         const txtP = this.add.text(180, 260, 'MODO PRÁCTICA', { fontSize: '18px', fill: '#fff' }).setOrigin(0.5);
-
         const btnA = this.add.rectangle(180, 350, 260, 60, 0xf3ba2f).setInteractive();
         const txtA = this.add.text(180, 350, 'MODO APUESTA', { fontSize: '18px', fill: '#000', fontStyle: 'bold' }).setOrigin(0.5);
+        
+        this.menu.add([title, btnP, txtP, btnA, txtA]);
 
-        const rules = this.add.text(180, 480, '100 GAS = Bronce\n200 GAS = Plata\n500 GAS = ORO', { fontSize: '16px', fill: '#f3ba2f', align: 'center' }).setOrigin(0.5);
-        this.menu.add([title, btnP, txtP, btnA, txtA, rules]);
-
-        // Juego
-        scoreText = this.add.text(180, 50, 'GAS: 0', { fontSize: '28px', fill: '#f3ba2f', fontStyle: 'bold' }).setOrigin(0.5).setVisible(false).setDepth(10);
-        player = this.physics.add.sprite(180, 560, 'skin').setDisplaySize(50, 50).setCollideWorldBounds(true).setVisible(false);
+        // Interfaz
+        scoreText = this.add.text(180, 50, 'GAS: 0', { fontSize: '28px', fill: '#f3ba2f', fontStyle: 'bold' }).setOrigin(0.5).setVisible(false);
+        
+        // Jugador: Intentar cargar Skin, si no usa Fallback
+        const skinKey = this.textures.exists('skin') ? 'skin' : 'fallbackSkin';
+        player = this.physics.add.sprite(180, 560, skinKey).setDisplaySize(50, 50).setCollideWorldBounds(true).setVisible(false);
+        
         items = this.physics.add.group();
 
         btnP.on('pointerdown', () => start.call(this));
@@ -71,7 +74,7 @@
         this.physics.add.overlap(player, items, (p, item) => {
             if (item.texture.key === 'gas') {
                 item.destroy(); score++;
-                gameSpeed += 5; // Aceleración suave para que sea justo
+                gameSpeed += 5;
                 scoreText.setText('GAS: ' + score);
             } else { die.call(this); }
         });
@@ -90,8 +93,7 @@
     function spawn() {
         if (!isPlaying) return;
         let x = Phaser.Math.Between(40, 320);
-        // AJUSTE: Ahora el GAS sale el 35% de las veces (antes era 15%). Más premios.
-        let isGas = Phaser.Math.Between(0, 100) > 65; 
+        let isGas = Phaser.Math.Between(0, 100) > 65; // 35% Probabilidad de GAS
         let item = items.create(x, -50, isGas ? 'gas' : 'obs');
         item.setVelocityY(gameSpeed);
     }
@@ -99,7 +101,7 @@
     function die() {
         isPlaying = false;
         if (bgMusic) bgMusic.stop();
-        alert("¡FIN DEL JUEGO!\nGAS recolectado: " + score);
+        alert("¡FIN DEL JUEGO!\nGAS: " + score);
         this.scene.restart();
     }
 

@@ -3,21 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZAARD GOLD RUN - Web3 Betting</title>
+    <title>ZAARD GOLD RUN - Fuerza PANGA</title>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.8.1/dist/web3.min.js"></script>
     <style>
-        body { margin: 0; background-color: #000; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; font-family: sans-serif; }
-        #game-container { border: 2px solid #f3ba2f; box-shadow: 0 0 15px #f3ba2f; }
+        body { margin: 0; background-color: #000; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        #game-container { border: 2px solid #f3ba2f; }
     </style>
 </head>
 <body>
 <div id="game-container"></div>
 <script>
-    const VAULT_CONTRACT = "0xbC71465eD3e4B395fe8ed46Bac764Cb4b8BbAed2";
-    const BURN_ADDRESS = "0x000000000000000000000000000000000000dEaD";
-    const ZAARD_TOKEN = "0xd9e66399a7017c6fb5b624d491bb96a4a736d2bb";
-
     const config = {
         type: Phaser.AUTO,
         width: 360,
@@ -33,9 +29,11 @@
     let player, items, score = 0, scoreText, gameSpeed = 360, isPlaying = false, isBetting = false, bgMusic;
 
     function preload() {
+        // Carga con pasarela rápida
         this.load.image('bg', 'https://cloudflare-ipfs.com/ipfs/bafybeigcq6o2axe2fcz3jk4timmuq2xkow5kdgd5msasbnyzaup4lmjui4');
         this.load.audio('music', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3');
         
+        // Generar gráficos básicos de inmediato
         let g = this.make.graphics({x: 0, y: 0, add: false});
         g.fillStyle(0xffffff, 1); g.fillTriangle(0, 40, 20, 0, 40, 40); g.generateTexture('player', 40, 40); g.clear();
         g.fillStyle(0xf3ba2f, 1); g.fillCircle(15, 15, 15); g.generateTexture('gas', 30, 30); g.clear();
@@ -43,84 +41,77 @@
     }
 
     function create() {
-        bgMusic = this.sound.add('music', { loop: true, volume: 0.4 });
+        // Fondo (se añade pero no bloquea)
+        this.background = this.add.image(180, 320, 'bg').setDisplaySize(360, 640).setAlpha(0).setDepth(0);
+        this.events.on('render', () => { if(this.textures.exists('bg')) this.background.setAlpha(0.4); });
+
+        // Capa de Menú
         this.menu = this.add.container(0, 0).setDepth(100);
-        
-        this.add.image(180, 320, 'bg').setDisplaySize(360, 640).setAlpha(0.5);
-        const title = this.add.text(180, 100, 'ZAARD GOLD RUN', { fontSize: '30px', fill: '#f3ba2f', fontStyle: 'bold' }).setOrigin(0.5);
+        const title = this.add.text(180, 120, 'ZAARD GOLD RUN', { fontSize: '32px', fill: '#f3ba2f', fontStyle: 'bold' }).setOrigin(0.5);
 
-        // Botón Practicar
-        const btn1 = this.add.rectangle(180, 250, 240, 50, 0x555555).setInteractive();
-        const txt1 = this.add.text(180, 250, 'MODO PRÁCTICA', { fontSize: '16px', fill: '#fff' }).setOrigin(0.5);
+        // Botón Práctica
+        const btnP = this.add.rectangle(180, 260, 260, 60, 0x333333).setInteractive();
+        const txtP = this.add.text(180, 260, 'MODO PRÁCTICA', { fontSize: '18px', fill: '#fff' }).setOrigin(0.5);
 
-        // Botón Apostar (0.0001 ZAARD)
-        const btn2 = this.add.rectangle(180, 330, 240, 50, 0xf3ba2f).setInteractive();
-        const txt2 = this.add.text(180, 330, 'APOSTAR 0.0001 ZAARD', { fontSize: '16px', fill: '#000', fontStyle: 'bold' }).setOrigin(0.5);
+        // Botón Apostar
+        const btnA = this.add.rectangle(180, 350, 260, 60, 0xf3ba2f).setInteractive();
+        const txtA = this.add.text(180, 350, 'APOSTAR 0.0001 ZAARD', { fontSize: '16px', fill: '#000', fontStyle: 'bold' }).setOrigin(0.5);
 
-        const rules = this.add.text(180, 450, '100 GAS = Bronce\n200 GAS = Plata\n500 GAS = ORO', { fontSize: '14px', fill: '#aaa', align: 'center' }).setOrigin(0.5);
+        const rules = this.add.text(180, 480, '100 GAS = Bronce\n200 GAS = Plata\n500 GAS = ORO', { fontSize: '16px', fill: '#f3ba2f', align: 'center' }).setOrigin(0.5);
 
-        this.menu.add([title, btn1, txt1, btn2, txt2, rules]);
+        this.menu.add([title, btnP, txtP, btnA, txtA, rules]);
 
-        scoreText = this.add.text(180, 40, 'GAS: 0', { fontSize: '24px', fill: '#f3ba2f', fontStyle: 'bold' }).setOrigin(0.5).setVisible(false);
+        // Juego
+        scoreText = this.add.text(180, 50, 'GAS: 0', { fontSize: '28px', fill: '#f3ba2f', fontStyle: 'bold' }).setOrigin(0.5).setVisible(false).setDepth(10);
         player = this.physics.add.sprite(180, 560, 'player').setCollideWorldBounds(true).setVisible(false);
         items = this.physics.add.group();
 
-        btn1.on('pointerdown', () => startLevel(false));
-        btn2.on('pointerdown', () => startLevel(true));
+        // Música con manejo de error
+        try { bgMusic = this.sound.add('music', { loop: true, volume: 0.4 }); } catch(e) { console.log("Audio no soportado"); }
+
+        btnP.on('pointerdown', () => start(false));
+        btnA.on('pointerdown', () => start(true));
 
         this.physics.add.overlap(player, items, (p, item) => {
             if (item.texture.key === 'gas') {
-                item.destroy(); score += 1;
-                gameSpeed += 5;
+                item.destroy(); score++;
+                gameSpeed += 6;
                 scoreText.setText('GAS: ' + score);
-            } else {
-                gameOver();
-            }
+            } else { die.call(this); }
         });
 
-        this.time.addEvent({ delay: 600, callback: spawn, loop: true });
+        this.time.addEvent({ delay: 600, callback: spawn, callbackScope: this, loop: true });
     }
 
-    async function startLevel(bet) {
-        if (bet) {
-            if (typeof window.ethereum !== 'undefined') {
-                await window.ethereum.request({ method: 'eth_requestAccounts' });
-                isBetting = true;
-            } else {
-                alert("Instala Metamask para apostar"); return;
-            }
-        }
-        game.scene.scenes[0].menu.setVisible(false);
-        if (!bgMusic.isPlaying) bgMusic.play();
+    function start(bet) {
+        isBetting = bet;
         isPlaying = true; score = 0; gameSpeed = 360;
-        scoreText.setVisible(true); player.setVisible(true);
+        game.scene.scenes[0].menu.setVisible(false);
+        scoreText.setVisible(true).setText('GAS: 0');
+        player.setVisible(true).setX(180);
+        if (bgMusic && !bgMusic.isPlaying) bgMusic.play();
     }
 
     function spawn() {
         if (!isPlaying) return;
         let x = Phaser.Math.Between(40, 320);
-        let isGas = Phaser.Math.Between(0, 100) > 85;
+        let isGas = Phaser.Math.Between(0, 100) > 85; 
         let item = items.create(x, -50, isGas ? 'gas' : 'obs');
         item.setVelocityY(gameSpeed);
     }
 
-    function gameOver() {
+    function die() {
         isPlaying = false;
-        bgMusic.stop();
-        if (isBetting && score < 100) {
-            alert("Perdiste tu apuesta. ZAARD enviado a la billetera de quema.");
-            // Aquí se ejecutaría la lógica del contrato para transferir al BURN_ADDRESS
-        } else if (isBetting && score >= 100) {
-            let rank = score >= 500 ? "ORO" : (score >= 200 ? "PLATA" : "BRONCE");
-            alert("¡FUERZA PANGA! Ganaste rango " + rank + ". El Vaul te recompensará.");
-        }
-        game.scene.scenes[0].scene.restart();
+        if (bgMusic) bgMusic.stop();
+        alert("FIN DEL JUEGO\nTotal GAS: " + score);
+        this.scene.restart();
     }
 
     function update() {
         if (isPlaying && this.input.activePointer.isDown) {
             player.x = Phaser.Math.Linear(player.x, this.input.activePointer.x, 0.2);
         }
+        items.children.iterate(c => { if(c && c.y > 680) c.destroy(); });
     }
 </script>
 </body>

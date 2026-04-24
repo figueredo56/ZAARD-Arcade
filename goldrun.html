@@ -7,7 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
     <style>
         body { margin: 0; background-color: #000; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-        #game-container { border: 2px solid #f3ba2f; box-shadow: 0 0 20px #f3ba2f; }
+        #game-container { border: 2px solid #f3ba2f; }
     </style>
 </head>
 <body>
@@ -25,13 +25,13 @@
     };
 
     const game = new Phaser.Game(config);
-    let player, items, score = 0, scoreText, gameSpeed = 350, isPlaying = false, bgMusic;
+    let player, items, score = 0, scoreText, gameSpeed = 360, isPlaying = false, bgMusic;
 
     function preload() {
-        // Usamos una pasarela rápida para el CID de IPFS
-        this.load.image('welcomeBg', 'https://cloudflare-ipfs.com/ipfs/bafybeigcq6o2axe2fcz3jk4timmuq2xkow5kdgd5msasbnyzaup4lmjui4');
-        this.load.audio('gameMusic', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3');
-
+        // IPFS con pasarela de respaldo
+        this.load.image('welcomeBg', 'https://ipfs.io/ipfs/bafybeigcq6o2axe2fcz3jk4timmuq2xkow5kdgd5msasbnyzaup4lmjui4');
+        
+        // Generar texturas básicas de inmediato (sin esperar archivos)
         let g = this.make.graphics({x: 0, y: 0, add: false});
         g.fillStyle(0xffffff, 1); g.fillTriangle(0, 40, 20, 0, 40, 40);
         g.generateTexture('player', 40, 40); g.clear();
@@ -42,53 +42,50 @@
     }
 
     function create() {
-        bgMusic = this.sound.add('gameMusic', { loop: true, volume: 0.5 });
-
-        // Capa de Bienvenida con Texto Forzado
+        // Capa de Bienvenida
         this.welcomeLayer = this.add.container(0, 0).setDepth(100);
         
-        // Si la imagen de IPFS falla, el fondo se queda negro pero el texto aparece
+        // Fondo (se muestra solo si carga)
         const bgImg = this.add.image(180, 320, 'welcomeBg').setDisplaySize(360, 640).setAlpha(0.6);
+        
         const title = this.add.text(180, 150, 'ZAARD GOLD RUN', { fontSize: '34px', fill: '#f3ba2f', fontStyle: 'bold' }).setOrigin(0.5);
-        const rules = this.add.text(180, 300, 'REGLAS:\n\n- Atrapa el GAS (Dorado)\n- Esquiva Obstáculos (Rojo)\n- ¡Acelera por cada GAS!', { fontSize: '18px', fill: '#ffffff', align: 'center' }).setOrigin(0.5);
+        const rules = this.add.text(180, 300, 'REGLAS:\n\n- Atrapa el GAS (Dorado)\n- Esquiva Obstáculos (Rojo)\n- ¡Velocidad nivel PANGA!', { fontSize: '18px', fill: '#ffffff', align: 'center' }).setOrigin(0.5);
         
         const btnBg = this.add.rectangle(180, 480, 280, 70, 0xf3ba2f).setInteractive();
         const btnText = this.add.text(180, 480, 'PRUEBA TU FUERZA PANGA', { fontSize: '18px', fill: '#000', fontStyle: 'bold' }).setOrigin(0.5);
 
         this.welcomeLayer.add([bgImg, title, rules, btnBg, btnText]);
 
-        // Interfaz de Juego
-        scoreText = this.add.text(180, 45, 'ZAARD GAS: 0', { fontSize: '28px', fill: '#f3ba2f', fontStyle: 'bold' }).setOrigin(0.5).setDepth(10).setVisible(false);
+        // Elementos de juego (Ocultos hasta el click)
+        scoreText = this.add.text(180, 50, 'ZAARD GAS: 0', { fontSize: '28px', fill: '#f3ba2f', fontStyle: 'bold' }).setOrigin(0.5).setVisible(false);
         player = this.physics.add.sprite(180, 560, 'player').setCollideWorldBounds(true).setVisible(false);
         items = this.physics.add.group();
 
         btnBg.on('pointerdown', () => {
             this.welcomeLayer.setVisible(false);
-            if (!bgMusic.isPlaying) bgMusic.play();
             isPlaying = true;
             score = 0;
             gameSpeed = 360;
-            scoreText.setVisible(true);
-            player.setVisible(true);
+            scoreText.setVisible(true).setText('ZAARD GAS: 0');
+            player.setVisible(true).setX(180);
         });
 
         this.physics.add.overlap(player, items, (p, item) => {
             if (item.texture.key === 'gas') {
                 item.destroy();
                 score += 10;
-                gameSpeed += 25; // ¡Velocidad PANGA agresiva!
+                gameSpeed += 25; // Aumento agresivo
                 scoreText.setText('ZAARD GAS: ' + score);
             } else {
-                bgMusic.stop();
                 this.scene.restart();
                 isPlaying = false;
             }
         }, null, this);
 
-        this.time.addEvent({ delay: 650, callback: () => {
+        this.time.addEvent({ delay: 600, callback: () => {
             if (!isPlaying) return;
             let x = Phaser.Math.Between(40, 320);
-            let isGas = Phaser.Math.Between(0, 100) > 82; // 82% obstáculos (Dificultad alta)
+            let isGas = Phaser.Math.Between(0, 100) > 85; // 85% obstáculos
             let item = items.create(x, -50, isGas ? 'gas' : 'obs');
             item.setVelocityY(gameSpeed);
         }, loop: true });
@@ -96,7 +93,7 @@
 
     function update() {
         if (isPlaying && this.input.activePointer.isDown) {
-            player.x = Phaser.Math.Linear(player.x, this.input.activePointer.x, 0.25);
+            player.x = Phaser.Math.Linear(player.x, this.input.activePointer.x, 0.2);
         }
         items.children.iterate(c => { if (c && c.y > 680) c.destroy(); });
     }

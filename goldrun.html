@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ZAARD Memory HD</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.8.1/web3.min.js"></script>
     <style>
@@ -18,38 +18,49 @@
             color: white; 
             font-family: 'Segoe UI', sans-serif; 
             margin: 0; 
-            overflow: hidden; /* Evita scroll innecesario */
+            padding: 0;
+            overflow: hidden; /* Evita que la pantalla rebote */
+        }
+
+        /* Capa oscura para que el fondo no sature la vista */
+        body::before {
+            content: "";
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
         }
 
         #setup-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
+            background: rgba(0,0,0,0.9);
             z-index: 100; display: flex; justify-content: center; align-items: center;
         }
 
         .config-card {
-            background: #0a0a0a; padding: 25px; border: 2px solid var(--gold);
+            background: rgba(10, 10, 10, 0.95); padding: 30px; border: 2px solid var(--gold);
             border-radius: 20px; max-width: 350px; width: 85%; text-align: center;
-            box-shadow: 0 0 30px rgba(255,179,0,0.3);
+            box-shadow: 0 0 20px var(--gold);
         }
 
         #game-ui {
-            display: flex; flex-direction: column; height: 100vh;
+            display: flex; flex-direction: column; height: 100vh; width: 100vw;
         }
 
         .header {
-            background: rgba(0,0,0,0.8); padding: 15px; 
+            background: rgba(0,0,0,0.85); padding: 15px; 
             text-align: center; border-bottom: 2px solid var(--gold);
             font-weight: bold; font-size: 1.2rem;
         }
 
+        /* EL TABLERO: Ahora ocupa el centro sin apretarse */
         .grid-6x6 {
             display: grid; 
             grid-template-columns: repeat(6, 1fr);
-            gap: 5px; 
+            gap: 6px; 
             padding: 10px;
-            max-width: 500px; 
-            margin: auto;
+            margin: auto; /* Esto centra el tablero verticalmente */
+            width: 92vw;
+            max-width: 500px;
         }
 
         .card {
@@ -71,28 +82,23 @@
 
         .card .front { 
             transform: rotateY(180deg); 
-            background: linear-gradient(135deg, #222, #333); 
+            background: #222; 
             display: flex; justify-content: center; align-items: center; 
-            font-size: 1.5rem; /* Emojis más grandes */
+            font-size: 1.3rem;
         }
 
         .hidden { display: none !important; }
-        
-        .btn-action { 
-            background: var(--gold); color: black; border: none; 
-            padding: 15px 25px; border-radius: 50px; 
-            font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem;
-        }
+        .btn-action { background: var(--gold); color: black; border: none; padding: 15px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; }
     </style>
 </head>
 <body>
 
     <div id="setup-screen">
         <div class="config-card">
-            <h1 style="color: var(--gold); margin-top: 0;">ZAARD MEMORY</h1>
-            <p>Empareja los 18 pares en menos de 8 intentos para ganar.</p>
-            <button class="btn-action" onclick="connectWallet()">CONECTAR Y APOSTAR</button>
-            <p style="text-decoration: underline; cursor: pointer; font-size: 0.9rem; margin-top: 20px; color: #888;" onclick="startMode(true)">Modo Invitado (Sin Recompensa)</p>
+            <h2 style="color: var(--gold); margin: 0 0 10px 0;">ZAARD MEMORY HD</h2>
+            <p>Empareja las cartas en menos de 8 intentos.</p>
+            <button class="btn-action" onclick="connectWallet()">CONECTAR BILLETERA</button>
+            <p style="text-decoration: underline; cursor: pointer; font-size: 0.9rem; color: #aaa; margin-top: 15px;" onclick="startMode(true)">Modo Invitado</p>
         </div>
     </div>
 
@@ -108,11 +114,10 @@
         let flippedCards = [];
         let matchedPairs = 0;
         let canFlip = true;
-        
         const emojis = ['💎', '🚀', '🔥', '🦁', '⚡', '🛡️', '👑', '💰', '🎯', '🎰', '🔱', '🧿', '🔋', '📡', '🛸', '🪐', '🧬', '🧪'];
         let gameCards = [...emojis, ...emojis];
 
-        function startMode(isGuest) {
+        function startMode(guest) {
             document.getElementById('setup-screen').classList.add('hidden');
             document.getElementById('game-ui').classList.remove('hidden');
             initGame();
@@ -123,30 +128,19 @@
                 try {
                     await window.ethereum.request({ method: 'eth_requestAccounts' });
                     startMode(false);
-                } catch (e) { alert("Conexión rechazada"); }
-            } else { 
-                alert("Por favor usa el navegador de MetaMask"); 
-            }
+                } catch (e) { alert("Error al conectar"); }
+            } else { alert("Usa MetaMask"); }
         }
 
         function initGame() {
             const board = document.getElementById('board');
-            attempts = 0;
-            matchedPairs = 0;
-            document.getElementById('attempt-count').innerText = "0";
-            
-            // Mezclar cartas
             gameCards.sort(() => Math.random() - 0.5);
-            
             board.innerHTML = '';
-            gameCards.forEach((val, index) => {
+            gameCards.forEach(val => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.dataset.value = val;
-                card.innerHTML = `
-                    <div class="back"></div>
-                    <div class="front">${val}</div>
-                `;
+                card.innerHTML = `<div class="back"></div><div class="front">${val}</div>`;
                 card.onclick = () => flipCard(card);
                 board.appendChild(card);
             });
@@ -154,45 +148,34 @@
 
         function flipCard(card) {
             if (!canFlip || flippedCards.length >= 2 || card.classList.contains('flipped')) return;
-
             card.classList.add('flipped');
             flippedCards.push(card);
-
             if (flippedCards.length === 2) {
                 canFlip = false;
-                checkMatch();
+                setTimeout(checkMatch, 700);
             }
         }
 
         function checkMatch() {
             const [c1, c2] = flippedCards;
-            
             if (c1.dataset.value === c2.dataset.value) {
                 matchedPairs++;
                 flippedCards = [];
                 canFlip = true;
-                
-                if (matchedPairs === 18) {
-                    setTimeout(() => {
-                        alert("¡BRUTAL! Has ganado la recompensa.");
-                        location.reload();
-                    }, 500);
-                }
+                if (matchedPairs === 18) alert("¡Ganaste!");
             } else {
                 attempts++;
                 document.getElementById('attempt-count').innerText = attempts;
-                
                 setTimeout(() => {
                     c1.classList.remove('flipped');
                     c2.classList.remove('flipped');
                     flippedCards = [];
                     canFlip = true;
-
                     if (attempts >= 7) {
-                        alert("GAME OVER. Superaste los 7 intentos.");
+                        alert("Perdiste. Reintentando...");
                         location.reload();
                     }
-                }, 1000);
+                }, 500);
             }
         }
     </script>

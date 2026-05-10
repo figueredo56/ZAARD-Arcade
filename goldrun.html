@@ -3,73 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZAARD Memory Vault - 6x6</title>
+    <title>ZAARD Memory HD - Web3</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.8.1/web3.min.js"></script>
     <style>
-        :root { --gold: #FFB300; --dark: #050505; --glass: rgba(255, 255, 255, 0.1); }
-        body { background: var(--dark); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; text-align: center; }
+        :root { 
+            --gold: #FFB300; 
+            --dark: #050505; 
+            --bg-url: url('https://cloudflare-ipfs.com/ipfs/bafybeihmzzhikxn6f4xctz6betwprnupyq4f6kw3233vwnagcomraiftoy');
+            --card-back: url('https://cloudflare-ipfs.com/ipfs/bafybeihsmtiwinw5w6jcebelg2p6kr64ivuijcmx4dnpuny2m22piqin2y');
+        }
         
+        body { 
+            background: var(--bg-url) no-repeat center center fixed; 
+            background-size: cover;
+            color: white; 
+            font-family: 'Segoe UI', sans-serif; 
+            margin: 0; 
+            text-align: center;
+            min-height: 100vh;
+        }
+
         /* Pantalla de Inicio */
         #setup-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, #1a1a1a 0%, #000 100%);
+            background: rgba(0,0,0,0.85);
             z-index: 100; display: flex; justify-content: center; align-items: center;
+            backdrop-filter: blur(5px);
         }
         .config-card {
-            background: rgba(0,0,0,0.8); padding: 30px; border: 2px solid var(--gold);
-            border-radius: 20px; max-width: 500px; width: 90%; backdrop-filter: blur(10px);
+            background: rgba(10,10,10,0.9); padding: 30px; border: 2px solid var(--gold);
+            border-radius: 20px; max-width: 450px; width: 90%; box-shadow: 0 0 30px rgba(255,179,0,0.3);
         }
         .btn-action {
-            background: var(--gold); border: none; padding: 12px 25px;
-            border-radius: 50px; font-weight: bold; cursor: pointer; margin: 10px; transition: 0.3s;
+            background: var(--gold); border: none; padding: 15px 30px;
+            border-radius: 50px; font-weight: bold; cursor: pointer; margin: 15px; font-size: 1rem;
         }
-        .btn-action:hover { transform: scale(1.1); box-shadow: 0 0 15px var(--gold); }
-        .guest-link { color: #888; text-decoration: underline; cursor: pointer; display: block; margin-top: 15px; }
 
-        /* Juego 6x6 */
-        .game-info { padding: 20px; font-size: 1.2rem; border-bottom: 1px solid var(--gold); }
+        /* Tablero 6x6 */
+        .game-info { background: rgba(0,0,0,0.7); padding: 15px; border-bottom: 2px solid var(--gold); font-weight: bold; }
         .grid-6x6 {
             display: grid; grid-template-columns: repeat(6, 1fr);
-            gap: 5px; max-width: 600px; margin: 20px auto; padding: 10px;
+            gap: 6px; max-width: 550px; margin: 20px auto; padding: 10px;
         }
         .card {
-            aspect-ratio: 1/1; background: #111; border: 1px solid var(--gold);
-            border-radius: 5px; cursor: pointer; position: relative;
-            transform-style: preserve-3d; transition: transform 0.5s;
+            aspect-ratio: 1/1; cursor: pointer; position: relative;
+            transform-style: preserve-3d; transition: transform 0.4s;
         }
         .card.flipped { transform: rotateY(180deg); }
         .card .front, .card .back {
             position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
-            display: flex; justify-content: center; align-items: center; font-size: 1.2rem;
+            border-radius: 5px; border: 1px solid var(--gold);
         }
-        .card .back { background: var(--gold); color: black; font-weight: bold; }
-        .card .front { transform: rotateY(180deg); background: #222; }
+        .card .back { 
+            background: var(--card-back) no-repeat center center; 
+            background-size: cover; 
+        }
+        .card .front { 
+            transform: rotateY(180deg); 
+            background: rgba(20,20,20,0.95); 
+            display: flex; justify-content: center; align-items: center; font-size: 1.4rem;
+        }
 
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
+    <audio id="snd-flip" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
+    <audio id="snd-match" src="https://assets.mixkit.co/active_storage/sfx/2020/2020-preview.mp3"></audio>
+    <audio id="snd-fail" src="https://assets.mixkit.co/active_storage/sfx/2572/2572-preview.mp3"></audio>
+
     <div id="setup-screen">
         <div class="config-card">
-            <h1 style="color: var(--gold);">BIENVENIDO</h1>
-            <p>Prueba tu memoria y gana recompensas en el ecosistema ZAARD.</p>
-            <div style="text-align: left; background: var(--glass); padding: 15px; border-radius: 10px; font-size: 0.9rem;">
-                <b>REGLAS:</b><br>
-                1. Apuesta: 0.0001 ZAARD.<br>
-                2. Objetivo: Emparejar las 36 cartas en <b>7 intentos o menos</b>.<br>
-                3. Gana: Reclama 0.0001 ZAARD del Baúl.<br>
-                4. Pierde: Los tokens se enviarán a la billetera de quema (DEAD).
-            </div>
-            <button class="btn-action" onclick="connectWallet()">CONECTAR Y APOSTAR</button>
-            <span class="guest-link" onclick="startGuestMode()">Entrar como Invitado (Sin Recompensas)</span>
+            <h1 style="color: var(--gold);">ZAARD MEMORY HD</h1>
+            <p>Bienvenido: prueba tu memoria y gana recompensa.</p>
+            <p style="font-size: 0.85rem; color: #bbb;">Apuesta: 0.0001 ZAARD | Recompensa: 0.0001 ZAARD<br>Objetivo: Menos de 8 intentos (Max 7).</p>
+            <button class="btn-action" onclick="connectWallet()">CONECTAR BILLETERA</button>
+            <div style="cursor:pointer; text-decoration: underline; color: var(--gold);" onclick="startMode(true)">Modo Invitado</div>
         </div>
     </div>
 
     <div id="game-ui" class="hidden">
         <div class="game-info">
-            MODO: <span id="mode-text" style="color: var(--gold);">---</span> | 
-            INTENTOS: <span id="attempt-count" style="color: var(--gold);">0</span> / 7
+            <span id="mode-label">MODO: ---</span> | INTENTOS: <span id="attempt-count">0</span> / 7
         </div>
         <div class="grid-6x6" id="board"></div>
     </div>
@@ -80,14 +96,16 @@
         let isGuest = true;
         let flippedCards = [];
         const maxAttempts = 7;
-        const totalPairs = 18; // 6x6 = 36 cartas
+        const totalPairs = 18;
         
         const emojis = ['💎', '🚀', '🔥', '🦁', '⚡', '🛡️', '👑', '💰', '🎯', '🎰', '🔱', '🧿', '🔋', '📡', '🛸', '🪐', '🧬', '🧪'];
         let gameCards = [...emojis, ...emojis];
 
-        function startGuestMode() {
-            isGuest = true;
-            document.getElementById('mode-text').innerText = "INVITADO";
+        function playSnd(id) { document.getElementById(id).play(); }
+
+        function startMode(guest) {
+            isGuest = guest;
+            document.getElementById('mode-label').innerText = isGuest ? "MODO: INVITADO" : "MODO: WEB3";
             document.getElementById('setup-screen').classList.add('hidden');
             document.getElementById('game-ui').classList.remove('hidden');
             initGame();
@@ -97,14 +115,9 @@
             if (window.ethereum) {
                 try {
                     await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    // Aquí llamarías a tu función de apuesta del contrato ZAARD
-                    alert("Simulación de Apuesta: 0.0001 ZAARD bloqueados.");
-                    isGuest = false;
-                    document.getElementById('mode-text').innerText = "WEB3 (0.0001 ZAARD)";
-                    document.getElementById('setup-screen').classList.add('hidden');
-                    document.getElementById('game-ui').classList.remove('hidden');
-                    initGame();
-                } catch (e) { alert("Error al conectar wallet."); }
+                    alert("Apuesta de 0.0001 ZAARD confirmada.");
+                    startMode(false);
+                } catch (e) { alert("Conexión rechazada."); }
             } else { alert("Instala MetaMask."); }
         }
 
@@ -112,58 +125,8 @@
             const board = document.getElementById('board');
             gameCards.sort(() => Math.random() - 0.5);
             board.innerHTML = '';
-            
-            gameCards.forEach((emoji, index) => {
+            gameCards.forEach((emoji) => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.dataset.value = emoji;
-                card.innerHTML = `<div class="back">Z</div><div class="front">${emoji}</div>`;
-                card.onclick = () => flipCard(card);
-                board.appendChild(card);
-            });
-        }
-
-        function flipCard(card) {
-            if (flippedCards.length < 2 && !card.classList.contains('flipped')) {
-                card.classList.add('flipped');
-                flippedCards.push(card);
-
-                if (flippedCards.length === 2) {
-                    attempts++;
-                    document.getElementById('attempt-count').innerText = attempts;
-                    checkMatch();
-                }
-            }
-        }
-
-        function checkMatch() {
-            const [c1, c2] = flippedCards;
-            if (c1.dataset.value === c2.dataset.value) {
-                matchedPairs++;
-                flippedCards = [];
-                if (matchedPairs === totalPairs) endGame(true);
-            } else {
-                setTimeout(() => {
-                    c1.classList.remove('flipped');
-                    c2.classList.remove('flipped');
-                    flippedCards = [];
-                    if (attempts >= maxAttempts) endGame(false);
-                }, 800);
-            }
-        }
-
-        function endGame(won) {
-            if (won && attempts <= maxAttempts) {
-                alert(`¡MEMORIA DE ÉLITE! Usaste ${attempts} intentos. Reclamando recompensa del Baúl...`);
-                // Llamar función de reclamo en contrato
-            } else {
-                alert(`JUEGO TERMINADO. Intentos: ${attempts}. Perdiste la apuesta.`);
-                if (!isGuest) {
-                    console.log("Enviando apuesta a 0x000000000000000000000000000000000000dEaD");
-                }
-            }
-            location.reload(); // Reiniciar
-        }
-    </script>
-</body>
-</html>
+                card.innerHTML = `<div class

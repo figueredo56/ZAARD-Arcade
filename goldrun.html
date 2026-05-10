@@ -2,130 +2,168 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>ZAARD GOLD RUN - Fuerza PANGA</title>
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.1/dist/web3.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZAARD Memory Vault - 6x6</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.8.1/web3.min.js"></script>
     <style>
-        * { touch-action: none; -webkit-touch-callout: none; user-select: none; }
-        body { margin: 0; background-color: #000; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; position: fixed; width: 100%; font-family: 'Courier New', Courier, monospace; }
-        #game-container { border: 2px solid #f3ba2f; box-shadow: 0 0 20px #f3ba2f; background: #000; }
+        :root { --gold: #FFB300; --dark: #050505; --glass: rgba(255, 255, 255, 0.1); }
+        body { background: var(--dark); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; text-align: center; }
+        
+        /* Pantalla de Inicio */
+        #setup-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, #1a1a1a 0%, #000 100%);
+            z-index: 100; display: flex; justify-content: center; align-items: center;
+        }
+        .config-card {
+            background: rgba(0,0,0,0.8); padding: 30px; border: 2px solid var(--gold);
+            border-radius: 20px; max-width: 500px; width: 90%; backdrop-filter: blur(10px);
+        }
+        .btn-action {
+            background: var(--gold); border: none; padding: 12px 25px;
+            border-radius: 50px; font-weight: bold; cursor: pointer; margin: 10px; transition: 0.3s;
+        }
+        .btn-action:hover { transform: scale(1.1); box-shadow: 0 0 15px var(--gold); }
+        .guest-link { color: #888; text-decoration: underline; cursor: pointer; display: block; margin-top: 15px; }
+
+        /* Juego 6x6 */
+        .game-info { padding: 20px; font-size: 1.2rem; border-bottom: 1px solid var(--gold); }
+        .grid-6x6 {
+            display: grid; grid-template-columns: repeat(6, 1fr);
+            gap: 5px; max-width: 600px; margin: 20px auto; padding: 10px;
+        }
+        .card {
+            aspect-ratio: 1/1; background: #111; border: 1px solid var(--gold);
+            border-radius: 5px; cursor: pointer; position: relative;
+            transform-style: preserve-3d; transition: transform 0.5s;
+        }
+        .card.flipped { transform: rotateY(180deg); }
+        .card .front, .card .back {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            display: flex; justify-content: center; align-items: center; font-size: 1.2rem;
+        }
+        .card .back { background: var(--gold); color: black; font-weight: bold; }
+        .card .front { transform: rotateY(180deg); background: #222; }
+
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
-<div id="game-container"></div>
-<script>
-    const VAULT = "0xbC71465eD3e4B395fe8ed46Bac764Cb4b8BbAed2";
-    const BURN  = "0x000000000000000000000000000000000000dEaD";
 
-    const config = {
-        type: Phaser.AUTO,
-        width: 360,
-        height: 640,
-        parent: 'game-container',
-        transparent: true,
-        physics: { default: 'arcade', arcade: { debug: false } },
-        scene: { preload, create, update }
-    };
+    <div id="setup-screen">
+        <div class="config-card">
+            <h1 style="color: var(--gold);">BIENVENIDO</h1>
+            <p>Prueba tu memoria y gana recompensas en el ecosistema ZAARD.</p>
+            <div style="text-align: left; background: var(--glass); padding: 15px; border-radius: 10px; font-size: 0.9rem;">
+                <b>REGLAS:</b><br>
+                1. Apuesta: 0.0001 ZAARD.<br>
+                2. Objetivo: Emparejar las 36 cartas en <b>7 intentos o menos</b>.<br>
+                3. Gana: Reclama 0.0001 ZAARD del Baúl.<br>
+                4. Pierde: Los tokens se enviarán a la billetera de quema (DEAD).
+            </div>
+            <button class="btn-action" onclick="connectWallet()">CONECTAR Y APOSTAR</button>
+            <span class="guest-link" onclick="startGuestMode()">Entrar como Invitado (Sin Recompensas)</span>
+        </div>
+    </div>
 
-    const game = new Phaser.Game(config);
-    let player, items, score = 0, scoreText, gameSpeed = 350, isPlaying = false, bgMusic;
+    <div id="game-ui" class="hidden">
+        <div class="game-info">
+            MODO: <span id="mode-text" style="color: var(--gold);">---</span> | 
+            INTENTOS: <span id="attempt-count" style="color: var(--gold);">0</span> / 7
+        </div>
+        <div class="grid-6x6" id="board"></div>
+    </div>
 
-    function preload() {
-        this.load.audio('music', 'https://cdn.pixabay.com/audio/2022/01/18/audio_d0a13f69d2.mp3');
-        let g = this.make.graphics({x: 0, y: 0, add: false});
-        // Fenix
-        g.fillStyle(0xf3ba2f, 1); g.fillTriangle(20, 0, 0, 40, 40, 40);
-        g.fillStyle(0xffd700, 1); g.fillEllipse(20, 35, 60, 15);
-        g.generateTexture('skin', 60, 50); g.clear();
-        // Elementos
-        g.fillStyle(0xf3ba2f, 1); g.fillCircle(15, 15, 15); g.generateTexture('gas', 30, 30); g.clear();
-        g.fillStyle(0xff0000, 1); g.fillTriangle(17, 0, 0, 35, 35, 35); g.generateTexture('obs', 35, 35);
-    }
+    <script>
+        let attempts = 0;
+        let matchedPairs = 0;
+        let isGuest = true;
+        let flippedCards = [];
+        const maxAttempts = 7;
+        const totalPairs = 18; // 6x6 = 36 cartas
+        
+        const emojis = ['💎', '🚀', '🔥', '🦁', '⚡', '🛡️', '👑', '💰', '🎯', '🎰', '🔱', '🧿', '🔋', '📡', '🛸', '🪐', '🧬', '🧪'];
+        let gameCards = [...emojis, ...emojis];
 
-    function create() {
-        this.stars = [];
-        for (let i = 0; i < 50; i++) {
-            this.add.circle(Phaser.Math.Between(0, 360), Phaser.Math.Between(0, 640), 1, 0xffffff, 0.5);
+        function startGuestMode() {
+            isGuest = true;
+            document.getElementById('mode-text').innerText = "INVITADO";
+            document.getElementById('setup-screen').classList.add('hidden');
+            document.getElementById('game-ui').classList.remove('hidden');
+            initGame();
         }
 
-        try { bgMusic = this.sound.add('music', { loop: true, volume: 0.5 }); } catch(e){}
-
-        this.drawMenu();
-
-        scoreText = this.add.text(180, 50, 'GAS: 0', { fontSize: '28px', fill: '#f3ba2f', fontStyle: 'bold' }).setOrigin(0.5).setVisible(false).setDepth(10);
-        player = this.physics.add.sprite(180, 560, 'skin').setCollideWorldBounds(true).setVisible(false).setDepth(5);
-        items = this.physics.add.group();
-
-        this.physics.add.overlap(player, items, (p, item) => {
-            if (item.texture.key === 'gas') {
-                item.destroy(); score++; gameSpeed += 4; scoreText.setText('GAS: ' + score);
-            } else { this.gameOver(); }
-        });
-
-        this.time.addEvent({ delay: 550, callback: spawn, callbackScope: this, loop: true });
-    }
-
-    this.drawMenu = function() {
-        if (this.menuContainer) this.menuContainer.destroy();
-        this.menuContainer = this.add.container(0, 0).setDepth(100);
-        
-        const rect = this.add.rectangle(180, 320, 320, 500, 0x000000, 0.8).setStrokeStyle(2, 0xf3ba2f);
-        const title = this.add.text(180, 120, 'ZAARD GOLD RUN', { fontSize: '28px', fill: '#f3ba2f', fontStyle: 'bold' }).setOrigin(0.5);
-        
-        const info = this.add.text(180, 250, '100 GAS = BRONCE\n200 GAS = PLATA\n500 GAS = ORO\n\nVAULT: ' + VAULT.slice(0,6)+'...'+VAULT.slice(-4), { fontSize: '14px', fill: '#fff', align: 'center' }).setOrigin(0.5);
-
-        const btnP = this.add.rectangle(180, 400, 200, 50, 0x333333).setInteractive();
-        const txtP = this.add.text(180, 400, 'PRÁCTICA', { fontSize: '18px', fill: '#fff' }).setOrigin(0.5);
-
-        const btnA = this.add.rectangle(180, 470, 200, 50, 0xf3ba2f).setInteractive();
-        const txtA = this.add.text(180, 470, 'APOSTAR', { fontSize: '18px', fill: '#000', fontStyle: 'bold' }).setOrigin(0.5);
-
-        this.menuContainer.add([rect, title, info, btnP, txtP, btnA, txtA]);
-
-        btnP.on('pointerdown', () => this.startGame(false));
-        btnA.on('pointerdown', () => this.connectAndStart());
-    };
-
-    this.connectAndStart = async function() {
-        if (window.ethereum) {
-            try {
-                await window.ethereum.request({ method: 'eth_requestAccounts' });
-                this.startGame(true);
-            } catch (e) { alert("Conexión rechazada"); }
-        } else { alert("Usa el navegador de MetaMask"); }
-    };
-
-    this.startGame = function(isBet) {
-        this.menuContainer.setVisible(false);
-        isPlaying = true; score = 0; gameSpeed = 350;
-        scoreText.setVisible(true).setText('GAS: 0');
-        player.setVisible(true).setX(180);
-        if (bgMusic) { this.sound.resumeAll(); if(!bgMusic.isPlaying) bgMusic.play(); }
-    };
-
-    function spawn() {
-        if (!isPlaying) return;
-        let x = Phaser.Math.Between(40, 320);
-        let item = items.create(x, -50, Phaser.Math.Between(0, 100) > 65 ? 'gas' : 'obs');
-        item.setVelocityY(gameSpeed);
-    }
-
-    this.gameOver = function() {
-        isPlaying = false;
-        if (bgMusic) bgMusic.stop();
-        items.clear(true, true);
-        player.setVisible(false);
-        alert("¡FIN DEL JUEGO!\nGAS: " + score);
-        this.menuContainer.setVisible(true); // En lugar de reiniciar escena, solo mostramos menú
-    };
-
-    function update() {
-        if (isPlaying && this.input.activePointer.isDown) {
-            player.x = Phaser.Math.Linear(player.x, this.input.activePointer.x, 0.2);
+        async function connectWallet() {
+            if (window.ethereum) {
+                try {
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    // Aquí llamarías a tu función de apuesta del contrato ZAARD
+                    alert("Simulación de Apuesta: 0.0001 ZAARD bloqueados.");
+                    isGuest = false;
+                    document.getElementById('mode-text').innerText = "WEB3 (0.0001 ZAARD)";
+                    document.getElementById('setup-screen').classList.add('hidden');
+                    document.getElementById('game-ui').classList.remove('hidden');
+                    initGame();
+                } catch (e) { alert("Error al conectar wallet."); }
+            } else { alert("Instala MetaMask."); }
         }
-        items.children.iterate(c => { if (c && c.y > 680) c.destroy(); });
-    }
-</script>
+
+        function initGame() {
+            const board = document.getElementById('board');
+            gameCards.sort(() => Math.random() - 0.5);
+            board.innerHTML = '';
+            
+            gameCards.forEach((emoji, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.dataset.value = emoji;
+                card.innerHTML = `<div class="back">Z</div><div class="front">${emoji}</div>`;
+                card.onclick = () => flipCard(card);
+                board.appendChild(card);
+            });
+        }
+
+        function flipCard(card) {
+            if (flippedCards.length < 2 && !card.classList.contains('flipped')) {
+                card.classList.add('flipped');
+                flippedCards.push(card);
+
+                if (flippedCards.length === 2) {
+                    attempts++;
+                    document.getElementById('attempt-count').innerText = attempts;
+                    checkMatch();
+                }
+            }
+        }
+
+        function checkMatch() {
+            const [c1, c2] = flippedCards;
+            if (c1.dataset.value === c2.dataset.value) {
+                matchedPairs++;
+                flippedCards = [];
+                if (matchedPairs === totalPairs) endGame(true);
+            } else {
+                setTimeout(() => {
+                    c1.classList.remove('flipped');
+                    c2.classList.remove('flipped');
+                    flippedCards = [];
+                    if (attempts >= maxAttempts) endGame(false);
+                }, 800);
+            }
+        }
+
+        function endGame(won) {
+            if (won && attempts <= maxAttempts) {
+                alert(`¡MEMORIA DE ÉLITE! Usaste ${attempts} intentos. Reclamando recompensa del Baúl...`);
+                // Llamar función de reclamo en contrato
+            } else {
+                alert(`JUEGO TERMINADO. Intentos: ${attempts}. Perdiste la apuesta.`);
+                if (!isGuest) {
+                    console.log("Enviando apuesta a 0x000000000000000000000000000000000000dEaD");
+                }
+            }
+            location.reload(); // Reiniciar
+        }
+    </script>
 </body>
 </html>

@@ -8,9 +8,7 @@
     <style>
         :root { 
             --gold: #FFB300; 
-            /* Enlace IPFS directo para el fondo */
             --bg-url: url('https://ipfs.io/ipfs/bafybeihmzzhikxn6f4xctz6betwprnupyq4f6kw3233vwnagcomraiftoy');
-            /* Enlace IPFS directo para el reverso de cartas */
             --card-back: url('https://ipfs.io/ipfs/bafybeihsmtiwinw5w6jcebelg2p6kr64ivuijcmx4dnpuny2m22piqin2y');
         }
         
@@ -20,26 +18,38 @@
             color: white; 
             font-family: 'Segoe UI', sans-serif; 
             margin: 0; 
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            overflow: hidden; /* Evita scroll innecesario */
         }
 
         #setup-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
             z-index: 100; display: flex; justify-content: center; align-items: center;
         }
 
         .config-card {
-            background: #0a0a0a; padding: 30px; border: 2px solid var(--gold);
-            border-radius: 20px; max-width: 400px; width: 85%; text-align: center;
-            box-shadow: 0 0 20px rgba(255,179,0,0.4);
+            background: #0a0a0a; padding: 25px; border: 2px solid var(--gold);
+            border-radius: 20px; max-width: 350px; width: 85%; text-align: center;
+            box-shadow: 0 0 30px rgba(255,179,0,0.3);
+        }
+
+        #game-ui {
+            display: flex; flex-direction: column; height: 100vh;
+        }
+
+        .header {
+            background: rgba(0,0,0,0.8); padding: 15px; 
+            text-align: center; border-bottom: 2px solid var(--gold);
+            font-weight: bold; font-size: 1.2rem;
         }
 
         .grid-6x6 {
-            display: grid; grid-template-columns: repeat(6, 1fr);
-            gap: 4px; max-width: 95vw; margin: 10px auto;
+            display: grid; 
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px; 
+            padding: 10px;
+            max-width: 500px; 
+            margin: auto;
         }
 
         .card {
@@ -51,7 +61,7 @@
 
         .card .front, .card .back {
             position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
-            border-radius: 4px; border: 1px solid var(--gold);
+            border-radius: 6px; border: 1px solid var(--gold);
         }
 
         .card .back { 
@@ -61,27 +71,33 @@
 
         .card .front { 
             transform: rotateY(180deg); 
-            background: #222; 
-            display: flex; justify-content: center; align-items: center; font-size: 1.1rem;
+            background: linear-gradient(135deg, #222, #333); 
+            display: flex; justify-content: center; align-items: center; 
+            font-size: 1.5rem; /* Emojis más grandes */
         }
 
         .hidden { display: none !important; }
-        .btn-action { background: var(--gold); border: none; padding: 12px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        
+        .btn-action { 
+            background: var(--gold); color: black; border: none; 
+            padding: 15px 25px; border-radius: 50px; 
+            font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem;
+        }
     </style>
 </head>
 <body>
 
     <div id="setup-screen">
         <div class="config-card">
-            <h2 style="color: var(--gold);">ZAARD MEMORY HD</h2>
-            <p>Prueba tu memoria y gana recompensa.</p>
-            <button class="btn-action" onclick="connectWallet()">CONECTAR BILLETERA</button>
-            <p style="text-decoration: underline; cursor: pointer; font-size: 0.8rem;" onclick="startMode(true)">Modo Invitado</p>
+            <h1 style="color: var(--gold); margin-top: 0;">ZAARD MEMORY</h1>
+            <p>Empareja los 18 pares en menos de 8 intentos para ganar.</p>
+            <button class="btn-action" onclick="connectWallet()">CONECTAR Y APOSTAR</button>
+            <p style="text-decoration: underline; cursor: pointer; font-size: 0.9rem; margin-top: 20px; color: #888;" onclick="startMode(true)">Modo Invitado (Sin Recompensa)</p>
         </div>
     </div>
 
     <div id="game-ui" class="hidden">
-        <div style="background: rgba(0,0,0,0.8); padding: 10px; border-bottom: 1px solid var(--gold);">
+        <div class="header">
             INTENTOS: <span id="attempt-count" style="color: var(--gold);">0</span> / 7
         </div>
         <div class="grid-6x6" id="board"></div>
@@ -91,10 +107,12 @@
         let attempts = 0;
         let flippedCards = [];
         let matchedPairs = 0;
+        let canFlip = true;
+        
         const emojis = ['💎', '🚀', '🔥', '🦁', '⚡', '🛡️', '👑', '💰', '🎯', '🎰', '🔱', '🧿', '🔋', '📡', '🛸', '🪐', '🧬', '🧪'];
         let gameCards = [...emojis, ...emojis];
 
-        function startMode(guest) {
+        function startMode(isGuest) {
             document.getElementById('setup-screen').classList.add('hidden');
             document.getElementById('game-ui').classList.remove('hidden');
             initGame();
@@ -105,50 +123,76 @@
                 try {
                     await window.ethereum.request({ method: 'eth_requestAccounts' });
                     startMode(false);
-                } catch (e) { alert("Error al conectar"); }
-            } else { alert("Instala MetaMask"); }
+                } catch (e) { alert("Conexión rechazada"); }
+            } else { 
+                alert("Por favor usa el navegador de MetaMask"); 
+            }
         }
 
         function initGame() {
             const board = document.getElementById('board');
+            attempts = 0;
+            matchedPairs = 0;
+            document.getElementById('attempt-count').innerText = "0";
+            
+            // Mezclar cartas
             gameCards.sort(() => Math.random() - 0.5);
+            
             board.innerHTML = '';
-            gameCards.forEach(val => {
+            gameCards.forEach((val, index) => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.dataset.value = val;
-                card.innerHTML = `<div class="back"></div><div class="front">${val}</div>`;
+                card.innerHTML = `
+                    <div class="back"></div>
+                    <div class="front">${val}</div>
+                `;
                 card.onclick = () => flipCard(card);
                 board.appendChild(card);
             });
         }
 
         function flipCard(card) {
-            if (flippedCards.length < 2 && !card.classList.contains('flipped')) {
-                card.classList.add('flipped');
-                flippedCards.push(card);
-                if (flippedCards.length === 2) {
-                    attempts++;
-                    document.getElementById('attempt-count').innerText = attempts;
-                    setTimeout(checkMatch, 700);
-                }
+            if (!canFlip || flippedCards.length >= 2 || card.classList.contains('flipped')) return;
+
+            card.classList.add('flipped');
+            flippedCards.push(card);
+
+            if (flippedCards.length === 2) {
+                canFlip = false;
+                checkMatch();
             }
         }
 
         function checkMatch() {
             const [c1, c2] = flippedCards;
+            
             if (c1.dataset.value === c2.dataset.value) {
                 matchedPairs++;
                 flippedCards = [];
-                if (matchedPairs === 18) alert("¡Ganaste!");
-            } else {
-                c1.classList.remove('flipped');
-                c2.classList.remove('flipped');
-                flippedCards = [];
-                if (attempts >= 7) {
-                    alert("Juego terminado: Perdiste tu apuesta.");
-                    location.reload();
+                canFlip = true;
+                
+                if (matchedPairs === 18) {
+                    setTimeout(() => {
+                        alert("¡BRUTAL! Has ganado la recompensa.");
+                        location.reload();
+                    }, 500);
                 }
+            } else {
+                attempts++;
+                document.getElementById('attempt-count').innerText = attempts;
+                
+                setTimeout(() => {
+                    c1.classList.remove('flipped');
+                    c2.classList.remove('flipped');
+                    flippedCards = [];
+                    canFlip = true;
+
+                    if (attempts >= 7) {
+                        alert("GAME OVER. Superaste los 7 intentos.");
+                        location.reload();
+                    }
+                }, 1000);
             }
         }
     </script>

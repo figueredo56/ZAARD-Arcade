@@ -2,182 +2,98 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZAARD Memory HD</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.8.1/web3.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZARD: Golden Run</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root { 
-            --gold: #FFB300; 
-            --bg-url: url('https://ipfs.io/ipfs/bafybeihmzzhikxn6f4xctz6betwprnupyq4f6kw3233vwnagcomraiftoy');
-            --card-back: url('https://ipfs.io/ipfs/bafybeihsmtiwinw5w6jcebelg2p6kr64ivuijcmx4dnpuny2m22piqin2y');
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
         
-        body { 
-            background: #000 var(--bg-url) no-repeat center center fixed; 
-            background-size: cover;
-            color: white; 
-            font-family: 'Segoe UI', sans-serif; 
-            margin: 0; 
-            padding: 0;
-            overflow: hidden; /* Evita que la pantalla rebote */
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: #06060c;
+            overflow: hidden;
+            user-select: none;
         }
 
-        /* Capa oscura para que el fondo no sature la vista */
-        body::before {
-            content: "";
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: -1;
+        /* Fondo cósmico animado */
+        .neon-bg {
+            background: radial-gradient(circle at 50% 50%, #1a0b2e 0%, #05020a 100%);
+            position: relative;
+        }
+        .neon-bg::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px);
+            background-size: 550px 550px;
+            opacity: 0.15;
         }
 
-        #setup-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 100; display: flex; justify-content: center; align-items: center;
+        /* Brillo de Neón Dorado (ZARD) */
+        .neon-glow {
+            text-shadow: 0 0 10px rgba(234, 179, 8, 0.6), 0 0 20px rgba(234, 179, 8, 0.4);
+        }
+        .border-neon {
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.4);
+            border: 2px solid rgba(234, 179, 8, 0.8);
         }
 
-        .config-card {
-            background: rgba(10, 10, 10, 0.95); padding: 30px; border: 2px solid var(--gold);
-            border-radius: 20px; max-width: 350px; width: 85%; text-align: center;
-            box-shadow: 0 0 20px var(--gold);
+        /* Botones de acción */
+        .btn-epic {
+            background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .btn-epic:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 25px rgba(234, 179, 8, 0.8);
         }
 
-        #game-ui {
-            display: flex; flex-direction: column; height: 100vh; width: 100vw;
+        canvas {
+            display: block;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
         }
-
-        .header {
-            background: rgba(0,0,0,0.85); padding: 15px; 
-            text-align: center; border-bottom: 2px solid var(--gold);
-            font-weight: bold; font-size: 1.2rem;
-        }
-
-        /* EL TABLERO: Ahora ocupa el centro sin apretarse */
-        .grid-6x6 {
-            display: grid; 
-            grid-template-columns: repeat(6, 1fr);
-            gap: 6px; 
-            padding: 10px;
-            margin: auto; /* Esto centra el tablero verticalmente */
-            width: 92vw;
-            max-width: 500px;
-        }
-
-        .card {
-            aspect-ratio: 1/1; cursor: pointer; position: relative;
-            transform-style: preserve-3d; transition: transform 0.4s;
-        }
-
-        .card.flipped { transform: rotateY(180deg); }
-
-        .card .front, .card .back {
-            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
-            border-radius: 6px; border: 1px solid var(--gold);
-        }
-
-        .card .back { 
-            background: #111 var(--card-back) no-repeat center center; 
-            background-size: cover; 
-        }
-
-        .card .front { 
-            transform: rotateY(180deg); 
-            background: #222; 
-            display: flex; justify-content: center; align-items: center; 
-            font-size: 1.3rem;
-        }
-
-        .hidden { display: none !important; }
-        .btn-action { background: var(--gold); color: black; border: none; padding: 15px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; }
     </style>
 </head>
-<body>
+<body class="w-screen h-screen flex items-center justify-center neon-bg text-white m-0 p-0">
 
-    <div id="setup-screen">
-        <div class="config-card">
-            <h2 style="color: var(--gold); margin: 0 0 10px 0;">ZAARD MEMORY HD</h2>
-            <p>Empareja las cartas en menos de 8 intentos.</p>
-            <button class="btn-action" onclick="connectWallet()">CONECTAR BILLETERA</button>
-            <p style="text-decoration: underline; cursor: pointer; font-size: 0.9rem; color: #aaa; margin-top: 15px;" onclick="startMode(true)">Modo Invitado</p>
+    <div id="pantalla-bienvenida" class="absolute z-20 w-full max-w-2xl p-8 rounded-3xl bg-black/85 backdrop-blur-md border-neon text-center mx-4 transition-all duration-500">
+        <h1 class="text-3xl md:text-4xl font-black text-yellow-400 tracking-wider mb-2 neon-glow">BIENVENIDOS A</h1>
+        <h2 class="text-4xl md:text-5xl font-black text-white tracking-widest mb-6 border-b border-yellow-500/20 pb-4">ZAARD INNOVATION</h2>
+        
+        <p class="text-lg text-yellow-500/90 font-bold mb-6 tracking-wide">Prueba tu destreza y gana recompensas</p>
+        
+        <div class="bg-purple-950/20 border border-purple-500/30 rounded-2xl p-5 text-left text-sm text-gray-300 space-y-3 mb-8">
+            <div class="flex items-start gap-3">
+                <span class="text-yellow-400 font-bold">🔥 EL RETO:</span>
+                <p>Pilota el Fénix cósmico. Esquiva los obstáculos que se aproximan en el espacio profundo. La velocidad aumentará progresivamente poniendo a prueba tus reflejos.</p>
+            </div>
+            <div class="flex items-start gap-3">
+                <span class="text-yellow-400 font-bold">📦 OBJETIVO:</span>
+                <p>Debes recolectar exactamente <span class="text-yellow-400 font-bold">100 cajas de gas</span> para asegurar la victoria. Dispones de <span class="text-red-400 font-bold">7 oportunidades</span> de impacto antes de perder.</p>
+            </div>
+            <div class="flex items-start gap-3">
+                <span class="text-purple-400 font-bold">💎 ECONOMÍA:</span>
+                <p>En el modo Web3, entras con una apuesta de <span class="text-purple-400 font-bold">0.0001 ZARD</span>. Si vences, reclamas <span class="text-yellow-400 font-bold">0.00015 ZARD</span>. Si fallas, tus tokens se envían al contrato de quema permanente.</p>
+            </div>
         </div>
+
+        <button onclick="irAlMenuModos()" class="btn-epic w-full md:w-auto px-12 py-4 rounded-xl font-black text-black tracking-widest text-lg">
+            ACEPTAR Y CONTINUAR
+        </button>
     </div>
 
-    <div id="game-ui" class="hidden">
-        <div class="header">
-            INTENTOS: <span id="attempt-count" style="color: var(--gold);">0</span> / 7
+    <div id="menu-modos" class="hidden absolute z-10 w-full max-w-4xl p-8 rounded-3xl bg-black/85 backdrop-blur-md border-neon text-center mx-4 transition-all duration-500">
+        <div class="w-full h-48 rounded-2xl mb-6 overflow-hidden relative border border-yellow-500/30">
+            <img src="https://cloudflare-ipfs.com/ipfs/bafybeiefhnawny7nlgixveiia7aaougqxsird6or4nws52vp36ndbfvixa" 
+                 alt="ZARD Golden Run" 
+                 class="w-full h-full object-cover opacity-80">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
         </div>
-        <div class="grid-6x6" id="board"></div>
-    </div>
 
-    <script>
-        let attempts = 0;
-        let flippedCards = [];
-        let matchedPairs = 0;
-        let canFlip = true;
-        const emojis = ['💎', '🚀', '🔥', '🦁', '⚡', '🛡️', '👑', '💰', '🎯', '🎰', '🔱', '🧿', '🔋', '📡', '🛸', '🪐', '🧬', '🧪'];
-        let gameCards = [...emojis, ...emojis];
+        <h1 class="text-4xl md:text-6xl font-black text-yellow-400 tracking-wider mb-2 neon-glow">GOLDEN RUN</h1>
+        <p class="text-xs md:text-sm text-gray-400 tracking-widest mb-8">SELECCIONA TU SISTEMA DE ACCESO</p>
 
-        function startMode(guest) {
-            document.getElementById('setup-screen').classList.add('hidden');
-            document.getElementById('game-ui').classList.remove('hidden');
-            initGame();
-        }
-
-        async function connectWallet() {
-            if (window.ethereum) {
-                try {
-                    await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    startMode(false);
-                } catch (e) { alert("Error al conectar"); }
-            } else { alert("Usa MetaMask"); }
-        }
-
-        function initGame() {
-            const board = document.getElementById('board');
-            gameCards.sort(() => Math.random() - 0.5);
-            board.innerHTML = '';
-            gameCards.forEach(val => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.dataset.value = val;
-                card.innerHTML = `<div class="back"></div><div class="front">${val}</div>`;
-                card.onclick = () => flipCard(card);
-                board.appendChild(card);
-            });
-        }
-
-        function flipCard(card) {
-            if (!canFlip || flippedCards.length >= 2 || card.classList.contains('flipped')) return;
-            card.classList.add('flipped');
-            flippedCards.push(card);
-            if (flippedCards.length === 2) {
-                canFlip = false;
-                setTimeout(checkMatch, 700);
-            }
-        }
-
-        function checkMatch() {
-            const [c1, c2] = flippedCards;
-            if (c1.dataset.value === c2.dataset.value) {
-                matchedPairs++;
-                flippedCards = [];
-                canFlip = true;
-                if (matchedPairs === 18) alert("¡Ganaste!");
-            } else {
-                attempts++;
-                document.getElementById('attempt-count').innerText = attempts;
-                setTimeout(() => {
-                    c1.classList.remove('flipped');
-                    c2.classList.remove('flipped');
-                    flippedCards = [];
-                    canFlip = true;
-                    if (attempts >= 7) {
-                        alert("Perdiste. Reintentando...");
-                        location.reload();
-                    }
-                }, 500);
-            }
-        }
-    </script>
-</body>
-</html>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+            <button onclick="iniciarJuego('prueba')" class="bg-gray-900/80 border border-gray-700 hover:border-yellow-500/50 p-5 rounded-xl font-bold text-gray-300 text-lg tracking-wide flex flex-col items-center justify-center transition-all duration-300 hover:scale-[1.02]">
+                <span class="text-yellow-400 font-black">MODO INVITADO</span>
+                <span class="text-xs font-normal opacity-7

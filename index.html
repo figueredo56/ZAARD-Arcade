@@ -274,39 +274,30 @@
             }
         }
 
-        async function prepararJuego(modo) {
-            modoActual = modo;
-            
-            if (modoActual === 'wallet') {
-                if (typeof window.ethereum !== 'undefined' || typeof window.web3 !== 'undefined') {
-                    try {
-                        const cuentas = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                        if (!cuentas || cuentas.length === 0) {
-                            alert("Error: No se detectó ninguna cuenta activa en Metamask/Trust Wallet.");
-                            return;
-                        }
-                        
-                        await window.ethereum.request({
-                            method: 'eth_sendTransaction',
-                            params: [{ 
-                                from: cuentas[0], 
-                                to: CONTRATO_ZARD, 
-                                value: '0x0' 
-                            }],
-                        });
-                    } catch (error) {
-                        alert("⚠️ Acceso denegado: Debes confirmar la firma en tu billetera para acceder al modo de apuestas.");
-                        return;
-                    }
-                } else {
-                    alert("⚠️ No se detectó ninguna Web3 Wallet. Por favor, abre este enlace desde el navegador interno de Trust Wallet o MetaMask.");
-                    return;
-                }
+       async function prepararJuego(modo) {
+    if (modo !== 'prueba') {
+        try {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            await provider.send("eth_requestAccounts", []);
+            const signer = provider.getSigner();
+
+            if (modo === 'zaard') {
+                // APUESTA EN ZARD: Ejecuta el contrato directamente
+                const contrato = new ethers.Contract(CONTRATO_ZARD, ["function transfer(address, uint256) public returns (bool)"], signer);
+                await (await contrato.transfer(RECAUDADORA, ethers.utils.parseUnits("0.0001", 18))).wait();
+            } else if (modo === 'bnb') {
+                // APUESTA EN BNB: Envío directo a la recaudadora
+                await (await signer.sendTransaction({ to: RECAUDADORA, value: ethers.utils.parseEther("0.000005") })).wait();
             }
-            
-            document.getElementById('menu-modos').style.display = 'none';
-            document.getElementById('contenedor-juego').style.display = 'flex';
-            iniciarEngine();
+        } catch (e) {
+            alert("⚠️ Error de pago: La transacción fue rechazada o cancelada.");
+            return;
+        }
+    }
+    document.getElementById('menu-modos').style.display = 'none';
+    document.getElementById('contenedor-juego').style.display = 'flex';
+    iniciarEngine();
+       }
         }
 
         function iniciarEngine() {

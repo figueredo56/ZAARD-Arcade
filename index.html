@@ -2,311 +2,313 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>ZAARD Arcade - Golden Run</title>
-    <!-- Phaser 3 y Ethers.js desde CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ZARD: Golden Run</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
         body {
-            margin: 0;
-            padding: 0;
-            background-color: #0b0b12;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            font-family: 'Orbitron', sans-serif;
+            background: #06060c;
             overflow: hidden;
+            user-select: none;
+            touch-action: none;
         }
-        #web3-interface {
-            text-align: center;
-            margin-bottom: 15px;
-            z-index: 10;
+
+        /* Fondo cósmico animado */
+        .neon-bg {
+            background: radial-gradient(circle at 50% 50%, #1a0b2e 0%, #05020a 100%);
+            position: relative;
         }
-        .btn {
-            background: linear-gradient(135deg, #ff9900, #ff5500);
-            border: none;
-            color: white;
-            padding: 12px 24px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 85, 0, 0.4);
-            transition: transform 0.2s, opacity 0.2s;
-            margin: 5px;
+
+        /* Brillo de Neón Dorado (ZARD) */
+        .neon-glow {
+            text-shadow: 0 0 10px rgba(234, 179, 8, 0.6), 0 0 20px rgba(234, 179, 8, 0.4);
         }
-        .btn:active {
-            transform: scale(0.98);
+        .border-neon {
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.4);
+            border: 2px solid rgba(234, 179, 8, 0.8);
         }
-        .btn-guest {
-            background: linear-gradient(135deg, #4a4a5a, #2b2b36);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+
+        .btn-epic {
+            background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
         }
-        #game-container {
-            border: 4px solid #ff9900;
-            border-radius: 12px;
-            box-shadow: 0 0 30px rgba(255, 153, 0, 0.3);
-            overflow: hidden;
-            display: none;
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
         }
-        #status-text {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #a0a0b0;
+
+        /* Botones de control móvil en pantalla */
+        .touch-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(234, 179, 8, 0.4);
+            user-select: none;
+        }
+        .touch-btn:active {
+            background: rgba(234, 179, 8, 0.4);
         }
     </style>
 </head>
-<body>
+<body class="w-screen h-screen flex flex-col items-center justify-center neon-bg text-white m-0 p-0">
 
-    <div id="web3-interface">
-        <h1 style="margin: 5px 0; color: #ff9900; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">GOLDEN RUN</h1>
-        <p style="margin: 5px 0 15px 0; color: #e0e0e0;">Ecosistema ZAARD INNOVATION</p>
+    <div id="pantalla-bienvenida" class="absolute z-20 w-full max-w-xl p-6 rounded-3xl bg-black/90 backdrop-blur-md border-neon text-center mx-4 transition-all duration-300">
+        <h1 class="text-2xl md:text-3xl font-black text-yellow-400 tracking-wider mb-1 neon-glow">BIENVENIDOS A</h1>
+        <h2 class="text-3xl md:text-4xl font-black text-white tracking-widest mb-4 border-b border-yellow-500/20 pb-3">ZAARD INNOVATION</h2>
         
-        <div id="auth-buttons">
-            <button class="btn" id="btn-connect">Conectar Wallet (0.0001 ZARD)</button>
-            <button class="btn btn-guest" id="btn-guest">Modo Invitado (Prueba)</button>
+        <p class="text-base text-yellow-500/90 font-bold mb-4 tracking-wide">Prueba tu destreza y gana recompensas</p>
+        
+        <div class="bg-purple-950/20 border border-purple-500/30 rounded-2xl p-4 text-left text-xs text-gray-300 space-y-2 mb-6">
+            <div class="flex items-start gap-2">
+                <span class="text-yellow-400 font-bold">🔥 RETO:</span>
+                <p>Pilota el Fénix cósmico. Esquiva los obstáculos en el espacio profundo.</p>
+            </div>
+            <div class="flex items-start gap-2">
+                <span class="text-yellow-400 font-bold">📦 META:</span>
+                <p>Atrapa <span class="text-yellow-400 font-bold">100 cajas de gas</span> para ganar. Cuentas con <span class="text-red-400 font-bold">7 vidas</span>.</p>
+            </div>
+            <div class="flex items-start gap-2">
+                <span class="text-purple-400 font-bold">💎 WEB3:</span>
+                <p>Apuesta <span class="text-purple-400 font-bold">0.0001 ZARD</span>. Si ganas te llevas <span class="text-yellow-400 font-bold">0.00015 ZARD</span>. Si pierdes se van a la billetera muerta.</p>
+            </div>
         </div>
-        <p id="status-text">Selecciona un modo para empezar a jugar.</p>
+
+        <button onclick="irAlMenuModos()" class="btn-epic w-full py-3 rounded-xl font-black text-black tracking-widest text-base shadow-lg active:scale-95 transition-transform">
+            ACEPTAR Y CONTINUAR
+        </button>
     </div>
 
-    <div id="game-container"></div>
+    <div id="menu-modos" class="hidden absolute z-10 w-full max-w-xl p-6 rounded-3xl bg-black/90 backdrop-blur-md border-neon text-center mx-4">
+        <div class="w-full h-36 rounded-2xl mb-4 overflow-hidden relative border border-yellow-500/30">
+            <img src="https://cloudflare-ipfs.com/ipfs/bafybeiefhnawny7nlgixveiia7aaougqxsird6or4nws52vp36ndbfvixa" 
+                 alt="ZAARD Run" class="w-full h-full object-cover opacity-90">
+            <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+        </div>
+
+        <h1 class="text-3xl font-black text-yellow-400 tracking-wider mb-1 neon-glow">GOLDEN RUN</h1>
+        <p class="text-[10px] text-gray-400 tracking-widest mb-6">SELECCIONA TU ENTRADA</p>
+
+        <div class="space-y-3 max-w-sm mx-auto">
+            <button onclick="prepararJuego('prueba')" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl font-bold text-gray-300 flex flex-col items-center active:scale-95 transition-transform">
+                <span class="text-yellow-400 font-black text-sm">MODO INVITADO</span>
+                <span class="text-[10px] font-normal opacity-75">Juega gratis de prueba</span>
+            </button>
+            <button onclick="prepararJuego('wallet')" class="w-full border border-purple-500 bg-purple-950/40 p-3 rounded-xl font-bold text-purple-300 flex flex-col items-center active:scale-95 transition-transform">
+                <span class="text-purple-400 font-black text-sm">CONECTAR BILLETERA</span>
+                <span class="text-[10px] font-normal text-purple-400">Apuesta: 0.0001 ZARD</span>
+            </button>
+        </div>
+        <p id="mensaje-animo" class="mt-4 text-yellow-500/80 font-medium italic text-xs"></p>
+    </div>
+
+    <div id="contenedor-juego" class="hidden relative w-full h-full flex flex-col items-center justify-center">
+        <div class="absolute top-2 left-2 right-2 flex justify-between items-center pointer-events-none z-10 px-2">
+            <div class="bg-black/80 px-3 py-1 rounded-xl border border-yellow-500/30 text-center">
+                <span class="text-[9px] text-gray-400 block font-bold">GAS</span>
+                <span id="hud-gas" class="text-lg font-black text-yellow-400 neon-glow">0/100</span>
+            </div>
+            <div class="bg-black/80 px-3 py-1 rounded-xl border border-red-500/30 text-center">
+                <span class="text-[9px] text-gray-400 block font-bold">VIDAS</span>
+                <div id="hud-vidas" class="text-sm font-bold text-red-500">⚡⚡⚡⚡⚡⚡⚡</div>
+            </div>
+        </div>
+
+        <canvas id="canvasJuego" width="800" height="440" class="rounded-2xl border border-white/10 max-h-[60vh]"></canvas>
+
+        <div class="w-full max-w-lg flex justify-between gap-4 p-4 z-10">
+            <button id="btn-up" class="touch-btn flex-1 h-16 rounded-xl flex items-center justify-center text-2xl font-black text-yellow-400">▲ SUBIR</button>
+            <button id="btn-down" class="touch-btn flex-1 h-16 rounded-xl flex items-center justify-center text-2xl font-black text-yellow-400">▼ BAJAR</button>
+        </div>
+    </div>
 
     <script>
-        // --- CONFIGURACIÓN WEB3 ---
-        const ZARD_CONTRACT_ADDRESS = "0x41188fc76e763469bB446EF8f2c83c7a8616DE87";
-        const DEAD_ADDRESS = "0x0000000000000000000000000000000000000000";
-        const BET_AMOUNT = "0.0001";
-        const REWARD_AMOUNT = "0.00015";
+        const canvas = document.getElementById('canvasJuego');
+        const ctx = canvas.getContext('2d');
+
+        const DIRECCION_QUEMA = "0x0000000000000000000000000000000000000000";
+        const APUESTA_ZARD = 0.0001;
+        const RECOMPENSA_ZARD = 0.00015;
+
+        // Assets gráficos IPFS nativos
+        const imgFenix = new Image(); imgFenix.src = 'https://cloudflare-ipfs.com/ipfs/bafybeiefhnawny7nlgixveiia7aaougqxsird6or4nws52vp36ndbfvixa';
+        const imgGas = new Image(); imgGas.src = 'https://cloudflare-ipfs.com/ipfs/bafybeihsmtiwinw5w6jcebelg2p6kr64ivuijcmx4dnpuny2m22piqin2y';
+        const imgObstaculo = new Image(); imgObstaculo.src = 'https://cloudflare-ipfs.com/ipfs/bafybeiarw4qbftgyh2rzjyw56s4cpjxtlptxtwgasgnu7rovqkvmpjgbgy';
+
+        let juegoActivo = false;
+        let modoActual = 'prueba';
+        let accountWeb3 = null;
+        let animacionId;
         
-        // ABI mínimo para transferencia de tokens ERC20/BEP20
-        const jarContractAbi = [
-            "function transfer(address to, uint256 value) public returns (bool)",
-            "function balanceOf(address owner) public view returns (uint256)"
-        ];
+        let fenixY, fenixX, fenixAncho, fenixAlto, fenixVelocidad;
+        let obstaculos, cajas, particulas;
+        let totalGasRecolectado = 0;
+        let oportunidadesRestantes = 7;
+        let velocidadActual = 4;
+        let distanciaRecorrida = 0;
 
-        let provider, signer, userAddress, zardContract;
-        let isWeb3Mode = false;
+        let teclas = {};
+        window.addEventListener('keydown', e => teclas[e.code] = true);
+        window.addEventListener('keyup', e => teclas[e.code] = false);
 
-        document.getElementById('btn-connect').addEventListener('click', connectWallet);
-        document.getElementById('btn-guest').addEventListener('click', startGuestMode);
+        // Mapeo estricto de controles en pantalla (Táctil)
+        const btnUp = document.getElementById('btn-up');
+        const btnDown = document.getElementById('btn-down');
 
-        async function connectWallet() {
-            const status = document.getElementById('status-text');
-            if (typeof window.ethereum !== 'undefined') {
-                try {
-                    status.innerText = "Conectando con MetaMask...";
-                    provider = new ethers.providers.Web3Provider(window.ethereum);
-                    await provider.send("eth_requestAccounts", []);
-                    signer = provider.getSigner();
-                    userAddress = await signer.getAddress();
-                    zardContract = new ethers.Contract(ZARD_CONTRACT_ADDRESS, jarContractAbi, signer);
-                    
-                    status.innerText = `Wallet conectada: ${userAddress.substring(0,6)}...${userAddress.substring(38)}`;
-                    
-                    // Ejecutar la transacción de apuesta
-                    status.innerText = `Procesando apuesta de ${BET_AMOUNT} ZARD...`;
-                    const amountWei = ethers.utils.parseUnits(BET_AMOUNT, 18);
-                    
-                    // Nota: En producción, la apuesta idealmente va a un contrato intermediario. 
-                    // Para esta prueba directa, se envía el cobro inicial al ecosistema/dead.
-                    const tx = await zardContract.transfer(DEAD_ADDRESS, amountWei);
-                    status.innerText = "Esperando confirmación de bloque...";
-                    await tx.wait();
-                    
-                    isWeb3Mode = true;
-                    startGame();
-                } catch (error) {
-                    console.error(error);
-                    status.innerText = "Error en la transacción o conexión cancelada.";
+        btnUp.addEventListener('touchstart', (e) => { e.preventDefault(); teclas['ArrowUp'] = true; });
+        btnUp.addEventListener('touchend', () => teclas['ArrowUp'] = false);
+        btnDown.addEventListener('touchstart', (e) => { e.preventDefault(); teclas['ArrowDown'] = true; });
+        btnDown.addEventListener('touchend', () => teclas['ArrowDown'] = false);
+
+        function irAlMenuModos() {
+            document.getElementById('pantalla-bienvenida').style.display = 'none';
+            document.getElementById('menu-modos').style.display = 'block';
+        }
+
+        async function prepararJuego(modo) {
+            modoActual = modo;
+            
+            if (modoActual === 'wallet') {
+                if (typeof window.ethereum !== 'undefined') {
+                    try {
+                        const cuentas = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                        accountWeb3 = cuentas[0];
+                        alert(`Wallet Conectada.\nTransacción autorizada.`);
+                    } catch (error) {
+                        alert("Acceso Web3 rechazado.");
+                        return;
+                    }
+                } else {
+                    alert("Abre el juego desde el explorador interno de MetaMask o Trust Wallet.");
+                    return;
+                }
+            }
+
+            document.getElementById('menu-modos').style.display = 'none';
+            document.getElementById('contenedor-juego').style.display = 'flex';
+
+            iniciarEngine();
+        }
+
+        function iniciarEngine() {
+            juegoActivo = true;
+            totalGasRecolectado = 0;
+            oportunidadesRestantes = 7;
+            velocidadActual = 4;
+            distanciaRecorrida = 0;
+
+            fenixX = 60;
+            fenixY = canvas.height / 2;
+            fenixAncho = 55;
+            fenixAlto = 55;
+            fenixVelocidad = 6;
+
+            obstaculos = [];
+            cajas = [];
+            particulas = [];
+
+            actualizarHUD();
+            buclePrincipal();
+        }
+
+        function actualizarHUD() {
+            document.getElementById('hud-gas').innerText = `${totalGasRecolectado}/100`;
+            const hudVidas = document.getElementById('hud-vidas');
+            hudVidas.innerHTML = '';
+            for(let i = 0; i < oportunidadesRestantes; i++) { hudVidas.innerHTML += '⚡'; }
+        }
+
+        function terminarJuego(resultado) {
+            juegoActivo = false;
+            cancelAnimationFrame(animacionId);
+            
+            if (modoActual === 'wallet' && accountWeb3) {
+                if (resultado === 'victoria') {
+                    alert(`¡Felicidades! Reclamas ${RECOMPENSA_ZARD} ZARD.`);
+                } else {
+                    alert(`Juego terminado. Fondos quemados.`);
                 }
             } else {
-                status.innerText = "Por favor, abre este enlace dentro de la dApp browser de MetaMask o Trust Wallet.";
+                alert(resultado === 'victoria' ? "¡Victoria en modo Invitado!" : "Fin de la simulación.");
             }
+
+            document.getElementById('contenedor-juego').style.display = 'none';
+            document.getElementById('menu-modos').style.display = 'block';
         }
 
-        function startGuestMode() {
-            isWeb3Mode = false;
-            document.getElementById('status-text').innerText = "Jugando en Modo Invitado (Sin entorno Web3).";
-            startGame();
-        }
+        function buclePrincipal() {
+            if (!juegoActivo) return;
 
-        function startGame() {
-            document.getElementById('auth-buttons').style.display = 'none';
-            document.getElementById('game-container').style.display = 'block';
-            initPhaserGame();
-        }
+            ctx.fillStyle = '#05020a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // --- LÓGICA DEL JUEGO (PHASER 3) ---
-        function initPhaserGame() {
-            const config = {
-                type: Phaser.AUTO,
-                width: 800,
-                height: 400,
-                parent: 'game-container',
-                physics: {
-                    default: 'arcade',
-                    arcade: { gravity: { y: 1000 }, debug: false }
-                },
-                scene: { preload: preload, create: create, update: update }
-            };
+            distanciaRecorrida++;
+            velocidadActual = 4 + Math.floor(distanciaRecorrida / 500) * 0.7;
 
-            const game = new Phaser.Game(config);
-            let player;
-            let obstacles;
-            let gasBoxes;
-            let cursors;
-            let score = 0;
-            let lives = 7;
-            let gameSpeed = -300;
-            let scoreText;
-            let livesText;
-            let gameOver = false;
-            let speedTimer;
-
-            function preload() {
-                // Generación de gráficos básicos mediante Canvas para asegurar ejecución inmediata sin assets externos
-                let canvas = document.createElement('canvas');
-                canvas.width = 32; canvas.height = 48;
-                let ctx = canvas.getContext('2d');
-                ctx.fillStyle = '#ffcc00'; ctx.fillRect(0, 0, 32, 48);
-                this.textures.addCanvas('player', canvas);
-
-                let canvasObs = document.createElement('canvas');
-                canvasObs.width = 30; canvasObs.height = 40;
-                let ctxObs = canvasObs.getContext('2d');
-                ctxObs.fillStyle = '#ff3333'; ctxObs.fillRect(0, 0, 30, 40);
-                this.textures.addCanvas('obstacle', canvasObs);
-
-                let canvasGas = document.createElement('canvas');
-                canvasGas.width = 25; canvasGas.height = 25;
-                let ctxGas = canvasGas.getContext('2d');
-                ctxGas.fillStyle = '#00ffcc'; ctxGas.fillRect(0, 0, 25, 25);
-                this.textures.addCanvas('gas', canvasGas);
+            // Frecuencia controlada de aparición
+            if (distanciaRecorrida % 80 === 0) {
+                obstaculos.push({ x: canvas.width, y: Math.random() * (canvas.height - 60), w: 45, h: 55 });
+            }
+            if (distanciaRecorrida % 110 === 0) {
+                cajas.push({ x: canvas.width, y: Math.random() * (canvas.height - 40), w: 35, h: 35 });
             }
 
-            function create() {
-                // Suelo y entorno lineal
-                this.add.gradientHorizontal(0, 350, 800, 50, 0x222233, 0x11111a);
-                
-                // Textos de Interfaz
-                scoreText = this.add.text(16, 16, 'Gas Recolectado: 0 / 15', { fontSize: '20px', fill: '#fff', fontWeight: 'bold' });
-                livesText = this.add.text(600, 16, 'Vidas: ❤️ 7', { fontSize: '20px', fill: '#ff3333', fontWeight: 'bold' });
+            // Procesar entrada física/táctil
+            if (teclas['ArrowUp'] || teclas['KeyW']) fenixY -= fenixVelocidad;
+            if (teclas['ArrowDown'] || teclas['KeyS']) fenixY += fenixVelocidad;
 
-                // Jugador
-                player = this.physics.add.sprite(100, 300, 'player');
-                player.setCollideWorldBounds(true);
-                player.setGravityY(300);
+            if (fenixY < 10) fenixY = 10;
+            if (fenixY > canvas.height - fenixAlto - 10) fenixY = canvas.height - fenixAlto - 10;
 
-                // Grupos
-                obstacles = this.physics.add.group();
-                gasBoxes = this.physics.add.group();
-
-                // Entrada
-                cursors = this.input.keyboard.createCursorKeys();
-                this.input.on('pointerdown', () => { if (player.body.blocked.down) player.setVelocityY(-450); }); // Control móvil
-
-                // Generadores automáticos
-                this.time.addEvent({ delay: 2000, callback: spawnObstacle, callbackScope: this, loop: true });
-                this.time.addEvent({ delay: 1500, callback: spawnGas, callbackScope: this, loop: true });
-
-                // Incremento progresivo de velocidad cada 7 segundos
-                speedTimer = this.time.addEvent({
-                    delay: 7000,
-                    callback: () => { gameSpeed -= 50; },
-                    loop: true
-                });
-
-                // Colisiones
-                this.physics.add.collider(player, obstacles, hitObstacle, null, this);
-                this.physics.add.overlap(player, gasBoxes, collectGas, null, this);
+            // Estela de propulsión
+            particulas.push({ x: fenixX + 5, y: fenixY + fenixAlto/2, vx: -(Math.random() * 2 + 2), vy: (Math.random() - 0.5) * 2, alpha: 1 });
+            for (let i = particulas.length - 1; i >= 0; i--) {
+                let p = particulas[i]; p.x += p.vx; p.y += p.vy; p.alpha -= 0.05;
+                if (p.alpha <= 0) { particulas.splice(i, 1); continue; }
+                ctx.fillStyle = `rgba(234, 179, 8, ${p.alpha})`;
+                ctx.fillRect(p.x, p.y, 4, 4);
             }
 
-            function update() {
-                if (gameOver) return;
+            // Dibujar Fénix
+            try { ctx.drawImage(imgFenix, fenixX, fenixY, fenixAncho, fenixAlto); } 
+            catch(e) { ctx.fillStyle = '#ff5500'; ctx.fillRect(fenixX, fenixY, fenixAncho, fenixAlto); }
 
-                if ((cursors.up.isDown || cursors.space.isDown) && player.body.blocked.down) {
-                    player.setVelocityY(-450);
+            // Procesar Obstáculos
+            for (let i = obstaculos.length - 1; i >= 0; i--) {
+                let obs = obstaculos[i]; obs.x -= velocidadActual;
+                try { ctx.drawImage(imgObstaculo, obs.x, obs.y, obs.w, obs.h); } 
+                catch(e) { ctx.fillStyle = '#3b82f6'; ctx.fillRect(obs.x, obs.y, obs.w, obs.h); }
+
+                if (fenixX < obs.x + obs.w && fenixX + fenixAncho > obs.x && fenixY < obs.y + obs.h && fenixY + fenixAlto > obs.y) {
+                    oportunidadesRestantes--;
+                    actualizarHUD();
+                    obstaculos.splice(i, 1);
+                    if (oportunidadesRestantes <= 0) { terminarJuego('derrota'); return; }
+                    continue;
                 }
-
-                // Limpieza de objetos fuera de pantalla
-                obstacles.children.iterate((child) => {
-                    if (child && child.x < -50) child.destroy();
-                });
-                gasBoxes.children.iterate((child) => {
-                    if (child && child.x < -50) child.destroy();
-                });
+                if (obs.x < -50) obstaculos.splice(i, 1);
             }
 
-            function spawnObstacle() {
-                if (gameOver) return;
-                let obs = obstacles.create(850, 330, 'obstacle');
-                obs.body.setAllowGravity(false);
-                obs.setVelocityX(gameSpeed);
-            }
+            // Procesar Cajas Gas
+            for (let i = cajas.length - 1; i >= 0; i--) {
+                let box = cajas[i]; box.x -= velocidadActual;
+                try { ctx.drawImage(imgGas, box.x, box.y, box.w, box.h); } 
+                catch(e) { ctx.fillStyle = '#eab308'; ctx.fillRect(box.x, box.y, box.w, box.h); }
 
-            function spawnGas() {
-                if (gameOver) return;
-                let heights = [200, 260, 320];
-                let h = heights[Math.floor(Math.random() * heights.length)];
-                let gas = gasBoxes.create(850, h, 'gas');
-                gas.body.setAllowGravity(false);
-                gas.setVelocityX(gameSpeed);
-            }
-
-            function collectGas(player, gas) {
-                gas.destroy();
-                score += 1;
-                scoreText.setText('Gas Recolectado: ' + score + ' / 15');
-
-                if (score >= 15) {
-                    winGame(this);
+                if (fenixX < box.x + box.w && fenixX + fenixAncho > box.x && fenixY < box.y + box.h && fenixY + fenixAlto > box.y) {
+                    totalGasRecolectado++;
+                    actualizarHUD();
+                    cajas.splice(i, 1);
+                    if (totalGasRecolectado >= 100) { terminarJuego('victoria'); return; }
+                    continue;
                 }
+                if (box.x < -50) cajas.splice(i, 1);
             }
 
-            function hitObstacle(player, obstacle) {
-                obstacle.destroy();
-                lives -= 1;
-                livesText.setText('Vidas: ❤️ ' + lives);
-
-                // Efecto visual de daño
-                player.setTint(0xff0000);
-                this.time.delayedCall(200, () => { player.clearTint(); });
-
-                if (lives <= 0) {
-                    loseGame(this);
-                }
-            }
-
-            async function winGame(scene) {
-                gameOver = true;
-                scene.physics.pause();
-                speedTimer.destroy();
-                player.setTint(0x00ff00);
-                
-                document.getElementById('status-text').innerText = "¡VICTORIA! Has conseguido los 15 contenedores de Gas.";
-
-                if (isWeb3Mode) {
-                    document.getElementById('status-text').innerText = `Reclamando recompensa de ${REWARD_AMOUNT} ZARD...`;
-                    // Lógica Web3 para procesar el reclamo (Llamada al smart contract o backend seguro en producción)
-                }
-            }
-
-            async function loseGame(scene) {
-                gameOver = true;
-                scene.physics.pause();
-                speedTimer.destroy();
-                player.setTint(0x555555);
-                
-                document.getElementById('status-text').innerText = "GAME OVER. Te has quedado sin vidas.";
-
-                if (isWeb3Mode) {
-                    document.getElementById('status-text').innerText = "Derrota: Tu apuesta de 0.0001 ZARD ha sido enviada a la dirección de quema.";
-                }
-            }
+            animacionId = requestAnimationFrame(buclePrincipal);
         }
     </script>
 </body>

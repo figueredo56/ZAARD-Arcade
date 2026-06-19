@@ -2,37 +2,34 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>ZAARD MEMORY 6x6</title>
+    <title>ZAARD MEMORY ARCADE</title>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
     <style>
-        body { margin: 0; background: #020006; color: white; font-family: 'Orbitron', sans-serif; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        #ui-layer { position: absolute; z-index: 10; text-align: center; }
-        .panel { background: rgba(0,0,0,0.9); border: 2px solid #34c1ea; padding: 20px; border-radius: 15px; }
-        button { margin: 10px; padding: 15px 25px; cursor: pointer; background: #16a34a; border: none; color: white; font-weight: bold; border-radius: 8px; }
-        #bienvenida-img { width: 300px; height: 300px; background-size: cover; margin-bottom: 10px; }
+        body { margin: 0; background: #020006; color: white; font-family: 'Segoe UI', sans-serif; overflow: hidden; }
+        .ui-panel { position: absolute; width: 90%; max-width: 400px; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #000; border: 2px solid #5a2d82; border-radius: 20px; padding: 20px; text-align: center; box-shadow: 0 0 20px #5a2d82; z-index: 100; }
+        .banner { width: 100%; height: 200px; background-size: cover; background-position: center; border-radius: 10px; margin-bottom: 15px; }
+        button { width: 100%; padding: 15px; margin-top: 10px; border: none; border-radius: 10px; background: linear-gradient(90deg, #5a2d82, #2ecc71); color: white; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div id="ui-layer">
-    <div id="pantalla-inicio" class="panel">
-        <div id="bienvenida-img" style="background-image: url('https://ipfs.io/ipfs/bafybeiefhnawny7nlgixveiia7aaougqxsird6or4nws52vp36ndbfvixa')"></div>
-        <h1>BIENVENIDO A ZAARD</h1>
-        <p>Prueba tu memoria y gana recompensas.</p>
-        <button onclick="showMenu()">ACEPTAR RETO</button>
+<div id="ui-container">
+    <div id="pantalla-inicio" class="ui-panel">
+        <div class="banner" style="background-image: url('https://ipfs.io/ipfs/bafybeiefhnawny7nlgixveiia7aaougqxsird6or4nws52vp36ndbfvixa')"></div>
+        <h2 style="color: #bc8fef;">ZAARD ARCADE</h2>
+        <p>Sincronizando sistemas táctiles...</p>
+        <button onclick="document.getElementById('pantalla-inicio').style.display='none'; document.getElementById('menu-seleccion').style.display='block';">¡ENTRAR AL JUEGO!</button>
     </div>
-    
-    <div id="menu-juego" class="panel" style="display:none;">
-        <div style="width: 200px; height: 200px; background: url('https://ipfs.io/ipfs/bafybeic5377igwloc2o63whivoykazkibjruq7bau4edjpfdfu4gudunjm') center/cover;"></div>
-        <h2>SELECCIONA MODO</h2>
-        <button onclick="iniciarJuego(false)">INVITADO</button>
-        <button onclick="iniciarJuego(true)">CONECTAR WEB3</button>
+
+    <div id="menu-seleccion" class="ui-panel" style="display:none;">
+        <div class="banner" style="background-image: url('https://ipfs.io/ipfs/bafybeic5377igwloc2o63whivoykazkibjruq7bau4edjpfdfu4gudunjm')"></div>
+        <h2 style="color: #bc8fef;">MEMORY RUN</h2>
+        <button onclick="lanzarJuego(false)">MODO INVITADO</button>
+        <button onclick="lanzarJuego(true)">CONECTAR BILLETERA</button>
     </div>
 </div>
 
 <script>
-    function showMenu() { document.getElementById('pantalla-inicio').style.display = 'none'; document.getElementById('menu-juego').style.display = 'block'; }
-
     const cids = [
         "bafybeihg4evetf2c5fqeozxttct7mone4jaequysqrxndlx4wqmf2zn45a",
         "bafkreic6hmavutykpcpviuxv4pq3xkgcquznb5j4zw7zbsrmwp5jnhylcy",
@@ -46,26 +43,26 @@
         "bafybeic5377igwloc2o63whivoykazkibjruq7bau4edjpfdfu4gudunjm"
     ];
 
-    function iniciarJuego(web3) {
-        document.getElementById('ui-layer').style.display = 'none';
+    function lanzarJuego(esWeb3) {
+        document.getElementById('ui-container').style.display = 'none';
         new Phaser.Game({
-            type: Phaser.AUTO, width: 800, height: 800,
+            type: Phaser.AUTO, width: window.innerWidth, height: window.innerHeight,
             scene: {
                 preload: function() {
-                    cids.forEach((cid, i) => this.load.image('c'+i, 'https://ipfs.io/ipfs/' + cid));
+                    cids.forEach((c, i) => this.load.image('c'+i, 'https://ipfs.io/ipfs/'+c));
                     this.load.image('dorso', 'https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m');
                 },
                 create: function() {
-                    // Fondo espacial simple
-                    this.add.rectangle(400, 400, 800, 800, 0x020006);
-                    this.intentos = 6;
-                    this.txt = this.add.text(20, 20, 'Oportunidades: 6', { fontSize: '32px', fill: '#34c1ea' });
+                    this.add.rectangle(window.innerWidth/2, window.innerHeight/2, window.innerWidth, window.innerHeight, 0x020006);
+                    this.vidas = 6;
+                    this.txt = this.add.text(20, 20, 'Oportunidades: 6', { fontSize: '24px', color: '#bc8fef' });
                     
                     let deck = []; for(let i=0; i<18; i++) { deck.push(i%10, i%10); }
                     Phaser.Utils.Array.Shuffle(deck);
 
                     deck.forEach((id, i) => {
-                        let card = this.add.sprite(100 + (i % 6) * 120, 150 + Math.floor(i / 6) * 120, 'dorso').setScale(0.15).setInteractive();
+                        // Cuadrícula 6x6 ajustada
+                        let card = this.add.sprite(70 + (i%6)*95, 150 + Math.floor(i/6)*95, 'dorso').setScale(0.13).setInteractive();
                         card.cid = 'c'+id;
                         card.on('pointerdown', () => {
                             if(this.lock || card.texture.key !== 'dorso') return;
@@ -77,8 +74,8 @@
                                     setTimeout(() => {
                                         this.p1.setTexture('dorso'); card.setTexture('dorso');
                                         this.p1 = null; this.lock = false;
-                                        this.intentos--; this.txt.setText('Oportunidades: ' + this.intentos);
-                                        if(this.intentos <= 0) location.reload();
+                                        this.vidas--; this.txt.setText('Oportunidades: ' + this.vidas);
+                                        if(this.vidas <= 0) location.reload();
                                     }, 800);
                                 } else { this.p1 = null; this.lock = false; }
                             }

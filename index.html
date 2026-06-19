@@ -10,7 +10,7 @@
         
         body, html {
             font-family: 'Orbitron', sans-serif;
-            background: #05020a;
+            background: #020205;
             overflow: hidden;
             user-select: none;
             touch-action: none;
@@ -20,37 +20,39 @@
             height: 100%;
         }
 
-        /* Fondo de espacio profundo para toda la aplicación */
+        /* FONDO ESPACIAL PREMIUM CON ESTRELLAS DE NEÓN */
         .espacio-bg {
-            background-color: #05020a;
+            background-color: #040209;
             background-image: 
-                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
-                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
-                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px);
-            background-size: 550px 550px, 350px 350px, 250px 250px;
-            background-position: 0 0, 40px 60px, 130px 270px;
+                radial-gradient(white, rgba(255,255,255,.3) 1px, transparent 20px),
+                radial-gradient(rgba(234, 179, 8, 0.5), rgba(234, 179, 8, 0.1) 2px, transparent 40px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px);
+            background-size: 300px 300px, 400px 400px, 250px 250px;
+            background-position: 0 0, 150px 150px, 50px 100px;
         }
 
         .neon-glow { 
-            text-shadow: 0 0 10px rgba(234, 179, 8, 0.6), 0 0 20px rgba(234, 179, 8, 0.3); 
+            text-shadow: 0 0 10px rgba(234, 179, 8, 0.7), 0 0 20px rgba(234, 179, 8, 0.4); 
         }
         
         .border-neon { 
-            box-shadow: 0 0 20px rgba(234, 179, 8, 0.35); 
-            border: 2px solid rgba(234, 179, 8, 0.85); 
+            box-shadow: 0 0 25px rgba(234, 179, 8, 0.4); 
+            border: 2px solid rgba(234, 179, 8, 0.9); 
         }
 
         .btn-epic { 
             background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); 
         }
 
-        /* Contenedores de imagen por CSS para evitar fallos de carga en móviles */
+        /* Contenedores CSS blindados para garantizar la carga de imágenes */
         .img-bienvenida-css {
             background: url('https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4') center/cover no-repeat;
+            min-height: 140px;
         }
 
         .img-menu-css {
             background: url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m') center/cover no-repeat;
+            min-height: 140px;
         }
 
         canvas { 
@@ -66,23 +68,23 @@
 
     <div id="pantalla-audio" class="absolute z-30 w-full max-w-xl p-6 rounded-3xl bg-black/95 border-neon text-center mx-4">
         <h1 class="text-2xl font-black text-yellow-400 tracking-wider mb-2 neon-glow">ZAARD ARCADE</h1>
-        <p class="text-sm text-gray-400 mb-6">Toca el botón para sincronizar los gráficos y activar el sonido premium.</p>
+        <p class="text-sm text-gray-400 mb-6">Sincronizando sistemas táctiles, interfaz gráfica y audio cósmico...</p>
         <button onclick="activarSistemas()" class="btn-epic w-full py-4 rounded-xl font-black text-black tracking-widest text-lg shadow-lg active:scale-95 transition-transform">
             ¡ENTRAR AL JUEGO!
         </button>
     </div>
 
     <div id="pantalla-bienvenida" class="hidden absolute z-20 w-full max-w-xl p-6 rounded-3xl bg-black/95 backdrop-blur-md border-neon text-center mx-4">
-        <div class="w-full h-36 rounded-2xl mb-4 overflow-hidden relative border border-yellow-500/30 img-bienvenida-css">
-            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+        <div class="w-full rounded-2xl mb-4 border border-yellow-500/40 img-bienvenida-css relative">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent"></div>
         </div>
 
         <h1 class="text-2xl font-black text-yellow-400 tracking-wider mb-1 neon-glow">BIENVENIDOS A</h1>
         <h2 class="text-3xl font-black text-white tracking-widest mb-4 border-b border-yellow-500/20 pb-3">ZAARD INNOVATION</h2>
         
         <div class="bg-purple-950/20 border border-purple-500/30 rounded-2xl p-4 text-left text-xs text-gray-300 space-y-2 mb-6">
-            <p><span class="text-yellow-400 font-bold">🔥 CONTROL:</span> Desliza tu dedo libremente por la pantalla para mover al fénix.</p>
-            <p><span class="text-yellow-400 font-bold">📦 META:</span> Atrapa 100 cajas de gas. Cuentas con 7 vidas.</p>
+            <p><span class="text-yellow-400 font-bold">🔥 CONTROL:</span> Desliza tu dedo libremente por la pantalla para mover al fénix arriba y abajo.</p>
+            <p><span class="text-yellow-400 font-bold">📦 META:</span> Atrapa 100 cajas de gas. Tienes 7 oportunidades de escudo.</p>
         </div>
 
         <button onclick="irAlMenuModos()" class="btn-epic w-full py-3 rounded-xl font-black text-black tracking-widest text-base active:scale-95 transition-transform">
@@ -91,8 +93,8 @@
     </div>
 
     <div id="menu-modos" class="hidden absolute z-10 w-full max-w-xl p-6 rounded-3xl bg-black/95 backdrop-blur-md border-neon text-center mx-4">
-        <div class="w-full h-36 rounded-2xl mb-4 overflow-hidden relative border border-yellow-500/30 img-menu-css">
-            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+        <div class="w-full rounded-2xl mb-4 border border-yellow-500/40 img-menu-css relative">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent"></div>
         </div>
 
         <h1 class="text-3xl font-black text-yellow-400 tracking-wider mb-1 neon-glow">GOLDEN RUN</h1>
@@ -130,7 +132,7 @@
 
         <div class="w-full max-w-2xl bg-black/80 backdrop-blur-md border-t-2 border-yellow-500/80 rounded-t-2xl p-3 text-center z-10 shadow-lg">
             <p class="text-[11px] text-yellow-500/90 font-bold tracking-widest uppercase">
-                SISTEMA TÁCTIL ACTIVO: ARRASTRA EN CUALQUIER ÁREA PARA MOVER TU FÉNIX
+                DESLIZA EN CUALQUIER LADO PARA MANIOBRAR LA NAVE FÉNIX
             </p>
         </div>
     </div>
@@ -140,6 +142,8 @@
         const ctx = canvas.getContext('2d');
 
         let audioCtx = null;
+        let audioMusicaInterval = null; // Control del bucle musical continuo
+        let notaMusicalIndex = 0;
         const CONTRATO_ZARD = "0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65";
 
         const imgFenix = new Image();
@@ -193,6 +197,7 @@
             document.getElementById('menu-modos').style.display = 'block';
         }
 
+        // CONTROLADOR DE AUDIO AVANZADO PARA EFECTOS Y MÚSICA CONTINUA
         function sonarEfecto(tipo) {
             if (!audioCtx) return;
             try {
@@ -205,24 +210,51 @@
                     osc.type = 'sawtooth';
                     osc.frequency.setValueAtTime(180, audioCtx.currentTime);
                     osc.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.4);
-                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
                     osc.start(); osc.stop(audioCtx.currentTime + 0.4);
                 } else if (tipo === 'gas') {
                     osc.type = 'sine';
-                    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-                    osc.frequency.setValueAtTime(900, audioCtx.currentTime + 0.08);
-                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
-                    osc.start(); osc.stop(audioCtx.currentTime + 0.2);
-                } else if (tipo === 'musica') {
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(110, audioCtx.currentTime);
-                    gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
-                    osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+                    osc.frequency.setValueAtTime(650, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(950, audioCtx.currentTime + 0.07);
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.18);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.18);
                 }
             } catch(e) {}
+        }
+
+        // GENERADOR DE MÚSICA DE FONDO EN TIEMPO REAL (Bucle Espacial)
+        function iniciarMusicaDeFondo() {
+            if (!audioCtx) return;
+            // Secuencia Armónica de Bajos Espaciales
+            const notas = [110.00, 130.81, 146.83, 164.81]; 
+            
+            audioMusicaInterval = setInterval(() => {
+                if (!juegoActivo) return;
+                try {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(notas[notaMusicalIndex % notas.length], audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+                    
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.4);
+                    notaMusicalIndex++;
+                } catch(e) {}
+            }, 400); // Ritmo continuo constante
+        }
+
+        function detenerMusicaDeFondo() {
+            if (audioMusicaInterval) {
+                clearInterval(audioMusicaInterval);
+                audioMusicaInterval = null;
+            }
         }
 
         async function prepararJuego(modo) {
@@ -261,6 +293,7 @@
             particulas = [];
 
             actualizarHUD();
+            iniciarMusicaDeFondo(); // Encender la banda sonora espacial
             buclePrincipal();
         }
 
@@ -273,6 +306,7 @@
 
         function terminarJuego(resultado) {
             juegoActivo = false;
+            detenerMusicaDeFondo(); // Apagar música
             cancelAnimationFrame(animacionId);
             
             if (resultado === 'victoria') {
@@ -289,13 +323,11 @@
         function buclePrincipal() {
             if (!juegoActivo) return;
 
-            // Canvas limpio transparente para ver el fondo estrellado CSS por detrás
+            // Dejamos el fondo transparente para que se aprecie el fondo estelar CSS continuo por detrás
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             distanciaRecorrida++;
             velocidadActual = 5 + Math.floor(distanciaRecorrida / 500) * 0.5;
-
-            if (distanciaRecorrida % 25 === 0) sonarEfecto('musica');
 
             if (distanciaRecorrida % 80 === 0) {
                 obstaculos.push({ x: canvas.width, y: Math.random() * (canvas.height - 70) + 10, w: 55, h: 55 });
@@ -307,7 +339,7 @@
             if (fenixY < 0) fenixY = 0;
             if (fenixY > canvas.height - fenixAlto) fenixY = canvas.height - fenixAlto;
 
-            // Partículas de estela
+            // Estela dorada de partículas de la nave
             particulas.push({ x: fenixX + 10, y: fenixY + fenixAlto/2, vx: -3, vy: (Math.random() - 0.5) * 2, alpha: 1 });
             for (let i = particulas.length - 1; i >= 0; i--) {
                 let p = particulas[i]; p.x += p.vx; p.y += p.vy; p.alpha -= 0.05;
@@ -316,14 +348,14 @@
                 ctx.fillRect(p.x, p.y, 4, 4);
             }
 
-            // DIBUJAR NAVE
+            // DIBUJAR NAVE FÉNIX
             if (imgFenix.complete && imgFenix.naturalWidth !== 0) {
                 ctx.drawImage(imgFenix, fenixX, fenixY, fenixAncho, fenixAlto);
             } else {
                 ctx.fillStyle = '#eab308'; ctx.fillRect(fenixX, fenixY, fenixAncho, fenixAlto);
             }
 
-            // OBSTÁCULOS
+            // PROCESAR OBSTÁCULOS
             for (let i = obstaculos.length - 1; i >= 0; i--) {
                 let obs = obstaculos[i]; obs.x -= velocidadActual;
                 
@@ -344,7 +376,7 @@
                 if (obs.x < -60) obstaculos.splice(i, 1);
             }
 
-            // GAS
+            // PROCESAR RECOMPENSAS DE GAS
             for (let i = cajas.length - 1; i >= 0; i--) {
                 let box = cajas[i]; box.x -= velocidadActual;
                 

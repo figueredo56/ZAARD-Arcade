@@ -10,7 +10,7 @@
         
         body, html {
             font-family: 'Orbitron', sans-serif;
-            background: #020205;
+            background: #020105;
             overflow: hidden;
             user-select: none;
             touch-action: none;
@@ -20,15 +20,19 @@
             height: 100%;
         }
 
-        /* FONDO ESPACIAL PREMIUM CON ESTRELLAS DE NEÓN */
+        /* FONDO CÓSMICO DE NEBULOSAS Y POLVO ESTELAR */
         .espacio-bg {
-            background-color: #040209;
+            background-color: #030108;
             background-image: 
+                radial-gradient(circle at 20% 30%, rgba(112, 26, 117, 0.25) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(30, 58, 138, 0.3) 0%, transparent 60%),
+                radial-gradient(circle at 50% 50%, rgba(76, 29, 149, 0.2) 0%, transparent 45%),
                 radial-gradient(white, rgba(255,255,255,.3) 1px, transparent 20px),
-                radial-gradient(rgba(234, 179, 8, 0.5), rgba(234, 179, 8, 0.1) 2px, transparent 40px),
+                radial-gradient(rgba(234, 179, 8, 0.4), rgba(234, 179, 8, 0.05) 2px, transparent 40px),
                 radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px);
-            background-size: 300px 300px, 400px 400px, 250px 250px;
-            background-position: 0 0, 150px 150px, 50px 100px;
+            background-size: 100% 100%, 100% 100%, 100% 100%, 250px 250px, 400px 400px, 320px 320px;
+            background-position: 0 0, 0 0, 0 0, 0 0, 120px 120px, 60px 90px;
+            background-attachment: fixed;
         }
 
         .neon-glow { 
@@ -44,7 +48,6 @@
             background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); 
         }
 
-        /* Contenedores CSS blindados para garantizar la carga de imágenes */
         .img-bienvenida-css {
             background: url('https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4') center/cover no-repeat;
             min-height: 140px;
@@ -142,7 +145,7 @@
         const ctx = canvas.getContext('2d');
 
         let audioCtx = null;
-        let audioMusicaInterval = null; // Control del bucle musical continuo
+        let audioMusicaInterval = null; 
         let notaMusicalIndex = 0;
         const CONTRATO_ZARD = "0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65";
 
@@ -197,7 +200,6 @@
             document.getElementById('menu-modos').style.display = 'block';
         }
 
-        // CONTROLADOR DE AUDIO AVANZADO PARA EFECTOS Y MÚSICA CONTINUA
         function sonarEfecto(tipo) {
             if (!audioCtx) return;
             try {
@@ -224,10 +226,8 @@
             } catch(e) {}
         }
 
-        // GENERADOR DE MÚSICA DE FONDO EN TIEMPO REAL (Bucle Espacial)
         function iniciarMusicaDeFondo() {
             if (!audioCtx) return;
-            // Secuencia Armónica de Bajos Espaciales
             const notas = [110.00, 130.81, 146.83, 164.81]; 
             
             audioMusicaInterval = setInterval(() => {
@@ -247,7 +247,7 @@
                     osc.stop(audioCtx.currentTime + 0.4);
                     notaMusicalIndex++;
                 } catch(e) {}
-            }, 400); // Ritmo continuo constante
+            }, 400); 
         }
 
         function detenerMusicaDeFondo() {
@@ -259,18 +259,37 @@
 
         async function prepararJuego(modo) {
             modoActual = modo;
-            if (modoActual === 'wallet' && typeof window.ethereum !== 'undefined') {
-                try {
-                    const cuentas = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    await window.ethereum.request({
-                        method: 'eth_sendTransaction',
-                        params: [{ from: cuentas[0], to: CONTRATO_ZARD, value: '0x0' }],
-                    });
-                } catch (error) {
-                    alert("Transacción cancelada.");
-                    return;
+            
+            // FILTRO ESTRICTO WEB3 PARA EL MODO APUESTA
+            if (modoActual === 'wallet') {
+                if (typeof window.ethereum !== 'undefined' || typeof window.web3 !== 'undefined') {
+                    try {
+                        // Forzar petición real de conexión de cuentas
+                        const cuentas = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                        if (!cuentas || cuentas.length === 0) {
+                            alert("Error: No se detectó ninguna cuenta activa en Metamask/Trust Wallet.");
+                            return;
+                        }
+                        
+                        // Forzar firma o transacción de verificación a la red
+                        await window.ethereum.request({
+                            method: 'eth_sendTransaction',
+                            params: [{ 
+                                from: cuentas[0], 
+                                to: CONTRATO_ZARD, 
+                                value: '0x0' 
+                            }],
+                        });
+                    } catch (error) {
+                        alert("⚠️ Acceso denegado: Debes confirmar la firma en tu billetera para acceder al modo de apuestas.");
+                        return; // Bloquea la entrada si cancela la firma o falla
+                    }
+                } else {
+                    alert("⚠️ No se detectó ninguna Web3 Wallet. Por favor, abre este enlace desde el navegador interno de Trust Wallet o MetaMask.");
+                    return; // Bloquea la entrada si no hay Wallet inyectada
                 }
             }
+            
             document.getElementById('menu-modos').style.display = 'none';
             document.getElementById('contenedor-juego').style.display = 'flex';
             iniciarEngine();
@@ -293,7 +312,7 @@
             particulas = [];
 
             actualizarHUD();
-            iniciarMusicaDeFondo(); // Encender la banda sonora espacial
+            iniciarMusicaDeFondo(); 
             buclePrincipal();
         }
 
@@ -306,7 +325,7 @@
 
         function terminarJuego(resultado) {
             juegoActivo = false;
-            detenerMusicaDeFondo(); // Apagar música
+            detenerMusicaDeFondo(); 
             cancelAnimationFrame(animacionId);
             
             if (resultado === 'victoria') {
@@ -323,7 +342,6 @@
         function buclePrincipal() {
             if (!juegoActivo) return;
 
-            // Dejamos el fondo transparente para que se aprecie el fondo estelar CSS continuo por detrás
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             distanciaRecorrida++;
@@ -339,7 +357,6 @@
             if (fenixY < 0) fenixY = 0;
             if (fenixY > canvas.height - fenixAlto) fenixY = canvas.height - fenixAlto;
 
-            // Estela dorada de partículas de la nave
             particulas.push({ x: fenixX + 10, y: fenixY + fenixAlto/2, vx: -3, vy: (Math.random() - 0.5) * 2, alpha: 1 });
             for (let i = particulas.length - 1; i >= 0; i--) {
                 let p = particulas[i]; p.x += p.vx; p.y += p.vy; p.alpha -= 0.05;
@@ -348,14 +365,12 @@
                 ctx.fillRect(p.x, p.y, 4, 4);
             }
 
-            // DIBUJAR NAVE FÉNIX
             if (imgFenix.complete && imgFenix.naturalWidth !== 0) {
                 ctx.drawImage(imgFenix, fenixX, fenixY, fenixAncho, fenixAlto);
             } else {
                 ctx.fillStyle = '#eab308'; ctx.fillRect(fenixX, fenixY, fenixAncho, fenixAlto);
             }
 
-            // PROCESAR OBSTÁCULOS
             for (let i = obstaculos.length - 1; i >= 0; i--) {
                 let obs = obstaculos[i]; obs.x -= velocidadActual;
                 
@@ -376,7 +391,6 @@
                 if (obs.x < -60) obstaculos.splice(i, 1);
             }
 
-            // PROCESAR RECOMPENSAS DE GAS
             for (let i = cajas.length - 1; i >= 0; i--) {
                 let box = cajas[i]; box.x -= velocidadActual;
                 

@@ -20,7 +20,7 @@
             height: 100%;
         }
 
-        /* NUEVO FONDO CÓSMICO DE NEBULOSA AZUL PROFUNDO */
+        /* FONDO CÓSMICO DE NEBULOSA AZUL PROFUNDO */
         .espacio-bg {
             background-color: #020617;
             background-image: 
@@ -341,19 +341,12 @@
             distanciaRecorrida++;
             velocidadActual = 5 + Math.floor(distanciaRecorrida / 500) * 0.5;
 
-            if (distanciaRecorrida % 75 === 0) {
-                const tipoDeAtaque = Math.random();
-                if (tipoDeAtaque > 0.45) {
-                    const h1 = Math.random() * (canvas.height / 2 - 40) + 10;
-                    const h2 = Math.random() * (canvas.height / 2 - 40) + (canvas.height / 2);
-                    obstaculos.push({ x: canvas.width, y: h1, w: 55, h: 55 });
-                    obstaculos.push({ x: canvas.width + 30, y: h2, w: 55, h: 55 });
-                } else {
-                    obstaculos.push({ x: canvas.width, y: Math.random() * (canvas.height - 70) + 10, w: 55, h: 55 });
-                }
+            // REGRESO AL RITMO ORIGINAL: UN OBSTÁCULO EQUILIBRADO A LA VEZ
+            if (distanciaRecorrida % 80 === 0) {
+                obstaculos.push({ x: canvas.width, y: Math.random() * (canvas.height - 70) + 10, w: 55, h: 55 });
             }
             
-            if (distanciaRecorrida % 110 === 0) {
+            if (distanciaRecorrida % 120 === 0) {
                 cajas.push({ x: canvas.width, y: Math.random() * (canvas.height - 50) + 10, w: 45, h: 45 });
             }
 
@@ -364,7 +357,7 @@
             for (let i = particulas.length - 1; i >= 0; i--) {
                 let p = particulas[i]; p.x += p.vx; p.y += p.vy; p.alpha -= 0.05;
                 if (p.alpha <= 0) { particulas.splice(i, 1); continue; }
-                ctx.fillStyle = `rgba(6, 182, 212, ${p.alpha})`; // Estela ahora es cian para combinar
+                ctx.fillStyle = `rgba(6, 182, 212, ${p.alpha})`; 
                 ctx.fillRect(p.x, p.y, 4, 4);
             }
 

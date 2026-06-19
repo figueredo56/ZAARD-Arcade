@@ -2,76 +2,64 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta property="og:title" content="ZAARD Memory Challenge">
-    <meta property="og:description" content="Apuesta, juega y gana en el ecosistema ZAARD.">
-    <meta property="og:image" content="https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m">
-    <title>ZAARD Memory 6x6</title>
+    <title>ZAARD Memory Challenge</title>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
-    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
     <style>
-        body { margin: 0; display: flex; flex-direction: column; align-items: center; background: #020006; color: white; font-family: 'Orbitron', sans-serif; }
-        #game-container { margin-top: 20px; border: 3px solid #34c1ea; box-shadow: 0 0 20px rgba(52, 193, 234, 0.5); }
-        .controls { margin-top: 20px; text-align: center; }
-        button { padding: 15px 30px; font-size: 18px; cursor: pointer; background: linear-gradient(135deg, #34c1ea, #16a34a); border: none; color: white; font-weight: bold; border-radius: 10px; }
-        button:disabled { background: #555; cursor: not-allowed; }
+        body { margin: 0; background: #020006; color: white; font-family: 'Orbitron', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+        #game-container { border: 4px solid #34c1ea; box-shadow: 0 0 30px #34c1ea; }
     </style>
 </head>
 <body>
 
-    <h1>ZAARD MEMORY 6x6</h1>
     <div id="game-container"></div>
-    
-    <div class="controls">
-        <button id="btn-conectar">Conectar Billetera</button>
-        <button id="btn-jugar" disabled>Apostar 0.0001 ZARD y Jugar</button>
-    </div>
 
     <script>
-        const contractAddress = "0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65";
-        const btnConectar = document.getElementById('btn-conectar');
-        const btnJugar = document.getElementById('btn-jugar');
-
-        btnConectar.onclick = async () => {
-            if (window.ethereum) {
-                await window.ethereum.request({ method: 'eth_requestAccounts' });
-                btnJugar.disabled = false;
-                alert("Billetera ZAARD conectada");
-            }
-        };
-
-        btnJugar.onclick = async () => {
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const signer = provider.getSigner();
-            const abi = ["function apostar() external payable"];
-            const contract = new ethers.Contract(contractAddress, abi, signer);
-
-            try {
-                const tx = await contract.apostar({ value: ethers.utils.parseEther("0.0001") });
-                await tx.wait();
-                alert("Apuesta confirmada. ¡Iniciando Juego!");
-                // Aquí se activaría el juego en Phaser
-            } catch (error) {
-                alert("Error en la transacción de apuesta.");
-            }
-        };
+        // Tus CIDs convertidos a URLs de IPFS
+        const cids = [
+            "bafybeihg4evetf2c5fqeozxttct7mone4jaequysqrxndlx4wqmf2zn45a",
+            "bafkreic6hmavutykpcpviuxv4pq3xkgcquznb5j4zw7zbsrmwp5jnhylcy",
+            "bafkreigufyxj7u4z7dgdkkghqbwyykmbtzp4ysxa7vau5a7at4bix4qmca",
+            "bafkreicdxf34fpb4t5yx6p4ijurnspvv47rgu373nl5yeyzj57s3ignoli",
+            "bafkreia3b625wibxbftpcbdjqwqjnuthccdr2nrl6t3oflfne7w4dcqmaq",
+            "bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4",
+            "bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue",
+            "bafkreicd3i7jagmv5iig5t3nttdqpwmv6xa2e3ahyvtzh7vy2hdglbfvsq",
+            "bafkreihtzxh5dazi4c3vueo5glxbycstfdesswsus73c4uwah5xwunyowa",
+            "bafybeic5377igwloc2o63whivoykazkibjruq7bau4edjpfdfu4gudunjm"
+        ];
 
         const config = {
-            type: Phaser.AUTO,
-            width: 600,
-            height: 600,
-            parent: 'game-container',
-            scene: { preload, create }
+            type: Phaser.AUTO, width: 800, height: 800, parent: 'game-container',
+            scene: {
+                preload: function() {
+                    cids.forEach((cid, index) => this.load.image('carta'+index, 'https://ipfs.io/ipfs/' + cid));
+                    this.load.image('dorso', 'https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m');
+                },
+                create: function() {
+                    this.intentos = 3;
+                    this.txtIntentos = this.add.text(20, 20, 'Intentos: ' + this.intentos, { fontSize: '32px', fill: '#34c1ea' });
+                    
+                    // Lógica del tablero 6x6 (36 cartas, 18 pares)
+                    let cartas = [];
+                    for(let i=0; i<18; i++) { cartas.push(i%10, i%10); } // Mezcla tus 10 CIDs
+                    Phaser.Utils.Array.Shuffle(cartas);
+
+                    cartas.forEach((cidIdx, i) => {
+                        let x = 80 + (i % 6) * 120;
+                        let y = 100 + Math.floor(i / 6) * 120;
+                        let card = this.add.image(x, y, 'dorso').setScale(0.2).setInteractive();
+                        card.cid = 'carta' + cidIdx;
+                        card.on('pointerdown', () => {
+                            card.setTexture(card.cid);
+                            // Aquí iría la lógica de comparación de pares
+                            // Si falla par: this.intentos--; this.txtIntentos.setText('Intentos: ' + this.intentos);
+                        });
+                    });
+                }
+            }
         };
-
-        const game = new Phaser.Game(config);
-
-        function preload() {
-            this.load.image('dorso', 'https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m');
-        }
-
-        function create() {
-            this.add.text(120, 280, 'Conecta tu Billetera para empezar', { fontSize: '20px', fill: '#fff' });
-        }
+        new Phaser.Game(config);
     </script>
 </body>
 </html>

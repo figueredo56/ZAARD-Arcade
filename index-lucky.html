@@ -9,30 +9,34 @@
         body { 
             margin: 0; 
             background: url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m') no-repeat center center fixed; 
-            /* Ajuste para que la imagen no se vea gigante */
-            background-size: contain; 
+            background-size: cover; 
             background-color: #000;
-            color: white; 
+            color: #d8b4fe; /* Morado suave para el texto */
             text-align: center; 
             font-family: 'Rajdhani', sans-serif; 
             height: 100vh; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            justify-content: center; 
+            justify-content: center;
         }
+
+        /* Capa oscura extra para que resalten los botones */
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: -1; }
         
-        .aviso { background: rgba(0,0,0,0.8); border: 2px solid #ffd700; padding: 10px; margin: 10px; border-radius: 8px; font-size: 1rem; }
-        .btn { padding: 10px 20px; background: linear-gradient(45deg, #ff8c00, #ff0000); cursor: pointer; border: 2px solid #ffd700; border-radius: 8px; color: white; font-weight: bold; margin: 5px; }
+        .aviso { background: rgba(30, 0, 50, 0.8); border: 2px solid #9d4edd; padding: 15px; margin: 15px; border-radius: 12px; font-size: 1.1rem; color: #e0aaff; }
+        .btn { padding: 12px 25px; background: linear-gradient(45deg, #7b2cbf, #3c096c); cursor: pointer; border: 2px solid #c77dff; border-radius: 10px; color: white; font-weight: bold; margin: 8px; text-transform: uppercase; }
         .chests-container { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; justify-content: center; }
-        .chest { width: 80px; cursor: pointer; border: 2px solid #ffd700; border-radius: 8px; overflow: hidden; transition: 0.3s; }
-        .chest:hover { transform: scale(1.1); }
-        #status-msg { font-size: 1.2rem; margin-top: 15px; color: #ffd700; font-weight: bold; padding: 0 20px; }
+        .chest { width: 90px; cursor: pointer; border: 2px solid #9d4edd; border-radius: 8px; overflow: hidden; transition: 0.3s; }
+        .chest:hover { transform: scale(1.1); box-shadow: 0 0 15px #c77dff; }
+        #status-msg { font-size: 1.4rem; margin-top: 20px; color: #c77dff; font-weight: bold; padding: 0 20px; text-shadow: 1px 1px 2px black; }
     </style>
 </head>
 <body>
+    <div class="overlay"></div>
+
     <div id="welcome-area">
-        <h1>ZAARD LUCKY CHEST</h1>
+        <h1 style="color: #c77dff;">ZAARD LUCKY CHEST</h1>
         <div class="aviso">
             APUESTA: 0.0001 ZAARD<br>
             PREMIO: 0.00015 ZAARD<br>
@@ -43,7 +47,7 @@
     </div>
 
     <div id="game-area" style="display:none;">
-        <h1>¡ELIGE TU CAJA!</h1>
+        <h1 style="color: #c77dff;">¡ELIGE TU CAJA!</h1>
         <div class="chests-container">
             <div class="chest" onclick="abrirCaja(1)"><img src="https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4" width="100%"></div>
             <div class="chest" onclick="abrirCaja(2)"><img src="https://ipfs.io/ipfs/bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue" width="100%"></div>
@@ -70,10 +74,10 @@
             const gano = Math.random() > 0.7;
             if (gano) {
                 msg.innerText = "¡FELICIDADES! Tus 0.00015 ZAARD ya están en tu cartera.";
-                msg.style.color = "#00ff00";
+                msg.style.color = "#7b2cbf";
             } else {
                 msg.innerText = "Intenta luego, sigue intentando. Mejor suerte la próxima, ¡no te desanimes!";
-                msg.style.color = "#ff4500";
+                msg.style.color = "#ff4d6d";
             }
         }
     </script>

@@ -10,7 +10,7 @@
         
         body, html {
             font-family: 'Orbitron', sans-serif;
-            background: #020105;
+            background: #010415;
             overflow: hidden;
             user-select: none;
             touch-action: none;
@@ -20,32 +20,33 @@
             height: 100%;
         }
 
-        /* FONDO CÓSMICO DE NEBULOSAS Y POLVO ESTELAR */
+        /* NUEVO FONDO CÓSMICO DE NEBULOSA AZUL PROFUNDO */
         .espacio-bg {
-            background-color: #030108;
+            background-color: #020617;
             background-image: 
-                radial-gradient(circle at 20% 30%, rgba(112, 26, 117, 0.25) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(30, 58, 138, 0.3) 0%, transparent 60%),
-                radial-gradient(circle at 50% 50%, rgba(76, 29, 149, 0.2) 0%, transparent 45%),
-                radial-gradient(white, rgba(255,255,255,.3) 1px, transparent 20px),
-                radial-gradient(rgba(234, 179, 8, 0.4), rgba(234, 179, 8, 0.05) 2px, transparent 40px),
-                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px);
-            background-size: 100% 100%, 100% 100%, 100% 100%, 250px 250px, 400px 400px, 320px 320px;
-            background-position: 0 0, 0 0, 0 0, 0 0, 120px 120px, 60px 90px;
+                radial-gradient(circle at 15% 20%, rgba(29, 78, 216, 0.35) 0%, transparent 55%),
+                radial-gradient(circle at 85% 75%, rgba(6, 182, 212, 0.25) 0%, transparent 50%),
+                radial-gradient(circle at 50% 40%, rgba(30, 58, 138, 0.4) 0%, transparent 60%),
+                radial-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1) 1px, transparent 15px),
+                radial-gradient(rgba(6, 182, 212, 0.5), rgba(6, 182, 212, 0.05) 2px, transparent 30px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 25px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 200px 200px, 350px 350px, 280px 280px;
+            background-position: 0 0, 0 0, 0 0, 10px 10px, 100px 150px, 40px 80px;
             background-attachment: fixed;
         }
 
         .neon-glow { 
-            text-shadow: 0 0 10px rgba(234, 179, 8, 0.7), 0 0 20px rgba(234, 179, 8, 0.4); 
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.7), 0 0 20px rgba(29, 78, 216, 0.5); 
         }
         
         .border-neon { 
-            box-shadow: 0 0 25px rgba(234, 179, 8, 0.4); 
-            border: 2px solid rgba(234, 179, 8, 0.9); 
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.3); 
+            border: 2px solid rgba(6, 182, 212, 0.8); 
         }
 
         .btn-epic { 
-            background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); 
+            background: linear-gradient(135deg, #06b6d4 0%, #1d4ed8 100%); 
+            color: white !important;
         }
 
         .img-bienvenida-css {
@@ -70,58 +71,58 @@
 <body class="espacio-bg w-screen h-screen flex flex-col items-center justify-center text-white">
 
     <div id="pantalla-audio" class="absolute z-30 w-full max-w-xl p-6 rounded-3xl bg-black/95 border-neon text-center mx-4">
-        <h1 class="text-2xl font-black text-yellow-400 tracking-wider mb-2 neon-glow">ZAARD ARCADE</h1>
+        <h1 class="text-2xl font-black text-cyan-400 tracking-wider mb-2 neon-glow">ZAARD ARCADE</h1>
         <p class="text-sm text-gray-400 mb-6">Sincronizando sistemas táctiles, interfaz gráfica y audio cósmico...</p>
-        <button onclick="activarSistemas()" class="btn-epic w-full py-4 rounded-xl font-black text-black tracking-widest text-lg shadow-lg active:scale-95 transition-transform">
+        <button onclick="activarSistemas()" class="btn-epic w-full py-4 rounded-xl font-black tracking-widest text-lg shadow-lg active:scale-95 transition-transform">
             ¡ENTRAR AL JUEGO!
         </button>
     </div>
 
     <div id="pantalla-bienvenida" class="hidden absolute z-20 w-full max-w-xl p-6 rounded-3xl bg-black/95 backdrop-blur-md border-neon text-center mx-4">
-        <div class="w-full rounded-2xl mb-4 border border-yellow-500/40 img-bienvenida-css relative">
+        <div class="w-full rounded-2xl mb-4 border border-cyan-500/40 img-bienvenida-css relative">
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent"></div>
         </div>
 
-        <h1 class="text-2xl font-black text-yellow-400 tracking-wider mb-1 neon-glow">BIENVENIDOS A</h1>
-        <h2 class="text-3xl font-black text-white tracking-widest mb-4 border-b border-yellow-500/20 pb-3">ZAARD INNOVATION</h2>
+        <h1 class="text-2xl font-black text-cyan-400 tracking-wider mb-1 neon-glow">BIENVENIDOS A</h1>
+        <h2 class="text-3xl font-black text-white tracking-widest mb-4 border-b border-cyan-500/20 pb-3">ZAARD INNOVATION</h2>
         
-        <div class="bg-purple-950/20 border border-purple-500/30 rounded-2xl p-4 text-left text-xs text-gray-300 space-y-2 mb-6">
-            <p><span class="text-yellow-400 font-bold">🔥 CONTROL:</span> Desliza tu dedo libremente por la pantalla para mover al fénix arriba y abajo.</p>
-            <p><span class="text-yellow-400 font-bold">📦 META:</span> Atrapa 100 cajas de gas. Tienes 7 oportunidades de escudo.</p>
+        <div class="bg-blue-950/20 border border-blue-500/30 rounded-2xl p-4 text-left text-xs text-gray-300 space-y-2 mb-6">
+            <p><span class="text-cyan-400 font-bold">🔥 CONTROL:</span> Desliza tu dedo libremente por la pantalla para mover al fénix arriba y abajo.</p>
+            <p><span class="text-cyan-400 font-bold">📦 META:</span> Atrapa 100 cajas de gas. Tienes 7 oportunidades de escudo.</p>
         </div>
 
-        <button onclick="irAlMenuModos()" class="btn-epic w-full py-3 rounded-xl font-black text-black tracking-widest text-base active:scale-95 transition-transform">
+        <button onclick="irAlMenuModos()" class="btn-epic w-full py-3 rounded-xl font-black tracking-widest text-base active:scale-95 transition-transform">
             CONTINUAR
         </button>
     </div>
 
     <div id="menu-modos" class="hidden absolute z-10 w-full max-w-xl p-6 rounded-3xl bg-black/95 backdrop-blur-md border-neon text-center mx-4">
-        <div class="w-full rounded-2xl mb-4 border border-yellow-500/40 img-menu-css relative">
+        <div class="w-full rounded-2xl mb-4 border border-cyan-500/40 img-menu-css relative">
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent"></div>
         </div>
 
-        <h1 class="text-3xl font-black text-yellow-400 tracking-wider mb-1 neon-glow">GOLDEN RUN</h1>
+        <h1 class="text-3xl font-black text-cyan-400 tracking-wider mb-1 neon-glow">GOLDEN RUN</h1>
         <p class="text-[10px] text-gray-400 tracking-widest mb-6">SELECCIONA TU ENTRADA</p>
 
         <div class="space-y-3 max-w-sm mx-auto">
             <button onclick="prepararJuego('prueba')" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl font-bold text-gray-300 flex flex-col items-center active:scale-95 transition-transform">
-                <span class="text-yellow-400 font-black text-sm">MODO INVITADO</span>
+                <span class="text-cyan-400 font-black text-sm">MODO INVITADO</span>
                 <span class="text-[10px] font-normal opacity-75">Juega gratis de prueba</span>
             </button>
-            <button onclick="prepararJuego('wallet')" class="w-full border border-purple-500 bg-purple-950/40 p-3 rounded-xl font-bold text-purple-300 flex flex-col items-center active:scale-95 transition-transform">
-                <span class="text-purple-400 font-black text-sm">CONECTAR BILLETERA</span>
-                <span class="text-[10px] font-normal text-purple-400">Contrato: 0x3468...4d65</span>
+            <button onclick="prepararJuego('wallet')" class="w-full border border-blue-500 bg-blue-950/40 p-3 rounded-xl font-bold text-blue-300 flex flex-col items-center active:scale-95 transition-transform">
+                <span class="text-blue-400 font-black text-sm">CONECTAR BILLETERA</span>
+                <span class="text-[10px] font-normal text-blue-400">Contrato: 0x3468...4d65</span>
             </button>
         </div>
-        <p id="mensaje-animo" class="mt-4 text-yellow-500/80 font-medium italic text-xs px-2"></p>
+        <p id="mensaje-animo" class="mt-4 text-cyan-400/80 font-medium italic text-xs px-2"></p>
     </div>
 
     <div id="contenedor-juego" class="hidden relative w-full h-full flex flex-col items-center justify-between p-4">
         
-        <div class="w-full max-w-2xl bg-black/80 backdrop-blur-md border-b-2 border-yellow-500/80 rounded-b-2xl p-4 flex justify-between items-center z-10 shadow-lg">
-            <div class="bg-gray-950/90 px-5 py-2 rounded-xl border border-yellow-500/40 text-center">
+        <div class="w-full max-w-2xl bg-black/80 backdrop-blur-md border-b-2 border-cyan-500/80 rounded-b-2xl p-4 flex justify-between items-center z-10 shadow-lg">
+            <div class="bg-gray-950/90 px-5 py-2 rounded-xl border border-cyan-500/40 text-center">
                 <span class="text-[10px] text-gray-400 block font-bold tracking-widest">GAS COLLECTED</span>
-                <span id="hud-gas" class="text-2xl font-black text-yellow-400 neon-glow">0/100</span>
+                <span id="hud-gas" class="text-2xl font-black text-cyan-400 neon-glow">0/100</span>
             </div>
             <div class="bg-gray-950/90 px-5 py-2 rounded-xl border border-red-500/40 text-center">
                 <span class="text-[10px] text-gray-400 block font-bold tracking-widest">SHIELD STATUS</span>
@@ -133,8 +134,8 @@
             <canvas id="canvasJuego" width="800" height="480" class="rounded-2xl max-h-[65vh] w-full object-contain"></canvas>
         </div>
 
-        <div class="w-full max-w-2xl bg-black/80 backdrop-blur-md border-t-2 border-yellow-500/80 rounded-t-2xl p-3 text-center z-10 shadow-lg">
-            <p class="text-[11px] text-yellow-500/90 font-bold tracking-widest uppercase">
+        <div class="w-full max-w-2xl bg-black/80 backdrop-blur-md border-t-2 border-cyan-500/80 rounded-t-2xl p-3 text-center z-10 shadow-lg">
+            <p class="text-[11px] text-cyan-400 font-bold tracking-widest uppercase">
                 DESLIZA EN CUALQUIER LADO PARA MANIOBRAR LA NAVE FÉNIX
             </p>
         </div>
@@ -145,8 +146,8 @@
         const ctx = canvas.getContext('2d');
 
         let audioCtx = null;
-        let audioMusicaInterval = null; 
-        let notaMusicalIndex = 0;
+        let mainTrackOsc = null; 
+        let mainTrackGain = null;
         const CONTRATO_ZARD = "0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65";
 
         const imgFenix = new Image();
@@ -228,50 +229,43 @@
 
         function iniciarMusicaDeFondo() {
             if (!audioCtx) return;
-            const notas = [110.00, 130.81, 146.83, 164.81]; 
-            
-            audioMusicaInterval = setInterval(() => {
-                if (!juegoActivo) return;
-                try {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(notas[notaMusicalIndex % notas.length], audioCtx.currentTime);
-                    gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
-                    
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.4);
-                    notaMusicalIndex++;
-                } catch(e) {}
-            }, 400); 
+            try {
+                mainTrackOsc = audioCtx.createOscillator();
+                mainTrackGain = audioCtx.createGain();
+                
+                mainTrackOsc.type = 'triangle';
+                mainTrackOsc.frequency.setValueAtTime(98.00, audioCtx.currentTime); 
+                
+                mainTrackGain.gain.setValueAtTime(0.07, audioCtx.currentTime);
+                
+                mainTrackOsc.connect(mainTrackGain);
+                mainTrackGain.connect(audioCtx.destination);
+                mainTrackOsc.start();
+            } catch(e) {}
         }
 
         function detenerMusicaDeFondo() {
-            if (audioMusicaInterval) {
-                clearInterval(audioMusicaInterval);
-                audioMusicaInterval = null;
-            }
+            try {
+                if (mainTrackOsc) {
+                    mainTrackOsc.stop();
+                    mainTrackOsc.disconnect();
+                    mainTrackOsc = null;
+                }
+            } catch(e) {}
         }
 
         async function prepararJuego(modo) {
             modoActual = modo;
             
-            // FILTRO ESTRICTO WEB3 PARA EL MODO APUESTA
             if (modoActual === 'wallet') {
                 if (typeof window.ethereum !== 'undefined' || typeof window.web3 !== 'undefined') {
                     try {
-                        // Forzar petición real de conexión de cuentas
                         const cuentas = await window.ethereum.request({ method: 'eth_requestAccounts' });
                         if (!cuentas || cuentas.length === 0) {
                             alert("Error: No se detectó ninguna cuenta activa en Metamask/Trust Wallet.");
                             return;
                         }
                         
-                        // Forzar firma o transacción de verificación a la red
                         await window.ethereum.request({
                             method: 'eth_sendTransaction',
                             params: [{ 
@@ -282,11 +276,11 @@
                         });
                     } catch (error) {
                         alert("⚠️ Acceso denegado: Debes confirmar la firma en tu billetera para acceder al modo de apuestas.");
-                        return; // Bloquea la entrada si cancela la firma o falla
+                        return;
                     }
                 } else {
                     alert("⚠️ No se detectó ninguna Web3 Wallet. Por favor, abre este enlace desde el navegador interno de Trust Wallet o MetaMask.");
-                    return; // Bloquea la entrada si no hay Wallet inyectada
+                    return;
                 }
             }
             
@@ -347,10 +341,19 @@
             distanciaRecorrida++;
             velocidadActual = 5 + Math.floor(distanciaRecorrida / 500) * 0.5;
 
-            if (distanciaRecorrida % 80 === 0) {
-                obstaculos.push({ x: canvas.width, y: Math.random() * (canvas.height - 70) + 10, w: 55, h: 55 });
+            if (distanciaRecorrida % 75 === 0) {
+                const tipoDeAtaque = Math.random();
+                if (tipoDeAtaque > 0.45) {
+                    const h1 = Math.random() * (canvas.height / 2 - 40) + 10;
+                    const h2 = Math.random() * (canvas.height / 2 - 40) + (canvas.height / 2);
+                    obstaculos.push({ x: canvas.width, y: h1, w: 55, h: 55 });
+                    obstaculos.push({ x: canvas.width + 30, y: h2, w: 55, h: 55 });
+                } else {
+                    obstaculos.push({ x: canvas.width, y: Math.random() * (canvas.height - 70) + 10, w: 55, h: 55 });
+                }
             }
-            if (distanciaRecorrida % 120 === 0) {
+            
+            if (distanciaRecorrida % 110 === 0) {
                 cajas.push({ x: canvas.width, y: Math.random() * (canvas.height - 50) + 10, w: 45, h: 45 });
             }
 
@@ -361,14 +364,14 @@
             for (let i = particulas.length - 1; i >= 0; i--) {
                 let p = particulas[i]; p.x += p.vx; p.y += p.vy; p.alpha -= 0.05;
                 if (p.alpha <= 0) { particulas.splice(i, 1); continue; }
-                ctx.fillStyle = `rgba(234, 179, 8, ${p.alpha})`;
+                ctx.fillStyle = `rgba(6, 182, 212, ${p.alpha})`; // Estela ahora es cian para combinar
                 ctx.fillRect(p.x, p.y, 4, 4);
             }
 
             if (imgFenix.complete && imgFenix.naturalWidth !== 0) {
                 ctx.drawImage(imgFenix, fenixX, fenixY, fenixAncho, fenixAlto);
             } else {
-                ctx.fillStyle = '#eab308'; ctx.fillRect(fenixX, fenixY, fenixAncho, fenixAlto);
+                ctx.fillStyle = '#06b6d4'; ctx.fillRect(fenixX, fenixY, fenixAncho, fenixAlto);
             }
 
             for (let i = obstaculos.length - 1; i >= 0; i--) {

@@ -70,6 +70,7 @@
 </head>
 <body class="espacio-bg w-screen h-screen flex flex-col items-center justify-center text-white">
 
+    <!-- PANTALLA DE CARGA Y DESBLOQUEO DE AUDIO -->
     <div id="pantalla-audio" class="absolute z-30 w-full max-w-xl p-6 rounded-3xl bg-black/95 border-neon text-center mx-4">
         <h1 class="text-2xl font-black text-purple-400 tracking-wider mb-2 neon-glow">ZAARD ARCADE</h1>
         <p class="text-sm text-gray-400 mb-6">Sincronizando sistemas táctiles, interfaz gráfica y audio cósmico...</p>
@@ -78,6 +79,7 @@
         </button>
     </div>
 
+    <!-- PANTALLA 1: BIENVENIDA -->
     <div id="pantalla-bienvenida" class="hidden absolute z-20 w-full max-w-xl p-6 rounded-3xl bg-black/95 backdrop-blur-md border-neon text-center mx-4">
         <div class="w-full rounded-2xl mb-4 border border-purple-500/40 img-bienvenida-css relative">
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent"></div>
@@ -88,7 +90,7 @@
         
         <div class="bg-purple-950/20 border border-purple-500/30 rounded-2xl p-4 text-left text-xs text-gray-300 space-y-2 mb-6">
             <p><span class="text-green-400 font-bold">🔥 CONTROL:</span> Desliza tu dedo libremente por la pantalla para mover al fénix arriba y abajo.</p>
-            <p><span class="text-green-400 font-bold">📦 META:</span> Atrapa 100 cajas de gas. Tienes 7 oportunidades de escudo.</p>
+            <p><span class="text-green-400 font-bold">📦 META:</span> Atrapa 150 cajas de gas. Tienes 7 oportunidades de escudo.</p>
         </div>
 
         <button onclick="irAlMenuModos()" class="btn-epic w-full py-3 rounded-xl font-black tracking-widest text-base active:scale-95 transition-transform">
@@ -96,6 +98,7 @@
         </button>
     </div>
 
+    <!-- PANTALLA 2: SELECCIÓN DE MODO DE JUEGO -->
     <div id="menu-modos" class="hidden absolute z-10 w-full max-w-xl p-6 rounded-3xl bg-black/95 backdrop-blur-md border-neon text-center mx-4">
         <div class="w-full rounded-2xl mb-4 border border-purple-500/40 img-menu-css relative">
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent"></div>
@@ -117,12 +120,14 @@
         <p id="mensaje-animo" class="mt-4 text-purple-400/80 font-medium italic text-xs px-2"></p>
     </div>
 
+    <!-- PANTALLA 3: INTERFAZ DINÁMICA DEL JUEGO -->
     <div id="contenedor-juego" class="hidden relative w-full h-full flex flex-col items-center justify-between p-4">
         
+        <!-- Marcador Estilo Menú -->
         <div class="w-full max-w-2xl bg-black/80 backdrop-blur-md border-b-2 border-purple-500/80 rounded-b-2xl p-4 flex justify-between items-center z-10 shadow-lg">
             <div class="bg-gray-950/90 px-5 py-2 rounded-xl border border-purple-500/40 text-center">
                 <span class="text-[10px] text-gray-400 block font-bold tracking-widest">GAS COLLECTED</span>
-                <span id="hud-gas" class="text-2xl font-black text-green-400 neon-glow">0/100</span>
+                <span id="hud-gas" class="text-2xl font-black text-green-400 neon-glow">0/150</span>
             </div>
             <div class="bg-gray-950/90 px-5 py-2 rounded-xl border border-red-500/40 text-center">
                 <span class="text-[10px] text-gray-400 block font-bold tracking-widest">SHIELD STATUS</span>
@@ -130,10 +135,12 @@
             </div>
         </div>
 
+        <!-- Área de Vuelo Transparente -->
         <div class="w-full flex justify-center items-center my-auto">
             <canvas id="canvasJuego" width="800" height="480" class="rounded-2xl max-h-[65vh] w-full object-contain"></canvas>
         </div>
 
+        <!-- Panel de Control Inferior Estilo Menú -->
         <div class="w-full max-w-2xl bg-black/80 backdrop-blur-md border-t-2 border-purple-500/80 rounded-t-2xl p-3 text-center z-10 shadow-lg">
             <p class="text-[11px] text-purple-400 font-bold tracking-widest uppercase">
                 DESLIZA EN CUALQUIER LADO PARA MANIOBRAR LA NAVE FÉNIX
@@ -222,22 +229,20 @@
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(650, audioCtx.currentTime);
                     osc.frequency.setValueAtTime(950, audioCtx.currentTime + 0.07);
-                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.18);
                     osc.start(); osc.stop(audioCtx.currentTime + 0.18);
                 }
             } catch(e) {}
         }
 
-        // RE-ARQUITECTURA DE AUDIO ROBUSTA PARA MÓVILES
+        // VOLUMEN INTENSIFICADO PARA EVITAR FILTROS DE DISPOSITIVOS
         function iniciarMusicaDeFondo() {
             if (!audioCtx) return;
             try {
                 if (audioCtx.state === 'suspended') {
                     audioCtx.resume();
                 }
-                
-                // Limpieza preventiva
                 detenerMusicaDeFondo();
 
                 musicaLoopId = setInterval(() => {
@@ -246,9 +251,11 @@
                         let osc = audioCtx.createOscillator();
                         let gain = audioCtx.createGain();
                         osc.type = 'triangle';
-                        osc.frequency.setValueAtTime(92.50, audioCtx.currentTime); // Frecuencia de bajo profundo (F#2)
-                        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-                        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
+                        osc.frequency.setValueAtTime(92.50, audioCtx.currentTime); 
+                        
+                        // SUBIDA DE VOLUMEN DE 0.08 A 0.35
+                        gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.48);
                         
                         osc.connect(gain);
                         gain.connect(audioCtx.destination);
@@ -319,12 +326,19 @@
             particulas = [];
 
             actualizarHUD();
-            iniciarMusicaDeFondo(); 
+            
+            // Forzar el contexto antes de lanzar la melodía
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume().then(() => iniciarMusicaDeFondo());
+            } else {
+                iniciarMusicaDeFondo();
+            }
+            
             buclePrincipal();
         }
 
         function actualizarHUD() {
-            document.getElementById('hud-gas').innerText = `${totalGasRecolectado}/100`;
+            document.getElementById('hud-gas').innerText = `${totalGasRecolectado}/150`;
             const hudVidas = document.getElementById('hud-vidas');
             hudVidas.innerHTML = '';
             for(let i = 0; i < oportunidadesRestantes; i++) { hudVidas.innerHTML += '⚡'; }
@@ -352,9 +366,8 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             distanciaRecorrida++;
-            velocidadActual = 5 + Math.floor(distanciaRecorrida / 550) * 0.4;
+            velocidadActual = 5 + Math.floor(distanciaRecorrida / 400) * 0.6;
 
-            // BAJADA DE OBSTÁCULOS: De 80 pasó a 135 para una experiencia balanceada y fluida
             if (distanciaRecorrida % 135 === 0) {
                 obstaculos.push({ x: canvas.width, y: Math.random() * (canvas.height - 70) + 10, w: 55, h: 55 });
             }
@@ -370,7 +383,7 @@
             for (let i = particulas.length - 1; i >= 0; i--) {
                 let p = particulas[i]; p.x += p.vx; p.y += p.vy; p.alpha -= 0.05;
                 if (p.alpha <= 0) { particulas.splice(i, 1); continue; }
-                ctx.fillStyle = `rgba(147, 51, 234, ${p.alpha})`; // Partículas moradas cósmicas
+                ctx.fillStyle = `rgba(147, 51, 234, ${p.alpha})`; 
                 ctx.fillRect(p.x, p.y, 4, 4);
             }
 
@@ -414,7 +427,7 @@
                     totalGasRecolectado++;
                     actualizarHUD();
                     cajas.splice(i, 1);
-                    if (totalGasRecolectado >= 100) { terminarJuego('victoria'); return; }
+                    if (totalGasRecolectado >= 150) { terminarJuego('victoria'); return; }
                     continue;
                 }
                 if (box.x < -60) cajas.splice(i, 1);

@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <title>ZAARD LUCKY CHEST</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Rajdhani:wght@600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@900&family=Rajdhani:wght@700&display=swap');
         
         body { 
             margin: 0; 
             background: url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m') no-repeat center center fixed; 
             background-size: cover; 
             background-color: #000;
-            color: #d8b4fe; /* Morado suave para el texto */
+            color: #fff; 
             text-align: center; 
             font-family: 'Rajdhani', sans-serif; 
             height: 100vh; 
@@ -21,33 +21,37 @@
             justify-content: center;
         }
 
-        /* Capa oscura extra para que resalten los botones */
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: -1; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: -1; }
         
-        .aviso { background: rgba(30, 0, 50, 0.8); border: 2px solid #9d4edd; padding: 15px; margin: 15px; border-radius: 12px; font-size: 1.1rem; color: #e0aaff; }
-        .btn { padding: 12px 25px; background: linear-gradient(45deg, #7b2cbf, #3c096c); cursor: pointer; border: 2px solid #c77dff; border-radius: 10px; color: white; font-weight: bold; margin: 8px; text-transform: uppercase; }
-        .chests-container { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; justify-content: center; }
-        .chest { width: 90px; cursor: pointer; border: 2px solid #9d4edd; border-radius: 8px; overflow: hidden; transition: 0.3s; }
-        .chest:hover { transform: scale(1.1); box-shadow: 0 0 15px #c77dff; }
-        #status-msg { font-size: 1.4rem; margin-top: 20px; color: #c77dff; font-weight: bold; padding: 0 20px; text-shadow: 1px 1px 2px black; }
+        h1 { font-size: 3.5rem; color: #c77dff; text-shadow: 0 0 20px #7b2cbf; margin-bottom: 20px; text-transform: uppercase; }
+        
+        .aviso { background: rgba(40, 0, 70, 0.9); border: 4px solid #c77dff; padding: 25px; margin: 20px; border-radius: 20px; font-size: 1.6rem; color: #fff; box-shadow: 0 0 30px #7b2cbf; }
+        
+        .btn { padding: 20px 40px; background: linear-gradient(45deg, #7b2cbf, #3c096c); cursor: pointer; border: 3px solid #c77dff; border-radius: 15px; color: white; font-weight: bold; font-size: 1.5rem; margin: 15px; text-transform: uppercase; box-shadow: 0 0 20px #7b2cbf; }
+        
+        .chests-container { display: flex; gap: 20px; margin-top: 30px; flex-wrap: wrap; justify-content: center; }
+        .chest { width: 160px; cursor: pointer; border: 4px solid #c77dff; border-radius: 15px; overflow: hidden; transition: 0.3s; }
+        .chest:hover { transform: scale(1.15); box-shadow: 0 0 40px #c77dff; }
+        
+        #status-msg { font-size: 2rem; margin-top: 40px; color: #e0aaff; font-weight: bold; padding: 0 20px; text-shadow: 2px 2px 5px #000; }
     </style>
 </head>
 <body>
     <div class="overlay"></div>
 
     <div id="welcome-area">
-        <h1 style="color: #c77dff;">ZAARD LUCKY CHEST</h1>
+        <h1>ZAARD LUCKY CHEST</h1>
         <div class="aviso">
             APUESTA: 0.0001 ZAARD<br>
             PREMIO: 0.00015 ZAARD<br>
-            CONTRATO: <small>0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65</small>
+            <small>CONTRATO: 0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65</small>
         </div>
         <button class="btn" onclick="conectarCartera()">CONECTAR CARTERA</button>
         <button class="btn" onclick="iniciarJuego()">MODO INVITADO</button>
     </div>
 
     <div id="game-area" style="display:none;">
-        <h1 style="color: #c77dff;">¡ELIGE TU CAJA!</h1>
+        <h1 style="font-size: 3rem;">¡ELIGE TU CAJA!</h1>
         <div class="chests-container">
             <div class="chest" onclick="abrirCaja(1)"><img src="https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4" width="100%"></div>
             <div class="chest" onclick="abrirCaja(2)"><img src="https://ipfs.io/ipfs/bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue" width="100%"></div>
@@ -67,14 +71,14 @@
         }
         function iniciarJuego() {
             document.getElementById('welcome-area').style.display = 'none';
-            document.getElementById('game-area').style.display = 'block';
+            document.getElementById('game-area').style.display = 'flex';
         }
         function abrirCaja(n) {
             const msg = document.getElementById('status-msg');
             const gano = Math.random() > 0.7;
             if (gano) {
                 msg.innerText = "¡FELICIDADES! Tus 0.00015 ZAARD ya están en tu cartera.";
-                msg.style.color = "#7b2cbf";
+                msg.style.color = "#c77dff";
             } else {
                 msg.innerText = "Intenta luego, sigue intentando. Mejor suerte la próxima, ¡no te desanimes!";
                 msg.style.color = "#ff4d6d";

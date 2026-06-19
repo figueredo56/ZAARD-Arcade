@@ -7,82 +7,44 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
-        
         body {
             font-family: 'Orbitron', sans-serif;
-            background: #06060c;
+            background: #05020a;
             overflow: hidden;
             user-select: none;
             touch-action: none;
         }
-
-        /* Fondo cósmico animado */
-        .neon-bg {
-            background: radial-gradient(circle at 50% 50%, #1a0b2e 0%, #05020a 100%);
-            position: relative;
-        }
-
-        /* Brillo de Neón Dorado (ZARD) */
-        .neon-glow {
-            text-shadow: 0 0 10px rgba(234, 179, 8, 0.6), 0 0 20px rgba(234, 179, 8, 0.4);
-        }
-        .border-neon {
-            box-shadow: 0 0 15px rgba(234, 179, 8, 0.4);
-            border: 2px solid rgba(234, 179, 8, 0.8);
-        }
-
-        .btn-epic {
-            background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
-        }
-
-        canvas {
-            display: block;
-            margin: 0 auto;
-            max-width: 100%;
-            height: auto;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
-        }
+        .neon-glow { text-shadow: 0 0 10px rgba(234, 179, 8, 0.6); }
+        .border-neon { box-shadow: 0 0 15px rgba(234, 179, 8, 0.4); border: 2px solid rgba(234, 179, 8, 0.8); }
+        .btn-epic { background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); }
+        canvas { display: block; margin: 0 auto; max-width: 100%; height: auto; }
     </style>
 </head>
-<body class="w-screen h-screen flex flex-col items-center justify-center neon-bg text-white m-0 p-0">
+<body class="w-screen h-screen flex flex-col items-center justify-center text-white m-0 p-0">
 
-    <div id="pantalla-bienvenida" class="absolute z-20 w-full max-w-xl p-6 rounded-3xl bg-black/90 backdrop-blur-md border-neon text-center mx-4 transition-all duration-300">
-        <div class="w-full h-32 rounded-2xl mb-4 overflow-hidden relative border border-yellow-500/20">
-            <img src="https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4" 
-                 alt="ZAARD Welcome" class="w-full h-full object-cover opacity-80">
-            <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
-        </div>
-
-        <h1 class="text-2xl md:text-3xl font-black text-yellow-400 tracking-wider mb-1 neon-glow">BIENVENIDOS A</h1>
-        <h2 class="text-3xl md:text-4xl font-black text-white tracking-widest mb-4 border-b border-yellow-500/20 pb-3">ZAARD INNOVATION</h2>
-        
-        <div class="bg-purple-950/20 border border-purple-500/30 rounded-2xl p-4 text-left text-xs text-gray-300 space-y-2 mb-6">
-            <div class="flex items-start gap-2">
-                <span class="text-yellow-400 font-bold">🔥 RETO:</span>
-                <p>Pilota el Corredor Cósmico. Desliza o arrastra tu dedo libremente por la pantalla para mover la nave arriba y abajo de forma fluida.</p>
-            </div>
-            <div class="flex items-start gap-2">
-                <span class="text-yellow-400 font-bold">📦 META:</span>
-                <p>Atrapa <span class="text-yellow-400 font-bold">100 cajas de gas</span>. Cuentas con <span class="text-red-400 font-bold">7 vidas</span> antes del Game Over.</p>
-            </div>
-            <div class="flex items-start gap-2">
-                <span class="text-purple-400 font-bold">💎 WEB3:</span>
-                <p>Apuesta <span class="text-purple-400 font-bold">0.0001 ZARD</span> mediante smart contract de custodia. Si ganas te llevas <span class="text-yellow-400 font-bold">0.00015 ZARD</span>.</p>
-            </div>
-        </div>
-
-        <button onclick="irAlMenuModos()" class="btn-epic w-full py-3 rounded-xl font-black text-black tracking-widest text-base shadow-lg active:scale-95 transition-transform">
-            ACEPTAR Y CONTINUAR
+    <div id="pantalla-audio" class="absolute z-30 w-full max-w-xl p-6 rounded-3xl bg-black border-neon text-center mx-4">
+        <h1 class="text-2xl font-black text-yellow-400 tracking-wider mb-2 neon-glow">ZAARD ARCADE</h1>
+        <p class="text-sm text-gray-400 mb-6">Toca el botón para sincronizar los gráficos y activar el sonido premium.</p>
+        <button onclick="activarSistemas()" class="btn-epic w-full py-4 rounded-xl font-black text-black tracking-widest text-lg shadow-lg active:scale-95 transition-transform">
+            ¡ENTRAR AL JUEGO!
         </button>
     </div>
 
-    <div id="menu-modos" class="hidden absolute z-10 w-full max-w-xl p-6 rounded-3xl bg-black/90 backdrop-blur-md border-neon text-center mx-4">
-        <div class="w-full h-36 rounded-2xl mb-4 overflow-hidden relative border border-yellow-500/30">
-            <img src="https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m" 
-                 alt="ZAARD Menu Cover" class="w-full h-full object-cover opacity-90">
-            <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+    <div id="pantalla-bienvenida" class="hidden absolute z-20 w-full max-w-xl p-6 rounded-3xl bg-black/95 backdrop-blur-md border-neon text-center mx-4">
+        <h1 class="text-2xl font-black text-yellow-400 tracking-wider mb-1 neon-glow">BIENVENIDOS A</h1>
+        <h2 class="text-3xl font-black text-white tracking-widest mb-4 border-b border-yellow-500/20 pb-3">ZAARD INNOVATION</h2>
+        
+        <div class="bg-purple-950/20 border border-purple-500/30 rounded-2xl p-4 text-left text-xs text-gray-300 space-y-2 mb-6">
+            <p><span class="text-yellow-400 font-bold">🔥 CONTROL:</span> Desliza tu dedo en la pantalla para mover al fénix.</p>
+            <p><span class="text-yellow-400 font-bold">📦 META:</span> Atrapa 100 cajas de gas. Tienes 7 vidas.</p>
         </div>
 
+        <button onclick="irAlMenuModos()" class="btn-epic w-full py-3 rounded-xl font-black text-black tracking-widest text-base active:scale-95 transition-transform">
+            CONTINUAR
+        </button>
+    </div>
+
+    <div id="menu-modos" class="hidden absolute z-10 w-full max-w-xl p-6 rounded-3xl bg-black/95 backdrop-blur-md border-neon text-center mx-4">
         <h1 class="text-3xl font-black text-yellow-400 tracking-wider mb-1 neon-glow">GOLDEN RUN</h1>
         <p class="text-[10px] text-gray-400 tracking-widest mb-6">SELECCIONA TU ENTRADA</p>
 
@@ -102,39 +64,35 @@
     <div id="contenedor-juego" class="hidden relative w-full h-full flex flex-col items-center justify-center p-2">
         <div class="absolute top-4 left-4 right-4 flex justify-between items-center pointer-events-none z-10 px-2">
             <div class="bg-black/80 px-4 py-1.5 rounded-xl border border-yellow-500/30 text-center">
-                <span class="text-[10px] text-gray-400 block font-bold tracking-wider">GAS</span>
+                <span class="text-[10px] text-gray-400 block font-bold">GAS</span>
                 <span id="hud-gas" class="text-xl font-black text-yellow-400 neon-glow">0/100</span>
             </div>
             <div class="bg-black/80 px-4 py-1.5 rounded-xl border border-red-500/30 text-center">
-                <span class="text-[10px] text-gray-400 block font-bold tracking-wider">VIDAS</span>
-                <div id="hud-vidas" class="text-base font-bold text-red-500 tracking-tight">⚡⚡⚡⚡⚡⚡⚡</div>
+                <span class="text-[10px] text-gray-400 block font-bold">VIDAS</span>
+                <div id="hud-vidas" class="text-base font-bold text-red-500">⚡⚡⚡⚡⚡⚡⚡</div>
             </div>
         </div>
-
         <canvas id="canvasJuego" width="800" height="480" class="rounded-2xl border border-white/10 max-h-[85vh] w-full object-contain"></canvas>
-        
-        <div class="absolute bottom-4 text-[10px] text-gray-500 tracking-widest pointer-events-none uppercase">Arrastra tu dedo en cualquier lado para controlar la nave</div>
     </div>
 
     <script>
         const canvas = document.getElementById('canvasJuego');
         const ctx = canvas.getContext('2d');
 
-        // Contexto de audio nativo para blindaje móvil
         let audioCtx = null;
-
-        // CONTRATO OFICIAL DE ENTRADA Y APUESTA PARA EL ECOSISTEMA ZARD
         const CONTRATO_ZARD = "0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65";
-        const APUESTA_HEX_VAL = "0x5AF3107A4000"; // Equivalente en Wei hexadecimal para la transferencia estricta de 0.0001 tokens
 
-        // Carga estricta de Assets Gráficos con las URLs IPFS Oficiales provistas
-        const imgFenix = new Image(); imgFenix.src = 'https://ipfs.io/ipfs/bafybeihsmtiwinw5w6jcebelg2p6kr64ivuijcmx4dnpuny2m22piqin2y'; // Corredor
-        const imgGas = new Image(); imgGas.src = 'https://ipfs.io/ipfs/bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34'; // Gas
-        const imgObstaculo = new Image(); imgObstaculo.src = 'https://ipfs.io/ipfs/bafybeiarw4qbftgyh2rzjyw56s4cpjxtlptxtwgasgnu7rovqkvmpjgbgy'; // Obstáculos
+        // Carga y precalentamiento estricto de imágenes
+        const imgFenix = new Image();
+        const imgGas = new Image();
+        const imgObstaculo = new Image();
+
+        imgFenix.src = 'https://ipfs.io/ipfs/bafybeihsmtiwinw5w6jcebelg2p6kr64ivuijcmx4dnpuny2m22piqin2y';
+        imgGas.src = 'https://ipfs.io/ipfs/bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34';
+        imgObstaculo.src = 'https://ipfs.io/ipfs/bafybeiarw4qbftgyh2rzjyw56s4cpjxtlptxtwgasgnu7rovqkvmpjgbgy';
 
         let juegoActivo = false;
         let modoActual = 'prueba';
-        let accountWeb3 = null;
         let animacionId;
         
         let fenixY, fenixX, fenixAncho, fenixAlto;
@@ -143,9 +101,15 @@
         let oportunidadesRestantes = 7;
         let velocidadActual = 4.5;
         let distanciaRecorrida = 0;
-
-        // SISTEMA TÁCTIL ABSOLUTO POR ARRASTRE
         let touchActivo = false;
+
+        // FUNCIÓN CLAVE: Activa el sonido con el permiso del toque del usuario
+        function activarSistemas() {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            document.getElementById('pantalla-audio').style.display = 'none';
+            document.getElementById('pantalla-bienvenida').style.display = 'block';
+            sonarEfecto('gas'); // Confirmación auditiva de activación
+        }
 
         const mapearMovimientoTactil = (e) => {
             e.preventDefault();
@@ -156,41 +120,22 @@
             fenixY = relativeY - (fenixAlto / 2);
         };
 
-        canvas.addEventListener('touchstart', (e) => {
-            touchActivo = true;
-            mapearMovimientoTactil(e);
-            inicializarAudioNativo();
-        }, { passive: false });
-
+        canvas.addEventListener('touchstart', (e) => { touchActivo = true; mapearMovimientoTactil(e); }, { passive: false });
         canvas.addEventListener('touchmove', mapearMovimientoTactil, { passive: false });
         canvas.addEventListener('touchend', () => { touchActivo = false; });
 
-        let teclas = {};
-        window.addEventListener('keydown', e => { teclas[e.code] = true; inicializarAudioNativo(); });
-        window.addEventListener('keyup', e => teclas[e.code] = false);
-
         const frasesAnimo = [
-            "¡Dale, tú puedes! Reenfoca tu estrategia.",
             "¡No te sobreoperes! Si la racha es mala, respira y analiza.",
             "¡El fénix aprende de cada impacto, sigue adelante!",
-            "¡Enfócate! Esas 100 cajas de gas te esperan.",
             "¡Disciplina y consistencia, mantén el vuelo!"
         ];
-
-        document.getElementById('mensaje-animo').innerText = frasesAnimo[Math.floor(Math.random() * frasesAnimo.length)];
 
         function irAlMenuModos() {
             document.getElementById('pantalla-bienvenida').style.display = 'none';
             document.getElementById('menu-modos').style.display = 'block';
-            inicializarAudioNativo();
         }
 
-        function inicializarAudioNativo() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-        }
-
+        // GENERACIÓN DE AUDIO SINTETIZADO PREMIUM (Inmune a bloqueos)
         function sonarEfecto(tipo) {
             if (!audioCtx) return;
             try {
@@ -201,53 +146,45 @@
 
                 if (tipo === 'choque') {
                     osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(220, audioCtx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.3);
+                    osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.4);
                     gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-                    osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.4);
                 } else if (tipo === 'gas') {
                     osc.type = 'sine';
-                    osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); 
-                    osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.08);    
+                    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(900, audioCtx.currentTime + 0.08);
                     gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
-                    osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.2);
+                } else if (tipo === 'musica') {
+                    // Genera una nota de fondo baja espacial sostenida durante el vuelo
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(110, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.5);
                 }
             } catch(e) {}
         }
 
         async function prepararJuego(modo) {
             modoActual = modo;
-            if (modoActual === 'wallet') {
-                if (typeof window.ethereum !== 'undefined') {
-                    try {
-                        const cuentas = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                        accountWeb3 = cuentas[0];
-                        
-                        // Solicitud firma / depósito Web3 al Contrato ZARD provisto
-                        await window.ethereum.request({
-                            method: 'eth_sendTransaction',
-                            params: [{
-                                from: accountWeb3,
-                                to: CONTRATO_ZARD,
-                                value: '0x0', // Modificar si el contrato requiere BNB o ejecución directa de token mint
-                                data: '0x38ed1739' // Ejemplo firma hash genérico, personalizar según función externa de depósito
-                            }],
-                        });
-                    } catch (error) {
-                        alert("Transacción cancelada o fondo insuficiente.");
-                        return;
-                    }
-                } else {
-                    alert("Por favor abre el juego desde DApp Browser de MetaMask o Trust Wallet.");
+            if (modoActual === 'wallet' && typeof window.ethereum !== 'undefined') {
+                try {
+                    const cuentas = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    await window.ethereum.request({
+                        method: 'eth_sendTransaction',
+                        params: [{ from: cuentas[0], to: CONTRATO_ZARD, value: '0x0' }],
+                    });
+                } catch (error) {
+                    alert("Transacción cancelada.");
                     return;
                 }
             }
-
             document.getElementById('menu-modos').style.display = 'none';
             document.getElementById('contenedor-juego').style.display = 'flex';
-
             iniciarEngine();
         }
 
@@ -255,12 +192,12 @@
             juegoActivo = true;
             totalGasRecolectado = 0;
             oportunidadesRestantes = 7;
-            velocidadActual = 4.5;
+            velocidadActual = 5;
             distanciaRecorrida = 0;
 
-            fenixX = 50;
-            fenixAncho = 70; 
-            fenixAlto = 70;
+            fenixX = 60;
+            fenixAncho = 75; 
+            fenixAlto = 75;
             fenixY = (canvas.height / 2) - (fenixAlto / 2);
 
             obstaculos = [];
@@ -283,9 +220,9 @@
             cancelAnimationFrame(animacionId);
             
             if (resultado === 'victoria') {
-                alert(`¡VICTORIA ÉPICA! Envío de recompensa ejecutado a través del contrato:\n${CONTRATO_ZARD}`);
+                alert(`¡VICTORIA ÉPICA! Contrato: ${CONTRATO_ZARD}`);
             } else {
-                alert(`GAME OVER: Se agotaron tus 7 oportunidades.\n\n⚠️ RECOMENDACIÓN RECONECTA:\n"Fatiga de mercado detectada. Te sugerimos NO SEGUIR jugando de inmediato si encadenas pérdidas. ¡Toma un respiro, analiza y regresa con la mente fría!"`);
+                alert(`GAME OVER: Se agotaron tus 7 oportunidades.\n\n⚠️ RECOMENDACIÓN RECONECTA:\n"Fatiga de mercado detectada. Te sugerimos NO SEGUIR jugando de inmediato si encadenas pérdidas. ¡Toma un respiro y regresa con la mente fría!"`);
             }
 
             document.getElementById('contenedor-juego').style.display = 'none';
@@ -296,27 +233,86 @@
         function buclePrincipal() {
             if (!juegoActivo) return;
 
+            // Limpieza de pantalla limpia
             ctx.fillStyle = '#05020a';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             distanciaRecorrida++;
-            velocidadActual = 4.5 + Math.floor(distanciaRecorrida / 450) * 0.6;
+            velocidadActual = 5 + Math.floor(distanciaRecorrida / 500) * 0.5;
+
+            // Sonido de fondo tipo motor espacial sutil
+            if (distanciaRecorrida % 25 === 0) sonarEfecto('musica');
 
             if (distanciaRecorrida % 80 === 0) {
                 obstaculos.push({ x: canvas.width, y: Math.random() * (canvas.height - 70) + 10, w: 55, h: 55 });
             }
-            if (distanciaRecorrida % 110 === 0) {
-                cajas.push({ x: canvas.width, y: Math.random() * (canvas.height - 50) + 10, w: 40, h: 40 });
-            }
-
-            if (!touchActivo) {
-                if (teclas['ArrowUp'] || teclas['KeyW']) fenixY -= 7;
-                if (teclas['ArrowDown'] || teclas['KeyS']) fenixY += 7;
+            if (distanciaRecorrida % 120 === 0) {
+                cajas.push({ x: canvas.width, y: Math.random() * (canvas.height - 50) + 10, w: 45, h: 45 });
             }
 
             if (fenixY < 0) fenixY = 0;
             if (fenixY > canvas.height - fenixAlto) fenixY = canvas.height - fenixAlto;
 
-            // Partículas doradas
-            particulas.push({ 
-                x: fenixX +
+            // Estela dorada
+            particulas.push({ x: fenixX + 10, y: fenixY + fenixAlto/2, vx: -3, vy: (Math.random() - 0.5) * 2, alpha: 1 });
+            for (let i = particulas.length - 1; i >= 0; i--) {
+                let p = particulas[i]; p.x += p.vx; p.y += p.vy; p.alpha -= 0.05;
+                if (p.alpha <= 0) { particulas.splice(i, 1); continue; }
+                ctx.fillStyle = `rgba(234, 179, 8, ${p.alpha})`;
+                ctx.fillRect(p.x, p.y, 4, 4);
+            }
+
+            // RENDER REFORZADO DEL CORREDOR (FÉNIX)
+            if (imgFenix.complete && imgFenix.naturalWidth !== 0) {
+                ctx.drawImage(imgFenix, fenixX, fenixY, fenixAncho, fenixAlto);
+            } else {
+                ctx.fillStyle = '#eab308'; ctx.fillRect(fenixX, fenixY, fenixAncho, fenixAlto); // Respaldo estético
+            }
+
+            // PROCESAR OBSTÁCULOS
+            for (let i = obstaculos.length - 1; i >= 0; i--) {
+                let obs = obstaculos[i]; obs.x -= velocidadActual;
+                
+                if (imgObstaculo.complete && imgObstaculo.naturalWidth !== 0) {
+                    ctx.drawImage(imgObstaculo, obs.x, obs.y, obs.w, obs.h);
+                } else {
+                    ctx.fillStyle = '#ef4444'; ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+                }
+
+                if (fenixX < obs.x + obs.w && fenixX + fenixAncho > obs.x && fenixY < obs.y + obs.h && fenixY + fenixAlto > obs.y) {
+                    sonarEfecto('choque');
+                    oportunidadesRestantes--;
+                    actualizarHUD();
+                    obstaculos.splice(i, 1);
+                    if (oportunidadesRestantes <= 0) { terminarJuego('derrota'); return; }
+                    continue;
+                }
+                if (obs.x < -60) obstaculos.splice(i, 1);
+            }
+
+            // PROCESAR GAS
+            for (let i = cajas.length - 1; i >= 0; i--) {
+                let box = cajas[i]; box.x -= velocidadActual;
+                
+                if (imgGas.complete && imgGas.naturalWidth !== 0) {
+                    ctx.drawImage(imgGas, box.x, box.y, box.w, box.h);
+                } else {
+                    ctx.fillStyle = '#22c55e'; ctx.fillRect(box.x, box.y, box.w, box.h);
+                }
+
+                if (fenixX < box.x + box.w && fenixX + fenixAncho > box.x && fenixY < box.y + box.h && fenixY + fenixAlto > box.y) {
+                    sonarEfecto('gas');
+                    totalGasRecolectado++;
+                    actualizarHUD();
+                    cajas.splice(i, 1);
+                    if (totalGasRecolectado >= 100) { terminarJuego('victoria'); return; }
+                    continue;
+                }
+                if (box.x < -60) cajas.splice(i, 1);
+            }
+
+            animacionId = requestAnimationFrame(buclePrincipal);
+        }
+    </script>
+</body>
+</html>

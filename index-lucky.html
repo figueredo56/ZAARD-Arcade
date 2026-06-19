@@ -2,74 +2,71 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Lucky Chest - ZAARD Arcade</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZAARD LUCKY CHEST - EPICO</title>
     <style>
-        body { margin: 0; background: #020006; color: white; font-family: 'Arial', sans-serif; overflow: hidden; }
-        .ui-panel { 
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background: rgba(0,0,0,0.9);
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Rajdhani:wght@600&display=swap');
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            font-family: 'Rajdhani', sans-serif; color: white; text-align: center; overflow: hidden;
+            /* Fondo épico con tu primer CID */
+            background: url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m') no-repeat center center fixed;
+            background-size: cover;
         }
-        .banner { 
-            width: 90%; max-width: 600px; height: 300px; 
-            background-size: cover; background-position: center;
-            border-radius: 30px; margin-bottom: 20px;
-        }
-        button { background: linear-gradient(to right, #5a2d82, #9d4edd); color: white; border: none; padding: 15px 30px; border-radius: 25px; cursor: pointer; margin: 10px; font-weight: bold; }
-        .chest-grid { display: flex; gap: 20px; }
-        .chest { font-size: 80px; cursor: pointer; padding: 20px; border: 2px solid #5a2d82; border-radius: 20px; }
+
+        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1; }
+        .container { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
+
+        h1 { font-family: 'Cinzel', serif; font-size: 3.5rem; color: #ffd700; text-shadow: 0 0 20px #ff8c00; margin-bottom: 20px; text-transform: uppercase; }
+        
+        .btn { background: linear-gradient(45deg, #ff8c00, #ff0000); border: 2px solid #ffd700; color: white; padding: 15px 30px; font-size: 1.2rem; cursor: pointer; border-radius: 10px; margin: 10px; transition: 0.3s; text-transform: uppercase; font-weight: bold; }
+        .btn:hover { transform: scale(1.1); box-shadow: 0 0 20px #ffd700; }
+        .btn-wallet { background: linear-gradient(45deg, #0015ff, #00d4ff); border: 2px solid #00d4ff; }
+
+        #game-area { display: none; flex-direction: column; align-items: center; }
+        .chests-container { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
+        
+        .chest { width: 140px; height: 140px; cursor: pointer; transition: 0.3s; border-radius: 15px; border: 3px solid #ffd700; overflow: hidden; }
+        .chest img { width: 100%; height: 100%; object-fit: cover; }
+        .chest:hover { transform: scale(1.15) rotate(5deg); box-shadow: 0 0 25px #ffd700; }
+
+        #status-msg { margin-top: 25px; font-size: 1.8rem; color: #00ff00; text-shadow: 0 0 10px #00ff00; height: 40px; }
     </style>
 </head>
 <body>
-
-    <div id="ui-container" class="ui-panel">
-        <div id="pantalla-inicio" class="banner" style="background-image: url('https://ipfs.io/ipfs/bafybeieymfqhcj6pj2zvclkoecftyx4gzpkzcnohxwhyzytyijqqyjgzei')"></div>
-        <button onclick="document.getElementById('pantalla-inicio').style.display='none'; document.getElementById('menu-seleccion').style.display='flex';">¡ENTRAR AL JUEGO!</button>
-    </div>
-
-    <div id="menu-seleccion" class="ui-panel" style="display:none;">
-        <h2 style="color:#bc8fef;">LUCKY CHEST</h2>
-        <div class="chest-grid">
-            <div class="chest" onclick="jugar(1)">📦</div>
-            <div class="chest" onclick="jugar(2)">📦</div>
-            <div class="chest" onclick="jugar(3)">📦</div>
+    <div class="overlay"></div>
+    <div class="container">
+        <div id="welcome-area">
+            <h1>¡PRUEBA TU SUERTE Y GANA!</h1>
+            <button class="btn" onclick="iniciarJuego('invitado')">MODO INVITADO (Gratis)</button>
+            <button class="btn btn-wallet" onclick="iniciarJuego('cartera')">CONECTAR CARTERA</button>
         </div>
-        <button onclick="conectarBilletera()">CONECTAR BILLETERA</button>
-        <button onclick="window.location.href='index.html'">VOLVER AL MENÚ</button>
+
+        <div id="game-area">
+            <h1>ELIGE UNA CAJA</h1>
+            <div class="chests-container">
+                <div class="chest" onclick="abrirCaja(1)"><img src="https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4"></div>
+                <div class="chest" onclick="abrirCaja(2)"><img src="https://ipfs.io/ipfs/bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue"></div>
+                <div class="chest" onclick="abrirCaja(3)"><img src="https://ipfs.io/ipfs/bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34"></div>
+                <div class="chest" onclick="abrirCaja(4)"><img src="https://ipfs.io/ipfs/bafybeiefhnawny7nlgixveiia7aaougqxsird6or4nws52vp36ndbfvixa"></div>
+                <div class="chest" onclick="abrirCaja(5)"><img src="https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m"></div>
+            </div>
+            <div id="status-msg"></div>
+            <button class="btn" onclick="location.reload()">REINICIAR</button>
+        </div>
     </div>
 
     <script>
-        // Tus CIDs organizados como en tu juego de memoria
-        const cids = [
-            "bafybeihg4evetf2c5fqeozxttct7mone4jaequysqrxndlx4wqmf2zn45a",
-            "bafkreicdxf34fpb4t5yx6p4ijurnspvv47rgu373nl5yeyzj57s3ignoli",
-            "bafybeift764exak3gtcylewcd5mufkfaxabusywobwg2z5mcfkp7qeaapy",
-            "bafybeib5xg3hrhliizyw7n65reashvsqf6ritx7oi5334rbcvync27hbwe",
-            "bafybeiafcclndycyvb5p62jjhnypzezaa2fxw2oqmlt5azvual334lgd6y"
-        ];
-        
-        const BURN_ADDR = "0x000000000000000000000000000000000000dEaD";
-        const BACKGROUND_IMG = "https://ipfs.io/ipfs/bafybeiga7wy2ef4hstm5ppwfw36rvxipb3wzu3tm7ac6dfbwhmvnoqyc3u";
-
-        // Aplicar fondo espacial
-        document.body.style.backgroundImage = "url('" + BACKGROUND_IMG + "')";
-
-        async function conectarBilletera() {
-            if (window.ethereum) {
-                try {
-                    await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    alert("Billetera Conectada.");
-                } catch (e) { alert("Conexión necesaria."); }
-            } else { alert("Instala MetaMask."); }
+        function iniciarJuego(modo) {
+            if (modo === 'cartera' && !window.ethereum) return alert("Instala MetaMask");
+            document.getElementById('welcome-area').style.display = 'none';
+            document.getElementById('game-area').style.display = 'flex';
         }
-
-        function jugar(id) {
-            const gano = Math.random() > 0.5;
-            if(gano) {
-                alert("¡Ganaste! Tu premio se enviará a tu wallet.");
-            } else {
-                alert("Cofre vacío. Fondos enviados a la quema: " + BURN_ADDR);
-            }
+        function abrirCaja(n) {
+            const msg = document.getElementById('status-msg');
+            msg.innerText = "Abriendo caja " + n + "...";
+            setTimeout(() => { msg.innerText = "¡Ganaste 50 ZAARD Tokens!"; msg.style.color = "#ffd700"; }, 1000);
         }
     </script>
 </body>

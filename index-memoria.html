@@ -2,20 +2,26 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>ZAARD Memory Challenge</title>
+    <title>ZAARD Memory 7x7</title>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
     <style>
         body { margin: 0; background: #020006; color: white; font-family: 'Orbitron', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
-        #game-container { border: 4px solid #34c1ea; box-shadow: 0 0 30px #34c1ea; }
+        #menu-bienvenida { position: absolute; z-index: 20; background: rgba(0,0,0,0.95); padding: 40px; border: 2px solid #34c1ea; border-radius: 20px; text-align: center; width: 80%; max-width: 500px; }
+        button { margin: 15px; padding: 15px 30px; font-size: 18px; cursor: pointer; background: linear-gradient(135deg, #34c1ea, #16a34a); border: none; color: white; border-radius: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
 
+    <div id="menu-bienvenida">
+        <h1>BIENVENIDO A ZAARD</h1>
+        <p>Prueba tu memoria y gana Tokens de nuestro ecosistema.</p>
+        <button onclick="iniciarJuego(false)">Jugar Invitado</button>
+        <button onclick="iniciarJuego(true)">Apostar (Web3)</button>
+    </div>
+
     <div id="game-container"></div>
 
     <script>
-        // Tus CIDs convertidos a URLs de IPFS
         const cids = [
             "bafybeihg4evetf2c5fqeozxttct7mone4jaequysqrxndlx4wqmf2zn45a",
             "bafkreic6hmavutykpcpviuxv4pq3xkgcquznb5j4zw7zbsrmwp5jnhylcy",
@@ -29,37 +35,51 @@
             "bafybeic5377igwloc2o63whivoykazkibjruq7bau4edjpfdfu4gudunjm"
         ];
 
-        const config = {
-            type: Phaser.AUTO, width: 800, height: 800, parent: 'game-container',
-            scene: {
-                preload: function() {
-                    cids.forEach((cid, index) => this.load.image('carta'+index, 'https://ipfs.io/ipfs/' + cid));
-                    this.load.image('dorso', 'https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m');
-                },
-                create: function() {
-                    this.intentos = 3;
-                    this.txtIntentos = this.add.text(20, 20, 'Intentos: ' + this.intentos, { fontSize: '32px', fill: '#34c1ea' });
-                    
-                    // Lógica del tablero 6x6 (36 cartas, 18 pares)
-                    let cartas = [];
-                    for(let i=0; i<18; i++) { cartas.push(i%10, i%10); } // Mezcla tus 10 CIDs
-                    Phaser.Utils.Array.Shuffle(cartas);
+        function iniciarJuego(esWeb3) {
+            document.getElementById('menu-bienvenida').style.display = 'none';
+            
+            new Phaser.Game({
+                type: Phaser.AUTO, width: 850, height: 950, parent: 'game-container',
+                scene: {
+                    preload: function() {
+                        cids.forEach((cid, i) => this.load.image('c'+i, 'https://ipfs.io/ipfs/' + cid));
+                        this.load.image('dorso', 'https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m');
+                    },
+                    create: function() {
+                        this.intentos = 3;
+                        this.add.rectangle(425, 50, 220, 60, 0x000000).setStrokeStyle(3, 0x34c1ea);
+                        this.txtIntentos = this.add.text(340, 35, 'Vidas: 3', { fontSize: '28px', fill: '#ff0000', fontFamily: 'Orbitron' });
+                        
+                        let deck = [];
+                        for(let i=0; i<24; i++) { deck.push(i%10, i%10); } 
+                        Phaser.Utils.Array.Shuffle(deck);
 
-                    cartas.forEach((cidIdx, i) => {
-                        let x = 80 + (i % 6) * 120;
-                        let y = 100 + Math.floor(i / 6) * 120;
-                        let card = this.add.image(x, y, 'dorso').setScale(0.2).setInteractive();
-                        card.cid = 'carta' + cidIdx;
-                        card.on('pointerdown', () => {
-                            card.setTexture(card.cid);
-                            // Aquí iría la lógica de comparación de pares
-                            // Si falla par: this.intentos--; this.txtIntentos.setText('Intentos: ' + this.intentos);
+                        deck.forEach((id, i) => {
+                            let card = this.add.sprite(75 + (i % 7) * 115, 150 + Math.floor(i / 7) * 115, 'dorso').setScale(0.18).setInteractive();
+                            card.cid = 'c' + id;
+                            card.on('pointerdown', () => {
+                                if (this.bloqueado || card.texture.key !== 'dorso') return;
+                                card.setTexture(card.cid);
+                                if (!this.primera) { this.primera = card; } 
+                                else {
+                                    this.bloqueado = true;
+                                    if (this.primera.cid === card.cid) { this.primera = null; this.bloqueado = false; }
+                                    else {
+                                        setTimeout(() => {
+                                            this.primera.setTexture('dorso'); card.setTexture('dorso');
+                                            this.primera = null; this.bloqueado = false;
+                                            this.intentos--;
+                                            this.txtIntentos.setText('Vidas: ' + this.intentos);
+                                            if (this.intentos === 0) { alert("¡Perdiste! Fin del juego."); location.reload(); }
+                                        }, 1000);
+                                    }
+                                }
+                            });
                         });
-                    });
+                    }
                 }
-            }
-        };
-        new Phaser.Game(config);
+            });
+        }
     </script>
 </body>
 </html>

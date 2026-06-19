@@ -5,13 +5,29 @@
     <title>ZAARD LUCKY CHEST</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Rajdhani:wght@600&display=swap');
-        body { margin: 0; background: url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m') no-repeat center center fixed; background-size: cover; color: white; text-align: center; font-family: 'Rajdhani', sans-serif; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .aviso { background: rgba(0,0,0,0.7); border: 2px solid #ffd700; padding: 15px; margin: 20px; border-radius: 10px; font-size: 1.2rem; }
-        .btn { padding: 15px 30px; background: linear-gradient(45deg, #ff8c00, #ff0000); cursor: pointer; border: 2px solid #ffd700; border-radius: 10px; color: white; font-weight: bold; font-size: 1.2rem; margin: 10px; }
-        .chests-container { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
-        .chest { width: 120px; cursor: pointer; border: 2px solid #ffd700; border-radius: 10px; overflow: hidden; transition: 0.3s; }
+        
+        body { 
+            margin: 0; 
+            background: url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m') no-repeat center center fixed; 
+            /* Ajuste para que la imagen no se vea gigante */
+            background-size: contain; 
+            background-color: #000;
+            color: white; 
+            text-align: center; 
+            font-family: 'Rajdhani', sans-serif; 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        
+        .aviso { background: rgba(0,0,0,0.8); border: 2px solid #ffd700; padding: 10px; margin: 10px; border-radius: 8px; font-size: 1rem; }
+        .btn { padding: 10px 20px; background: linear-gradient(45deg, #ff8c00, #ff0000); cursor: pointer; border: 2px solid #ffd700; border-radius: 8px; color: white; font-weight: bold; margin: 5px; }
+        .chests-container { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; justify-content: center; }
+        .chest { width: 80px; cursor: pointer; border: 2px solid #ffd700; border-radius: 8px; overflow: hidden; transition: 0.3s; }
         .chest:hover { transform: scale(1.1); }
-        #status-msg { font-size: 1.5rem; margin-top: 20px; color: #ffd700; font-weight: bold; }
+        #status-msg { font-size: 1.2rem; margin-top: 15px; color: #ffd700; font-weight: bold; padding: 0 20px; }
     </style>
 </head>
 <body>

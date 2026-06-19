@@ -7,22 +7,64 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
-        body {
+        
+        body, html {
             font-family: 'Orbitron', sans-serif;
             background: #05020a;
             overflow: hidden;
             user-select: none;
             touch-action: none;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
         }
-        .neon-glow { text-shadow: 0 0 10px rgba(234, 179, 8, 0.6); }
-        .border-neon { box-shadow: 0 0 15px rgba(234, 179, 8, 0.4); border: 2px solid rgba(234, 179, 8, 0.8); }
-        .btn-epic { background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); }
-        canvas { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+
+        /* Fondo de espacio profundo para toda la aplicación */
+        .espacio-bg {
+            background-color: #05020a;
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px);
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+            background-position: 0 0, 40px 60px, 130px 270px;
+        }
+
+        .neon-glow { 
+            text-shadow: 0 0 10px rgba(234, 179, 8, 0.6), 0 0 20px rgba(234, 179, 8, 0.3); 
+        }
+        
+        .border-neon { 
+            box-shadow: 0 0 20px rgba(234, 179, 8, 0.35); 
+            border: 2px solid rgba(234, 179, 8, 0.85); 
+        }
+
+        .btn-epic { 
+            background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); 
+        }
+
+        /* Contenedores de imagen por CSS para evitar fallos de carga en móviles */
+        .img-bienvenida-css {
+            background: url('https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4') center/cover no-repeat;
+        }
+
+        .img-menu-css {
+            background: url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m') center/cover no-repeat;
+        }
+
+        canvas { 
+            display: block; 
+            margin: 0 auto; 
+            max-width: 100%; 
+            height: auto; 
+            background: transparent;
+        }
     </style>
 </head>
-<body class="w-screen h-screen flex flex-col items-center justify-center text-white m-0 p-0">
+<body class="espacio-bg w-screen h-screen flex flex-col items-center justify-center text-white">
 
-    <div id="pantalla-audio" class="absolute z-30 w-full max-w-xl p-6 rounded-3xl bg-black border-neon text-center mx-4">
+    <div id="pantalla-audio" class="absolute z-30 w-full max-w-xl p-6 rounded-3xl bg-black/95 border-neon text-center mx-4">
         <h1 class="text-2xl font-black text-yellow-400 tracking-wider mb-2 neon-glow">ZAARD ARCADE</h1>
         <p class="text-sm text-gray-400 mb-6">Toca el botón para sincronizar los gráficos y activar el sonido premium.</p>
         <button onclick="activarSistemas()" class="btn-epic w-full py-4 rounded-xl font-black text-black tracking-widest text-lg shadow-lg active:scale-95 transition-transform">
@@ -31,12 +73,16 @@
     </div>
 
     <div id="pantalla-bienvenida" class="hidden absolute z-20 w-full max-w-xl p-6 rounded-3xl bg-black/95 backdrop-blur-md border-neon text-center mx-4">
+        <div class="w-full h-36 rounded-2xl mb-4 overflow-hidden relative border border-yellow-500/30 img-bienvenida-css">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+        </div>
+
         <h1 class="text-2xl font-black text-yellow-400 tracking-wider mb-1 neon-glow">BIENVENIDOS A</h1>
         <h2 class="text-3xl font-black text-white tracking-widest mb-4 border-b border-yellow-500/20 pb-3">ZAARD INNOVATION</h2>
         
         <div class="bg-purple-950/20 border border-purple-500/30 rounded-2xl p-4 text-left text-xs text-gray-300 space-y-2 mb-6">
-            <p><span class="text-yellow-400 font-bold">🔥 CONTROL:</span> Desliza tu dedo en la pantalla para mover al fénix.</p>
-            <p><span class="text-yellow-400 font-bold">📦 META:</span> Atrapa 100 cajas de gas. Tienes 7 vidas.</p>
+            <p><span class="text-yellow-400 font-bold">🔥 CONTROL:</span> Desliza tu dedo libremente por la pantalla para mover al fénix.</p>
+            <p><span class="text-yellow-400 font-bold">📦 META:</span> Atrapa 100 cajas de gas. Cuentas con 7 vidas.</p>
         </div>
 
         <button onclick="irAlMenuModos()" class="btn-epic w-full py-3 rounded-xl font-black text-black tracking-widest text-base active:scale-95 transition-transform">
@@ -45,6 +91,10 @@
     </div>
 
     <div id="menu-modos" class="hidden absolute z-10 w-full max-w-xl p-6 rounded-3xl bg-black/95 backdrop-blur-md border-neon text-center mx-4">
+        <div class="w-full h-36 rounded-2xl mb-4 overflow-hidden relative border border-yellow-500/30 img-menu-css">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+        </div>
+
         <h1 class="text-3xl font-black text-yellow-400 tracking-wider mb-1 neon-glow">GOLDEN RUN</h1>
         <p class="text-[10px] text-gray-400 tracking-widest mb-6">SELECCIONA TU ENTRADA</p>
 
@@ -61,18 +111,28 @@
         <p id="mensaje-animo" class="mt-4 text-yellow-500/80 font-medium italic text-xs px-2"></p>
     </div>
 
-    <div id="contenedor-juego" class="hidden relative w-full h-full flex flex-col items-center justify-center p-2">
-        <div class="absolute top-4 left-4 right-4 flex justify-between items-center pointer-events-none z-10 px-2">
-            <div class="bg-black/80 px-4 py-1.5 rounded-xl border border-yellow-500/30 text-center">
-                <span class="text-[10px] text-gray-400 block font-bold">GAS</span>
-                <span id="hud-gas" class="text-xl font-black text-yellow-400 neon-glow">0/100</span>
+    <div id="contenedor-juego" class="hidden relative w-full h-full flex flex-col items-center justify-between p-4">
+        
+        <div class="w-full max-w-2xl bg-black/80 backdrop-blur-md border-b-2 border-yellow-500/80 rounded-b-2xl p-4 flex justify-between items-center z-10 shadow-lg">
+            <div class="bg-gray-950/90 px-5 py-2 rounded-xl border border-yellow-500/40 text-center">
+                <span class="text-[10px] text-gray-400 block font-bold tracking-widest">GAS COLLECTED</span>
+                <span id="hud-gas" class="text-2xl font-black text-yellow-400 neon-glow">0/100</span>
             </div>
-            <div class="bg-black/80 px-4 py-1.5 rounded-xl border border-red-500/30 text-center">
-                <span class="text-[10px] text-gray-400 block font-bold">VIDAS</span>
-                <div id="hud-vidas" class="text-base font-bold text-red-500">⚡⚡⚡⚡⚡⚡⚡</div>
+            <div class="bg-gray-950/90 px-5 py-2 rounded-xl border border-red-500/40 text-center">
+                <span class="text-[10px] text-gray-400 block font-bold tracking-widest">SHIELD STATUS</span>
+                <div id="hud-vidas" class="text-lg font-bold text-red-500 tracking-wider">⚡⚡⚡⚡⚡⚡⚡</div>
             </div>
         </div>
-        <canvas id="canvasJuego" width="800" height="480" class="rounded-2xl border border-white/10 max-h-[85vh] w-full object-contain"></canvas>
+
+        <div class="w-full flex justify-center items-center my-auto">
+            <canvas id="canvasJuego" width="800" height="480" class="rounded-2xl max-h-[65vh] w-full object-contain"></canvas>
+        </div>
+
+        <div class="w-full max-w-2xl bg-black/80 backdrop-blur-md border-t-2 border-yellow-500/80 rounded-t-2xl p-3 text-center z-10 shadow-lg">
+            <p class="text-[11px] text-yellow-500/90 font-bold tracking-widest uppercase">
+                SISTEMA TÁCTIL ACTIVO: ARRASTRA EN CUALQUIER ÁREA PARA MOVER TU FÉNIX
+            </p>
+        </div>
     </div>
 
     <script>
@@ -82,7 +142,6 @@
         let audioCtx = null;
         const CONTRATO_ZARD = "0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65";
 
-        // Carga y precalentamiento estricto de imágenes
         const imgFenix = new Image();
         const imgGas = new Image();
         const imgObstaculo = new Image();
@@ -103,12 +162,11 @@
         let distanciaRecorrida = 0;
         let touchActivo = false;
 
-        // FUNCIÓN CLAVE: Activa el sonido con el permiso del toque del usuario
         function activarSistemas() {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             document.getElementById('pantalla-audio').style.display = 'none';
             document.getElementById('pantalla-bienvenida').style.display = 'block';
-            sonarEfecto('gas'); // Confirmación auditiva de activación
+            sonarEfecto('gas');
         }
 
         const mapearMovimientoTactil = (e) => {
@@ -135,7 +193,6 @@
             document.getElementById('menu-modos').style.display = 'block';
         }
 
-        // GENERACIÓN DE AUDIO SINTETIZADO PREMIUM (Inmune a bloqueos)
         function sonarEfecto(tipo) {
             if (!audioCtx) return;
             try {
@@ -159,10 +216,9 @@
                     gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
                     osc.start(); osc.stop(audioCtx.currentTime + 0.2);
                 } else if (tipo === 'musica') {
-                    // Genera una nota de fondo baja espacial sostenida durante el vuelo
                     osc.type = 'triangle';
                     osc.frequency.setValueAtTime(110, audioCtx.currentTime);
-                    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
                     osc.start(); osc.stop(audioCtx.currentTime + 0.5);
                 }
@@ -222,7 +278,7 @@
             if (resultado === 'victoria') {
                 alert(`¡VICTORIA ÉPICA! Contrato: ${CONTRATO_ZARD}`);
             } else {
-                alert(`GAME OVER: Se agotaron tus 7 oportunidades.\n\n⚠️ RECOMENDACIÓN RECONECTA:\n"Fatiga de mercado detectada. Te sugerimos NO SEGUIR jugando de inmediato si encadenas pérdidas. ¡Toma un respiro y regresa con la mente fría!"`);
+                alert(`GAME OVER\n\n⚠️ RECOMENDACIÓN RECONECTA:\n"Fatiga de mercado detectada. Te sugerimos NO SEGUIR jugando de inmediato si encadenas pérdidas. ¡Toma un respiro y regresa con la mente fría!"`);
             }
 
             document.getElementById('contenedor-juego').style.display = 'none';
@@ -233,14 +289,12 @@
         function buclePrincipal() {
             if (!juegoActivo) return;
 
-            // Limpieza de pantalla limpia
-            ctx.fillStyle = '#05020a';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // Canvas limpio transparente para ver el fondo estrellado CSS por detrás
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             distanciaRecorrida++;
             velocidadActual = 5 + Math.floor(distanciaRecorrida / 500) * 0.5;
 
-            // Sonido de fondo tipo motor espacial sutil
             if (distanciaRecorrida % 25 === 0) sonarEfecto('musica');
 
             if (distanciaRecorrida % 80 === 0) {
@@ -253,7 +307,7 @@
             if (fenixY < 0) fenixY = 0;
             if (fenixY > canvas.height - fenixAlto) fenixY = canvas.height - fenixAlto;
 
-            // Estela dorada
+            // Partículas de estela
             particulas.push({ x: fenixX + 10, y: fenixY + fenixAlto/2, vx: -3, vy: (Math.random() - 0.5) * 2, alpha: 1 });
             for (let i = particulas.length - 1; i >= 0; i--) {
                 let p = particulas[i]; p.x += p.vx; p.y += p.vy; p.alpha -= 0.05;
@@ -262,14 +316,14 @@
                 ctx.fillRect(p.x, p.y, 4, 4);
             }
 
-            // RENDER REFORZADO DEL CORREDOR (FÉNIX)
+            // DIBUJAR NAVE
             if (imgFenix.complete && imgFenix.naturalWidth !== 0) {
                 ctx.drawImage(imgFenix, fenixX, fenixY, fenixAncho, fenixAlto);
             } else {
-                ctx.fillStyle = '#eab308'; ctx.fillRect(fenixX, fenixY, fenixAncho, fenixAlto); // Respaldo estético
+                ctx.fillStyle = '#eab308'; ctx.fillRect(fenixX, fenixY, fenixAncho, fenixAlto);
             }
 
-            // PROCESAR OBSTÁCULOS
+            // OBSTÁCULOS
             for (let i = obstaculos.length - 1; i >= 0; i--) {
                 let obs = obstaculos[i]; obs.x -= velocidadActual;
                 
@@ -290,7 +344,7 @@
                 if (obs.x < -60) obstaculos.splice(i, 1);
             }
 
-            // PROCESAR GAS
+            // GAS
             for (let i = cajas.length - 1; i >= 0; i--) {
                 let box = cajas[i]; box.x -= velocidadActual;
                 

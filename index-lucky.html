@@ -2,71 +2,63 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZAARD LUCKY CHEST - EPICO</title>
+    <title>ZAARD LUCKY CHEST</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Rajdhani:wght@600&display=swap');
-
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            font-family: 'Rajdhani', sans-serif; color: white; text-align: center; overflow: hidden;
-            /* Fondo épico con tu primer CID */
-            background: url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m') no-repeat center center fixed;
-            background-size: cover;
-        }
-
-        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1; }
-        .container { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
-
-        h1 { font-family: 'Cinzel', serif; font-size: 3.5rem; color: #ffd700; text-shadow: 0 0 20px #ff8c00; margin-bottom: 20px; text-transform: uppercase; }
-        
-        .btn { background: linear-gradient(45deg, #ff8c00, #ff0000); border: 2px solid #ffd700; color: white; padding: 15px 30px; font-size: 1.2rem; cursor: pointer; border-radius: 10px; margin: 10px; transition: 0.3s; text-transform: uppercase; font-weight: bold; }
-        .btn:hover { transform: scale(1.1); box-shadow: 0 0 20px #ffd700; }
-        .btn-wallet { background: linear-gradient(45deg, #0015ff, #00d4ff); border: 2px solid #00d4ff; }
-
-        #game-area { display: none; flex-direction: column; align-items: center; }
+        body { margin: 0; background: url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m') no-repeat center center fixed; background-size: cover; color: white; text-align: center; font-family: 'Rajdhani', sans-serif; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .aviso { background: rgba(0,0,0,0.7); border: 2px solid #ffd700; padding: 15px; margin: 20px; border-radius: 10px; font-size: 1.2rem; }
+        .btn { padding: 15px 30px; background: linear-gradient(45deg, #ff8c00, #ff0000); cursor: pointer; border: 2px solid #ffd700; border-radius: 10px; color: white; font-weight: bold; font-size: 1.2rem; margin: 10px; }
         .chests-container { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
-        
-        .chest { width: 140px; height: 140px; cursor: pointer; transition: 0.3s; border-radius: 15px; border: 3px solid #ffd700; overflow: hidden; }
-        .chest img { width: 100%; height: 100%; object-fit: cover; }
-        .chest:hover { transform: scale(1.15) rotate(5deg); box-shadow: 0 0 25px #ffd700; }
-
-        #status-msg { margin-top: 25px; font-size: 1.8rem; color: #00ff00; text-shadow: 0 0 10px #00ff00; height: 40px; }
+        .chest { width: 120px; cursor: pointer; border: 2px solid #ffd700; border-radius: 10px; overflow: hidden; transition: 0.3s; }
+        .chest:hover { transform: scale(1.1); }
+        #status-msg { font-size: 1.5rem; margin-top: 20px; color: #ffd700; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="overlay"></div>
-    <div class="container">
-        <div id="welcome-area">
-            <h1>¡PRUEBA TU SUERTE Y GANA!</h1>
-            <button class="btn" onclick="iniciarJuego('invitado')">MODO INVITADO (Gratis)</button>
-            <button class="btn btn-wallet" onclick="iniciarJuego('cartera')">CONECTAR CARTERA</button>
+    <div id="welcome-area">
+        <h1>ZAARD LUCKY CHEST</h1>
+        <div class="aviso">
+            APUESTA: 0.0001 ZAARD<br>
+            PREMIO: 0.00015 ZAARD<br>
+            CONTRATO: <small>0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65</small>
         </div>
+        <button class="btn" onclick="conectarCartera()">CONECTAR CARTERA</button>
+        <button class="btn" onclick="iniciarJuego()">MODO INVITADO</button>
+    </div>
 
-        <div id="game-area">
-            <h1>ELIGE UNA CAJA</h1>
-            <div class="chests-container">
-                <div class="chest" onclick="abrirCaja(1)"><img src="https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4"></div>
-                <div class="chest" onclick="abrirCaja(2)"><img src="https://ipfs.io/ipfs/bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue"></div>
-                <div class="chest" onclick="abrirCaja(3)"><img src="https://ipfs.io/ipfs/bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34"></div>
-                <div class="chest" onclick="abrirCaja(4)"><img src="https://ipfs.io/ipfs/bafybeiefhnawny7nlgixveiia7aaougqxsird6or4nws52vp36ndbfvixa"></div>
-                <div class="chest" onclick="abrirCaja(5)"><img src="https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m"></div>
-            </div>
-            <div id="status-msg"></div>
-            <button class="btn" onclick="location.reload()">REINICIAR</button>
+    <div id="game-area" style="display:none;">
+        <h1>¡ELIGE TU CAJA!</h1>
+        <div class="chests-container">
+            <div class="chest" onclick="abrirCaja(1)"><img src="https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4" width="100%"></div>
+            <div class="chest" onclick="abrirCaja(2)"><img src="https://ipfs.io/ipfs/bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue" width="100%"></div>
+            <div class="chest" onclick="abrirCaja(3)"><img src="https://ipfs.io/ipfs/bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34" width="100%"></div>
+            <div class="chest" onclick="abrirCaja(4)"><img src="https://ipfs.io/ipfs/bafybeiefhnawny7nlgixveiia7aaougqxsird6or4nws52vp36ndbfvixa" width="100%"></div>
+            <div class="chest" onclick="abrirCaja(5)"><img src="https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m" width="100%"></div>
         </div>
+        <div id="status-msg"></div>
+        <br><button class="btn" onclick="location.reload()">REINICIAR</button>
     </div>
 
     <script>
-        function iniciarJuego(modo) {
-            if (modo === 'cartera' && !window.ethereum) return alert("Instala MetaMask");
+        function conectarCartera() {
+            if (window.ethereum) {
+                window.ethereum.request({ method: 'eth_requestAccounts' }).then(iniciarJuego);
+            } else { alert("Instala MetaMask"); }
+        }
+        function iniciarJuego() {
             document.getElementById('welcome-area').style.display = 'none';
-            document.getElementById('game-area').style.display = 'flex';
+            document.getElementById('game-area').style.display = 'block';
         }
         function abrirCaja(n) {
             const msg = document.getElementById('status-msg');
-            msg.innerText = "Abriendo caja " + n + "...";
-            setTimeout(() => { msg.innerText = "¡Ganaste 50 ZAARD Tokens!"; msg.style.color = "#ffd700"; }, 1000);
+            const gano = Math.random() > 0.7;
+            if (gano) {
+                msg.innerText = "¡FELICIDADES! Tus 0.00015 ZAARD ya están en tu cartera.";
+                msg.style.color = "#00ff00";
+            } else {
+                msg.innerText = "Intenta luego, sigue intentando. Mejor suerte la próxima, ¡no te desanimes!";
+                msg.style.color = "#ff4500";
+            }
         }
     </script>
 </body>

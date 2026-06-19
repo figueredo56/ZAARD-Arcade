@@ -2,161 +2,312 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>ZAARD GOLD RUN - PANGA EDITION</title>
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser-arcade-physics.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>ZAARD Arcade - Golden Run</title>
+    <!-- Phaser 3 y Ethers.js desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <style>
-        body { margin: 0; background-color: #050515; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
-        .web3-panel { position: fixed; top: 10px; width: 95%; display: flex; justify-content: space-between; padding: 10px; z-index: 10; }
-        .btn-connect { padding: 8px 12px; background: rgba(0, 251, 255, 0.1); border: 1px solid #00fbff; color: #00fbff; font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 4px; }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0b0b12;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        #web3-interface {
+            text-align: center;
+            margin-bottom: 15px;
+            z-index: 10;
+        }
+        .btn {
+            background: linear-gradient(135deg, #ff9900, #ff5500);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 85, 0, 0.4);
+            transition: transform 0.2s, opacity 0.2s;
+            margin: 5px;
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+        .btn-guest {
+            background: linear-gradient(135deg, #4a4a5a, #2b2b36);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+        #game-container {
+            border: 4px solid #ff9900;
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(255, 153, 0, 0.3);
+            overflow: hidden;
+            display: none;
+        }
+        #status-text {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #a0a0b0;
+        }
     </style>
 </head>
 <body>
 
-<div class="web3-panel">
-    <div style="color: #00fbff; font-weight: bold; text-shadow: 0 0 5px #00fbff;">ZAARD INNOVATION</div>
-    <button id="connectBtn" class="btn-connect" onclick="connectWallet()">CONECTAR WALLET</button>
-</div>
-
-<script>
-    const BURNS_ADDRESS = "0x0000000000000000000000000000000000000000";
-    const APUESTA = "0.0001";
-    const OBJETIVO_GAS = 200;
-
-    const config = {
-        type: Phaser.AUTO,
-        width: 800,
-        height: 1250,
-        backgroundColor: '#050515',
-        scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
-        physics: { default: 'arcade', arcade: { debug: false } },
-        scene: { preload: preload, create: create, update: update }
-    };
-
-    const game = new Phaser.Game(config);
-    let player, obstacles, gasGroup, cursors;
-    let score = 0, lives = 5, gameSpeed = 450, isPlaying = false;
-    let scoreText, livesText;
-
-    function preload() {
-        const gw = "https://cloudflare-ipfs.com/ipfs/";
-        this.load.image('fondo', gw + 'bafybeibdx3yzp4tc2ju26o4eht5si4tdy3kpgqf3z5j2e4he5si4tdy3kpg');
-        this.load.image('player', gw + 'bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34');
-        this.load.image('obs', gw + 'bafybeiarw4qbftgyh2rzjyw56s4cpjxtlptxtwgasgnu7rovqkvmpjgbgy');
-        this.load.image('gas', gw + 'bafybeihsmtiwinw5w6jcebelg2p6kr64ivuijcmx4dnpuny2m22piqin2y');
+    <div id="web3-interface">
+        <h1 style="margin: 5px 0; color: #ff9900; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">GOLDEN RUN</h1>
+        <p style="margin: 5px 0 15px 0; color: #e0e0e0;">Ecosistema ZAARD INNOVATION</p>
         
-        // Sonidos (Usando los de Phaser Labs que son estables)
-        this.load.audio('collect', 'https://labs.phaser.io/assets/audio/SoundEffects/p-ping.mp3');
-        this.load.audio('crash', 'https://labs.phaser.io/assets/audio/SoundEffects/explosion.mp3');
-        this.load.audio('winSound', 'https://labs.phaser.io/assets/audio/SoundEffects/key.wav');
-    }
+        <div id="auth-buttons">
+            <button class="btn" id="btn-connect">Conectar Wallet (0.0001 ZARD)</button>
+            <button class="btn btn-guest" id="btn-guest">Modo Invitado (Prueba)</button>
+        </div>
+        <p id="status-text">Selecciona un modo para empezar a jugar.</p>
+    </div>
 
-    function create() {
-        this.add.image(400, 625, 'fondo').setDisplaySize(800, 1250).setAlpha(0.3);
-        mostrarBienvenida.call(this);
-    }
+    <div id="game-container"></div>
 
-    function mostrarBienvenida() {
-        let overlay = this.add.graphics().fillStyle(0x000000, 0.85).fillRect(0, 0, 800, 1250);
+    <script>
+        // --- CONFIGURACIÓN WEB3 ---
+        const ZARD_CONTRACT_ADDRESS = "0x41188fc76e763469bB446EF8f2c83c7a8616DE87";
+        const DEAD_ADDRESS = "0x0000000000000000000000000000000000000000";
+        const BET_AMOUNT = "0.0001";
+        const REWARD_AMOUNT = "0.00015";
         
-        let welcomeTxt = this.add.text(400, 300, 'BIENVENIDO A ZAARD\n"LA FUERZA PANGA"', {
-            fontSize: '55px', fill: '#00fbff', align: 'center', fontWeight: 'bold', stroke: '#000', strokeThickness: 5
-        }).setOrigin(0.5);
+        // ABI mínimo para transferencia de tokens ERC20/BEP20
+        const jarContractAbi = [
+            "function transfer(address to, uint256 value) public returns (bool)",
+            "function balanceOf(address owner) public view returns (uint256)"
+        ];
 
-        let infoTxt = this.add.text(400, 550, 
-            'Domina la energía del ecosistema.\n\n' +
-            '• RECOLECTA: 200 de GAS para ganar.\n' +
-            '• EVITA: Los obstáculos del vacío.\n' +
-            '• FUERZA PANGA: Tienes 5 vidas.\n\n' +
-            'Apuesta: 0.0001 ZAARD.2\n' +
-            'Si fallas, tu energía se quema.', {
-            fontSize: '28px', fill: '#ffffff', align: 'center', lineSpacing: 10
-        }).setOrigin(0.5);
+        let provider, signer, userAddress, zardContract;
+        let isWeb3Mode = false;
 
-        let btnStart = this.add.rectangle(400, 900, 450, 90, 0x00fbff, 0.2).setInteractive();
-        let txtStart = this.add.text(400, 900, 'ACTIVAR FUERZA PANGA', { fontSize: '32px', fill: '#00fbff', fontWeight: 'bold' }).setOrigin(0.5);
+        document.getElementById('btn-connect').addEventListener('click', connectWallet);
+        document.getElementById('btn-guest').addEventListener('click', startGuestMode);
 
-        btnStart.on('pointerdown', () => {
-            overlay.destroy(); welcomeTxt.destroy(); infoTxt.destroy(); btnStart.destroy(); txtStart.destroy();
-            iniciarJuego.call(this);
-        });
-
-        this.tweens.add({ targets: txtStart, alpha: 0.5, duration: 800, yoyo: true, loop: -1 });
-    }
-
-    function iniciarJuego() {
-        isPlaying = true;
-        score = 0; lives = 5; gameSpeed = 450;
-
-        player = this.physics.add.sprite(400, 1050, 'player').setScale(0.25).setCollideWorldBounds(true);
-        obstacles = this.physics.add.group();
-        gasGroup = this.physics.add.group();
-
-        scoreText = this.add.text(20, 80, 'GAS: 0 / 200', { fontSize: '35px', fill: '#00fbff', fontWeight: 'bold' });
-        livesText = this.add.text(20, 130, 'VIDAS: 5', { fontSize: '35px', fill: '#ff4444', fontWeight: 'bold' });
-
-        this.time.addEvent({ delay: 1000, callback: spawnObstacle, callbackScope: this, loop: true });
-        this.time.addEvent({ delay: 800, callback: spawnGas, callbackScope: this, loop: true });
-
-        this.physics.add.overlap(player, obstacles, hitObstacle, null, this);
-        this.physics.add.overlap(player, gasGroup, collectGas, null, this);
-
-        this.input.on('pointermove', (pointer) => { if(isPlaying) player.x = pointer.x; });
-    }
-
-    function spawnObstacle() {
-        if (!isPlaying) return;
-        let obs = obstacles.create(Phaser.Math.Between(50, 750), -50, 'obs').setScale(0.18);
-        obs.setVelocityY(gameSpeed);
-    }
-
-    function spawnGas() {
-        if (!isPlaying) return;
-        let gas = gasGroup.create(Phaser.Math.Between(50, 750), -50, 'gas').setScale(0.15);
-        gas.setVelocityY(gameSpeed);
-    }
-
-    function hitObstacle(player, obstacle) {
-        obstacle.destroy();
-        this.sound.play('crash', { volume: 0.5 });
-        lives--;
-        livesText.setText('VIDAS: ' + lives);
-        this.cameras.main.shake(150, 0.01);
-        if (lives <= 0) finalizarJuego.call(this, false);
-    }
-
-    function collectGas(player, gas) {
-        gas.destroy();
-        this.sound.play('collect', { volume: 0.4 });
-        score++;
-        scoreText.setText('GAS: ' + score + ' / 200');
-        gameSpeed += 3; 
-        if (score >= OBJETIVO_GAS) finalizarJuego.call(this, true);
-    }
-
-    function update() {}
-
-    function finalizarJuego(win) {
-        isPlaying = false;
-        this.physics.pause();
-        if(win) this.sound.play('winSound');
-
-        let msg = win ? "¡VICTORIA MAJESTUOSA!\nRECOMPENSA ENVIADA" : "ENERGÍA AGOTADA\nZAARD ENVIADO A LA QUEMA";
-        let color = win ? "#00fbff" : "#ff4444";
-
-        this.add.rectangle(400, 625, 800, 1250, 0x000000, 0.9);
-        this.add.text(400, 600, msg, { fontSize: '42px', fill: color, align: 'center', fontWeight: 'bold' }).setOrigin(0.5);
-        
-        setTimeout(() => { location.reload(); }, 5000);
-    }
-
-    async function connectWallet() {
-        if (window.ethereum) {
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            document.getElementById('connectBtn').innerText = accounts[0].substring(0, 6) + '...';
+        async function connectWallet() {
+            const status = document.getElementById('status-text');
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    status.innerText = "Conectando con MetaMask...";
+                    provider = new ethers.providers.Web3Provider(window.ethereum);
+                    await provider.send("eth_requestAccounts", []);
+                    signer = provider.getSigner();
+                    userAddress = await signer.getAddress();
+                    zardContract = new ethers.Contract(ZARD_CONTRACT_ADDRESS, jarContractAbi, signer);
+                    
+                    status.innerText = `Wallet conectada: ${userAddress.substring(0,6)}...${userAddress.substring(38)}`;
+                    
+                    // Ejecutar la transacción de apuesta
+                    status.innerText = `Procesando apuesta de ${BET_AMOUNT} ZARD...`;
+                    const amountWei = ethers.utils.parseUnits(BET_AMOUNT, 18);
+                    
+                    // Nota: En producción, la apuesta idealmente va a un contrato intermediario. 
+                    // Para esta prueba directa, se envía el cobro inicial al ecosistema/dead.
+                    const tx = await zardContract.transfer(DEAD_ADDRESS, amountWei);
+                    status.innerText = "Esperando confirmación de bloque...";
+                    await tx.wait();
+                    
+                    isWeb3Mode = true;
+                    startGame();
+                } catch (error) {
+                    console.error(error);
+                    status.innerText = "Error en la transacción o conexión cancelada.";
+                }
+            } else {
+                status.innerText = "Por favor, abre este enlace dentro de la dApp browser de MetaMask o Trust Wallet.";
+            }
         }
-    }
-</script>
+
+        function startGuestMode() {
+            isWeb3Mode = false;
+            document.getElementById('status-text').innerText = "Jugando en Modo Invitado (Sin entorno Web3).";
+            startGame();
+        }
+
+        function startGame() {
+            document.getElementById('auth-buttons').style.display = 'none';
+            document.getElementById('game-container').style.display = 'block';
+            initPhaserGame();
+        }
+
+        // --- LÓGICA DEL JUEGO (PHASER 3) ---
+        function initPhaserGame() {
+            const config = {
+                type: Phaser.AUTO,
+                width: 800,
+                height: 400,
+                parent: 'game-container',
+                physics: {
+                    default: 'arcade',
+                    arcade: { gravity: { y: 1000 }, debug: false }
+                },
+                scene: { preload: preload, create: create, update: update }
+            };
+
+            const game = new Phaser.Game(config);
+            let player;
+            let obstacles;
+            let gasBoxes;
+            let cursors;
+            let score = 0;
+            let lives = 7;
+            let gameSpeed = -300;
+            let scoreText;
+            let livesText;
+            let gameOver = false;
+            let speedTimer;
+
+            function preload() {
+                // Generación de gráficos básicos mediante Canvas para asegurar ejecución inmediata sin assets externos
+                let canvas = document.createElement('canvas');
+                canvas.width = 32; canvas.height = 48;
+                let ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#ffcc00'; ctx.fillRect(0, 0, 32, 48);
+                this.textures.addCanvas('player', canvas);
+
+                let canvasObs = document.createElement('canvas');
+                canvasObs.width = 30; canvasObs.height = 40;
+                let ctxObs = canvasObs.getContext('2d');
+                ctxObs.fillStyle = '#ff3333'; ctxObs.fillRect(0, 0, 30, 40);
+                this.textures.addCanvas('obstacle', canvasObs);
+
+                let canvasGas = document.createElement('canvas');
+                canvasGas.width = 25; canvasGas.height = 25;
+                let ctxGas = canvasGas.getContext('2d');
+                ctxGas.fillStyle = '#00ffcc'; ctxGas.fillRect(0, 0, 25, 25);
+                this.textures.addCanvas('gas', canvasGas);
+            }
+
+            function create() {
+                // Suelo y entorno lineal
+                this.add.gradientHorizontal(0, 350, 800, 50, 0x222233, 0x11111a);
+                
+                // Textos de Interfaz
+                scoreText = this.add.text(16, 16, 'Gas Recolectado: 0 / 15', { fontSize: '20px', fill: '#fff', fontWeight: 'bold' });
+                livesText = this.add.text(600, 16, 'Vidas: ❤️ 7', { fontSize: '20px', fill: '#ff3333', fontWeight: 'bold' });
+
+                // Jugador
+                player = this.physics.add.sprite(100, 300, 'player');
+                player.setCollideWorldBounds(true);
+                player.setGravityY(300);
+
+                // Grupos
+                obstacles = this.physics.add.group();
+                gasBoxes = this.physics.add.group();
+
+                // Entrada
+                cursors = this.input.keyboard.createCursorKeys();
+                this.input.on('pointerdown', () => { if (player.body.blocked.down) player.setVelocityY(-450); }); // Control móvil
+
+                // Generadores automáticos
+                this.time.addEvent({ delay: 2000, callback: spawnObstacle, callbackScope: this, loop: true });
+                this.time.addEvent({ delay: 1500, callback: spawnGas, callbackScope: this, loop: true });
+
+                // Incremento progresivo de velocidad cada 7 segundos
+                speedTimer = this.time.addEvent({
+                    delay: 7000,
+                    callback: () => { gameSpeed -= 50; },
+                    loop: true
+                });
+
+                // Colisiones
+                this.physics.add.collider(player, obstacles, hitObstacle, null, this);
+                this.physics.add.overlap(player, gasBoxes, collectGas, null, this);
+            }
+
+            function update() {
+                if (gameOver) return;
+
+                if ((cursors.up.isDown || cursors.space.isDown) && player.body.blocked.down) {
+                    player.setVelocityY(-450);
+                }
+
+                // Limpieza de objetos fuera de pantalla
+                obstacles.children.iterate((child) => {
+                    if (child && child.x < -50) child.destroy();
+                });
+                gasBoxes.children.iterate((child) => {
+                    if (child && child.x < -50) child.destroy();
+                });
+            }
+
+            function spawnObstacle() {
+                if (gameOver) return;
+                let obs = obstacles.create(850, 330, 'obstacle');
+                obs.body.setAllowGravity(false);
+                obs.setVelocityX(gameSpeed);
+            }
+
+            function spawnGas() {
+                if (gameOver) return;
+                let heights = [200, 260, 320];
+                let h = heights[Math.floor(Math.random() * heights.length)];
+                let gas = gasBoxes.create(850, h, 'gas');
+                gas.body.setAllowGravity(false);
+                gas.setVelocityX(gameSpeed);
+            }
+
+            function collectGas(player, gas) {
+                gas.destroy();
+                score += 1;
+                scoreText.setText('Gas Recolectado: ' + score + ' / 15');
+
+                if (score >= 15) {
+                    winGame(this);
+                }
+            }
+
+            function hitObstacle(player, obstacle) {
+                obstacle.destroy();
+                lives -= 1;
+                livesText.setText('Vidas: ❤️ ' + lives);
+
+                // Efecto visual de daño
+                player.setTint(0xff0000);
+                this.time.delayedCall(200, () => { player.clearTint(); });
+
+                if (lives <= 0) {
+                    loseGame(this);
+                }
+            }
+
+            async function winGame(scene) {
+                gameOver = true;
+                scene.physics.pause();
+                speedTimer.destroy();
+                player.setTint(0x00ff00);
+                
+                document.getElementById('status-text').innerText = "¡VICTORIA! Has conseguido los 15 contenedores de Gas.";
+
+                if (isWeb3Mode) {
+                    document.getElementById('status-text').innerText = `Reclamando recompensa de ${REWARD_AMOUNT} ZARD...`;
+                    // Lógica Web3 para procesar el reclamo (Llamada al smart contract o backend seguro en producción)
+                }
+            }
+
+            async function loseGame(scene) {
+                gameOver = true;
+                scene.physics.pause();
+                speedTimer.destroy();
+                player.setTint(0x555555);
+                
+                document.getElementById('status-text').innerText = "GAME OVER. Te has quedado sin vidas.";
+
+                if (isWeb3Mode) {
+                    document.getElementById('status-text').innerText = "Derrota: Tu apuesta de 0.0001 ZARD ha sido enviada a la dirección de quema.";
+                }
+            }
+        }
+    </script>
 </body>
 </html>

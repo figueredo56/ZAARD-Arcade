@@ -42,16 +42,6 @@
             height: auto;
             box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
         }
-
-        /* Botones de control móvil en pantalla */
-        .touch-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(234, 179, 8, 0.4);
-            user-select: none;
-        }
-        .touch-btn:active {
-            background: rgba(234, 179, 8, 0.4);
-        }
     </style>
 </head>
 <body class="w-screen h-screen flex flex-col items-center justify-center neon-bg text-white m-0 p-0">
@@ -65,11 +55,11 @@
         <div class="bg-purple-950/20 border border-purple-500/30 rounded-2xl p-4 text-left text-xs text-gray-300 space-y-2 mb-6">
             <div class="flex items-start gap-2">
                 <span class="text-yellow-400 font-bold">🔥 RETO:</span>
-                <p>Pilota el Fénix cósmico. Esquiva los obstáculos en el espacio profundo.</p>
+                <p>Pilota el Fénix cósmico usando el control táctil. Arrastra tu dedo en la pantalla para mover la nave.</p>
             </div>
             <div class="flex items-start gap-2">
                 <span class="text-yellow-400 font-bold">📦 META:</span>
-                <p>Atrapa <span class="text-yellow-400 font-bold">100 cajas de gas</span> para ganar. Cuentas con <span class="text-red-400 font-bold">7 vidas</span>.</p>
+                <p>Atrapa <span class="text-yellow-400 font-bold">100 cajas de gas</span> para ganar. Cuentas con <span class="text-red-400 font-bold">7 vidas</span> antes del Game Over.</p>
             </div>
             <div class="flex items-start gap-2">
                 <span class="text-purple-400 font-bold">💎 WEB3:</span>
@@ -105,25 +95,25 @@
         <p id="mensaje-animo" class="mt-4 text-yellow-500/80 font-medium italic text-xs"></p>
     </div>
 
-    <div id="contenedor-juego" class="hidden relative w-full h-full flex flex-col items-center justify-center">
-        <div class="absolute top-2 left-2 right-2 flex justify-between items-center pointer-events-none z-10 px-2">
-            <div class="bg-black/80 px-3 py-1 rounded-xl border border-yellow-500/30 text-center">
-                <span class="text-[9px] text-gray-400 block font-bold">GAS</span>
-                <span id="hud-gas" class="text-lg font-black text-yellow-400 neon-glow">0/100</span>
+    <div id="contenedor-juego" class="hidden relative w-full h-full flex flex-col items-center justify-center p-2">
+        <div class="absolute top-4 left-4 right-4 flex justify-between items-center pointer-events-none z-10 px-2">
+            <div class="bg-black/80 px-4 py-1.5 rounded-xl border border-yellow-500/30 text-center">
+                <span class="text-[10px] text-gray-400 block font-bold tracking-wider">GAS</span>
+                <span id="hud-gas" class="text-xl font-black text-yellow-400 neon-glow">0/100</span>
             </div>
-            <div class="bg-black/80 px-3 py-1 rounded-xl border border-red-500/30 text-center">
-                <span class="text-[9px] text-gray-400 block font-bold">VIDAS</span>
-                <div id="hud-vidas" class="text-sm font-bold text-red-500">⚡⚡⚡⚡⚡⚡⚡</div>
+            <div class="bg-black/80 px-4 py-1.5 rounded-xl border border-red-500/30 text-center">
+                <span class="text-[10px] text-gray-400 block font-bold tracking-wider">VIDAS</span>
+                <div id="hud-vidas" class="text-base font-bold text-red-500 tracking-tight">⚡⚡⚡⚡⚡⚡⚡</div>
             </div>
         </div>
 
-        <canvas id="canvasJuego" width="800" height="440" class="rounded-2xl border border-white/10 max-h-[60vh]"></canvas>
-
-        <div class="w-full max-w-lg flex justify-between gap-4 p-4 z-10">
-            <button id="btn-up" class="touch-btn flex-1 h-16 rounded-xl flex items-center justify-center text-2xl font-black text-yellow-400">▲ SUBIR</button>
-            <button id="btn-down" class="touch-btn flex-1 h-16 rounded-xl flex items-center justify-center text-2xl font-black text-yellow-400">▼ BAJAR</button>
-        </div>
+        <canvas id="canvasJuego" width="800" height="480" class="rounded-2xl border border-white/10 max-h-[85vh] w-full object-contain"></canvas>
+        
+        <div class="absolute bottom-4 text-[10px] text-gray-500 tracking-widest pointer-events-none uppercase">Arrastra el dedo para mover al fénix</div>
     </div>
+
+    <audio id="music-bg" src="https://assets.mixkit.co/bgm/mixkit-retro-futurism-150.mp3" loop preload="auto"></audio>
+    <audio id="sfx-hit" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-84.wav" preload="auto"></audio>
 
     <script>
         const canvas = document.getElementById('canvasJuego');
@@ -133,7 +123,7 @@
         const APUESTA_ZARD = 0.0001;
         const RECOMPENSA_ZARD = 0.00015;
 
-        // Assets gráficos IPFS nativos
+        // Carga estricta de Assets Gráficos con las URLs de IPFS
         const imgFenix = new Image(); imgFenix.src = 'https://cloudflare-ipfs.com/ipfs/bafybeiefhnawny7nlgixveiia7aaougqxsird6or4nws52vp36ndbfvixa';
         const imgGas = new Image(); imgGas.src = 'https://cloudflare-ipfs.com/ipfs/bafybeihsmtiwinw5w6jcebelg2p6kr64ivuijcmx4dnpuny2m22piqin2y';
         const imgObstaculo = new Image(); imgObstaculo.src = 'https://cloudflare-ipfs.com/ipfs/bafybeiarw4qbftgyh2rzjyw56s4cpjxtlptxtwgasgnu7rovqkvmpjgbgy';
@@ -143,29 +133,76 @@
         let accountWeb3 = null;
         let animacionId;
         
-        let fenixY, fenixX, fenixAncho, fenixAlto, fenixVelocidad;
+        let fenixY, fenixX, fenixAncho, fenixAlto;
         let obstaculos, cajas, particulas;
         let totalGasRecolectado = 0;
         let oportunidadesRestantes = 7;
         let velocidadActual = 4;
         let distanciaRecorrida = 0;
 
+        // LÓGICA DE CONTROL TÁCTIL DIRECTO EN PANTALLA (SIN BOTONES INTERNOS)
+        let touchActivo = false;
+
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            touchActivo = true;
+            ajustarPosicionFenix(e.touches[0]);
+        }, { passive: false });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (touchActivo) ajustarPosicionFenix(e.touches[0]);
+        }, { passive: false });
+
+        canvas.addEventListener('touchend', () => { touchActivo = false; });
+
+        function ajustarPosicionFenix(touch) {
+            const rect = canvas.getBoundingClientRect();
+            // Mapeamos la coordenada Y real del dedo escalada a la resolución del lienzo del canvas (480px)
+            const relativeY = ((touch.clientY - rect.top) / rect.height) * canvas.height;
+            // Centramos el fénix horizontalmente respecto a la posición del dedo
+            fenixY = relativeY - (fenixAlto / 2);
+        }
+
+        // Soporte alternativo para desarrollo en PC con teclado (W/S o Flechas)
         let teclas = {};
         window.addEventListener('keydown', e => teclas[e.code] = true);
         window.addEventListener('keyup', e => teclas[e.code] = false);
 
-        // Mapeo estricto de controles en pantalla (Táctil)
-        const btnUp = document.getElementById('btn-up');
-        const btnDown = document.getElementById('btn-down');
+        const frasesAnimo = [
+            "¡Dale, tú puedes! Reenfoca tu estrategia.",
+            "¡No te sobreoperes! Si la racha es mala, respira y analiza.",
+            "¡El fénix aprende de cada impacto, sigue adelante!",
+            "¡Enfócate! Esas 100 cajas de gas te esperan.",
+            "¡Disciplina y consistencia, mantén el vuelo!"
+        ];
 
-        btnUp.addEventListener('touchstart', (e) => { e.preventDefault(); teclas['ArrowUp'] = true; });
-        btnUp.addEventListener('touchend', () => teclas['ArrowUp'] = false);
-        btnDown.addEventListener('touchstart', (e) => { e.preventDefault(); teclas['ArrowDown'] = true; });
-        btnDown.addEventListener('touchend', () => teclas['ArrowDown'] = false);
+        document.getElementById('mensaje-animo').innerText = frasesAnimo[Math.floor(Math.random() * frasesAnimo.length)];
 
         function irAlMenuModos() {
             document.getElementById('pantalla-bienvenida').style.display = 'none';
             document.getElementById('menu-modos').style.display = 'block';
+            // Iniciar de forma limpia la música ambiental
+            reproducirMusica();
+        }
+
+        function reproducirMusica() {
+            const musica = document.getElementById('music-bg');
+            if (musica) {
+                musica.volume = 0.25;
+                musica.play().catch(() => {
+                    console.log("Interacción de audio en espera.");
+                });
+            }
+        }
+
+        function reproducirEfectoChoque() {
+            const sfx = document.getElementById('sfx-hit');
+            if (sfx) {
+                sfx.currentTime = 0;
+                sfx.volume = 0.4;
+                sfx.play().catch(() => {});
+            }
         }
 
         async function prepararJuego(modo) {
@@ -176,7 +213,6 @@
                     try {
                         const cuentas = await window.ethereum.request({ method: 'eth_requestAccounts' });
                         accountWeb3 = cuentas[0];
-                        alert(`Wallet Conectada.\nTransacción autorizada.`);
                     } catch (error) {
                         alert("Acceso Web3 rechazado.");
                         return;
@@ -197,20 +233,20 @@
             juegoActivo = true;
             totalGasRecolectado = 0;
             oportunidadesRestantes = 7;
-            velocidadActual = 4;
+            velocidadActual = 4.5;
             distanciaRecorrida = 0;
 
-            fenixX = 60;
-            fenixY = canvas.height / 2;
-            fenixAncho = 55;
-            fenixAlto = 55;
-            fenixVelocidad = 6;
+            fenixX = 50;
+            fenixAncho = 75; // Tamaño óptimo para ver el fénix real
+            fenixAlto = 75;
+            fenixY = (canvas.height / 2) - (fenixAlto / 2);
 
             obstaculos = [];
             cajas = [];
             particulas = [];
 
             actualizarHUD();
+            reproducirMusica();
             buclePrincipal();
         }
 
@@ -225,79 +261,114 @@
             juegoActivo = false;
             cancelAnimationFrame(animacionId);
             
-            if (modoActual === 'wallet' && accountWeb3) {
-                if (resultado === 'victoria') {
-                    alert(`¡Felicidades! Reclamas ${RECOMPENSA_ZARD} ZARD.`);
-                } else {
-                    alert(`Juego terminado. Fondos quemados.`);
-                }
+            if (resultado === 'victoria') {
+                alert(`¡VICTORIA ÉPICA! Has completado la recolección.\nModo: ${modoActual.toUpperCase()}`);
             } else {
-                alert(resultado === 'victoria' ? "¡Victoria en modo Invitado!" : "Fin de la simulación.");
+                // Alerta psicológica recomendando detenerse si hay mala racha
+                alert(`GAME OVER: Has agotado tus 7 oportunidades.\n\n💡 RECOMENDACIÓN RECONECTA:\n"Mercado volátil o fatiga detectada. Te recomendamos NO SEGUIR operando de inmediato si encadenas pérdidas. ¡Toma un respiro y regresa con la mente fría!"`);
             }
 
+            // Regresar automáticamente al menú principal limpiando la interfaz
             document.getElementById('contenedor-juego').style.display = 'none';
             document.getElementById('menu-modos').style.display = 'block';
+            document.getElementById('mensaje-animo').innerText = frasesAnimo[Math.floor(Math.random() * frasesAnimo.length)];
         }
 
         function buclePrincipal() {
             if (!juegoActivo) return;
 
-            ctx.fillStyle = '#05020a';
+            // Limpieza del fondo con estela suave
+            ctx.fillStyle = 'rgba(5, 2, 10, 0.4)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             distanciaRecorrida++;
-            velocidadActual = 4 + Math.floor(distanciaRecorrida / 500) * 0.7;
+            // Incremento gradual y progresivo de velocidad cada tramos espaciales
+            velocidadActual = 4.5 + Math.floor(distanciaRecorrida / 400) * 0.6;
 
-            // Frecuencia controlada de aparición
-            if (distanciaRecorrida % 80 === 0) {
-                obstaculos.push({ x: canvas.width, y: Math.random() * (canvas.height - 60), w: 45, h: 55 });
+            // Generadores con rangos controlados de aparición
+            if (distanciaRecorrida % 75 === 0) {
+                obstaculos.push({ x: canvas.width, y: Math.random() * (canvas.height - 70) + 10, w: 55, h: 55 });
             }
             if (distanciaRecorrida % 110 === 0) {
-                cajas.push({ x: canvas.width, y: Math.random() * (canvas.height - 40), w: 35, h: 35 });
+                cajas.push({ x: canvas.width, y: Math.random() * (canvas.height - 50) + 10, w: 40, h: 40 });
             }
 
-            // Procesar entrada física/táctil
-            if (teclas['ArrowUp'] || teclas['KeyW']) fenixY -= fenixVelocidad;
-            if (teclas['ArrowDown'] || teclas['KeyS']) fenixY += fenixVelocidad;
+            // Movimiento del fénix mediante teclado si no se usa el táctil
+            if (!touchActivo) {
+                if (teclas['ArrowUp'] || teclas['KeyW']) fenixY -= 7;
+                if (teclas['ArrowDown'] || teclas['KeyS']) fenixY += 7;
+            }
 
-            if (fenixY < 10) fenixY = 10;
-            if (fenixY > canvas.height - fenixAlto - 10) fenixY = canvas.height - fenixAlto - 10;
+            // Límites estrictos de pantalla
+            if (fenixY < 0) fenixY = 0;
+            if (fenixY > canvas.height - fenixAlto) fenixY = canvas.height - fenixAlto;
 
-            // Estela de propulsión
-            particulas.push({ x: fenixX + 5, y: fenixY + fenixAlto/2, vx: -(Math.random() * 2 + 2), vy: (Math.random() - 0.5) * 2, alpha: 1 });
+            // Partículas de fuego cósmico
+            particulas.push({ 
+                x: fenixX + 15, 
+                y: fenixY + fenixAlto/2, 
+                vx: -(Math.random() * 3 + 2), 
+                vy: (Math.random() - 0.5) * 2, 
+                alpha: 1 
+            });
+            
             for (let i = particulas.length - 1; i >= 0; i--) {
-                let p = particulas[i]; p.x += p.vx; p.y += p.vy; p.alpha -= 0.05;
+                let p = particulas[i]; p.x += p.vx; p.y += p.vy; p.alpha -= 0.04;
                 if (p.alpha <= 0) { particulas.splice(i, 1); continue; }
                 ctx.fillStyle = `rgba(234, 179, 8, ${p.alpha})`;
                 ctx.fillRect(p.x, p.y, 4, 4);
             }
 
-            // Dibujar Fénix
-            try { ctx.drawImage(imgFenix, fenixX, fenixY, fenixAncho, fenixAlto); } 
-            catch(e) { ctx.fillStyle = '#ff5500'; ctx.fillRect(fenixX, fenixY, fenixAncho, fenixAlto); }
+            // DIBUJAR FÉNIX REAL DE MANERA PROFESIONAL
+            ctx.save();
+            ctx.shadowBlur = 15; ctx.shadowColor = '#eab308';
+            try {
+                ctx.drawImage(imgFenix, fenixX, fenixY, fenixAncho, fenixAlto);
+            } catch(e) {
+                ctx.fillStyle = '#ff9900'; ctx.fillRect(fenixX, fenixY, fenixAncho, fenixAlto);
+            }
+            ctx.restore();
 
-            // Procesar Obstáculos
+            // PROCESAR OBSTÁCULOS (Textura CID Real)
             for (let i = obstaculos.length - 1; i >= 0; i--) {
                 let obs = obstaculos[i]; obs.x -= velocidadActual;
-                try { ctx.drawImage(imgObstaculo, obs.x, obs.y, obs.w, obs.h); } 
-                catch(e) { ctx.fillStyle = '#3b82f6'; ctx.fillRect(obs.x, obs.y, obs.w, obs.h); }
+                
+                ctx.save();
+                ctx.shadowBlur = 10; ctx.shadowColor = '#ef4444';
+                try {
+                    ctx.drawImage(imgObstaculo, obs.x, obs.y, obs.w, obs.h);
+                } catch(e) {
+                    ctx.fillStyle = '#ef4444'; ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+                }
+                ctx.restore();
 
+                // Detección de Colisiones
                 if (fenixX < obs.x + obs.w && fenixX + fenixAncho > obs.x && fenixY < obs.y + obs.h && fenixY + fenixAlto > obs.y) {
+                    reproducirEfectoChoque();
                     oportunidadesRestantes--;
                     actualizarHUD();
                     obstaculos.splice(i, 1);
+                    
                     if (oportunidadesRestantes <= 0) { terminarJuego('derrota'); return; }
                     continue;
                 }
-                if (obs.x < -50) obstaculos.splice(i, 1);
+                if (obs.x < -60) obstaculos.splice(i, 1);
             }
 
-            // Procesar Cajas Gas
+            // PROCESAR CAJAS DE GAS (Textura CID Real)
             for (let i = cajas.length - 1; i >= 0; i--) {
                 let box = cajas[i]; box.x -= velocidadActual;
-                try { ctx.drawImage(imgGas, box.x, box.y, box.w, box.h); } 
-                catch(e) { ctx.fillStyle = '#eab308'; ctx.fillRect(box.x, box.y, box.w, box.h); }
+                
+                ctx.save();
+                ctx.shadowBlur = 12; ctx.shadowColor = '#22c55e';
+                try {
+                    ctx.drawImage(imgGas, box.x, box.y, box.w, box.h);
+                } catch(e) {
+                    ctx.fillStyle = '#22c55e'; ctx.fillRect(box.x, box.y, box.w, box.h);
+                }
+                ctx.restore();
 
+                // Recolección exitosa
                 if (fenixX < box.x + box.w && fenixX + fenixAncho > box.x && fenixY < box.y + box.h && fenixY + fenixAlto > box.y) {
                     totalGasRecolectado++;
                     actualizarHUD();
@@ -305,7 +376,7 @@
                     if (totalGasRecolectado >= 100) { terminarJuego('victoria'); return; }
                     continue;
                 }
-                if (box.x < -50) cajas.splice(i, 1);
+                if (box.x < -60) cajas.splice(i, 1);
             }
 
             animacionId = requestAnimationFrame(buclePrincipal);

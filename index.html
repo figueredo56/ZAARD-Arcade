@@ -282,15 +282,15 @@
             const signer = provider.getSigner();
 
             if (modo === 'zaard') {
-                // APUESTA EN ZARD: Ejecuta el contrato directamente
+                // APUESTA EN ZARD
                 const contrato = new ethers.Contract(CONTRATO_ZARD, ["function transfer(address, uint256) public returns (bool)"], signer);
                 await (await contrato.transfer(RECAUDADORA, ethers.utils.parseUnits("0.0001", 18))).wait();
             } else if (modo === 'bnb') {
-                // APUESTA EN BNB: Envío directo a la recaudadora
+                // APUESTA EN BNB
                 await (await signer.sendTransaction({ to: RECAUDADORA, value: ethers.utils.parseEther("0.000005") })).wait();
             }
         } catch (e) {
-            alert("⚠️ Error de pago: La transacción fue rechazada o cancelada.");
+            alert("⚠️ Error: Transacción cancelada o fallida.");
             return;
         }
     }
@@ -298,7 +298,6 @@
     document.getElementById('contenedor-juego').style.display = 'flex';
     iniciarEngine();
        }
-        }
 
         function iniciarEngine() {
             juegoActivo = true;

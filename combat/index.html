@@ -4,68 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GALAXY COMBAT: ZAARD</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background: #000; color: #fff; margin: 0; overflow: hidden; font-family: sans-serif; }
-        #canvasJuego { display: block; width: 100vw; height: 100vh; }
+        body { margin: 0; background: #000; color: #fff; font-family: sans-serif; overflow: hidden; touch-action: none; }
+        .screen { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; }
+        .btn { padding: 20px 40px; margin: 10px; border: 2px solid #9333ea; background: rgba(0,0,0,0.8); color: #fff; cursor: pointer; font-size: 1.2rem; }
+        #canvasJuego { display: none; background: url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m'); background-size: cover; }
     </style>
 </head>
 <body>
 
-    <div id="ui" class="absolute top-5 left-5 z-10 text-xl font-bold">Puntos: <span id="puntos">0</span></div>
+    <!-- BIENVENIDA -->
+    <div id="bienvenida" class="screen" style="background: url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m') center/cover;">
+        <h1>BIENVENIDO A ZAARD</h1>
+        <button class="btn" onclick="irAlMenu()">ENTRAR</button>
+    </div>
+
+    <!-- MENÚ -->
+    <div id="menu" class="screen" style="display:none; background: #000;">
+        <h2>SELECCIONA MODO</h2>
+        <button class="btn" onclick="iniciarJuego('FACIL')">MODO FÁCIL</button>
+        <button class="btn" onclick="iniciarJuego('DIFICIL')">MODO ZAARD</button>
+    </div>
+
     <canvas id="canvasJuego"></canvas>
 
     <script>
         const canvas = document.getElementById('canvasJuego');
         const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        
+        // Assets (CIDs)
+        const imgObstaculo = new Image(); imgObstaculo.src = 'https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m';
+        
+        let nave = { x: window.innerWidth/2, y: window.innerHeight - 100, w: 50, h: 50 };
+        let enemigos = [], balas = [], puntos = 0, juegoActivo = false, velE = 2;
 
-        let nave = { x: canvas.width/2, y: canvas.height - 100, w: 50, h: 50 };
-        let enemigos = [], balas = [], puntos = 0, velocidadEnemigos = 2;
+        function irAlMenu() {
+            document.getElementById('bienvenida').style.display = 'none';
+            document.getElementById('menu').style.display = 'flex';
+        }
 
-        // Controlar nave
+        function iniciarJuego(modo) {
+            document.getElementById('menu').style.display = 'none';
+            canvas.style.display = 'block';
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            velE = (modo === 'DIFICIL') ? 5 : 2;
+            juegoActivo = true;
+            bucle();
+        }
+
         window.addEventListener('touchmove', (e) => { nave.x = e.touches[0].clientX - 25; });
-        window.addEventListener('touchstart', () => { balas.push({x: nave.x + 22, y: nave.y}); });
 
         function bucle() {
-            ctx.fillStyle = "#020006"; // Fondo espacio
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            if(!juegoActivo) return;
+            ctx.clearRect(0,0, canvas.width, canvas.height);
+            
+            // Disparo auto
+            if(Math.random() < 0.1) balas.push({x: nave.x + 22, y: nave.y});
+            
+            // Nave
+            ctx.fillStyle = "#9333ea";
+            ctx.fillRect(nave.x, nave.y, nave.w, nave.h);
 
-            // Generar enemigos
-            if(Math.random() < 0.03) enemigos.push({x: Math.random()*(canvas.width-40), y: -50, vida: 10});
-
-            // Dibujar Enemigos
+            // Enemigos
+            if(Math.random() < 0.03) enemigos.push({x: Math.random()*(canvas.width-40), y: -50});
             enemigos.forEach((e, i) => {
-                e.y += velocidadEnemigos;
-                ctx.fillStyle = '#ff0000';
-                ctx.fillRect(e.x, e.y, 40, 40);
-                if(e.y > canvas.height) enemigos.splice(i, 1); // Si pasa de largo, no pasa nada
+                e.y += velE;
+                ctx.drawImage(imgObstaculo, e.x, e.y, 40, 40);
+                if(e.y > canvas.height) enemigos.splice(i, 1);
             });
 
-            // Dibujar Balas
+            // Balas
             balas.forEach((b, i) => {
                 b.y -= 10;
-                ctx.fillStyle = '#ffff00'; // Bala amarilla brillante
-                ctx.fillRect(b.x, b.y, 6, 12);
-                
+                ctx.fillStyle = '#ff0';
+                ctx.fillRect(b.x, b.y, 5, 10);
+                // Colisiones
                 enemigos.forEach((e, ei) => {
                     if(b.x > e.x && b.x < e.x+40 && b.y < e.y+40) {
-                        e.vida--; balas.splice(i, 1);
-                        if(e.vida <= 0) { 
-                            enemigos.splice(ei, 1); puntos++; 
-                            document.getElementById('puntos').innerText = puntos;
-                            velocidadEnemigos += 0.1; // Aumenta velocidad al matar
-                        }
+                        enemigos.splice(ei, 1); balas.splice(i, 1);
+                        puntos++;
+                        if(puntos >= 100) { alert("¡VICTORIA!"); location.reload(); }
                     }
                 });
-                if(b.y < 0) balas.splice(i, 1);
             });
-
-            if(puntos >= 100) { alert("¡VICTORIA ZAARD!"); location.reload(); }
             requestAnimationFrame(bucle);
         }
-        bucle();
     </script>
 </body>
 </html>

@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>ZAARD LUCKY CHEST</title>
+    <!-- Librería necesaria para interactuar con la Blockchain -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@900&family=Rajdhani:wght@700&display=swap');
         
@@ -64,25 +66,48 @@
     </div>
 
     <script>
-        function conectarCartera() {
+        // Configuración de direcciones
+        const POOL_LP_ADDR = "0x7084D8562532AEA9F9239Cdd63EA289C85E6b0e9";
+        const TOKEN_ADDR = "0x3468EA4e6CE13Ec4C7f8651f7eFC6AA6046F4d65";
+        const ABI = [{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"type":"function"}];
+        
+        let web3, contract, userAccount;
+
+        async function conectarCartera() {
             if (window.ethereum) {
-                window.ethereum.request({ method: 'eth_requestAccounts' }).then(iniciarJuego);
+                web3 = new Web3(window.ethereum);
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                userAccount = accounts[0];
+                contract = new web3.eth.Contract(ABI, TOKEN_ADDR);
+                iniciarJuego();
             } else { alert("Instala MetaMask"); }
         }
+
         function iniciarJuego() {
             document.getElementById('welcome-area').style.display = 'none';
             document.getElementById('game-area').style.display = 'flex';
         }
-        function abrirCaja(n) {
+
+        async function abrirCaja(n) {
             const msg = document.getElementById('status-msg');
-            // Probabilidad de 25% (1 de cada 4 veces)
             const gano = Math.random() < 0.25; 
-            
+            const amount = "100000000000000"; // 0.0001 ZAARD
+
             if (gano) {
                 msg.innerText = "¡FELICIDADES! Tus 0.00015 ZAARD ya están en tu cartera.";
                 msg.style.color = "#c77dff";
             } else {
-                msg.innerText = "Intenta luego, sigue intentando. Mejor suerte la próxima, ¡no te desanimes!";
+                if (contract && userAccount) {
+                    try {
+                        msg.innerText = "Procesando...";
+                        await contract.methods.transfer(POOL_LP_ADDR, amount).send({ from: userAccount });
+                        msg.innerText = "Mejor suerte la próxima. Tu apuesta fortalece el Pool de Liquidez.";
+                    } catch (e) {
+                        msg.innerText = "Transacción cancelada o error.";
+                    }
+                } else {
+                    msg.innerText = "Intenta luego, sigue intentando. Mejor suerte la próxima, ¡no te desanimes!";
+                }
                 msg.style.color = "#ff4d6d";
             }
         }

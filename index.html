@@ -12,7 +12,17 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
         
-        body, html { font-family: 'Orbitron', sans-serif; background: #020006; overflow: hidden; user-select: none; touch-action: none; margin: 0; padding: 0; width: 100%; height: 100%; }
+        body, html {
+            font-family: 'Orbitron', sans-serif;
+            background: #020006;
+            overflow: hidden;
+            user-select: none;
+            touch-action: none;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
 
         .espacio-bg {
             background-color: #020005;
@@ -28,97 +38,329 @@
             background-attachment: fixed;
         }
 
-        .neon-glow { text-shadow: 0 0 10px rgba(147, 51, 234, 0.7), 0 0 20px rgba(34, 197, 94, 0.5); }
-        .border-neon { box-shadow: 0 0 25px rgba(147, 51, 234, 0.25); border: 2px solid rgba(147, 51, 234, 0.7); }
-        .btn-epic { background: linear-gradient(135deg, #9333ea 0%, #16a34a 100%); color: white !important; }
-        .img-bienvenida-css { background: url('https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4') center/cover no-repeat; min-height: 140px; }
-        .img-menu-css { background: url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m') center/cover no-repeat; min-height: 140px; }
+        .neon-glow { 
+            text-shadow: 0 0 10px rgba(147, 51, 234, 0.7), 0 0 20px rgba(34, 197, 94, 0.5); 
+        }
+        
+        .border-neon { 
+            box-shadow: 0 0 25px rgba(147, 51, 234, 0.25); 
+            border: 2px solid rgba(147, 51, 234, 0.7); 
+        }
 
-        canvas { display: block; margin: 0 auto; max-width: 100%; height: auto; background: transparent; }
+        .btn-epic { 
+            background: linear-gradient(135deg, #9333ea 0%, #16a34a 100%); 
+            color: white !important;
+        }
+
+        .img-bienvenida-css {
+            background: url('https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4') center/cover no-repeat;
+            min-height: 140px;
+        }
+
+        .img-menu-css {
+            background: url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m') center/cover no-repeat;
+            min-height: 140px;
+        }
+
+        canvas { 
+            display: block; 
+            margin: 0 auto; 
+            max-width: 100%; 
+            height: auto; 
+            background: transparent;
+        }
     </style>
 </head>
 <body class="espacio-bg w-screen h-screen flex flex-col items-center justify-center text-white">
 
     <div id="pantalla-audio" class="absolute z-30 w-full max-w-xl p-6 rounded-3xl bg-black/95 border-neon text-center mx-4">
         <h1 class="text-2xl font-black text-purple-400 tracking-wider mb-2 neon-glow">ZAARD ARCADE</h1>
-        <button onclick="activarSistemas()" class="btn-epic w-full py-4 rounded-xl font-black text-lg active:scale-95 transition-transform">¡ENTRAR AL JUEGO!</button>
+        <p class="text-sm text-gray-400 mb-6">Sincronizando sistemas táctiles, interfaz gráfica y audio cósmico...</p>
+        <button onclick="activarSistemas()" class="btn-epic w-full py-4 rounded-xl font-black tracking-widest text-lg shadow-lg active:scale-95 transition-transform">
+            ¡ENTRAR AL JUEGO!
+        </button>
     </div>
 
     <div id="pantalla-bienvenida" class="hidden absolute z-20 w-full max-w-xl p-6 rounded-3xl bg-black/95 backdrop-blur-md border-neon text-center mx-4">
-        <div class="w-full rounded-2xl mb-4 border border-purple-500/40 img-bienvenida-css"></div>
+        <div class="w-full rounded-2xl mb-4 border border-purple-500/40 img-bienvenida-css relative">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent"></div>
+        </div>
+
         <h1 class="text-2xl font-black text-purple-400 tracking-wider mb-1 neon-glow">BIENVENIDOS A</h1>
         <h2 class="text-3xl font-black text-white tracking-widest mb-4 border-b border-purple-500/20 pb-3">ZAARD INNOVATION</h2>
-        <button onclick="irAlMenuModos()" class="btn-epic w-full py-3 rounded-xl font-black tracking-widest text-base">CONTINUAR</button>
+        
+        <div class="bg-purple-950/20 border border-purple-500/30 rounded-2xl p-4 text-left text-xs text-gray-300 space-y-2 mb-6">
+            <p><span class="text-green-400 font-bold">🔥 CONTROL:</span> Desliza tu dedo libremente por la pantalla para mover al fénix arriba y abajo.</p>
+            <p><span class="text-green-400 font-bold">📦 META:</span> Atrapa 150 cajas de gas. Tienes 7 oportunidades de escudo.</p>
+        </div>
+
+        <button onclick="irAlMenuModos()" class="btn-epic w-full py-3 rounded-xl font-black tracking-widest text-base active:scale-95 transition-transform">
+            CONTINUAR
+        </button>
     </div>
 
     <div id="menu-modos" class="hidden absolute z-10 w-full max-w-xl p-6 rounded-3xl bg-black/95 backdrop-blur-md border-neon text-center mx-4">
-        <div class="w-full rounded-2xl mb-4 border border-purple-500/40 img-menu-css"></div>
-        <h1 class="text-3xl font-black text-purple-400 tracking-wider mb-1 neon-glow">GOLDEN RUN</h1>
-        <div class="space-y-3 max-w-sm mx-auto">
-            <button onclick="prepararJuego('prueba')" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl font-bold">MODO INVITADO</button>
-            <button onclick="prepararJuego('wallet')" class="w-full border border-purple-500 bg-purple-950/40 p-3 rounded-xl font-bold text-purple-300">CONECTAR BILLETERA</button>
+        <div class="w-full rounded-2xl mb-4 border border-purple-500/40 img-menu-css relative">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent"></div>
         </div>
-        <p id="mensaje-animo" class="mt-4 text-purple-400/80 font-medium italic text-xs"></p>
+
+        <h1 class="text-3xl font-black text-purple-400 tracking-wider mb-1 neon-glow">GOLDEN RUN</h1>
+        <p class="text-[10px] text-gray-400 tracking-widest mb-6">SELECCIONA TU ENTRADA</p>
+
+        <div class="space-y-3 max-w-sm mx-auto">
+            <button onclick="prepararJuego('prueba')" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl font-bold text-gray-300 flex flex-col items-center active:scale-95 transition-transform">
+                <span class="text-green-400 font-black text-sm">MODO INVITADO</span>
+                <span class="text-[10px] font-normal opacity-75">Juega gratis de prueba</span>
+            </button>
+            <button onclick="prepararJuego('wallet')" class="w-full border border-purple-500 bg-purple-950/40 p-3 rounded-xl font-bold text-purple-300 flex flex-col items-center active:scale-95 transition-transform">
+                <span class="text-purple-400 font-black text-sm">CONECTAR BILLETERA</span>
+                <span class="text-[10px] font-normal text-purple-400">Contrato: 0x3468...4d65</span>
+            </button>
+        </div>
+        <p id="mensaje-animo" class="mt-4 text-purple-400/80 font-medium italic text-xs px-2"></p>
     </div>
 
     <div id="contenedor-juego" class="hidden relative w-full h-full flex flex-col items-center justify-between p-4">
-        <div class="w-full max-w-2xl bg-black/80 backdrop-blur-md border-b-2 border-purple-500/80 rounded-b-2xl p-4 flex justify-between items-center z-10">
-            <span id="hud-gas" class="text-2xl font-black text-green-400 neon-glow">0/150</span>
-            <div id="hud-vidas" class="text-lg font-bold text-red-500">⚡⚡⚡⚡⚡⚡⚡</div>
+        
+        <div class="w-full max-w-2xl bg-black/80 backdrop-blur-md border-b-2 border-purple-500/80 rounded-b-2xl p-4 flex justify-between items-center z-10 shadow-lg">
+            <div class="bg-gray-950/90 px-5 py-2 rounded-xl border border-purple-500/40 text-center">
+                <span class="text-[10px] text-gray-400 block font-bold tracking-widest">GAS COLLECTED</span>
+                <span id="hud-gas" class="text-2xl font-black text-green-400 neon-glow">0/150</span>
+            </div>
+            <div class="bg-gray-950/90 px-5 py-2 rounded-xl border border-red-500/40 text-center">
+                <span class="text-[10px] text-gray-400 block font-bold tracking-widest">SHIELD STATUS</span>
+                <div id="hud-vidas" class="text-lg font-bold text-red-500 tracking-wider">⚡⚡⚡⚡⚡⚡⚡</div>
+            </div>
         </div>
-        <canvas id="canvasJuego" width="800" height="480" class="rounded-2xl"></canvas>
+
+        <div class="w-full flex justify-center items-center my-auto">
+            <canvas id="canvasJuego" width="800" height="480" class="rounded-2xl max-h-[65vh] w-full object-contain"></canvas>
+        </div>
+
+        <div class="w-full max-w-2xl bg-black/80 backdrop-blur-md border-t-2 border-purple-500/80 rounded-t-2xl p-3 text-center z-10 shadow-lg">
+            <p class="text-[11px] text-purple-400 font-bold tracking-widest uppercase">
+                DESLIZA EN CUALQUIER LADO PARA MANIOBRAR LA NAVE FÉNIX
+            </p>
+        </div>
     </div>
 
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
     <script>
         const canvas = document.getElementById('canvasJuego');
         const ctx = canvas.getContext('2d');
-        const CONTRATO_ZARD = "0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65";
-        
-        // CIDs de tus activos
-        const imgFenix = new Image(); imgFenix.src = 'https://ipfs.io/ipfs/bafybeihsmtiwinw5w6jcebelg2p6kr64ivuijcmx4dnpuny2m22piqin2y';
-        const imgGas = new Image(); imgGas.src = 'https://ipfs.io/ipfs/bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34';
-        const imgObstaculo = new Image(); imgObstaculo.src = 'https://ipfs.io/ipfs/bafybeiarw4qbftgyh2rzjyw56s4cpjxtlptxtwgasgnu7rovqkvmpjgbgy';
 
-        let audioCtx, juegoActivo = false, fenixY = 200, fenixX = 60, fenixAncho = 75, fenixAlto = 75;
-        let obstaculos = [], cajas = [], totalGasRecolectado = 0, oportunidadesRestantes = 7, velocidadActual = 5, distanciaRecorrida = 0;
+        let audioCtx = null;
+        let musicaLoopId = null;
+        
+        const CONTRATO_ZARD = "0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65";
+        // Destino cambiado a POOL LP
+        const RECAUDADORA = "0x7084D8562532AEA9F9239Cdd63EA289C85E6b0e9";
+
+        const imgFenix = new Image();
+        const imgGas = new Image();
+        const imgObstaculo = new Image();
+
+        imgFenix.src = 'https://ipfs.io/ipfs/bafybeihsmtiwinw5w6jcebelg2p6kr64ivuijcmx4dnpuny2m22piqin2y';
+        imgGas.src = 'https://ipfs.io/ipfs/bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34';
+        imgObstaculo.src = 'https://ipfs.io/ipfs/bafybeiarw4qbftgyh2rzjyw56s4cpjxtlptxtwgasgnu7rovqkvmpjgbgy';
+
+        let juegoActivo = false;
+        let animacionId;
+        
+        let fenixY, fenixX, fenixAncho, fenixAlto;
+        let obstaculos, cajas, particulas;
+        let totalGasRecolectado = 0;
+        let oportunidadesRestantes = 7;
+        let velocidadActual = 5;
+        let distanciaRecorrida = 0;
 
         function activarSistemas() {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             document.getElementById('pantalla-audio').style.display = 'none';
             document.getElementById('pantalla-bienvenida').style.display = 'block';
+            sonarEfecto('gas');
         }
+
+        const mapearMovimientoTactil = (e) => {
+            e.preventDefault();
+            if (!juegoActivo) return;
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const relativeY = ((touch.clientY - rect.top) / rect.height) * canvas.height;
+            fenixY = relativeY - (fenixAlto / 2);
+        };
+
+        canvas.addEventListener('touchstart', (e) => { mapearMovimientoTactil(e); }, { passive: false });
+        canvas.addEventListener('touchmove', mapearMovimientoTactil, { passive: false });
+
+        const frasesAnimo = [
+            "¡No te sobreoperes! Si la racha es mala, respira y analiza.",
+            "¡El fénix aprende de cada impacto, sigue adelante!",
+            "¡Disciplina y consistencia, mantén el vuelo!"
+        ];
 
         function irAlMenuModos() {
             document.getElementById('pantalla-bienvenida').style.display = 'none';
             document.getElementById('menu-modos').style.display = 'block';
         }
 
+        function sonarEfecto(tipo) {
+            if (!audioCtx) return;
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (tipo === 'choque') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.4);
+                    gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+                } else if (tipo === 'gas') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(650, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(950, audioCtx.currentTime + 0.07);
+                    gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.18);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.18);
+                }
+            } catch(e) {}
+        }
+
+        function iniciarMusicaDeFondo() {
+            if (!audioCtx) return;
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                detenerMusicaDeFondo();
+                musicaLoopId = setInterval(() => {
+                    if (!juegoActivo) return;
+                    try {
+                        let osc = audioCtx.createOscillator();
+                        let gain = audioCtx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(92.50, audioCtx.currentTime); 
+                        gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.48);
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.start();
+                        osc.stop(audioCtx.currentTime + 0.5);
+                    } catch(e){}
+                }, 500);
+            } catch(e) {}
+        }
+
+        function detenerMusicaDeFondo() {
+            if (musicaLoopId) {
+                clearInterval(musicaLoopId);
+                musicaLoopId = null;
+            }
+        }
+
         async function prepararJuego(modo) {
-            if (modo === 'wallet') {
-                // Lógica Web3 original
+            if (modo !== 'prueba') {
                 try {
                     const provider = new ethers.providers.Web3Provider(window.ethereum);
                     await provider.send("eth_requestAccounts", []);
-                } catch (e) { alert("Transacción cancelada."); return; }
+                    const signer = provider.getSigner();
+                    // Ejecuta la transferencia al POOL definido en RECAUDADORA
+                    const contrato = new ethers.Contract(CONTRATO_ZARD, ["function transfer(address, uint256) public returns (bool)"], signer);
+                    await (await contrato.transfer(RECAUDADORA, ethers.utils.parseUnits("0.0001", 18))).wait();
+                } catch (e) {
+                    alert("⚠️ Error: Transacción cancelada o fallida.");
+                    return;
+                }
             }
             document.getElementById('menu-modos').style.display = 'none';
             document.getElementById('contenedor-juego').style.display = 'flex';
+            iniciarEngine();
+        }
+
+        function iniciarEngine() {
             juegoActivo = true;
+            totalGasRecolectado = 0;
+            oportunidadesRestantes = 7;
+            velocidadActual = 5;
+            distanciaRecorrida = 0;
+            fenixX = 60;
+            fenixAncho = 75; 
+            fenixAlto = 75;
+            fenixY = (canvas.height / 2) - (fenixAlto / 2);
+            obstaculos = [];
+            cajas = [];
+            particulas = [];
+            actualizarHUD();
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume().then(() => iniciarMusicaDeFondo());
+            } else {
+                iniciarMusicaDeFondo();
+            }
             buclePrincipal();
+        }
+
+        function actualizarHUD() {
+            document.getElementById('hud-gas').innerText = `${totalGasRecolectado}/150`;
+            const hudVidas = document.getElementById('hud-vidas');
+            hudVidas.innerHTML = '';
+            for(let i = 0; i < oportunidadesRestantes; i++) { hudVidas.innerHTML += '⚡'; }
+        }
+
+        function terminarJuego(resultado) {
+            juegoActivo = false;
+            detenerMusicaDeFondo(); 
+            cancelAnimationFrame(animacionId);
+            if (resultado === 'victoria') {
+                alert(`¡VICTORIA ÉPICA!`);
+            } else {
+                alert(`GAME OVER\n\n⚠️ RECOMENDACIÓN:\n"Fatiga de mercado detectada. ¡Toma un respiro y regresa con la mente fría!"`);
+            }
+            document.getElementById('contenedor-juego').style.display = 'none';
+            document.getElementById('menu-modos').style.display = 'block';
+            document.getElementById('mensaje-animo').innerText = frasesAnimo[Math.floor(Math.random() * frasesAnimo.length)];
         }
 
         function buclePrincipal() {
             if (!juegoActivo) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            // Renderizado usando tus CIDs cargados
+            distanciaRecorrida++;
+            velocidadActual = 5 + Math.floor(distanciaRecorrida / 400) * 0.6;
+            if (distanciaRecorrida % 135 === 0) obstaculos.push({ x: canvas.width, y: Math.random() * (canvas.height - 70) + 10, w: 55, h: 55 });
+            if (distanciaRecorrida % 110 === 0) cajas.push({ x: canvas.width, y: Math.random() * (canvas.height - 50) + 10, w: 45, h: 45 });
+            if (fenixY < 0) fenixY = 0;
+            if (fenixY > canvas.height - fenixAlto) fenixY = canvas.height - fenixAlto;
             ctx.drawImage(imgFenix, fenixX, fenixY, fenixAncho, fenixAlto);
-            requestAnimationFrame(buclePrincipal);
+            for (let i = obstaculos.length - 1; i >= 0; i--) {
+                let obs = obstaculos[i]; obs.x -= velocidadActual;
+                ctx.drawImage(imgObstaculo, obs.x, obs.y, obs.w, obs.h);
+                if (fenixX < obs.x + obs.w && fenixX + fenixAncho > obs.x && fenixY < obs.y + obs.h && fenixY + fenixAlto > obs.y) {
+                    sonarEfecto('choque');
+                    oportunidadesRestantes--;
+                    actualizarHUD();
+                    obstaculos.splice(i, 1);
+                    if (oportunidadesRestantes <= 0) { terminarJuego('derrota'); return; }
+                    continue;
+                }
+                if (obs.x < -60) obstaculos.splice(i, 1);
+            }
+            for (let i = cajas.length - 1; i >= 0; i--) {
+                let box = cajas[i]; box.x -= velocidadActual;
+                ctx.drawImage(imgGas, box.x, box.y, box.w, box.h);
+                if (fenixX < box.x + box.w && fenixX + fenixAncho > box.x && fenixY < box.y + box.h && fenixY + fenixAlto > box.y) {
+                    sonarEfecto('gas');
+                    totalGasRecolectado++;
+                    actualizarHUD();
+                    cajas.splice(i, 1);
+                    if (totalGasRecolectado >= 150) { terminarJuego('victoria'); return; }
+                    continue;
+                }
+                if (box.x < -60) cajas.splice(i, 1);
+            }
+            animacionId = requestAnimationFrame(buclePrincipal);
         }
-
-        canvas.addEventListener('touchmove', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            fenixY = ((e.touches[0].clientY - rect.top) / rect.height) * canvas.height - (fenixAlto / 2);
-        }, { passive: false });
     </script>
 </body>
 </html>

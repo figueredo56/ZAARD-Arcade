@@ -7,22 +7,15 @@
     <style>
         body { margin: 0; background: #020006; color: white; font-family: sans-serif; height: 100vh; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         
-        /* Contenedor principal para separar todo */
-        .grid-container { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 40px; /* Más espacio entre cuadros */
-            width: 90%; 
-            max-width: 500px;
-            align-items: center;
-        }
+        /* Pantalla de Bienvenida */
+        #bienvenida { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 200; cursor: pointer; text-align: center; padding: 20px; }
+        .btn-entrar { padding: 20px 40px; border: 2px solid #9333ea; background: transparent; color: #fff; font-size: 1.5rem; cursor: pointer; margin-top: 20px; }
 
-        /* Cuadros más grandes */
+        /* Contenedor del Menú */
+        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; width: 90%; max-width: 500px; align-items: center; }
         .box { width: 110px; height: 110px; border: 3px solid #9333ea; cursor: pointer; background: #000; overflow: hidden; margin: 0 auto; transition: transform 0.2s; }
         .box img { width: 100%; height: 100%; object-fit: cover; }
-        .box:hover { transform: scale(1.1); }
-
-        /* Posición del Token en el medio */
+        
         .center-box { grid-column: span 2; display: flex; justify-content: center; margin: 10px 0; }
         .center-box .box { width: 130px; height: 130px; border-color: #ffd700; box-shadow: 0 0 15px #ffd700; }
 
@@ -31,6 +24,14 @@
 </head>
 <body>
 
+    <!-- PORTADA DE BIENVENIDA -->
+    <div id="bienvenida">
+        <h1 style="color:#9333ea">RETOS ZAARD</h1>
+        <p>¡Gana tus ZAARD! Destruye al enemigo sin que te toque.</p>
+        <button class="btn-entrar" onclick="entrarAlMenu()">ENTRAR</button>
+    </div>
+
+    <!-- HUB CENTRAL -->
     <div class="grid-container">
         <div class="box" onclick="irA('combat')"><img src="CID_COMBAT" alt="Combat"></div>
         <div class="box" onclick="irA('memoria')"><img src="CID_MEMORIA" alt="Memoria"></div>
@@ -46,6 +47,7 @@
     <a id="btn-erp" href="https://figueredo56.github.io/zaard-official/" target="_blank">ERP ZAARD</a>
 
     <script>
+        function entrarAlMenu() { document.getElementById('bienvenida').style.display = 'none'; }
         function irA(carpeta) { window.location.href = `/${carpeta}/index.html`; }
         function irAlToken() { window.open('https://tu-link-de-token.com', '_blank'); }
     </script>

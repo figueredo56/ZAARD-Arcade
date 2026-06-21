@@ -62,6 +62,27 @@
         }
         location.reload();
     }
+    // Sistema de sonido
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playSnd(freq, dur, type = 'sine') {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    let o = audioCtx.createOscillator();
+    let g = audioCtx.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+    // Música de fondo suave
+    let osc = audioCtx.createOscillator();
+    let gain = audioCtx.createGain();
+    osc.type = 'sine'; osc.frequency.value = 110;
+    gain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start();
+
+    new Phaser.Game({
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(); o.stop(audioCtx.currentTime + dur);
+}
 
     function lanzarJuego(esWeb3) {
         document.getElementById('ui-container').remove(); 
@@ -75,6 +96,9 @@
                     cids.forEach((c, i) => this.load.image('c'+i, 'https://ipfs.io/ipfs/'+c));
                     this.load.image('dorso', 'https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m');
                 },
+                card.on('pointerdown', () => {
+    playSnd(400, 0.1, 'triangle'); // <--- Pega esta línea aquí
+    if (this.lock || card.texture.key !== 'dorso') return;
                 create: function() {
                     this.vidas = 10;
                     this.txt = this.add.text(60, 60, 'Oportunidades: 10', { fontSize: '50px', color: '#bc8fef' });

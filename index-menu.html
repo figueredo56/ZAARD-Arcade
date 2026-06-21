@@ -7,33 +7,45 @@
     <style>
         body { margin: 0; background: #020006; color: white; font-family: sans-serif; height: 100vh; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         
-        /* Ajuste de cuadrícula para que los cuadros sean más pequeños */
-        .grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 80%; max-width: 350px; }
-        .box { width: 80px; height: 80px; border: 2px solid #9333ea; cursor: pointer; background: #000; overflow: hidden; margin: 0 auto; }
+        /* Contenedor principal para separar todo */
+        .grid-container { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 40px; /* Más espacio entre cuadros */
+            width: 90%; 
+            max-width: 500px;
+            align-items: center;
+        }
+
+        /* Cuadros más grandes */
+        .box { width: 110px; height: 110px; border: 3px solid #9333ea; cursor: pointer; background: #000; overflow: hidden; margin: 0 auto; transition: transform 0.2s; }
         .box img { width: 100%; height: 100%; object-fit: cover; }
-        
-        /* Botón ERP fijo en la esquina inferior derecha */
-        #btn-erp { position: fixed; bottom: 20px; right: 20px; padding: 10px 20px; background: #16a34a; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; border: 1px solid #fff; }
-        
-        #overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 100; cursor: pointer; }
+        .box:hover { transform: scale(1.1); }
+
+        /* Posición del Token en el medio */
+        .center-box { grid-column: span 2; display: flex; justify-content: center; margin: 10px 0; }
+        .center-box .box { width: 130px; height: 130px; border-color: #ffd700; box-shadow: 0 0 15px #ffd700; }
+
+        #btn-erp { position: fixed; bottom: 20px; right: 20px; padding: 12px 25px; background: #16a34a; color: white; text-decoration: none; border-radius: 10px; font-weight: bold; border: 2px solid #fff; }
     </style>
 </head>
 <body>
 
-    <div id="overlay" onclick="iniciarExperiencia()"><h1>ENTRAR A ZAARD</h1></div>
-
     <div class="grid-container">
-        <div class="box" onclick="irA('combat')"><img src="CID_1" alt="Combat"></div>
-        <div class="box" onclick="irA('memoria')"><img src="CID_2" alt="Memoria"></div>
-        <div class="box" onclick="irAlToken()"><img src="CID_TOKEN" alt="ZARD"></div>
-        <div class="box" onclick="irA('lucky')"><img src="CID_3" alt="Lucky"></div>
+        <div class="box" onclick="irA('combat')"><img src="CID_COMBAT" alt="Combat"></div>
+        <div class="box" onclick="irA('memoria')"><img src="CID_MEMORIA" alt="Memoria"></div>
+        
+        <div class="center-box">
+            <div class="box" onclick="irAlToken()"><img src="CID_TOKEN" alt="ZARD"></div>
+        </div>
+
+        <div class="box" onclick="irA('lucky')"><img src="CID_LUCKY" alt="Lucky"></div>
+        <div class="box" onclick="irA('juego4')"><img src="CID_JUEGO4" alt="Juego 4"></div>
     </div>
 
-    <!-- Botón ERP -->
     <a id="btn-erp" href="https://figueredo56.github.io/zaard-official/" target="_blank">ERP ZAARD</a>
 
     <script>
-        function iniciarExperiencia() { document.getElementById('overlay').style.display = 'none'; }
         function irA(carpeta) { window.location.href = `/${carpeta}/index.html`; }
         function irAlToken() { window.open('https://tu-link-de-token.com', '_blank'); }
     </script>

@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZAARD COMBAT PRO</title>
-    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
     <style>
         body { margin: 0; background: #000; color: #fff; font-family: sans-serif; overflow: hidden; touch-action: none; }
         .screen { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; background: rgba(0,0,0,0.9); }
         .btn { padding: 15px 30px; margin: 10px; border: 2px solid #9333ea; background: #000; color: #fff; cursor: pointer; font-weight: bold; }
-        #canvasJuego { display: none; background: #000; }
-        .hud { position: absolute; top: 10px; left: 10px; z-index: 5; font-size: 1.2rem; }
+        #canvasJuego { display: none; }
+        .hud { position: absolute; top: 10px; left: 10px; z-index: 5; font-size: 1.2rem; pointer-events: none; }
     </style>
 </head>
 <body>
@@ -21,8 +20,8 @@
         <button class="btn" onclick="irAlMenu()">ENTRAR</button>
     </div>
 
-    <div id="menu" class="screen" style="display:none; background: url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m') center/cover;">
-        <h2 style="background:rgba(0,0,0,0.7); padding:10px;">SELECCIONA MODO</h2>
+    <div id="menu" class="screen" style="display:none;">
+        <h2>SELECCIONA MODO</h2>
         <button class="btn" onclick="iniciarJuego(false)">INVITADO (GRATIS)</button>
         <button class="btn" onclick="iniciarJuego(true)">CONECTAR WALLET (APUESTA)</button>
     </div>
@@ -33,27 +32,33 @@
     <script>
         const canvas = document.getElementById('canvasJuego');
         const ctx = canvas.getContext('2d');
-        const CID_ASSET = 'https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m';
-        const imgAsset = new Image(); imgAsset.src = CID_ASSET;
+        const imgAsset = new Image(); imgAsset.src = 'https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m';
+        
+        // Sonidos (Usamos el contexto de audio del navegador)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(freq, type, duration) {
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = type; osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + duration);
+        }
 
-        let nave = { x: 0, y: 0, w: 50, h: 50 }, enemigos = [], balas = [], puntos = 0, timeLeft = 60, juegoActivo = false;
+        let nave = { x: 0, y: 0, w: 50, h: 50 }, enemigos = [], balas = [], estrellas = [], puntos = 0, timeLeft = 60, juegoActivo = false;
+
+        // Generar estrellas de fondo
+        for(let i=0; i<100; i++) estrellas.push({x: Math.random()*window.innerWidth, y: Math.random()*window.innerHeight, r: Math.random()*2});
 
         function irAlMenu() { document.getElementById('bienvenida').style.display = 'none'; document.getElementById('menu').style.display = 'flex'; }
 
-        async function iniciarJuego(apuesta) {
-            if(apuesta) {
-                try { await window.ethereum.request({ method: 'eth_requestAccounts' }); } 
-                catch(e) { alert("Conecta tu wallet para apostar"); return; }
-            }
+        function iniciarJuego(apuesta) {
             document.getElementById('menu').style.display = 'none';
             canvas.style.display = 'block';
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            nave.x = canvas.width/2 - 25; nave.y = canvas.height - 100;
             juegoActivo = true;
-            let crono = setInterval(() => { 
-                if(timeLeft > 0) timeLeft--; 
-                else { clearInterval(crono); juegoActivo = false; alert("FIN: Destruidos " + puntos + "/300"); location.reload(); }
-            }, 1000);
+            setInterval(() => { if(juegoActivo && timeLeft > 0) timeLeft--; }, 1000);
             bucle();
         }
 
@@ -61,33 +66,32 @@
 
         function bucle() {
             if(!juegoActivo) return;
-            ctx.clearRect(0,0, canvas.width, canvas.height);
+            ctx.fillStyle = '#000'; ctx.fillRect(0,0, canvas.width, canvas.height);
             
-            // Nave
+            // Dibujar estrellas
+            ctx.fillStyle = '#fff';
+            estrellas.forEach(s => { ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill(); s.y += 0.5; if(s.y > canvas.height) s.y = 0; });
+
             ctx.drawImage(imgAsset, nave.x, nave.y, nave.w, nave.h);
 
-            // Enemigos
             if(Math.random() < 0.08) enemigos.push({x: Math.random()*(canvas.width-50), y: -50});
             enemigos.forEach((e, i) => {
                 e.y += 6;
                 ctx.drawImage(imgAsset, e.x, e.y, 40, 40);
-                // Colisión Nave-Enemigo (Game Over)
-                if(e.x < nave.x + 40 && e.x + 40 > nave.x && e.y < nave.y + 40 && e.y + 40 > nave.y) {
-                    alert("¡TE TOCARON! Fin del juego."); location.reload();
-                }
+                if(e.x < nave.x + 40 && e.x + 40 > nave.x && e.y < nave.y + 40 && e.y + 40 > nave.y) location.reload();
                 if(e.y > canvas.height) enemigos.splice(i, 1);
             });
 
-            // Disparos
-            if(Math.random() < 0.3) balas.push({x: nave.x + 22, y: nave.y});
+            if(Math.random() < 0.3) { balas.push({x: nave.x + 22, y: nave.y}); playSound(100, 'square', 0.1); }
             balas.forEach((b, i) => {
                 b.y -= 15;
                 ctx.fillStyle = '#ff0'; ctx.fillRect(b.x, b.y, 4, 10);
                 enemigos.forEach((e, ei) => {
                     if(b.x > e.x && b.x < e.x+40 && b.y > e.y && b.y < e.y+40) {
-                        enemigos.splice(ei, 1); balas.splice(i, 1);
-                        puntos++; document.getElementById('score').innerText = puntos;
-                        if(puntos >= 300) { alert("¡VICTORIA ÉPICA!"); location.reload(); }
+                        enemigos.splice(ei, 1); balas.splice(i, 1); puntos++; 
+                        document.getElementById('score').innerText = puntos;
+                        playSound(800, 'sine', 0.2); // Sonido de impacto
+                        if(puntos >= 300) { alert("¡VICTORIA!"); location.reload(); }
                     }
                 });
             });

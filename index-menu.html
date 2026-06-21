@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZAARD INNOVATION - ARCADE</title>
+    
+    <!-- Meta tags para compartir link con imagen -->
+    <meta property="og:title" content="ZAARD ARCADE HUB">
+    <meta property="og:description" content="Entra al ecosistema de juegos ZAARD y gana recompensas.">
+    <meta property="og:image" content="TU_CID_DE_IMAGEN_PRINCIPAL_AQUI">
+    <meta property="og:url" content="https://figueredo56.github.io/ZAARD-Arcade/">
+
+    <style>
+        body { margin: 0; background: #020006; color: white; font-family: 'Orbitron', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+        .grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 90%; max-width: 400px; }
+        .box { width: 100%; aspect-ratio: 1; border: 2px solid #9333ea; cursor: pointer; background: #000; overflow: hidden; }
+        .box img { width: 100%; height: 100%; object-fit: cover; }
+        .center-box { grid-column: span 2; display: flex; justify-content: center; margin: 10px 0; }
+        .center-box .box { width: 45%; border-color: #16a34a; }
+        #overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); display: flex; align-items: center; justify-content: center; z-index: 100; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div id="overlay" onclick="iniciarExperiencia()">
+        <h1>ENTRAR A ZAARD</h1>
+    </div>
+
+    <div class="grid-container">
+        <!-- 2 ARRIBA -->
+        <div class="box" onclick="irA('combat')"><img src="CID_COMBAT" alt="Combat"></div>
+        <div class="box" onclick="irA('memoria')"><img src="CID_MEMORIA" alt="Memoria"></div>
+        
+        <!-- CENTRO (TOKEN) -->
+        <div class="center-box">
+            <div class="box" onclick="irAlToken()"><img src="CID_TOKEN" alt="ZARD"></div>
+        </div>
+
+        <!-- 2 ABAJO -->
+        <div class="box" onclick="irA('lucky')"><img src="CID_LUCKY" alt="Lucky"></div>
+        <div class="box" onclick="irA('juego4')"><img src="CID_JUEGO4" alt="Juego 4"></div>
+    </div>
+
+    <script>
+        const musica = new Audio('URL_MUSICA');
+        musica.loop = true;
+
+        function iniciarExperiencia() {
+            document.getElementById('overlay').style.display = 'none';
+            musica.play();
+        }
+
+        function irA(carpeta) { window.location.href = `/${carpeta}/index.html`; }
+        function irAlToken() { window.open('https://tu-link-de-token.com', '_blank'); }
+    </script>
+</body>
+</html>

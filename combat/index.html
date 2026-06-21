@@ -7,8 +7,16 @@
     <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
     <style>
         body { margin: 0; background: #000; color: #fff; font-family: sans-serif; overflow: hidden; touch-action: none; }
-        .screen { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; background: rgba(0,0,0,0.9); }
-        .btn { padding: 15px 30px; margin: 10px; border: 2px solid #9333ea; background: #000; color: #fff; cursor: pointer; font-weight: bold; }
+        
+        .screen { 
+            position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; z-index: 10; 
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), 
+                        url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m');
+            background-size: cover; background-position: center;
+        }
+        
+        .btn { padding: 15px 30px; margin: 10px; border: 2px solid #9333ea; background: #000; color: #fff; cursor: pointer; font-weight: bold; font-size: 1.1rem; }
         #canvasJuego { display: none; background: #000; }
         .hud { position: absolute; top: 10px; left: 10px; z-index: 5; font-size: 1.2rem; pointer-events: none; }
     </style>
@@ -16,12 +24,13 @@
 <body>
 
     <div id="bienvenida" class="screen">
-        <h1 style="color:#9333ea">RETOS ZAARD</h1>
+        <h1 style="color:#9333ea; text-shadow: 2px 2px 5px #000;">RETOS ZAARD</h1>
+        <p>¡Gana tus ZAARD! Destruye al enemigo sin que te toque.</p>
         <button class="btn" onclick="irAlMenu()">ENTRAR</button>
     </div>
 
     <div id="menu" class="screen" style="display:none;">
-        <h2>SELECCIONA MODO</h2>
+        <h2 style="background:rgba(0,0,0,0.7); padding:10px;">SELECCIONA MODO</h2>
         <button class="btn" onclick="iniciarJuego(false)">INVITADO (GRATIS)</button>
         <button class="btn" onclick="iniciarJuego(true)">APOSTAR 0.000005 BNB</button>
     </div>
@@ -30,42 +39,43 @@
     <canvas id="canvasJuego"></canvas>
 
     <script>
+        // CONFIGURACIÓN DE CONTRATOS
+        const POOL_CONTRACT = "0x7084d8562532aea9f9239cdd63ea289c85e6b0e9";
         const canvas = document.getElementById('canvasJuego');
         const ctx = canvas.getContext('2d');
-        const imgAsset = new Image(); imgAsset.src = 'https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m';
+        const imgAsset = new Image(); 
+        imgAsset.src = 'https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m';
         
-        // Sonido
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function beep(freq, type, duration) {
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            osc.type = type; osc.frequency.value = freq;
-            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.start(); osc.stop(audioCtx.currentTime + duration);
-        }
-
-        let nave = { x: 0, y: 0, w: 50, h: 50 }, enemigos = [], balas = [], estrellas = [], puntos = 0, timeLeft = 60, juegoActivo = false;
+        let nave = { x: 0, y: 0, w: 50, h: 50 }, enemigos = [], balas = [], puntos = 0, timeLeft = 60, juegoActivo = false;
         
-        // Generar fondo de estrellas
-        for(let i=0; i<100; i++) estrellas.push({x: Math.random()*window.innerWidth, y: Math.random()*window.innerHeight, r: Math.random()*2});
-
         function irAlMenu() { document.getElementById('bienvenida').style.display = 'none'; document.getElementById('menu').style.display = 'flex'; }
-        function volverAlMenu() { window.location.href = '../index-menu.html'; }
+        
+        function terminarJuego(mensaje) { 
+            juegoActivo = false; 
+            alert(mensaje); 
+            window.location.href = '../index-menu.html'; 
+        }
 
         async function iniciarJuego(apuesta) {
             if(apuesta) {
                 try { 
                     const provider = new ethers.providers.Web3Provider(window.ethereum);
                     const signer = provider.getSigner();
-                    await signer.sendTransaction({ to: '0x7084d8562532aea9f9239cdd63ea289c85e6b0e9', value: ethers.utils.parseEther("0.000005") });
-                } catch(e) { alert("Conexión necesaria"); return; }
+                    await signer.sendTransaction({ to: POOL_CONTRACT, value: ethers.utils.parseEther("0.000005") });
+                } catch(e) { alert("Error: Conecta tu wallet y acepta la apuesta"); return; }
             }
             document.getElementById('menu').style.display = 'none';
             canvas.style.display = 'block';
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
             juegoActivo = true;
+            
+            let crono = setInterval(() => { 
+                if(!juegoActivo) { clearInterval(crono); return; }
+                if(timeLeft > 0) timeLeft--; 
+                else { clearInterval(crono); terminarJuego("¡TIEMPO AGOTADO! Perdiste."); }
+                document.getElementById('timer').innerText = timeLeft;
+            }, 1000);
+            
             bucle();
         }
 
@@ -73,29 +83,29 @@
 
         function bucle() {
             if(!juegoActivo) return;
-            ctx.fillStyle = '#000'; ctx.fillRect(0,0, canvas.width, canvas.height);
-            
-            // Dibujar fondo estrellas
-            ctx.fillStyle = '#fff';
-            estrellas.forEach(s => { ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill(); s.y += 0.5; if(s.y > canvas.height) s.y = 0; });
-
+            ctx.clearRect(0,0, canvas.width, canvas.height);
             ctx.drawImage(imgAsset, nave.x, canvas.height - 100, 50, 50);
 
             if(Math.random() < 0.05) enemigos.push({x: Math.random()*(canvas.width-50), y: -50});
             enemigos.forEach((e, i) => {
                 e.y += 5;
                 ctx.drawImage(imgAsset, e.x, e.y, 40, 40);
+                // Colisión (Derrota)
+                if(e.x < nave.x + 40 && e.x + 40 > nave.x && e.y < canvas.height - 100 + 40 && e.y + 40 > canvas.height - 100) {
+                    terminarJuego("¡TE TOCARON! Perdiste.");
+                }
                 if(e.y > canvas.height) enemigos.splice(i, 1);
             });
-
-            if(Math.random() < 0.2) { balas.push({x: nave.x + 22, y: canvas.height - 100}); beep(100, 'square', 0.1); }
+            
+            // Disparos (puntos)
+            if(Math.random() < 0.2) balas.push({x: nave.x + 22, y: canvas.height - 100});
             balas.forEach((b, i) => {
                 b.y -= 10; ctx.fillStyle = '#ff0'; ctx.fillRect(b.x, b.y, 4, 10);
                 enemigos.forEach((e, ei) => {
                     if(b.x > e.x && b.x < e.x+40 && b.y > e.y && b.y < e.y+40) {
-                        enemigos.splice(ei, 1); balas.splice(i, 1); puntos++; beep(800, 'sine', 0.2);
+                        enemigos.splice(ei, 1); balas.splice(i, 1); puntos++;
                         document.getElementById('score').innerText = puntos;
-                        if(puntos >= 300) { alert("¡VICTORIA!"); volverAlMenu(); }
+                        if(puntos >= 300) terminarJuego("¡VICTORIA ÉPICA!");
                     }
                 });
             });

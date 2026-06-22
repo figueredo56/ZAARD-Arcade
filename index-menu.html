@@ -34,42 +34,44 @@
         }
         .btn-entrar:hover { transform: scale(1.05); box-shadow: 0 0 30px #d946ef; }
 
-        /* EFECTO TITILEO */
-        @keyframes titilar {
-            0%, 100% { box-shadow: 0 0 10px #00ff00, 0 0 20px #d946ef; }
-            50% { box-shadow: 0 0 25px #00ff00, 0 0 45px #d946ef; }
+        /* EFECTO PALPITANTE PARA TODOS */
+        @keyframes palpitar {
+            0%, 100% { border-color: #00ff00; box-shadow: 0 0 10px #00ff00; }
+            50% { border-color: #d946ef; box-shadow: 0 0 15px #d946ef; }
         }
 
-        /* BOTONES JUEGOS */
+        /* BOTONES JUEGOS Y WEB - ESTILO UNIFICADO */
         .btn-juego { 
             position: absolute; display: flex; align-items: center; justify-content: center;
-            background: rgba(0, 0, 0, 0.4); border: 2px solid #00ff00; color: #00ff00;
-            font-weight: bold; font-size: 0.7rem; cursor: pointer; border-radius: 10px;
+            background: rgba(0, 0, 0, 0.4); 
+            border: 3px solid #00ff00; 
+            color: #00ff00;
+            font-weight: bold; font-size: 0.7rem; cursor: pointer; 
+            border-radius: 12px;
             text-align: center; text-shadow: 1px 1px 2px black;
-            box-shadow: 0 0 5px #00ff00;
+            animation: palpitar 2s infinite;
         }
 
-        /* POSICIONES ORIGINALES MANTENIDAS */
         #btn-memoria { top: 44%; left: 10%; width: 28%; height: 7%; }
         #btn-lucky { top: 57%; left: 10%; width: 28%; height: 7%; }
         #btn-battle { top: 70%; left: 10%; width: 28%; height: 7%; }
         #btn-runs { top: 83%; left: 10%; width: 28%; height: 7%; }
         #btn-web { top: 32%; right: 18%; width: 15%; height: 5%; }
         
-        /* BOTÓN TOKEN: TAMAÑO AJUSTADO, CON PALABRA Y TITILEO */
+        /* BOTÓN TOKEN FINAL: TAMAÑO Y PALPADEADO EXACTO */
         #btn-token { 
             position: absolute; 
-            top: 45.5%; right: 4.5%; 
-            width: 25%; height: 16%; 
+            top: 45%; right: 3.5%; 
+            width: 27%; height: 18%; 
             background: url('https://ipfs.io/ipfs/bafybeiggz26x26hncisti5s5y74ciuk4yuymtczhsbwdufoql2gidl57mu') no-repeat center center;
             background-size: contain;
-            border: 3px solid #00ff00;
+            border: 5px solid #00ff00;
             border-radius: 50%;
             cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             color: #00ff00; font-weight: bold; font-size: 1rem;
             text-shadow: 1px 1px 3px black;
-            animation: titilar 2s infinite;
+            animation: palpitar 1.5s infinite;
         }
     </style>
 </head>

@@ -9,7 +9,6 @@
         
         #fondo { 
             width: 100%; height: 100%; 
-            /* CID ACTUALIZADO */
             background: url('https://ipfs.io/ipfs/bafybeihv54ue4guak6d3jaxtelpd7tghkflbqbhyw32fr7g6rsozanrf44') no-repeat center center; 
             background-size: contain;
             position: relative;
@@ -53,8 +52,15 @@
         #btn-lucky { top: 57%; left: 10%; width: 28%; height: 7%; }
         #btn-battle { top: 70%; left: 10%; width: 28%; height: 7%; }
         #btn-runs { top: 83%; left: 10%; width: 28%; height: 7%; }
-        #btn-token { top: 48%; right: 4%; width: 18%; height: 10%; border-radius: 50%; border: 2px solid #00ff00; }
         #btn-web { top: 32%; right: 18%; width: 15%; height: 5%; }
+        
+        /* BOTÓN TOKEN ACTUALIZADO CON NUEVO CID Y TAMAÑO */
+        #btn-token { 
+            position: absolute; top: 46%; right: 2%; width: 22%; height: 14%; 
+            background: url('https://ipfs.io/ipfs/bafybeiggz26x26hncisti5s5y74ciuk4yuymtczhsbwdufoql2gidl57mu') no-repeat center center;
+            background-size: cover;
+            cursor: pointer; border-radius: 50%;
+        }
     </style>
 </head>
 <body>
@@ -71,7 +77,8 @@
         <div id="btn-battle" class="btn-juego" onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/combat/'">BATTLE</div>
         <div id="btn-runs" class="btn-juego" onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index.html'">RUNS</div>
         
-        <div id="btn-token" class="btn-juego" onclick="window.open('https://app.binance.com/uni-qr/web3-token-details?tokenCA=0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65&binanceChainId=56&chain=bsc', '_blank')">TOKEN</div>
+        <div id="btn-token" onclick="window.open('https://app.binance.com/uni-qr/web3-token-details?tokenCA=0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65&binanceChainId=56&chain=bsc', '_blank')"></div>
+        
         <div id="btn-web" class="btn-juego" onclick="window.open('https://figueredo56.github.io/zaard-official/', '_blank')">WEB</div>
     </div>
 

@@ -34,30 +34,42 @@
         }
         .btn-entrar:hover { transform: scale(1.05); box-shadow: 0 0 30px #d946ef; }
 
-        /* BOTONES DE JUEGOS */
-        .btn-juego { 
-            position: absolute; display: flex; align-items: center; justify-content: center;
-            background: rgba(0, 0, 0, 0.3); border: 2px solid #00ff00; color: #00ff00;
-            font-weight: bold; font-size: 0.7rem; cursor: pointer; border-radius: 10px;
-            text-align: center; text-shadow: 1px 1px 2px black;
+        /* EFECTO TITILEO */
+        @keyframes titilar {
+            0%, 100% { box-shadow: 0 0 10px #00ff00, 0 0 20px #d946ef; }
+            50% { box-shadow: 0 0 25px #00ff00, 0 0 45px #d946ef; }
         }
 
+        /* BOTONES JUEGOS */
+        .btn-juego { 
+            position: absolute; display: flex; align-items: center; justify-content: center;
+            background: rgba(0, 0, 0, 0.4); border: 2px solid #00ff00; color: #00ff00;
+            font-weight: bold; font-size: 0.7rem; cursor: pointer; border-radius: 10px;
+            text-align: center; text-shadow: 1px 1px 2px black;
+            box-shadow: 0 0 5px #00ff00;
+        }
+
+        /* POSICIONES ORIGINALES MANTENIDAS */
         #btn-memoria { top: 44%; left: 10%; width: 28%; height: 7%; }
         #btn-lucky { top: 57%; left: 10%; width: 28%; height: 7%; }
         #btn-battle { top: 70%; left: 10%; width: 28%; height: 7%; }
         #btn-runs { top: 83%; left: 10%; width: 28%; height: 7%; }
         #btn-web { top: 32%; right: 18%; width: 15%; height: 5%; }
         
-        /* BOTÓN TOKEN: AJUSTADO PARA COMPAGINAR EXACTAMENTE CON EL FONDO */
+        /* BOTÓN TOKEN: TAMAÑO AJUSTADO, CON PALABRA Y TITILEO */
         #btn-token { 
             position: absolute; 
-            top: 47.5%; right: 4.8%; 
-            width: 17%; height: 11%; 
+            top: 45.5%; right: 4.5%; 
+            width: 25%; height: 16%; 
             background: url('https://ipfs.io/ipfs/bafybeiggz26x26hncisti5s5y74ciuk4yuymtczhsbwdufoql2gidl57mu') no-repeat center center;
             background-size: contain;
-            cursor: pointer;
-            border: none;
+            border: 3px solid #00ff00;
             border-radius: 50%;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            color: #00ff00; font-weight: bold; font-size: 1rem;
+            text-shadow: 1px 1px 3px black;
+            animation: titilar 2s infinite;
         }
     </style>
 </head>
@@ -75,8 +87,7 @@
         <div id="btn-battle" class="btn-juego" onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/combat/'">BATTLE</div>
         <div id="btn-runs" class="btn-juego" onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index.html'">RUNS</div>
         
-        <!-- TOKEN: Tamaño y posición optimizados para tapar el círculo -->
-        <div id="btn-token" onclick="window.open('https://app.binance.com/uni-qr/web3-token-details?tokenCA=0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65&binanceChainId=56&chain=bsc', '_blank')"></div>
+        <div id="btn-token" onclick="window.open('https://app.binance.com/uni-qr/web3-token-details?tokenCA=0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65&binanceChainId=56&chain=bsc', '_blank')">TOKEN</div>
         
         <div id="btn-web" class="btn-juego" onclick="window.open('https://figueredo56.github.io/zaard-official/', '_blank')">WEB</div>
     </div>

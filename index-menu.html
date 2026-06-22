@@ -14,45 +14,52 @@
             position: relative;
         }
 
-        /* BIENVENIDA MORADO NEÓN */
+        /* BIENVENIDA NIVEL PROFESIONAL */
         #bienvenida { 
             position: fixed; top:0; left:0; width:100%; height:100%; 
-            background: rgba(0,0,0,0.5);
+            background: radial-gradient(circle, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.8) 100%);
             display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; 
-            text-align: center; color: #d946ef; padding: 20px;
+            text-align: center; color: #fff; padding: 20px;
         }
-        #bienvenida h1 { text-shadow: 0 0 10px #d946ef, 0 0 20px #d946ef; margin-bottom: 10px; }
-        #bienvenida p { text-shadow: 0 0 5px #000; margin-bottom: 30px; font-size: 1.2rem; font-weight: bold; color: white; }
+        #bienvenida h1 { 
+            font-size: 2.2rem; color: #fff; text-transform: uppercase;
+            text-shadow: 0 0 10px #d946ef, 0 0 20px #d946ef, 0 0 30px #d946ef; 
+            margin-bottom: 15px; 
+        }
+        #bienvenida p { 
+            font-size: 1.2rem; color: #e0e0e0; margin-bottom: 40px; 
+            text-shadow: 1px 1px 2px #000;
+        }
         .btn-entrar { 
-            padding: 15px 40px; border: 2px solid #d946ef; background: rgba(0,0,0,0.3); color: #d946ef; 
-            font-size: 1.3rem; cursor: pointer; border-radius: 10px; font-weight: bold;
-            text-shadow: 0 0 5px #d946ef;
+            padding: 18px 50px; 
+            background: linear-gradient(45deg, #d946ef, #8b5cf6); 
+            border: none; color: white; 
+            font-size: 1.5rem; cursor: pointer; border-radius: 50px; font-weight: bold;
+            box-shadow: 0 0 20px #d946ef; transition: 0.3s;
         }
+        .btn-entrar:hover { transform: scale(1.05); box-shadow: 0 0 30px #d946ef; }
 
-        /* BOTONES DE JUEGOS */
+        /* BOTONES DE JUEGOS (TU DISEÑO QUE QUEDÓ FINO) */
         .btn-juego { 
             position: absolute; display: flex; align-items: center; justify-content: center;
-            background: rgba(0, 0, 0, 0.4); border: 2px solid #00ff00; color: #00ff00;
-            font-weight: bold; font-size: 0.8rem; cursor: pointer; border-radius: 8px;
-            text-align: center; padding: 5px; text-shadow: 1px 1px 2px black;
+            background: rgba(0, 0, 0, 0.3); border: 2px solid #00ff00; color: #00ff00;
+            font-weight: bold; font-size: 0.7rem; cursor: pointer; border-radius: 10px;
+            text-align: center; text-shadow: 1px 1px 2px black;
         }
 
-        /* POSICIONES AJUSTADAS FINAS */
-        #btn-memoria { top: 43%; left: 10%; width: 30%; height: 8%; }
-        #btn-lucky { top: 56%; left: 10%; width: 30%; height: 8%; }
-        #btn-battle { top: 69%; left: 10%; width: 30%; height: 8%; }
-        #btn-runs { top: 82%; left: 10%; width: 30%; height: 8%; }
-        
-        /* TOKEN ajustado más a la derecha (right: 2%) */
-        #btn-token { top: 46%; right: 2%; width: 20%; height: 12%; border-radius: 50%; }
-        #btn-web { top: 22%; right: 15%; width: 20%; height: 6%; }
+        #btn-memoria { top: 44%; left: 10%; width: 28%; height: 7%; }
+        #btn-lucky { top: 57%; left: 10%; width: 28%; height: 7%; }
+        #btn-battle { top: 70%; left: 10%; width: 28%; height: 7%; }
+        #btn-runs { top: 83%; left: 10%; width: 28%; height: 7%; }
+        #btn-token { top: 48%; right: 4%; width: 18%; height: 10%; border-radius: 50%; border: 2px solid #00ff00; }
+        #btn-web { top: 32%; right: 18%; width: 15%; height: 5%; }
     </style>
 </head>
 <body>
 
     <div id="bienvenida">
         <h1>Bienvenidos a ZAARD ARCADE</h1>
-        <p>Pon a prueba tus habilidades y gana recompensas</p>
+        <p>Ecosistema de juegos y recompensas</p>
         <button class="btn-entrar" onclick="document.getElementById('bienvenida').style.display='none'">ENTRAR</button>
     </div>
 

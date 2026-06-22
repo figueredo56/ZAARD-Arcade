@@ -5,47 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZAARD ARCADE - HUB</title>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; font-family: sans-serif; }
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; }
         
-        /* Fondo principal */
+        /* Contenedor principal que mantiene la imagen ajustada */
         #fondo { 
             width: 100%; height: 100%; 
             background: url('https://ipfs.io/ipfs/bafybeibh72yyt44wdubhwzihjnagspobzprpmqi6kfi66a6b4di2rjurre') no-repeat center center; 
-            background-size: cover;
+            background-size: contain; /* Cambiado a contain para que no se corte */
+            position: relative;
         }
 
         /* Bienvenida */
         #bienvenida { 
             position: fixed; top:0; left:0; width:100%; height:100%; 
-            background: url('https://ipfs.io/ipfs/bafybeibh72yyt44wdubhwzihjnagspobzprpmqi6kfi66a6b4di2rjurre') no-repeat center center;
-            background-size: cover;
+            background: rgba(0,0,0,0.85);
             display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; 
+            text-align: center; color: white; padding: 20px;
         }
-        .btn-entrar { padding: 20px 50px; border: 3px solid #ffd700; background: rgba(0,0,0,0.6); color: #fff; font-size: 1.5rem; cursor: pointer; border-radius: 10px; }
+        .btn-entrar { 
+            padding: 15px 30px; border: 2px solid #00d4ff; background: transparent; color: #fff; 
+            font-size: 1.2rem; cursor: pointer; border-radius: 10px;
+        }
 
-        /* Botones sobre la imagen */
-        .btn-juego { position: absolute; width: 250px; height: 120px; background: rgba(255,255,255,0.05); cursor: pointer; border: 1px solid rgba(255,255,255,0.2); }
-        
-        /* Posiciones ajustadas para tu imagen */
-        #btn-memoria { top: 32%; left: 10%; }
-        #btn-lucky { top: 55%; left: 10%; }
-        #btn-combat { top: 78%; left: 10%; }
-        #btn-token { top: 45%; right: 10%; width: 150px; height: 150px; border-radius: 50%; }
-        #btn-web { bottom: 5%; right: 5%; width: 150px; height: 60px; }
+        /* Botones ajustados por porcentajes */
+        .btn-juego { 
+            position: absolute; display: flex; align-items: center; justify-content: center;
+            background: rgba(0, 212, 255, 0.15); border: 2px solid #00d4ff; color: white;
+            font-weight: bold; font-size: 0.7rem; cursor: pointer; border-radius: 8px;
+            text-align: center; padding: 5px;
+        }
+
+        /* POSICIONES (Ajusta estos porcentajes si se mueven) */
+        #btn-memoria { top: 30%; left: 8%; width: 35%; height: 12%; }
+        #btn-lucky { top: 45%; left: 8%; width: 35%; height: 12%; }
+        #btn-combat { top: 60%; left: 8%; width: 35%; height: 12%; }
+        #btn-token { top: 35%; right: 8%; width: 25%; height: 15%; border-radius: 50%; }
+        #btn-web { bottom: 5%; right: 5%; width: 20%; height: 5%; }
     </style>
 </head>
 <body>
 
     <div id="bienvenida">
-        <button class="btn-entrar" onclick="document.getElementById('bienvenida').style.display='none'">ENTRAR A ZAARD</button>
+        <h1>Bienvenidos a ZAARD ARCADE</h1>
+        <p>Pon a prueba tus habilidades y gana recompensas</p>
+        <button class="btn-entrar" onclick="document.getElementById('bienvenida').style.display='none'">ENTRAR</button>
     </div>
 
     <div id="fondo">
-        <div id="btn-memoria" class="btn-juego" onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index-memoria.html'"></div>
-        <div id="btn-lucky" class="btn-juego" onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index-lucky.html'"></div>
-        <div id="btn-combat" class="btn-juego" onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/combat/'"></div>
-        <div id="btn-token" class="btn-juego" onclick="window.open('https://app.binance.com/uni-qr/web3-token-details?tokenCA=0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65&binanceChainId=56&chain=bsc', '_blank')"></div>
-        <div id="btn-web" class="btn-juego" onclick="window.open('https://figueredo56.github.io/zaard-official/', '_blank')"></div>
+        <div id="btn-memoria" class="btn-juego" onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index-memoria.html'">MEMORIA</div>
+        <div id="btn-lucky" class="btn-juego" onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index-lucky.html'">LUCKY</div>
+        <div id="btn-combat" class="btn-juego" onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/combat/'">BATTLE</div>
+        <div id="btn-token" class="btn-juego" onclick="window.open('https://app.binance.com/uni-qr/web3-token-details?tokenCA=0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65&binanceChainId=56&chain=bsc', '_blank')">TOKEN</div>
+        <div id="btn-web" class="btn-juego" onclick="window.open('https://figueredo56.github.io/zaard-official/', '_blank')">WEB</div>
     </div>
 
 </body>

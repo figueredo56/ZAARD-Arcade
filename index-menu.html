@@ -17,15 +17,21 @@
         #bienvenida { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 200; cursor: pointer; text-align: center; padding: 20px; }
         .btn-entrar { padding: 20px 40px; border: 2px solid #9333ea; background: transparent; color: #fff; font-size: 1.5rem; cursor: pointer; margin-top: 20px; }
 
-        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; width: 90%; max-width: 500px; align-items: center; }
+        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; width: 90%; max-width: 500px; align-items: center; margin-top: -50px; }
         .box { width: 110px; height: 110px; border: 3px solid #9333ea; cursor: pointer; background: #000; overflow: hidden; margin: 0 auto; transition: transform 0.2s; }
         .box img { width: 100%; height: 100%; object-fit: cover; }
         
         .center-box { grid-column: span 2; display: flex; justify-content: center; margin: 10px 0; }
         .center-box .box { width: 130px; height: 130px; border-color: #ffd700; box-shadow: 0 0 15px #ffd700; }
 
-        /* Botón de la web con imagen de fondo */
-        #btn-erp { position: fixed; bottom: 20px; right: 20px; width: 150px; height: 80px; background-image: url('https://ipfs.io/ipfs/bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue'); background-size: cover; background-position: center; border: 2px solid #fff; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: white; font-weight: bold; text-shadow: 1px 1px 2px black; text-align: center; }
+        #btn-erp { 
+            position: fixed; bottom: 20px; right: 20px; width: 140px; height: 60px; 
+            background-image: url('https://ipfs.io/ipfs/bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue'); 
+            background-size: cover; background-position: center; border: 2px solid #fff; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
+            text-decoration: none; color: white; font-weight: bold; text-shadow: 1px 1px 2px black; 
+            text-align: center; font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
@@ -41,7 +47,9 @@
         <div class="box" onclick="irA('memoria')"><img src="CID_MEMORIA" alt="Memoria"></div>
         
         <div class="center-box">
-            <div class="box" onclick="irAlToken()"><img src="https://ipfs.io/ipfs/bafybeieiiuojv6snmh2vchhigyoq7s5vcdvel66ih5tacnhp6ceaveg3um" alt="ZARD"></div>
+            <div class="box" onclick="irAlToken()">
+                <img src="https://ipfs.io/ipfs/bafybeieiiuojv6snmh2vchhigyoq7s5vcdvel66ih5tacnhp6ceaveg3um" alt="ZARD">
+            </div>
         </div>
 
         <div class="box" onclick="irA('lucky')"><img src="CID_LUCKY" alt="Lucky"></div>

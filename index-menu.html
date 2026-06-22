@@ -4,64 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZAARD ARCADE - HUB</title>
-    
-    <meta property="og:title" content="JUEGOS DEL ECOSISTEMA ZAARD" />
-    <meta property="og:description" content="Entra y disfruta de todos los juegos del ecosistema ZAARD en un solo lugar." />
-    <meta property="og:image" content="https://ipfs.io/ipfs/bafybeidsfak32qtq2kcyrjd7mbhqnxbq7nbigxltr6htbyghetyokzuqum" />
-    <meta property="og:url" content="https://figueredo56.github.io/ZAARD-Arcade/" />
-    <meta property="og:type" content="website" />
-
     <style>
-        body { margin: 0; background: #020006; color: white; font-family: sans-serif; height: 100vh; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; font-family: sans-serif; }
         
-        #bienvenida { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 200; cursor: pointer; text-align: center; padding: 20px; }
-        .btn-entrar { padding: 20px 40px; border: 2px solid #9333ea; background: transparent; color: #fff; font-size: 1.5rem; cursor: pointer; margin-top: 20px; }
-
-        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; width: 90%; max-width: 500px; align-items: center; margin-top: -50px; }
-        .box { width: 110px; height: 110px; border: 3px solid #9333ea; cursor: pointer; background: #000; overflow: hidden; margin: 0 auto; transition: transform 0.2s; }
-        .box img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .center-box { grid-column: span 2; display: flex; justify-content: center; margin: 10px 0; }
-        .center-box .box { width: 130px; height: 130px; border-color: #ffd700; box-shadow: 0 0 15px #ffd700; }
-
-        #btn-erp { 
-            position: fixed; bottom: 20px; right: 20px; width: 140px; height: 60px; 
-            background-image: url('https://ipfs.io/ipfs/bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue'); 
-            background-size: cover; background-position: center; border: 2px solid #fff; 
-            border-radius: 10px; display: flex; align-items: center; justify-content: center; 
-            text-decoration: none; color: white; font-weight: bold; text-shadow: 1px 1px 2px black; 
-            text-align: center; font-size: 0.8rem;
+        /* Fondo principal */
+        #fondo { 
+            width: 100%; height: 100%; 
+            background: url('https://ipfs.io/ipfs/bafybeibh72yyt44wdubhwzihjnagspobzprpmqi6kfi66a6b4di2rjurre') no-repeat center center; 
+            background-size: cover;
         }
+
+        /* Bienvenida */
+        #bienvenida { 
+            position: fixed; top:0; left:0; width:100%; height:100%; 
+            background: url('https://ipfs.io/ipfs/bafybeibh72yyt44wdubhwzihjnagspobzprpmqi6kfi66a6b4di2rjurre') no-repeat center center;
+            background-size: cover;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; 
+        }
+        .btn-entrar { padding: 20px 50px; border: 3px solid #ffd700; background: rgba(0,0,0,0.6); color: #fff; font-size: 1.5rem; cursor: pointer; border-radius: 10px; }
+
+        /* Botones sobre la imagen */
+        .btn-juego { position: absolute; width: 250px; height: 120px; background: rgba(255,255,255,0.05); cursor: pointer; border: 1px solid rgba(255,255,255,0.2); }
+        
+        /* Posiciones ajustadas para tu imagen */
+        #btn-memoria { top: 32%; left: 10%; }
+        #btn-lucky { top: 55%; left: 10%; }
+        #btn-combat { top: 78%; left: 10%; }
+        #btn-token { top: 45%; right: 10%; width: 150px; height: 150px; border-radius: 50%; }
+        #btn-web { bottom: 5%; right: 5%; width: 150px; height: 60px; }
     </style>
 </head>
 <body>
 
     <div id="bienvenida">
-        <h1 style="color:#9333ea">RETOS ZAARD</h1>
-        <p>¡Gana tus ZAARD! Destruye al enemigo sin que te toque.</p>
-        <button class="btn-entrar" onclick="entrarAlMenu()">ENTRAR</button>
+        <button class="btn-entrar" onclick="document.getElementById('bienvenida').style.display='none'">ENTRAR A ZAARD</button>
     </div>
 
-    <div class="grid-container">
-        <div class="box" onclick="irA('combat')"><img src="CID_COMBAT" alt="Combat"></div>
-        <div class="box" onclick="irA('memoria')"><img src="CID_MEMORIA" alt="Memoria"></div>
-        
-        <div class="center-box">
-            <div class="box" onclick="irAlToken()">
-                <img src="https://ipfs.io/ipfs/bafybeieiiuojv6snmh2vchhigyoq7s5vcdvel66ih5tacnhp6ceaveg3um" alt="ZARD">
-            </div>
-        </div>
-
-        <div class="box" onclick="irA('lucky')"><img src="CID_LUCKY" alt="Lucky"></div>
-        <div class="box" onclick="irA('juego4')"><img src="CID_JUEGO4" alt="Juego 4"></div>
+    <div id="fondo">
+        <div id="btn-memoria" class="btn-juego" onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index-memoria.html'"></div>
+        <div id="btn-lucky" class="btn-juego" onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index-lucky.html'"></div>
+        <div id="btn-combat" class="btn-juego" onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/combat/'"></div>
+        <div id="btn-token" class="btn-juego" onclick="window.open('https://app.binance.com/uni-qr/web3-token-details?tokenCA=0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65&binanceChainId=56&chain=bsc', '_blank')"></div>
+        <div id="btn-web" class="btn-juego" onclick="window.open('https://figueredo56.github.io/zaard-official/', '_blank')"></div>
     </div>
 
-    <a id="btn-erp" href="https://figueredo56.github.io/zaard-official/" target="_blank">IR A WEB</a>
-
-    <script>
-        function entrarAlMenu() { document.getElementById('bienvenida').style.display = 'none'; }
-        function irA(carpeta) { window.location.href = `/${carpeta}/index.html`; }
-        function irAlToken() { window.open('https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65&binanceChainId=56&chain=bsc', '_blank'); }
-    </script>
 </body>
 </html>

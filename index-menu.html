@@ -4,14 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZAARD ARCADE - HUB</title>
+    
+    <meta property="og:title" content="JUEGOS DEL ECOSISTEMA ZAARD" />
+    <meta property="og:description" content="Entra y disfruta de todos los juegos del ecosistema ZAARD en un solo lugar." />
+    <meta property="og:image" content="https://ipfs.io/ipfs/bafybeidsfak32qtq2kcyrjd7mbhqnxbq7nbigxltr6htbyghetyokzuqum" />
+    <meta property="og:url" content="https://figueredo56.github.io/ZAARD-Arcade/" />
+    <meta property="og:type" content="website" />
+
     <style>
         body { margin: 0; background: #020006; color: white; font-family: sans-serif; height: 100vh; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         
-        /* Pantalla de Bienvenida */
         #bienvenida { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 200; cursor: pointer; text-align: center; padding: 20px; }
         .btn-entrar { padding: 20px 40px; border: 2px solid #9333ea; background: transparent; color: #fff; font-size: 1.5rem; cursor: pointer; margin-top: 20px; }
 
-        /* Contenedor del Menú */
         .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; width: 90%; max-width: 500px; align-items: center; }
         .box { width: 110px; height: 110px; border: 3px solid #9333ea; cursor: pointer; background: #000; overflow: hidden; margin: 0 auto; transition: transform 0.2s; }
         .box img { width: 100%; height: 100%; object-fit: cover; }
@@ -19,37 +24,36 @@
         .center-box { grid-column: span 2; display: flex; justify-content: center; margin: 10px 0; }
         .center-box .box { width: 130px; height: 130px; border-color: #ffd700; box-shadow: 0 0 15px #ffd700; }
 
-        #btn-erp { position: fixed; bottom: 20px; right: 20px; padding: 12px 25px; background: #16a34a; color: white; text-decoration: none; border-radius: 10px; font-weight: bold; border: 2px solid #fff; }
+        /* Botón de la web con imagen de fondo */
+        #btn-erp { position: fixed; bottom: 20px; right: 20px; width: 150px; height: 80px; background-image: url('https://ipfs.io/ipfs/bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue'); background-size: cover; background-position: center; border: 2px solid #fff; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: white; font-weight: bold; text-shadow: 1px 1px 2px black; text-align: center; }
     </style>
 </head>
 <body>
 
-    <!-- PORTADA DE BIENVENIDA -->
     <div id="bienvenida">
         <h1 style="color:#9333ea">RETOS ZAARD</h1>
         <p>¡Gana tus ZAARD! Destruye al enemigo sin que te toque.</p>
         <button class="btn-entrar" onclick="entrarAlMenu()">ENTRAR</button>
     </div>
 
-    <!-- HUB CENTRAL -->
     <div class="grid-container">
         <div class="box" onclick="irA('combat')"><img src="CID_COMBAT" alt="Combat"></div>
         <div class="box" onclick="irA('memoria')"><img src="CID_MEMORIA" alt="Memoria"></div>
         
         <div class="center-box">
-            <div class="box" onclick="irAlToken()"><img src="CID_TOKEN" alt="ZARD"></div>
+            <div class="box" onclick="irAlToken()"><img src="https://ipfs.io/ipfs/bafybeieiiuojv6snmh2vchhigyoq7s5vcdvel66ih5tacnhp6ceaveg3um" alt="ZARD"></div>
         </div>
 
         <div class="box" onclick="irA('lucky')"><img src="CID_LUCKY" alt="Lucky"></div>
         <div class="box" onclick="irA('juego4')"><img src="CID_JUEGO4" alt="Juego 4"></div>
     </div>
 
-    <a id="btn-erp" href="https://figueredo56.github.io/zaard-official/" target="_blank">ERP ZAARD</a>
+    <a id="btn-erp" href="https://figueredo56.github.io/zaard-official/" target="_blank">IR A WEB</a>
 
     <script>
         function entrarAlMenu() { document.getElementById('bienvenida').style.display = 'none'; }
         function irA(carpeta) { window.location.href = `/${carpeta}/index.html`; }
-        function irAlToken() { window.open('https://tu-link-de-token.com', '_blank'); }
+        function irAlToken() { window.open('https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65&binanceChainId=56&chain=bsc', '_blank'); }
     </script>
 </body>
 </html>

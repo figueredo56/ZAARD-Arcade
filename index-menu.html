@@ -14,19 +14,22 @@
             position: relative;
         }
 
+        /* BIENVENIDA MORADO NEÓN */
         #bienvenida { 
             position: fixed; top:0; left:0; width:100%; height:100%; 
-            background: rgba(0,0,0,0.4);
+            background: rgba(0,0,0,0.5);
             display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; 
-            text-align: center; color: white; padding: 20px;
+            text-align: center; color: #d946ef; padding: 20px;
         }
-        #bienvenida h1 { text-shadow: 2px 2px 10px #000; margin-bottom: 10px; color: #fff; }
-        #bienvenida p { text-shadow: 1px 1px 5px #000; margin-bottom: 30px; font-size: 1.2rem; font-weight: bold; }
+        #bienvenida h1 { text-shadow: 0 0 10px #d946ef, 0 0 20px #d946ef; margin-bottom: 10px; }
+        #bienvenida p { text-shadow: 0 0 5px #000; margin-bottom: 30px; font-size: 1.2rem; font-weight: bold; color: white; }
         .btn-entrar { 
-            padding: 15px 40px; border: 2px solid #00ff00; background: rgba(0,0,0,0.2); color: #00ff00; 
+            padding: 15px 40px; border: 2px solid #d946ef; background: rgba(0,0,0,0.3); color: #d946ef; 
             font-size: 1.3rem; cursor: pointer; border-radius: 10px; font-weight: bold;
+            text-shadow: 0 0 5px #d946ef;
         }
 
+        /* BOTONES DE JUEGOS */
         .btn-juego { 
             position: absolute; display: flex; align-items: center; justify-content: center;
             background: rgba(0, 0, 0, 0.4); border: 2px solid #00ff00; color: #00ff00;
@@ -34,15 +37,15 @@
             text-align: center; padding: 5px; text-shadow: 1px 1px 2px black;
         }
 
-        /* POSICIONES AJUSTADAS FINAS */
+        /* POSICIONES FINALES AJUSTADAS */
         #btn-memoria { top: 43%; left: 10%; width: 30%; height: 8%; }
         #btn-lucky { top: 56%; left: 10%; width: 30%; height: 8%; }
         #btn-battle { top: 69%; left: 10%; width: 30%; height: 8%; }
         #btn-runs { top: 82%; left: 10%; width: 30%; height: 8%; }
         
-        /* WEB más arriba (top: 32%) y TOKEN más a la derecha (right: 7%) */
-        #btn-token { top: 48%; right: 7%; width: 20%; height: 12%; border-radius: 50%; }
-        #btn-web { top: 32%; right: 15%; width: 20%; height: 6%; }
+        /* Token movido más a la derecha y abajo | Web subido más arriba */
+        #btn-token { top: 46%; right: 4%; width: 20%; height: 12%; border-radius: 50%; }
+        #btn-web { top: 22%; right: 15%; width: 20%; height: 6%; }
     </style>
 </head>
 <body>

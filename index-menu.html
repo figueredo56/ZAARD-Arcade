@@ -31,6 +31,12 @@
             border-radius: 50px; font-weight: bold; box-shadow: 0 0 20px #d946ef; transition: 0.3s;
         }
 
+        /* EFECTO PALPITANTE REESTABLECIDO */
+        @keyframes palpitar {
+            0%, 100% { border-color: #00ff00; box-shadow: 0 0 10px #00ff00; }
+            50% { border-color: #d946ef; box-shadow: 0 0 15px #d946ef; }
+        }
+
         #contenedor-botones { position: relative; z-index: 10; width: 100%; height: 100%; }
 
         .btn-juego { 
@@ -41,6 +47,7 @@
             font-weight: bold; font-size: 0.7rem; cursor: pointer; 
             border-radius: 12px;
             text-align: center; text-shadow: 1px 1px 2px black;
+            animation: palpitar 2s infinite; /* ¡Aquí estaba el secreto! */
         }
 
         #btn-memoria { top: 44%; left: 10%; width: 28%; height: 7%; }
@@ -58,22 +65,23 @@
             border: 5px solid #00ff00;
             border-radius: 50%;
             cursor: pointer;
+            animation: palpitar 1.5s infinite;
         }
 
-        /* NUEVO BOTÓN DE MÚSICA */
         #btn-musica {
             position: absolute;
-            top: 66%; right: 8%; /* Ubicado justo debajo del token */
+            top: 66%; right: 8%;
             width: 17%; height: 7%;
-            background: linear-gradient(45deg, #00ff00, #d946ef);
-            border: 2px solid white;
-            color: white;
+            background: rgba(0, 0, 0, 0.4);
+            border: 3px solid #00ff00;
+            color: #00ff00;
             font-weight: bold;
             font-size: 0.6rem;
             cursor: pointer;
             border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
             text-transform: uppercase;
+            animation: palpitar 2s infinite; /* ¡También palpita! */
         }
     </style>
 </head>
@@ -96,9 +104,7 @@
         <div id="btn-battle" class="btn-juego" onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/combat/'">BATTLE</div>
         <div id="btn-runs" class="btn-juego" onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index.html'">RUNS</div>
         <div id="btn-token" onclick="window.open('https://app.binance.com/uni-qr/web3-token-details?tokenCA=0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65&binanceChainId=56&chain=bsc', '_blank')"></div>
-        
         <div id="btn-musica" onclick="toggleAudio()">MÚSICA</div>
-        
         <div id="btn-web" class="btn-juego" onclick="window.open('https://figueredo56.github.io/zaard-official/', '_blank')">WEB</div>
     </div>
 

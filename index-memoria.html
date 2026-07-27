@@ -10,7 +10,7 @@
         body { 
             margin: 0; 
             padding: 0;
-            background: radial-gradient(circle at 50% 30%, #2e0854 0%, #120324 50%, #05010a 100%);
+            background: radial-gradient(circle at 50% 30%, #3d106b 0%, #17042f 50%, #070112 100%);
             background-attachment: fixed;
             overflow: hidden; 
             font-family: 'Arial', sans-serif; 
@@ -288,10 +288,12 @@
             type: Phaser.AUTO, 
             width: window.innerWidth, 
             height: window.innerHeight,
-            backgroundColor: '#160429',
+            backgroundColor: '#17042f',
             scale: {
-                mode: Phaser.Scale.RESIZE,
-                autoCenter: Phaser.Scale.CENTER_BOTH
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH,
+                width: 480,
+                height: 800
             },
             scene: {
                 preload: function() {
@@ -321,15 +323,15 @@
                     let sceneRef = this;
                     this.vidas = 12;
                     
-                    // Fondo con brillo sutil y elegante estilo espacio sideral morado/azulado
-                    let bgGlow = this.add.circle(window.innerWidth / 2, window.innerHeight / 2, Math.max(window.innerWidth, window.innerHeight) * 0.6, 0x4a1285, 0.22);
+                    // Fondo con brillo sutil y elegante estilo espacio sideral morado/azulado fijo al tamaño virtual de diseño (480x800)
+                    let bgGlow = this.add.circle(240, 400, 320, 0x5a189a, 0.28);
                     bgGlow.setBlendMode(Phaser.BlendModes.ADD);
 
-                    // UI Superior fija en pantalla
+                    // UI Superior fija en pantalla dentro del canvas de 480x800
                     this.avatarImg = this.add.image(55, 55, 'avatarUsr').setDisplaySize(60, 60);
                     this.txtNombre = this.add.text(105, 30, `${nombreUsuario}`, { fontSize: '24px', color: '#00ffff', fontStyle: 'bold' });
                     this.txtNivel = this.add.text(105, 65, `Nivel: ${nivelActual} / 10`, { fontSize: '20px', color: '#a855f7', fontStyle: 'bold' });
-                    this.txtVidas = this.add.text(window.innerWidth - 250, 45, `Oportunidades: ${this.vidas}`, { fontSize: '22px', color: '#bc8fef' });
+                    this.txtVidas = this.add.text(460, 45, `Oportunidades: ${this.vidas}`, { fontSize: '20px', color: '#bc8fef' }).setOrigin(1, 0);
                     
                     function construirTablero() {
                         if (sceneRef.cartasGroup) {
@@ -343,13 +345,13 @@
                         for(let i = 0; i < totalPares; i++) { deck.push(i, i); }
                         Phaser.Utils.Array.Shuffle(deck);
                         
-                        let cols = (window.innerWidth < 600) ? 4 : 5;
-                        let cardSize = 130; // Tamaño aumentado generosamente para visibilidad óptima
-                        let spacingX = 145;
-                        let spacingY = 145;
+                        let cols = 4;
+                        let cardSize = 100; // Tamaño óptimo y visible para que quepan holgadamente 4 columnas en 480px de ancho
+                        let spacingX = 112;
+                        let spacingY = 112;
                         
-                        let startX = (window.innerWidth / 2) - (((cols - 1) * spacingX) / 2);
-                        let startY = 220;
+                        let startX = 240 - (((cols - 1) * spacingX) / 2);
+                        let startY = 250;
 
                         sceneRef.paresRestantes = totalPares;
                         sceneRef.p1 = null;
@@ -408,12 +410,6 @@
                     }
 
                     construirTablero();
-
-                    // Evento de redimensionado automático y fluidez total sin romper la interfaz
-                    this.scale.on('resize', (gameSize) => {
-                        bgGlow.setPosition(gameSize.width / 2, gameSize.height / 2);
-                        sceneRef.txtVidas.x = gameSize.width - 250;
-                    });
                 }
             }
         });

@@ -31,69 +31,69 @@
             backdrop-filter: blur(12px);
         }
         @keyframes triColorGlow {
-            0% { border-color: #00ffff; box-shadow: 0 0 35px rgba(0, 255, 255, 0.5), inset 0 0 20px rgba(0, 255, 255, 0.2); }
-            33% { border-color: #22c55e; box-shadow: 0 0 40px rgba(34, 197, 94, 0.6), inset 0 0 20px rgba(34, 197, 94, 0.2); }
-            66% { border-color: #a855f7; box-shadow: 0 0 45px rgba(168, 85, 247, 0.7), inset 0 0 25px rgba(168, 85, 247, 0.3); }
-            100% { border-color: #00ffff; box-shadow: 0 0 35px rgba(0, 255, 255, 0.5), inset 0 0 20px rgba(0, 255, 255, 0.2); }
+            0% { border-color: #00ffff; box-shadow: 0 0 25px rgba(0, 255, 255, 0.4), inset 0 0 15px rgba(0, 255, 255, 0.15); }
+            33% { border-color: #22c55e; box-shadow: 0 0 30px rgba(34, 197, 94, 0.5), inset 0 0 15px rgba(34, 197, 94, 0.15); }
+            66% { border-color: #a855f7; box-shadow: 0 0 35px rgba(168, 85, 247, 0.6), inset 0 0 18px rgba(168, 85, 247, 0.2); }
+            100% { border-color: #00ffff; box-shadow: 0 0 25px rgba(0, 255, 255, 0.4), inset 0 0 15px rgba(0, 255, 255, 0.15); }
         }
         .ui-panel { 
-            width: 94%; 
-            max-width: 700px; 
+            width: 90%; 
+            max-width: 440px; 
             background: linear-gradient(135deg, rgba(35, 12, 65, 0.96) 0%, rgba(12, 4, 25, 0.98) 100%); 
-            border: 3px solid #a855f7; 
-            border-radius: 35px; 
-            padding: 35px; 
+            border: 2px solid #a855f7; 
+            border-radius: 24px; 
+            padding: 20px; 
             text-align: center; 
             animation: triColorGlow 5s infinite ease-in-out;
             box-sizing: border-box;
-            max-height: 92vh;
+            max-height: 90vh;
             overflow-y: auto;
         }
         .banner { 
             width: 100%; 
-            height: 220px; 
+            height: 130px; 
             background-size: cover; 
             background-position: center; 
-            border-radius: 20px; 
-            margin-bottom: 25px; 
+            border-radius: 14px; 
+            margin-bottom: 15px; 
             border: 2px solid #00ffff; 
-            box-shadow: 0 0 20px rgba(0,255,255,0.4);
+            box-shadow: 0 0 15px rgba(0,255,255,0.3);
         }
         .btn-zaard { 
             width: 100%; 
-            padding: 22px; 
-            margin-top: 18px; 
+            padding: 14px; 
+            margin-top: 10px; 
             border: 2px solid #00ffff; 
-            border-radius: 22px; 
+            border-radius: 14px; 
             background: linear-gradient(135deg, #a855f7, #22c55e); 
             color: white; 
             font-weight: bold; 
-            font-size: 20px; 
+            font-size: 15px; 
             cursor: pointer; 
             text-transform: uppercase; 
-            box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
             transition: transform 0.2s, box-shadow 0.2s;
         }
-        .btn-zaard:hover { transform: scale(1.03); box-shadow: 0 0 25px rgba(0,255,255,0.7); }
-        h1 { font-size: 3em; margin: 0 0 10px 0; background: linear-gradient(135deg, #00ffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 25px rgba(168, 85, 247, 0.6); }
-        h2 { color: #bc8fef; font-size: 2.2em; margin-top: 0; text-shadow: 0 0 10px rgba(188,143,239,0.5); }
+        .btn-zaard:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(0,255,255,0.6); }
+        h1 { font-size: 2em; margin: 0 0 8px 0; background: linear-gradient(135deg, #00ffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 15px rgba(168, 85, 247, 0.5); }
+        h2 { color: #bc8fef; font-size: 1.5em; margin-top: 0; text-shadow: 0 0 8px rgba(188,143,239,0.4); }
         
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid rgba(168, 85, 247, 0.4); padding-bottom: 12px; }
-        .close-btn { background: #5a2d82; color: #fff; border: 2px solid #00ffff; width: 40px; height: 40px; border-radius: 50%; font-weight: bold; cursor: pointer; font-size: 20px; box-shadow: 0 0 10px rgba(0,255,255,0.4); }
-        .setting-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.06); padding: 15px 20px; border-radius: 18px; margin-bottom: 12px; border: 1px solid rgba(0,255,255,0.2); font-size: 18px; }
-        .avatar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0; }
-        .avatar-item { background: rgba(0,0,0,0.6); border: 3px solid #a855f7; border-radius: 18px; padding: 10px; cursor: pointer; text-align: center; transition: 0.2s; }
-        .avatar-item.selected { border-color: #22c55e; box-shadow: 0 0 20px rgba(34,197,94,0.7); transform: scale(1.05); }
-        .avatar-item img { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; }
-        select { background: #1e0033; color: #fff; border: 2px solid #00ffff; padding: 10px 18px; border-radius: 12px; font-weight: bold; font-size: 16px; outline: none; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 2px solid rgba(168, 85, 247, 0.4); padding-bottom: 8px; }
+        .close-btn { background: #5a2d82; color: #fff; border: 2px solid #00ffff; width: 32px; height: 32px; border-radius: 50%; font-weight: bold; cursor: pointer; font-size: 16px; box-shadow: 0 0 8px rgba(0,255,255,0.3); }
+        .setting-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.06); padding: 10px 14px; border-radius: 12px; margin-bottom: 8px; border: 1px solid rgba(0,255,255,0.2); font-size: 14px; }
+        .avatar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 12px 0; }
+        .avatar-item { background: rgba(0,0,0,0.6); border: 2px solid #a855f7; border-radius: 12px; padding: 6px; cursor: pointer; text-align: center; transition: 0.2s; }
+        .avatar-item.selected { border-color: #22c55e; box-shadow: 0 0 12px rgba(34,197,94,0.6); transform: scale(1.03); }
+        .avatar-item img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
+        select { background: #1e0033; color: #fff; border: 2px solid #00ffff; padding: 6px 10px; border-radius: 8px; font-weight: bold; font-size: 14px; outline: none; }
     </style>
 </head>
 <body>
 
 <!-- Reproductor de audio global -->
-<div style="position: fixed; bottom: 12px; right: 12px; z-index: 2000; background: rgba(20,8,40,0.92); padding: 8px 15px; border-radius: 18px; border: 2px solid #00ffff; box-shadow: 0 0 15px rgba(0,255,255,0.4);">
-    <span style="font-size: 11px; color: #00ffff; font-weight: bold;">🎶 El Chupulún de Zaard</span>
-    <audio id="zaard-audio" controls autoplay loop style="height: 28px; width: 140px; vertical-align: middle; margin-left: 5px;">
+<div style="position: fixed; bottom: 10px; right: 10px; z-index: 2000; background: rgba(20,8,40,0.92); padding: 6px 12px; border-radius: 14px; border: 2px solid #00ffff; box-shadow: 0 0 12px rgba(0,255,255,0.3);">
+    <span style="font-size: 10px; color: #00ffff; font-weight: bold;">🎶 El Chupulún de Zaard</span>
+    <audio id="zaard-audio" controls autoplay loop style="height: 24px; width: 120px; vertical-align: middle; margin-left: 4px;">
         <source src="El Chupulún de Zaard.mp3" type="audio/mpeg">
     </audio>
 </div>
@@ -103,17 +103,17 @@
     <div id="pantalla-inicio" class="ui-panel">
         <div class="banner" style="background-image: url('https://ipfs.io/ipfs/bafybeiefhnawny7nlgixveiia7aaougqxsird6or4nws52vp36ndbfvixa')"></div>
         <h1>ZAARD ARCADE</h1>
-        <p style="color: #00ffff; font-size: 18px; margin-bottom: 25px; font-weight: bold;">Elige tu Avatar y supera el desafío de 10 Niveles</p>
+        <p style="color: #00ffff; font-size: 14px; margin-bottom: 15px; font-weight: bold;">Elige tu Avatar y supera el desafío de 10 Niveles</p>
         
-        <div style="margin-bottom: 20px;">
-            <p style="color: #bc8fef; font-size: 16px; margin-bottom: 10px;">Selecciona tu Avatar Inicial:</p>
-            <div class="avatar-grid" style="max-width: 400px; margin: 0 auto;">
+        <div style="margin-bottom: 12px;">
+            <p style="color: #bc8fef; font-size: 13px; margin-bottom: 8px;">Selecciona tu Avatar Inicial:</p>
+            <div class="avatar-grid" style="max-width: 280px; margin: 0 auto;">
                 <div class="avatar-item selected" onclick="seleccionarAvatarInicio(0, this)"><img src="https://ipfs.io/ipfs/bafybeicugqjr3uy2mvk32536qi3gf3astpwj53nlbeogx3vmzsmk2ia3wa"></div>
                 <div class="avatar-item" onclick="seleccionarAvatarInicio(1, this)"><img src="https://ipfs.io/ipfs/bafybeickwp5h3ew6bm4aim6r5v5sc5xha6h3hdsbrhja2zeruosphac5ba"></div>
                 <div class="avatar-item" onclick="seleccionarAvatarInicio(2, this)"><img src="https://ipfs.io/ipfs/bafybeigxro3eht2lctrk4akglifsxuvwolwqfzgqzvnstabnpjjiungza4"></div>
                 <div class="avatar-item" onclick="seleccionarAvatarInicio(3, this)"><img src="https://ipfs.io/ipfs/bafybeidwy5yeihhglhcuztl32loatlk3wccecimodl6m4ocuotuuru7gvi"></div>
             </div>
-            <input type="text" id="input-nombre-inicio" placeholder="Tu Alias / Nombre" value="Panga" style="width: 80%; padding: 14px; border-radius: 14px; border: 2px solid #00ffff; background: #0d001a; color: #fff; text-align: center; font-size: 18px; margin-top: 15px; outline: none;">
+            <input type="text" id="input-nombre-inicio" placeholder="Tu Alias / Nombre" value="Panga" style="width: 75%; padding: 10px; border-radius: 10px; border: 2px solid #00ffff; background: #0d001a; color: #fff; text-align: center; font-size: 15px; margin-top: 10px; outline: none;">
         </div>
 
         <button class="btn-zaard" onclick="iniciarConAvatarYContinuar()">¡ENTRAR AL JUEGO! 🚀</button>
@@ -123,7 +123,7 @@
     <div id="menu-seleccion" class="ui-panel" style="display:none;">
         <div class="banner" style="background-image: url('https://ipfs.io/ipfs/bafybeic5377igwloc2o63whivoykazkibjruq7bau4edjpfdfu4gudunjm')"></div>
         <h2>MEMORY RUN - 10 NIVELES</h2>
-        <div id="user-info-box" style="margin-bottom: 20px; font-size: 18px; color: #00ffff; font-weight: bold;"></div>
+        <div id="user-info-box" style="margin-bottom: 12px; font-size: 14px; color: #00ffff; font-weight: bold;"></div>
         
         <button class="btn-zaard" onclick="lanzarJuego(false)">MODO INVITADO</button>
         <button class="btn-zaard" onclick="conectarYJugar()" style="background: linear-gradient(135deg, #00ffff, #3b0764);">CONECTAR BILLETERA WEB3</button>
@@ -137,17 +137,17 @@
             <h2>Personalizar Perfil</h2>
             <button class="close-btn" onclick="cerrarModal('modal-perfil')">X</button>
         </div>
-        <p style="color: #00ffff; font-size: 16px;">Elige tu Avatar de Alta Calidad:</p>
+        <p style="color: #00ffff; font-size: 13px;">Elige tu Avatar de Alta Calidad:</p>
         <div class="avatar-grid">
             <div class="avatar-item selected" onclick="seleccionarAvatar(0, this)"><img src="https://ipfs.io/ipfs/bafybeicugqjr3uy2mvk32536qi3gf3astpwj53nlbeogx3vmzsmk2ia3wa"></div>
             <div class="avatar-item" onclick="seleccionarAvatar(1, this)"><img src="https://ipfs.io/ipfs/bafybeickwp5h3ew6bm4aim6r5v5sc5xha6h3hdsbrhja2zeruosphac5ba"></div>
             <div class="avatar-item" onclick="seleccionarAvatar(2, this)"><img src="https://ipfs.io/ipfs/bafybeigxro3eht2lctrk4akglifsxuvwolwqfzgqzvnstabnpjjiungza4"></div>
             <div class="avatar-item" onclick="seleccionarAvatar(3, this)"><img src="https://ipfs.io/ipfs/bafybeidwy5yeihhglhcuztl32loatlk3wccecimodl6m4ocuotuuru7gvi"></div>
         </div>
-        <div style="margin-top: 20px;">
-            <input type="text" id="input-nombre" placeholder="Tu Nombre o Alias" value="Panga" style="width: 80%; padding: 14px; border-radius: 12px; border: 2px solid #00ffff; background: #0d001a; color: #fff; text-align: center; font-size: 18px; outline: none;">
+        <div style="margin-top: 12px;">
+            <input type="text" id="input-nombre" placeholder="Tu Nombre o Alias" value="Panga" style="width: 75%; padding: 10px; border-radius: 10px; border: 2px solid #00ffff; background: #0d001a; color: #fff; text-align: center; font-size: 15px; outline: none;">
         </div>
-        <button class="btn-zaard" onclick="guardarPerfil()" style="margin-top: 25px;">Guardar Perfil</button>
+        <button class="btn-zaard" onclick="guardarPerfil()" style="margin-top: 15px;">Guardar Perfil</button>
     </div>
 
     <!-- Pantalla de Ajustes -->
@@ -177,7 +177,7 @@
                 <option value="en">English</option>
             </select>
         </div>
-        <button class="btn-zaard" onclick="cerrarModal('modal-ajustes')" style="margin-top: 20px;">Aceptar</button>
+        <button class="btn-zaard" onclick="cerrarModal('modal-ajustes')" style="margin-top: 15px;">Aceptar</button>
     </div>
 </div>
 
@@ -323,15 +323,15 @@
                     let sceneRef = this;
                     this.vidas = 12;
                     
-                    // Fondo con brillo sutil y elegante estilo espacio sideral morado/azulado fijo al tamaño virtual de diseño (480x800)
-                    let bgGlow = this.add.circle(240, 400, 320, 0x5a189a, 0.28);
+                    // Fondo con brillo sutil y elegante estilo espacio sideral morado/azulado
+                    let bgGlow = this.add.circle(240, 400, 280, 0x5a189a, 0.22);
                     bgGlow.setBlendMode(Phaser.BlendModes.ADD);
 
-                    // UI Superior fija en pantalla dentro del canvas de 480x800
-                    this.avatarImg = this.add.image(55, 55, 'avatarUsr').setDisplaySize(60, 60);
-                    this.txtNombre = this.add.text(105, 30, `${nombreUsuario}`, { fontSize: '24px', color: '#00ffff', fontStyle: 'bold' });
-                    this.txtNivel = this.add.text(105, 65, `Nivel: ${nivelActual} / 10`, { fontSize: '20px', color: '#a855f7', fontStyle: 'bold' });
-                    this.txtVidas = this.add.text(460, 45, `Oportunidades: ${this.vidas}`, { fontSize: '20px', color: '#bc8fef' }).setOrigin(1, 0);
+                    // UI Superior fija perfectamente proporcionada y más compacta
+                    this.avatarImg = this.add.image(38, 38, 'avatarUsr').setDisplaySize(42, 42);
+                    this.txtNombre = this.add.text(70, 20, `${nombreUsuario}`, { fontSize: '16px', color: '#00ffff', fontStyle: 'bold' });
+                    this.txtNivel = this.add.text(70, 42, `Nivel: ${nivelActual} / 10`, { fontSize: '13px', color: '#a855f7', fontStyle: 'bold' });
+                    this.txtVidas = this.add.text(465, 30, `Oportunidades: ${this.vidas}`, { fontSize: '14px', color: '#bc8fef' }).setOrigin(1, 0);
                     
                     function construirTablero() {
                         if (sceneRef.cartasGroup) {
@@ -346,12 +346,12 @@
                         Phaser.Utils.Array.Shuffle(deck);
                         
                         let cols = 4;
-                        let cardSize = 100; // Tamaño óptimo y visible para que quepan holgadamente 4 columnas en 480px de ancho
-                        let spacingX = 112;
-                        let spacingY = 112;
+                        let cardSize = 78; // Tamaño ideal ligeramente reducido para que quepa perfecto sin verse gigante ni estorboso
+                        let spacingX = 90;
+                        let spacingY = 90;
                         
                         let startX = 240 - (((cols - 1) * spacingX) / 2);
-                        let startY = 250;
+                        let startY = 210;
 
                         sceneRef.paresRestantes = totalPares;
                         sceneRef.p1 = null;
@@ -420,10 +420,10 @@
         modalDiv.style.cssText = "position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(10,2,25,0.92); z-index:3000; display:flex; justify-content:center; align-items:center; backdrop-filter:blur(12px);";
         
         modalDiv.innerHTML = `
-            <div style="background: linear-gradient(135deg, #280a4f, #0d021a); border: 3px solid #00ffff; border-radius: 35px; padding: 40px; text-align: center; width: 90%; max-width: 480px; box-shadow: 0 0 60px rgba(0,255,255,0.7);">
-                <h2 style="color: #00ffff; font-size: 2.8em; margin-bottom: 12px; text-shadow: 0 0 20px rgba(0,255,255,0.6);">¡Felicitaciones! 🎉</h2>
-                <p style="color: #bc8fef; font-size: 20px; margin-bottom: 30px; font-weight: bold;">¡Has superado el Nivel ${nivelActual} con gran destreza mental!</p>
-                <button id="btn-siguiente-nivel" style="width: 100%; padding: 22px; border: 2px solid #00ffff; border-radius: 20px; background: linear-gradient(135deg, #22c55e, #00ffff); color: #05010a; font-weight: bold; font-size: 21px; cursor: pointer; text-transform: uppercase; box-shadow: 0 0 25px rgba(34,197,94,0.8);">Aceptar y Pasar al Siguiente Nivel ⚡</button>
+            <div style="background: linear-gradient(135deg, #280a4f, #0d021a); border: 2px solid #00ffff; border-radius: 24px; padding: 25px; text-align: center; width: 85%; max-width: 360px; box-shadow: 0 0 40px rgba(0,255,255,0.5);">
+                <h2 style="color: #00ffff; font-size: 2em; margin-bottom: 8px; text-shadow: 0 0 15px rgba(0,255,255,0.5);">¡Felicitaciones! 🎉</h2>
+                <p style="color: #bc8fef; font-size: 15px; margin-bottom: 20px; font-weight: bold;">¡Has superado el Nivel ${nivelActual} con gran destreza mental!</p>
+                <button id="btn-siguiente-nivel" style="width: 100%; padding: 14px; border: 2px solid #00ffff; border-radius: 14px; background: linear-gradient(135deg, #22c55e, #00ffff); color: #05010a; font-weight: bold; font-size: 15px; cursor: pointer; text-transform: uppercase; box-shadow: 0 0 18px rgba(34,197,94,0.6);">Aceptar y Pasar al Siguiente Nivel ⚡</button>
             </div>
         `;
         document.body.appendChild(modalDiv);

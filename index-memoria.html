@@ -78,14 +78,10 @@
         h1 { font-size: 2em; margin: 0 0 8px 0; background: linear-gradient(135deg, #00ffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 15px rgba(168, 85, 247, 0.5); }
         h2 { color: #bc8fef; font-size: 1.5em; margin-top: 0; text-shadow: 0 0 8px rgba(188,143,239,0.4); }
         
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 2px solid rgba(168, 85, 247, 0.4); padding-bottom: 8px; }
-        .close-btn { background: #5a2d82; color: #fff; border: 2px solid #00ffff; width: 32px; height: 32px; border-radius: 50%; font-weight: bold; cursor: pointer; font-size: 16px; box-shadow: 0 0 8px rgba(0,255,255,0.3); }
-        .setting-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.06); padding: 10px 14px; border-radius: 12px; margin-bottom: 8px; border: 1px solid rgba(0,255,255,0.2); font-size: 14px; }
         .avatar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 12px 0; }
         .avatar-item { background: rgba(0,0,0,0.6); border: 2px solid #a855f7; border-radius: 12px; padding: 6px; cursor: pointer; text-align: center; transition: 0.2s; }
         .avatar-item.selected { border-color: #22c55e; box-shadow: 0 0 12px rgba(34,197,94,0.6); transform: scale(1.03); }
         .avatar-item img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
-        select { background: #1e0033; color: #fff; border: 2px solid #00ffff; padding: 6px 10px; border-radius: 8px; font-weight: bold; font-size: 14px; outline: none; }
     </style>
 </head>
 <body>
@@ -99,14 +95,14 @@
 </div>
 
 <div id="ui-container">
-    <!-- Pantalla 1: Inicio Protocolo -->
+    <!-- Pantalla 1: Inicio Protocolo (Selección única de Avatar y Alias) -->
     <div id="pantalla-inicio" class="ui-panel">
         <div class="banner" style="background-image: url('https://ipfs.io/ipfs/bafybeiefhnawny7nlgixveiia7aaougqxsird6or4nws52vp36ndbfvixa')"></div>
         <h1>ZAARD ARCADE</h1>
         <p style="color: #00ffff; font-size: 14px; margin-bottom: 15px; font-weight: bold;">Elige tu Avatar y supera el desafío de 10 Niveles</p>
         
         <div style="margin-bottom: 12px;">
-            <p style="color: #bc8fef; font-size: 13px; margin-bottom: 8px;">Selecciona tu Avatar Inicial:</p>
+            <p style="color: #bc8fef; font-size: 13px; margin-bottom: 8px;">Selecciona tu Avatar:</p>
             <div class="avatar-grid" style="max-width: 280px; margin: 0 auto;">
                 <div class="avatar-item selected" onclick="seleccionarAvatarInicio(0, this)"><img src="https://ipfs.io/ipfs/bafybeicugqjr3uy2mvk32536qi3gf3astpwj53nlbeogx3vmzsmk2ia3wa"></div>
                 <div class="avatar-item" onclick="seleccionarAvatarInicio(1, this)"><img src="https://ipfs.io/ipfs/bafybeickwp5h3ew6bm4aim6r5v5sc5xha6h3hdsbrhja2zeruosphac5ba"></div>
@@ -116,68 +112,8 @@
             <input type="text" id="input-nombre-inicio" placeholder="Tu Alias / Nombre" value="Panga" style="width: 75%; padding: 10px; border-radius: 10px; border: 2px solid #00ffff; background: #0d001a; color: #fff; text-align: center; font-size: 15px; margin-top: 10px; outline: none;">
         </div>
 
-        <button class="btn-zaard" onclick="iniciarConAvatarYContinuar()">¡ENTRAR AL JUEGO! 🚀</button>
-    </div>
-
-    <!-- Pantalla 2: Menú Principal / Selección -->
-    <div id="menu-seleccion" class="ui-panel" style="display:none;">
-        <div class="banner" style="background-image: url('https://ipfs.io/ipfs/bafybeic5377igwloc2o63whivoykazkibjruq7bau4edjpfdfu4gudunjm')"></div>
-        <h2>MEMORY RUN - 10 NIVELES</h2>
-        <div id="user-info-box" style="margin-bottom: 12px; font-size: 14px; color: #00ffff; font-weight: bold;"></div>
-        
-        <button class="btn-zaard" onclick="lanzarJuego(false)">MODO INVITADO</button>
+        <button class="btn-zaard" onclick="iniciarJuegoMenu(false)">MODO INVITADO 🚀</button>
         <button class="btn-zaard" onclick="conectarYJugar()" style="background: linear-gradient(135deg, #00ffff, #3b0764);">CONECTAR BILLETERA WEB3</button>
-        <button class="btn-zaard" onclick="abrirPerfil()" style="background: rgba(168,85,247,0.4); border: 2px solid #a855f7;">🎨 Cambiar Avatar y Perfil</button>
-        <button class="btn-zaard" onclick="abrirAjustes()" style="background: rgba(0,255,255,0.3); border: 2px solid #00ffff;">⚙️ Ajustes (Idioma y Sonido)</button>
-    </div>
-
-    <!-- Pantalla de Perfil / Avatares -->
-    <div id="modal-perfil" class="ui-panel" style="display:none;">
-        <div class="modal-header">
-            <h2>Personalizar Perfil</h2>
-            <button class="close-btn" onclick="cerrarModal('modal-perfil')">X</button>
-        </div>
-        <p style="color: #00ffff; font-size: 13px;">Elige tu Avatar de Alta Calidad:</p>
-        <div class="avatar-grid">
-            <div class="avatar-item selected" onclick="seleccionarAvatar(0, this)"><img src="https://ipfs.io/ipfs/bafybeicugqjr3uy2mvk32536qi3gf3astpwj53nlbeogx3vmzsmk2ia3wa"></div>
-            <div class="avatar-item" onclick="seleccionarAvatar(1, this)"><img src="https://ipfs.io/ipfs/bafybeickwp5h3ew6bm4aim6r5v5sc5xha6h3hdsbrhja2zeruosphac5ba"></div>
-            <div class="avatar-item" onclick="seleccionarAvatar(2, this)"><img src="https://ipfs.io/ipfs/bafybeigxro3eht2lctrk4akglifsxuvwolwqfzgqzvnstabnpjjiungza4"></div>
-            <div class="avatar-item" onclick="seleccionarAvatar(3, this)"><img src="https://ipfs.io/ipfs/bafybeidwy5yeihhglhcuztl32loatlk3wccecimodl6m4ocuotuuru7gvi"></div>
-        </div>
-        <div style="margin-top: 12px;">
-            <input type="text" id="input-nombre" placeholder="Tu Nombre o Alias" value="Panga" style="width: 75%; padding: 10px; border-radius: 10px; border: 2px solid #00ffff; background: #0d001a; color: #fff; text-align: center; font-size: 15px; outline: none;">
-        </div>
-        <button class="btn-zaard" onclick="guardarPerfil()" style="margin-top: 15px;">Guardar Perfil</button>
-    </div>
-
-    <!-- Pantalla de Ajustes -->
-    <div id="modal-ajustes" class="ui-panel" style="display:none;">
-        <div class="modal-header">
-            <h2>Ajustes del Sistema</h2>
-            <button class="close-btn" onclick="cerrarModal('modal-ajustes')">X</button>
-        </div>
-        <div class="setting-row">
-            <span>🎵 Música de Fondo</span>
-            <select id="sel-musica" onchange="toggleMusica(this.value)">
-                <option value="ON">ON</option>
-                <option value="OFF">OFF</option>
-            </select>
-        </div>
-        <div class="setting-row">
-            <span>🔊 Efectos de Sonido</span>
-            <select id="sel-sfx" onchange="toggleSfx(this.value)">
-                <option value="ON">ON</option>
-                <option value="OFF">OFF</option>
-            </select>
-        </div>
-        <div class="setting-row">
-            <span>🌐 Idioma</span>
-            <select id="sel-lang" onchange="cambiarIdioma(this.value)">
-                <option value="es">Español</option>
-                <option value="en">English</option>
-            </select>
-        </div>
-        <button class="btn-zaard" onclick="cerrarModal('modal-ajustes')" style="margin-top: 15px;">Aceptar</button>
     </div>
 </div>
 
@@ -227,35 +163,10 @@
         avatarSeleccionado = idx;
     }
 
-    function iniciarConAvatarYContinuar() {
+    function iniciarJuegoMenu(esModoWeb3) {
         nombreUsuario = document.getElementById('input-nombre-inicio').value || "Panga";
-        document.getElementById('pantalla-inicio').style.display = 'none';
-        document.getElementById('menu-seleccion').style.display = 'block';
-        document.getElementById('user-info-box').innerHTML = `👤 Jugador: ${nombreUsuario} | Nivel Actual: ${nivelActual}/10`;
+        lanzarJuego(esModoWeb3);
     }
-
-    function abrirPerfil() { document.getElementById('modal-perfil').style.display = 'block'; }
-    function abrirAjustes() { document.getElementById('modal-ajustes').style.display = 'block'; }
-    function cerrarModal(id) { document.getElementById(id).style.display = 'none'; }
-
-    function seleccionarAvatar(idx, el) {
-        document.querySelectorAll('#modal-perfil .avatar-item').forEach(i => i.classList.remove('selected'));
-        el.classList.add('selected');
-        avatarSeleccionado = idx;
-    }
-
-    function guardarPerfil() {
-        nombreUsuario = document.getElementById('input-nombre').value || "Panga";
-        document.getElementById('user-info-box').innerHTML = `👤 Jugador: ${nombreUsuario} | Nivel Actual: ${nivelActual}/10`;
-        cerrarModal('modal-perfil');
-    }
-
-    function toggleSfx(val) { sfxHabilitado = (val === 'ON'); }
-    function toggleMusica(val) {
-        const audio = document.getElementById('zaard-audio');
-        if(val === 'OFF') audio.pause(); else audio.play();
-    }
-    function cambiarIdioma(lang) { console.log("Idioma:", lang); }
 
     async function conectarYJugar() {
         if (window.ethereum) {
@@ -265,7 +176,7 @@
                 userAccount = accounts[0];
                 contract = new web3.eth.Contract(ABI, TOKEN_ADDR);
                 esWeb3 = true;
-                lanzarJuego(true);
+                iniciarJuegoMenu(true);
             } catch (e) { alert("Conexión de billetera fallida."); }
         } else { alert("Instala MetaMask o una billetera Web3 compatible."); }
     }
@@ -323,11 +234,9 @@
                     let sceneRef = this;
                     this.vidas = 12;
                     
-                    // Fondo con brillo sutil y elegante estilo espacio sideral morado/azulado
                     let bgGlow = this.add.circle(240, 400, 280, 0x5a189a, 0.22);
                     bgGlow.setBlendMode(Phaser.BlendModes.ADD);
 
-                    // UI Superior fija perfectamente proporcionada y más compacta
                     this.avatarImg = this.add.image(38, 38, 'avatarUsr').setDisplaySize(42, 42);
                     this.txtNombre = this.add.text(70, 20, `${nombreUsuario}`, { fontSize: '16px', color: '#00ffff', fontStyle: 'bold' });
                     this.txtNivel = this.add.text(70, 42, `Nivel: ${nivelActual} / 10`, { fontSize: '13px', color: '#a855f7', fontStyle: 'bold' });
@@ -339,101 +248,90 @@
                         }
                         sceneRef.cartasGroup = sceneRef.add.group();
 
-                        // Desafío progresivo: de 5 pares (10 cartas) en Nivel 1 hasta 10 pares (20 cartas) en Nivel 10
                         let totalPares = Math.min(4 + nivelActual, 10);
                         let deck = []; 
                         for(let i = 0; i < totalPares; i++) { deck.push(i, i); }
                         Phaser.Utils.Array.Shuffle(deck);
                         
                         let cols = 4;
-                        let cardSize = 78; // Tamaño ideal ligeramente reducido para que quepa perfecto sin verse gigante ni estorboso
+                        let cardSize = 78;
                         let spacingX = 90;
                         let spacingY = 90;
                         
                         let startX = 240 - (((cols - 1) * spacingX) / 2);
-                        let startY = 210;
-
-                        sceneRef.paresRestantes = totalPares;
-                        sceneRef.p1 = null;
-                        sceneRef.lock = false;
-
-                        deck.forEach((id, i) => {
-                            let x = startX + (i % cols) * spacingX;
-                            let y = startY + Math.floor(i / cols) * spacingY;
+                        let startY = 180;
+                        
+                        deck.forEach((val, idx) => {
+                            let r = Math.floor(idx / cols);
+                            let c = idx % cols;
+                            let posX = startX + c * spacingX;
+                            let posY = startY + r * spacingY;
                             
-                            let card = sceneRef.add.sprite(x, y, 'dorso').setDisplaySize(cardSize, cardSize).setInteractive();
-                            card.cid = 'c'+id;
-                            sceneRef.cartasGroup.add(card);
+                            let carta = sceneRef.add.sprite(posX, posY, 'dorso').setDisplaySize(cardSize, cardSize).setInteractive();
+                            carta.val = val;
+                            carta.revelada = false;
+                            sceneRef.cartasGroup.add(carta);
                             
-                            card.on('pointerdown', () => {
-                                playSnd(500, 0.1, 'triangle');
-                                if(sceneRef.lock || card.texture.key !== 'dorso') return;
-                                card.setTexture(card.cid);
-                                card.setDisplaySize(cardSize, cardSize);
+                            carta.on('pointerdown', () => {
+                                if (sceneRef.bloqueado || carta.revelada || carta === sceneRef.primeraCarta) return;
+                                playSnd(500, 0.05);
+                                carta.setTexture('c' + carta.val);
                                 
-                                if(!sceneRef.p1) {
-                                    sceneRef.p1 = card;
+                                if (!sceneRef.primeraCarta) {
+                                    sceneRef.primeraCarta = carta;
                                 } else {
-                                    sceneRef.lock = true;
-                                    if(sceneRef.p1.cid !== card.cid) {
-                                        setTimeout(() => {
-                                            sceneRef.p1.setTexture('dorso'); 
-                                            sceneRef.p1.setDisplaySize(cardSize, cardSize);
-                                            card.setTexture('dorso');
-                                            card.setDisplaySize(cardSize, cardSize);
-                                            sceneRef.p1 = null; 
-                                            sceneRef.lock = false;
-                                            sceneRef.vidas--; 
-                                            sceneRef.txtVidas.setText('Oportunidades: ' + sceneRef.vidas);
-                                            if(sceneRef.vidas <= 0) ejecutarPerdida();
-                                        }, 750);
-                                    } else { 
-                                        playSnd(850, 0.2, 'sine');
-                                        sceneRef.p1 = null; 
-                                        sceneRef.lock = false;
-                                        sceneRef.paresRestantes--;
+                                    sceneRef.bloqueado = true;
+                                    let primera = sceneRef.primeraCarta;
+                                    sceneRef.primeraCarta = null;
+                                    
+                                    if (primera.val === carta.val) {
+                                        playSnd(800, 0.1, 'triangle');
+                                        primera.revelada = true;
+                                        carta.revelada = true;
+                                        sceneRef.bloqueado = false;
                                         
-                                        if(sceneRef.paresRestantes === 0) {
-                                            setTimeout(() => {
-                                                if(nivelActual < 10) {
-                                                    mostrarModalVictoria(sceneRef, construirTablero);
-                                                } else {
-                                                    alert("¡IMPRESIONANTE! ¡Has completado los 10 niveles del Protocolo Panga con éxito absoluto!");
-                                                    location.reload();
-                                                }
-                                            }, 400);
+                                        let todasResueltas = true;
+                                        sceneRef.cartasGroup.getChildren().forEach(ch => {
+                                            if (!ch.revelada) todasResueltas = false;
+                                        });
+                                        
+                                        if (todasResueltas) {
+                                            playSnd(1200, 0.3, 'square');
+                                            if (nivelActual < 10) {
+                                                nivelActual++;
+                                                sceneRef.time.delayedCall(800, () => {
+                                                    sceneRef.txtNivel.setText(`Nivel: ${nivelActual} / 10`);
+                                                    construirTablero();
+                                                });
+                                            } else {
+                                                alert(`¡FELICIDADES ${nombreUsuario}! Has completado los 10 niveles del protocolo.`);
+                                                location.reload();
+                                            }
                                         }
+                                    } else {
+                                        playSnd(200, 0.15, 'sawtooth');
+                                        sceneRef.vidas--;
+                                        sceneRef.txtVidas.setText(`Oportunidades: ${sceneRef.vidas}`);
+                                        
+                                        sceneRef.time.delayedCall(600, () => {
+                                            primera.setTexture('dorso');
+                                            carta.setTexture('dorso');
+                                            sceneRef.bloqueado = false;
+                                            
+                                            if (sceneRef.vidas <= 0) {
+                                                ejecutarPerdida();
+                                            }
+                                        });
                                     }
                                 }
                             });
                         });
                     }
-
+                    
                     construirTablero();
                 }
             }
         });
-    }
-
-    function mostrarModalVictoria(scene, callbackReiniciar) {
-        let modalDiv = document.createElement('div');
-        modalDiv.style.cssText = "position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(10,2,25,0.92); z-index:3000; display:flex; justify-content:center; align-items:center; backdrop-filter:blur(12px);";
-        
-        modalDiv.innerHTML = `
-            <div style="background: linear-gradient(135deg, #280a4f, #0d021a); border: 2px solid #00ffff; border-radius: 24px; padding: 25px; text-align: center; width: 85%; max-width: 360px; box-shadow: 0 0 40px rgba(0,255,255,0.5);">
-                <h2 style="color: #00ffff; font-size: 2em; margin-bottom: 8px; text-shadow: 0 0 15px rgba(0,255,255,0.5);">¡Felicitaciones! 🎉</h2>
-                <p style="color: #bc8fef; font-size: 15px; margin-bottom: 20px; font-weight: bold;">¡Has superado el Nivel ${nivelActual} con gran destreza mental!</p>
-                <button id="btn-siguiente-nivel" style="width: 100%; padding: 14px; border: 2px solid #00ffff; border-radius: 14px; background: linear-gradient(135deg, #22c55e, #00ffff); color: #05010a; font-weight: bold; font-size: 15px; cursor: pointer; text-transform: uppercase; box-shadow: 0 0 18px rgba(34,197,94,0.6);">Aceptar y Pasar al Siguiente Nivel ⚡</button>
-            </div>
-        `;
-        document.body.appendChild(modalDiv);
-
-        document.getElementById('btn-siguiente-nivel').onclick = () => {
-            modalDiv.remove();
-            nivelActual++;
-            scene.txtNivel.setText(`Nivel: ${nivelActual} / 10`);
-            callbackReiniciar();
-        };
     }
 </script>
 </body>

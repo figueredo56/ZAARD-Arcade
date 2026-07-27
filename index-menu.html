@@ -13,7 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZAARD ARCADE - HUB</title>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; font-family: sans-serif; }
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; font-family: sans-serif; background-color: #000; }
         
         #fondo { 
             width: 100%; height: 100%; 
@@ -28,18 +28,124 @@
         }
 
         #bienvenida { 
-            position: fixed; top:0; left:0; width:100%; height:100%; 
-            background: radial-gradient(circle, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.8) 100%);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: radial-gradient(circle, rgba(15,5,30,0.85) 0%, rgba(0,0,0,0.95) 100%);
             display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; 
-            text-align: center; color: #fff; padding: 20px;
-        }
-        .btn-entrar { 
-            padding: 18px 50px; background: linear-gradient(45deg, #d946ef, #8b5cf6); 
-            border: none; color: white; font-size: 1.5rem; cursor: pointer; 
-            border-radius: 50px; font-weight: bold; box-shadow: 0 0 20px #d946ef; transition: 0.3s;
+            text-align: center; color: #fff; padding: 20px; box-sizing: border-box;
+            overflow-y: auto;
         }
 
-        /* EFECTO PALPITANTE REESTABLECIDO */
+        #bienvenida h1 {
+            font-size: 2.2rem;
+            color: #00ff00;
+            text-shadow: 0 0 15px #00ff00;
+            margin-bottom: 10px;
+        }
+
+        #bienvenida p {
+            color: #d946ef;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px #d946ef;
+        }
+
+        .input-container {
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .input-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        .input-container input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 25px;
+            border: 2px solid #00ff00;
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            text-align: center;
+            font-size: 1rem;
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+
+        .avatar-selection {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            max-width: 400px;
+        }
+
+        .avatar-option {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            border: 3px solid #555;
+            cursor: pointer;
+            object-fit: cover;
+            transition: 0.3s;
+            background: #111;
+        }
+
+        .avatar-option.selected {
+            border-color: #00ff00;
+            box-shadow: 0 0 15px #00ff00;
+            transform: scale(1.1);
+        }
+
+        .btn-entrar { 
+            padding: 15px 45px; background: linear-gradient(45deg, #d946ef, #8b5cf6); 
+            border: none; color: white; font-size: 1.3rem; cursor: pointer; 
+            border-radius: 50px; font-weight: bold; box-shadow: 0 0 20px #d946ef; transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .btn-entrar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px #d946ef;
+        }
+
+        /* Indicador de Perfil Activo en el Hub */
+        #perfil-activo {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #00ff00;
+            padding: 6px 15px;
+            border-radius: 30px;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(0,255,0,0.5);
+        }
+
+        #perfil-activo img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+            border: 2px solid #d946ef;
+        }
+
+        #perfil-activo span {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #00ff00;
+        }
+
+        /* EFECTO PALPITANTE */
         @keyframes palpitar {
             0%, 100% { border-color: #00ff00; box-shadow: 0 0 10px #00ff00; }
             50% { border-color: #d946ef; box-shadow: 0 0 15px #d946ef; }
@@ -55,7 +161,7 @@
             font-weight: bold; font-size: 0.7rem; cursor: pointer; 
             border-radius: 12px;
             text-align: center; text-shadow: 1px 1px 2px black;
-            animation: palpitar 2s infinite; /* ¡Aquí estaba el secreto! */
+            animation: palpitar 2s infinite; 
         }
 
         #btn-memoria { top: 44%; left: 10%; width: 28%; height: 7%; }
@@ -89,47 +195,140 @@
             border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
             text-transform: uppercase;
-            animation: palpitar 2s infinite; /* ¡También palpita! */
+            animation: palpitar 2s infinite; 
         }
     </style>
 </head>
 <body>
 
+    <!-- Audio de Fondo -->
     <audio id="musicaFondo" loop>
         <source src="El%20Chupulún%20de%20Zaard.mp3" type="audio/mpeg">
     </audio>
 
+    <!-- Elemento de Audio para efectos de Sonido (Click / Botones) -->
+    <audio id="sonidoClick" src="https://actions.google.com/sounds/v1/ui/click.ogg" preload="auto"></audio>
+
+    <!-- Pantalla de Bienvenida con Selección de Avatar y Nombre -->
     <div id="bienvenida">
-        <h1>Bienvenidos a ZAARD ARCADE</h1>
-        <button class="btn-entrar" onclick="iniciarExperiencia()">ENTRAR</button>
+        <h1>ZAARD ARCADE</h1>
+        <p>Elige tu identidad para entrar al ecosistema</p>
+        
+        <div class="input-container">
+            <label for="inputNombre">Tu Nombre o Alias:</label>
+            <input type="text" id="inputNombre" placeholder="Ej: Panga" maxlength="15">
+        </div>
+
+        <div class="input-container">
+            <label>Elige tu Avatar:</label>
+            <div class="avatar-selection">
+                <!-- Avatares Femeninos y Masculinos generados para el usuario -->
+                <img src="https://ipfs.io/ipfs/bafybeidnbe4knxriwgp3hjnpupozk5xg6f75xvvhuottvudryqmxvsrleu" class="avatar-option selected" onclick="seleccionarAvatar(this)" alt="Avatar 1">
+                <img src="https://ipfs.io/ipfs/bafybeiggz26x26hncisti5s5y74ciuk4yuymtczhsbwdufoql2gidl57mu" class="avatar-option" onclick="seleccionarAvatar(this)" alt="Avatar 2">
+            </div>
+        </div>
+
+        <button class="btn-entrar" onclick="iniciarExperiencia()">ENTRAR AL ARCADE</button>
+    </div>
+
+    <!-- Indicador visible del Perfil Activo en la Esquina Superior -->
+    <div id="perfil-activo" style="display: none;" onclick="cerrarSesion()" title="Haz clic para cambiar de perfil">
+        <img id="img-perfil-actual" src="" alt="Avatar">
+        <span id="txt-nombre-actual"></span>
     </div>
 
     <div id="fondo"></div>
 
     <div id="contenedor-botones">
-        <div id="btn-memoria" class="btn-juego" onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index-memoria.html'">MEMORIA</div>
-        <div id="btn-lucky" class="btn-juego" onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index-lucky.html'">LUCKY</div>
-        <div id="btn-battle" class="btn-juego" onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/combat/'">BATTLE</div>
-        <div id="btn-runs" class="btn-juego" onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index.html'">RUNS</div>
-        <div id="btn-token" onclick="window.open('https://app.binance.com/uni-qr/web3-token-details?tokenCA=0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65&binanceChainId=56&chain=bsc', '_blank')"></div>
+        <div id="btn-memoria" class="btn-juego" onclick="reproducirSonidoYRedirigir('https://figueredo56.github.io/ZAARD-Arcade/index-memoria.html')">MEMORIA</div>
+        <div id="btn-lucky" class="btn-juego" onclick="reproducirSonidoYRedirigir('https://figueredo56.github.io/ZAARD-Arcade/index-lucky.html')">LUCKY</div>
+        <div id="btn-battle" class="btn-juego" onclick="reproducirSonidoYRedirigir('https://figueredo56.github.io/ZAARD-Arcade/combat/')">BATTLE</div>
+        <div id="btn-runs" class="btn-juego" onclick="reproducirSonidoYRedirigir('https://figueredo56.github.io/ZAARD-Arcade/index.html')">RUNS</div>
+        <div id="btn-token" onclick="reproducirSonidoYAbrir('https://app.binance.com/uni-qr/web3-token-details?tokenCA=0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65&binanceChainId=56&chain=bsc', '_blank')"></div>
         <div id="btn-musica" onclick="toggleAudio()">MÚSICA</div>
-        <div id="btn-web" class="btn-juego" onclick="window.open('https://figueredo56.github.io/zaard-official/', '_blank')">WEB</div>
+        <div id="btn-web" class="btn-juego" onclick="reproducirSonidoYAbrir('https://figueredo56.github.io/zaard-official/', '_blank')">WEB</div>
     </div>
 
     <script>
         var musica = document.getElementById('musicaFondo');
-        
+        var sonidoClick = document.getElementById('sonidoClick');
+        var avatarSeleccionadoUrl = "https://ipfs.io/ipfs/bafybeidnbe4knxriwgp3hjnpupozk5xg6f75xvvhuottvudryqmxvsrleu";
+
+        // Comprobar si ya hay una sesión guardada al cargar la página
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const nombreGuardado = localStorage.getItem('zaard_nombre');
+            const avatarGuardado = localStorage.getItem('zaard_avatar');
+
+            if (nombreGuardado && avatarGuardado) {
+                mostrarInterfazJugador(nombreGuardado, avatarGuardado);
+            }
+        });
+
+        function seleccionarAvatar(elemento) {
+            // Quitar la selección previa
+            document.querySelectorAll('.avatar-option').forEach(img => img.classList.remove('selected'));
+            // Seleccionar el nuevo
+            elemento.classList.add('selected');
+            avatarSeleccionadoUrl = elemento.src;
+            reproducirEfectoSonido();
+        }
+
+        function reproducirEfectoSonido() {
+            try {
+                sonidoClick.currentTime = 0;
+                sonidoClick.play().catch(e => {});
+            } catch(e) {}
+        }
+
         function iniciarExperiencia() {
+            reproducirEfectoSonido();
+            const inputNombre = document.getElementById('inputNombre').value.trim();
+            const nombreFinal = inputNombre !== "" ? inputNombre : "Jugador Zaard";
+
+            // Guardar en el almacenamiento del navegador para mantener la sesión
+            localStorage.setItem('zaard_nombre', nombreFinal);
+            localStorage.setItem('zaard_avatar', avatarSeleccionadoUrl);
+
+            mostrarInterfazJugador(nombreFinal, avatarSeleccionadoUrl);
+
+            // Intentar reproducir música de fondo
+            musica.play().catch(e => {});
+        }
+
+        function mostrarInterfazJugador(nombre, avatar) {
             document.getElementById('bienvenida').style.display = 'none';
-            musica.play();
+            document.getElementById('img-perfil-actual').src = avatar;
+            document.getElementById('txt-nombre-actual').innerText = nombre;
+            document.getElementById('perfil-activo').style.display = 'flex';
+        }
+
+        function cerrarSesion() {
+            if(confirm("¿Deseas cerrar sesión para cambiar de avatar o nombre?")) {
+                localStorage.removeItem('zaard_nombre');
+                localStorage.removeItem('zaard_avatar');
+                location.reload();
+            }
         }
 
         function toggleAudio() {
+            reproducirEfectoSonido();
             if (musica.paused) {
                 musica.play();
             } else {
                 musica.pause();
             }
+        }
+
+        function reproducirSonidoYRedirigir(url) {
+            reproducirEfectoSonido();
+            setTimeout(() => {
+                window.location.href = url;
+            }, 200); // Pequeño retraso para que se alcance a escuchar el click
+        }
+
+        function reproducirSonidoYAbrir(url, target) {
+            reproducirEfectoSonido();
+            window.open(url, target);
         }
     </script>
 </body>

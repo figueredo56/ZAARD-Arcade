@@ -2,32 +2,167 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>ZAARD MEMORY ARCADE</title>
+    <title>ZAARD MEMORY ARCADE - Protocolo Panga</title>
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
     <style>
-        body { margin: 0; background: #020006; overflow: hidden; font-family: 'Arial', sans-serif; }
-        #ui-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1000; display: flex; justify-content: center; align-items: center; background: rgba(0,0,0,0.6); }
-        .ui-panel { width: 95%; max-width: 800px; background: rgba(0,0,0,0.9); border: 5px solid #5a2d82; border-radius: 50px; padding: 60px; text-align: center; box-shadow: 0 0 80px #5a2d82; }
-        .banner { width: 100%; height: 350px; background-size: cover; background-position: center; border-radius: 30px; margin-bottom: 40px; border: 3px solid #bc8fef; }
-        button { width: 100%; padding: 30px; margin-top: 30px; border: none; border-radius: 25px; background: linear-gradient(90deg, #5a2d82, #2ecc71); color: white; font-weight: bold; font-size: 28px; cursor: pointer; text-transform: uppercase; }
-        h1 { font-size: 4em; margin: 0; color: #bc8fef; text-shadow: 0 0 20px #5a2d82; }
+        body { 
+            margin: 0; 
+            background: linear-gradient(135deg, #1e0033 0%, #0d001a 50%, #001f3f 100%);
+            overflow: hidden; 
+            font-family: 'Arial', sans-serif; 
+            color: #fff;
+        }
+        #ui-container { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            z-index: 1000; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            background: rgba(5, 0, 15, 0.85); 
+            backdrop-filter: blur(10px);
+        }
+        @keyframes triColorGlow {
+            0% { border-color: #00ffff; box-shadow: 0 0 30px rgba(0, 255, 255, 0.4), inset 0 0 20px rgba(0, 255, 255, 0.1); }
+            33% { border-color: #22c55e; box-shadow: 0 0 35px rgba(34, 197, 94, 0.5), inset 0 0 20px rgba(34, 197, 94, 0.1); }
+            66% { border-color: #a855f7; box-shadow: 0 0 40px rgba(168, 85, 247, 0.6), inset 0 0 25px rgba(168, 85, 247, 0.2); }
+            100% { border-color: #00ffff; box-shadow: 0 0 30px rgba(0, 255, 255, 0.4), inset 0 0 20px rgba(0, 255, 255, 0.1); }
+        }
+        .ui-panel { 
+            width: 92%; 
+            max-width: 650px; 
+            background: rgba(15, 8, 30, 0.95); 
+            border: 3px solid #a855f7; 
+            border-radius: 35px; 
+            padding: 30px; 
+            text-align: center; 
+            animation: triColorGlow 5s infinite ease-in-out;
+            box-sizing: border-box;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .banner { 
+            width: 100%; 
+            height: 200px; 
+            background-size: cover; 
+            background-position: center; 
+            border-radius: 20px; 
+            margin-bottom: 20px; 
+            border: 2px solid #00ffff; 
+            box-shadow: 0 0 15px rgba(0,255,255,0.3);
+        }
+        .btn-zaard { 
+            width: 100%; 
+            padding: 20px; 
+            margin-top: 15px; 
+            border: none; 
+            border-radius: 20px; 
+            background: linear-gradient(135deg, #a855f7, #22c55e); 
+            color: white; 
+            font-weight: bold; 
+            font-size: 22px; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+            transition: transform 0.2s;
+        }
+        .btn-zaard:hover { transform: scale(1.02); }
+        h1 { font-size: 2.8em; margin: 0 0 10px 0; background: linear-gradient(135deg, #00ffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 20px rgba(168, 85, 247, 0.5); }
+        h2 { color: #bc8fef; font-size: 2em; margin-top: 0; }
+        
+        /* Estilos de elementos estilo la interfaz visual aportada */
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(168, 85, 247, 0.3); padding-bottom: 10px; }
+        .close-btn { background: #5a2d82; color: #fff; border: none; width: 35px; height: 35px; border-radius: 50%; font-weight: bold; cursor: pointer; font-size: 18px; }
+        .setting-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 12px 18px; border-radius: 15px; margin-bottom: 10px; border: 1px solid rgba(0,255,255,0.15); }
+        .avatar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; }
+        .avatar-item { background: rgba(0,0,0,0.5); border: 2px solid #a855f7; border-radius: 15px; padding: 8px; cursor: pointer; text-align: center; transition: 0.2s; }
+        .avatar-item.selected { border-color: #22c55e; box-shadow: 0 0 15px rgba(34,197,94,0.6); }
+        .avatar-item img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+        .level-badge { background: linear-gradient(90deg, #a855f7, #00ffff); padding: 8px 20px; border-radius: 20px; font-weight: bold; display: inline-block; margin-bottom: 15px; font-size: 18px; color: #000; text-shadow: none; }
+        select { background: #1e0033; color: #fff; border: 1px solid #a855f7; padding: 8px 15px; border-radius: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
 
+<!-- Reproductor de audio global -->
+<div style="position: fixed; bottom: 10px; right: 10px; z-index: 2000; background: rgba(0,0,0,0.8); padding: 5px 12px; border-radius: 15px; border: 1px solid #00ffff;">
+    <span style="font-size: 10px; color: #00ffff;">🎶 El Chupulún de Zaard</span>
+    <audio id="zaard-audio" controls autoplay loop style="height: 25px; width: 130px; vertical-align: middle;">
+        <source src="El Chupulún de Zaard.mp3" type="audio/mpeg">
+    </audio>
+</div>
+
 <div id="ui-container">
+    <!-- Pantalla 1: Inicio Protocolo -->
     <div id="pantalla-inicio" class="ui-panel">
         <div class="banner" style="background-image: url('https://ipfs.io/ipfs/bafybeiefhnawny7nlgixveiia7aaougqxsird6or4nws52vp36ndbfvixa')"></div>
         <h1>ZAARD ARCADE</h1>
-        <button onclick="document.getElementById('pantalla-inicio').style.display='none'; document.getElementById('menu-seleccion').style.display='block';">¡ENTRAR AL JUEGO!</button>
+        <p style="color: #00ffff; margin-bottom: 20px;">Protocolo Panga | Edición 10 Niveles</p>
+        <button class="btn-zaard" onclick="abrirMenuPrincipal()">¡ENTRAR AL JUEGO!</button>
     </div>
 
+    <!-- Pantalla 2: Menú Principal / Selección -->
     <div id="menu-seleccion" class="ui-panel" style="display:none;">
         <div class="banner" style="background-image: url('https://ipfs.io/ipfs/bafybeic5377igwloc2o63whivoykazkibjruq7bau4edjpfdfu4gudunjm')"></div>
-        <h2 style="color: #bc8fef; font-size: 3em;">MEMORY RUN</h2>
-        <button onclick="lanzarJuego(false)">MODO INVITADO</button>
-        <button onclick="conectarYJugar()">CONECTAR BILLETERA</button>
+        <h2>MEMORY RUN - 10 NIVELES</h2>
+        <div id="user-info-box" style="margin-bottom: 15px; font-size: 14px; color: #bc8fef;"></div>
+        <button class="btn-zaard" onclick="lanzarJuego(false)">MODO INVITADO</button>
+        <button class="btn-zaard" onclick="conectarYJugar()" style="background: linear-gradient(135deg, #00ffff, #3b0764);">CONECTAR BILLETERA WEB3</button>
+        <button class="btn-zaard" onclick="abrirPerfil()" style="background: rgba(168,85,247,0.3); border: 1px solid #a855f7; font-size: 16px; padding: 12px;">🎨 Crear / Editar Avatar y Perfil</button>
+        <button class="btn-zaard" onclick="abrirAjustes()" style="background: rgba(0,255,255,0.2); border: 1px solid #00ffff; font-size: 16px; padding: 12px;">⚙️ Ajustes (Idioma y Sonido)</button>
+    </div>
+
+    <!-- Pantalla de Perfil / Avatares -->
+    <div id="modal-perfil" class="ui-panel" style="display:none;">
+        <div class="modal-header">
+            <h2>Personalizar Perfil</h2>
+            <button class="close-btn" onclick="cerrarModal('modal-perfil')">X</button>
+        </div>
+        <p style="color: #00ffff; font-size: 14px;">Elige tu Avatar de Alta Calidad para el Protocolo:</p>
+        <div class="avatar-grid">
+            <div class="avatar-item selected" onclick="seleccionarAvatar(0, this)"><img src="https://ipfs.io/ipfs/bafybeicugqjr3uy2mvk32536qi3gf3astpwj53nlbeogx3vmzsmk2ia3wa"></div>
+            <div class="avatar-item" onclick="seleccionarAvatar(1, this)"><img src="https://ipfs.io/ipfs/bafybeickwp5h3ew6bm4aim6r5v5sc5xha6h3hdsbrhja2zeruosphac5ba"></div>
+            <div class="avatar-item" onclick="seleccionarAvatar(2, this)"><img src="https://ipfs.io/ipfs/bafybeigxro3eht2lctrk4akglifsxuvwolwqfzgqzvnstabnpjjiungza4"></div>
+            <div class="avatar-item" onclick="seleccionarAvatar(3, this)"><img src="https://ipfs.io/ipfs/bafybeidwy5yeihhglhcuztl32loatlk3wccecimodl6m4ocuotuuru7gvi"></div>
+        </div>
+        <div style="margin-top: 15px;">
+            <input type="text" id="input-nombre" placeholder="Tu Nombre o Alias" value="PangaUser" style="width: 80%; padding: 12px; border-radius: 10px; border: 1px solid #a855f7; background: #0d001a; color: #fff; text-align: center; font-size: 16px;">
+        </div>
+        <button class="btn-zaard" onclick="guardarPerfil()" style="margin-top: 20px;">Guardar Perfil</button>
+    </div>
+
+    <!-- Pantalla de Ajustes -->
+    <div id="modal-ajustes" class="ui-panel" style="display:none;">
+        <div class="modal-header">
+            <h2>Ajustes del Sistema</h2>
+            <button class="close-btn" onclick="cerrarModal('modal-ajustes')">X</button>
+        </div>
+        <div class="setting-row">
+            <span>🎵 Música de Fondo</span>
+            <select id="sel-musica" onchange="toggleMusica(this.value)">
+                <option value="ON">ON</option>
+                <option value="OFF">OFF</option>
+            </select>
+        </div>
+        <div class="setting-row">
+            <span>🔊 Efectos de Sonido</span>
+            <select id="sel-sfx" onchange="toggleSfx(this.value)">
+                <option value="ON">ON</option>
+                <option value="OFF">OFF</option>
+            </select>
+        </div>
+        <div class="setting-row">
+            <span>🌐 Idioma</span>
+            <select id="sel-lang" onchange="cambiarIdioma(this.value)">
+                <option value="es">Español</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+        <button class="btn-zaard" onclick="cerrarModal('modal-ajustes')">Aceptar</button>
     </div>
 </div>
 
@@ -37,9 +172,20 @@
     const ABI = [{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"type":"function"}];
     
     let web3, contract, userAccount, esWeb3 = false;
+    let nivelActual = 1;
+    let sfxHabilitado = true;
+    let avatarSeleccionado = 0;
+    let nombreUsuario = "PangaUser";
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
+    window.addEventListener('DOMContentLoaded', () => {
+        const audio = document.getElementById('zaard-audio');
+        audio.volume = 0.3;
+        audio.play().catch(e => console.log("Autoplay pendiente"));
+    });
+
     function playSnd(freq, dur, type = 'sine') {
+        if (!sfxHabilitado) return;
         if (audioCtx.state === 'suspended') audioCtx.resume();
         let o = audioCtx.createOscillator();
         let g = audioCtx.createGain();
@@ -53,6 +199,35 @@
         o.stop(audioCtx.currentTime + dur);
     }
 
+    function abrirMenuPrincipal() {
+        document.getElementById('pantalla-inicio').style.display = 'none';
+        document.getElementById('menu-seleccion').style.display = 'block';
+    }
+
+    function abrirPerfil() { document.getElementById('modal-perfil').style.display = 'block'; }
+    function abrirAjustes() { document.getElementById('modal-ajustes').style.display = 'block'; }
+    function cerrarModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    function seleccionarAvatar(idx, el) {
+        document.querySelectorAll('.avatar-item').forEach(i => i.classList.remove('selected'));
+        el.classList.add('selected');
+        avatarSeleccionado = idx;
+    }
+
+    function guardarPerfil() {
+        nombreUsuario = document.getElementById('input-nombre').value || "PangaUser";
+        cerrarModal('modal-perfil');
+    }
+
+    function toggleSfx(val) { sfxHabilitado = (val === 'ON'); }
+    function toggleMusica(val) {
+        const audio = document.getElementById('zaard-audio');
+        if(val === 'OFF') audio.pause(); else audio.play();
+    }
+    function cambiarIdioma(lang) {
+        console.log("Idioma cambiado a:", lang);
+    }
+
     async function conectarYJugar() {
         if (window.ethereum) {
             try {
@@ -62,46 +237,67 @@
                 contract = new web3.eth.Contract(ABI, TOKEN_ADDR);
                 esWeb3 = true;
                 lanzarJuego(true);
-            } catch (e) { alert("Conexión fallida."); }
-        } else { alert("Instala MetaMask."); }
+            } catch (e) { alert("Conexión de billetera fallida."); }
+        } else { alert("Por favor instala MetaMask o una billetera Web3 compatible."); }
     }
 
     async function ejecutarPerdida() {
         if (esWeb3 && contract) {
             try {
                 await contract.methods.transfer(POOL_LP_ADDR, "100000000000000").send({ from: userAccount });
-            } catch (e) { console.log("Error en transferencia"); }
+            } catch (e) { console.log("Transferencia omitida o cancelada"); }
         }
+        alert("¡Juego Terminado! Reiniciando desde el Nivel 1.");
+        nivelActual = 1;
         location.reload();
     }
 
-    function lanzarJuego(esWeb3) {
+    function lanzarJuego(esModoWeb3) {
         document.getElementById('ui-container').remove(); 
         
         new Phaser.Game({
             type: Phaser.AUTO, 
             width: window.innerWidth, 
             height: window.innerHeight,
-            backgroundColor: '#020006',
+            backgroundColor: '#070212',
             scene: {
                 preload: function() {
-                    const cids = ['bafybeifzkdoitiowwicqwnkfx6dnahydk5mm33h7r3j3wyv7c4rjp75ws4', 'bafybeiakl2nuugolggppxfttwcxfsv56zsjms4ityd5vjyyd54ctirzaeq', 'bafybeicugqjr3uy2mvk32536qi3gf3astpwj53nlbeogx3vmzsmk2ia3wa', 'bafybeickwp5h3ew6bm4aim6r5v5sc5xha6h3hdsbrhja2zeruosphac5ba', 'bafybeigxro3eht2lctrk4akglifsxuvwolwqfzgqzvnstabnpjjiungza4', 'bafybeidwy5yeihhglhcuztl32loatlk3wccecimodl6m4ocuotuuru7gvi', 'bafybeiheko4izm53qfmhejmvz5elek4hb2lp3weaduwndvrvpxdamwklue', 'bafybeiggz26x26hncisti5s5y74ciuk4yuymtczhsbwdufoql2gidl57mu', 'bafybeiginlvb63afmlicnvsx4fwfekanoipydzgzv3ay7njpvq6nm4zzym', 'bafybeie5wqjyuwdezpoe5tqkqlojxv5evtdkv6mxhondx5hvod44txbobq', 'bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m', 'bafybeieiiuojv6snmh2vchhigyoq7s5vcdvel66ih5tacnhp6ceaveg3um', 'bafybeibpwlfqcnmrz67trsxsdaxq5xmdwrywvgbstgg7hvtshqggkjwd74', 'bafybeif2pjebwhe3eodqoxhu3rccaxt6frh2mb5lxro2gy6p5syacgtaly', 'bafybeif5pqgoxonxnxscoayvpzawsxzw5lm6upxkbslnkbgjeenf5cg24m', 'bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue'];
+                    const cids = [
+                        'bafybeifzkdoitiowwicqwnkfx6dnahydk5mm33h7r3j3wyv7c4rjp75ws4', 
+                        'bafybeiakl2nuugolggppxfttwcxfsv56zsjms4ityd5vjyyd54ctirzaeq', 
+                        'bafybeicugqjr3uy2mvk32536qi3gf3astpwj53nlbeogx3vmzsmk2ia3wa', 
+                        'bafybeickwp5h3ew6bm4aim6r5v5sc5xha6h3hdsbrhja2zeruosphac5ba', 
+                        'bafybeigxro3eht2lctrk4akglifsxuvwolwqfzgqzvnstabnpjjiungza4', 
+                        'bafybeidwy5yeihhglhcuztl32loatlk3wccecimodl6m4ocuotuuru7gvi', 
+                        'bafybeiheko4izm53qfmhejmvz5elek4hb2lp3weaduwndvrvpxdamwklue', 
+                        'bafybeiggz26x26hncisti5s5y74ciuk4yuymtczhsbwdufoql2gidl57mu', 
+                        'bafybeiginlvb63afmlicnvsx4fwfekanoipydzgzv3ay7njpvq6nm4zzym', 
+                        'bafybeie5wqjyuwdezpoe5tqkqlojxv5evtdkv6mxhondx5hvod44txbobq'
+                    ];
                     cids.forEach((c, i) => this.load.image('c'+i, 'https://ipfs.io/ipfs/'+c));
                     this.load.image('dorso', 'https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m');
                 },
                 create: function() {
-                    this.vidas = 10;
-                    this.txt = this.add.text(60, 60, 'Oportunidades: 10', { fontSize: '50px', color: '#bc8fef' });
-                    let deck = []; for(let i=0; i<16; i++) { deck.push(i%8, i%8); }
+                    this.vidas = Math.max(3, 12 - nivelActual); // Disminuye vidas sutilmente al subir de nivel
+                    
+                    // Elementos de UI Estilo Juego Profesional Producido (Morado/Azul Neón)
+                    this.add.text(50, 40, `👤 ${nombreUsuario} | Nivel: ${nivelActual}/10`, { fontSize: '26px', color: '#00ffff', fontStyle: 'bold' });
+                    this.txtVidas = this.add.text(50, 80, `Oportunidades: ${this.vidas}`, { fontSize: '22px', color: '#bc8fef' });
+                    
+                    // Cálculo de parejas según el nivel (creciente de 4 a 10 pares)
+                    let numPares = Math.min(4 + nivelActual, 10);
+                    let deck = []; 
+                    for(let i=0; i<numPares; i++) { deck.push(i, i); }
                     Phaser.Utils.Array.Shuffle(deck);
                     
+                    let cols = 4;
                     deck.forEach((id, i) => {
-                        let x = (window.innerWidth/2) - 400 + (i % 6) * 145;
-                        let y = 250 + Math.floor(i / 6) * 145;
-                        let card = this.add.sprite(x, y, 'dorso').setScale(0.25).setInteractive();
+                        let x = (window.innerWidth/2) - 250 + (i % cols) * 125;
+                        let y = 200 + Math.floor(i / cols) * 125;
+                        let card = this.add.sprite(x, y, 'dorso').setScale(0.2).setInteractive();
                         card.cid = 'c'+id;
                         card.on('pointerdown', () => {
-                            playSnd(400, 0.1, 'triangle');
+                            playSnd(450, 0.1, 'triangle');
                             if(this.lock || card.texture.key !== 'dorso') return;
                             card.setTexture(card.cid);
                             if(!this.p1) this.p1 = card;
@@ -111,12 +307,30 @@
                                     setTimeout(() => {
                                         this.p1.setTexture('dorso'); card.setTexture('dorso');
                                         this.p1 = null; this.lock = false;
-                                        this.vidas--; this.txt.setText('Oportunidades: ' + this.vidas);
+                                        this.vidas--; this.txtVidas.setText('Oportunidades: ' + this.vidas);
                                         if(this.vidas <= 0) ejecutarPerdida();
-                                    }, 800);
-                                } else { this.p1 = null; this.lock = false; }
+                                    }, 700);
+                                } else { 
+                                    this.p1 = null; 
+                                    this.lock = false;
+                                    // Verificar victoria del nivel
+                                    let todasDescubiertas = true;
+                                    // Lógica simple de avance al vaciar
+                                    playSnd(800, 0.2, 'sine');
+                                }
                             }
                         });
+                    });
+
+                    // Botón para avanzar de nivel de prueba
+                    let btnSiguiente = this.add.text(window.innerWidth - 200, 50, '⚡ SIGUIENTE NIVEL', { fontSize: '18px', backgroundColor: '#5a2d82', color: '#fff', padding: 10 }).setInteractive();
+                    btnSiguiente.on('pointerdown', () => {
+                        if(nivelActual < 10) {
+                            nivelActual++;
+                            this.scene.restart();
+                        } else {
+                            alert("¡Felicidades! Has completado los 10 niveles del Protocolo Panga.");
+                        }
                     });
                 }
             }

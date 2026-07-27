@@ -28,7 +28,6 @@
 
 <div id="loading-screen">CARGANDO PROTOCOLO...</div>
 
-<!-- Reproductor de audio global (oculto pero funcional si el usuario lo activo en el menú) -->
 <audio id="zaard-audio" loop>
     <source src="El%20Chupulún%20de%20Zaard.mp3" type="audio/mpeg">
 </audio>
@@ -36,37 +35,29 @@
 <script>
     // --- CONFIGURACIÓN OBTENIDA DEL MENÚ PRINCIPAL ---
     const LS_NOMBRE = localStorage.getItem('zaard_nombre') || "Jugador Zaard";
-    // Obtenemos la URL del avatar seleccionado en el menú. Si no hay, usamos la primera opción por defecto.
     const LS_AVATAR_URL = localStorage.getItem('zaard_avatar') || 'https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_lhyyv2lhyyv2lhyy_1.png';
     const LS_IDIOMA = localStorage.getItem('zaard_lang') || 'es'; // 'es', 'en', 'zh'
 
     // Configuración Web3 y Apuestas
-    const TOKEN_ADDR = "0x3468EA4e6CE13Ec4C7f8651f7eFC6AA6046F4d65"; // Contrato Token ZARD
-    const BURN_WALLET = "0x000000000000000000000000000000000000dEaD"; // Billetera de Quema Oficial
+    const TOKEN_ADDR = "0x3468EA4e6CE13Ec4C7f8651f7eFC6AA6046F4d65"; 
+    const BURN_WALLET = "0x000000000000000000000000000000000000dEaD"; 
     const ABI_TRANSFER = [{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"type":"function"}];
-    const APUESTA_WEI = "100000000000000"; // 0.0001 ZARD (asumiendo 18 decimales)
+    const APUESTA_WEI = "100000000000000"; // 0.0001 ZARD
 
     let web3, contract, userAccount, esModoWeb3 = false;
     let nivelActual = 1;
-    let musicaHabilitada = localStorage.getItem('zaard_musica') !== 'OFF'; // Por defecto ON si no se especifica
-    
-    // Precargar la imagen del avatar para usarla en Phaser
+    let musicaHabilitada = localStorage.getItem('zaard_musica') !== 'OFF';
     const avatarImageKey = 'avatarUsr';
 
     window.addEventListener('DOMContentLoaded', () => {
-        // Configurar y reproducir música si estaba activa en el menú
         const audio = document.getElementById('zaard-audio');
         audio.volume = 0.3;
         if (musicaHabilitada) {
             audio.play().catch(e => console.log("Autoplay pendiente de interacción"));
         }
-        
-        // Ocultar pantalla de carga e iniciar Phaser
         document.getElementById('loading-screen').style.display = 'none';
         iniciarPhaserGame();
     });
-
-    // --- FUNCIONES WEB3 Y LÓGICA ---
 
     async function conectarBilletera() {
         if (window.ethereum) {
@@ -89,11 +80,9 @@
         }
     }
 
-    // Ejecuta la quema de tokens al perder la partida en modo Web3
     async function ejecutarQuemaPorPerdida() {
         if (esModoWeb3 && contract) {
             try {
-                // Muestra mensaje de proceso
                 const msg = LS_IDIOMA === 'zh' ? "正在处理销毁交易..." : "Procesando transacción de quema...";
                 const msgDiv = document.createElement('div');
                 msgDiv.style.position = 'fixed'; msgDiv.style.top='50%'; msgDiv.style.left='50%';
@@ -102,9 +91,7 @@
                 msgDiv.innerText = msg;
                 document.body.appendChild(msgDiv);
 
-                // Ejecuta la transferencia al burn wallet
                 await contract.methods.transfer(BURN_WALLET, APUESTA_WEI).send({ from: userAccount });
-                
                 msgDiv.remove();
                 alert(LS_IDIOMA === 'zh' ? "代币已销毁。" : "Tokens quemados correctamente.");
             } catch (e) { 
@@ -114,44 +101,32 @@
         }
     }
 
-    // --- GESTIÓN DE ESTADOS DEL JUEGO ---
-
     function irAlMenuPrincipal() {
-        // Redirige al usuario de vuelta al Hub principal
         window.location.href = "index.html";
     }
 
     function manejarVictoriaFinal(sceneRef) {
-        // Mensajes de felicitación según el idioma
         let mensaje = "¡FELICIDADES! Has completado los 10 niveles.";
         if (LS_IDIOMA === 'en') mensaje = "CONGRATULATIONS! You have completed all 10 levels.";
         if (LS_IDIOMA === 'zh') mensaje = "恭喜！您已完成所有 10 个关卡。";
         
         alert(`${mensaje} ${LS_NOMBRE}`);
-        // Al ganar el juego, no se quema nada, solo reiniciamos el nivel por ahora o volvemos al menú
-        // irAlMenuPrincipal(); 
-        // Opcional: reiniciar el juego
         nivelActual = 1;
         sceneRef.scene.restart();
     }
 
     async function manejarDerrota(sceneRef) {
-        // Mensajes de derrota según el idioma
         let mensaje = "¡Has perdido todas las oportunidades!";
         if (LS_IDIOMA === 'en') mensaje = "You have lost all opportunities!";
         if (LS_IDIOMA === 'zh') mensaje = "您已失去所有机会！";
 
-        // Si es modo Web3, ejecutamos la quema
         if (esModoWeb3) {
             await ejecutarQuemaPorPerdida();
         }
         
         alert(mensaje);
-        // Al perder, regresamos al menú principal
         irAlMenuPrincipal();
     }
-
-    // --- CONFIGURACIÓN DE PHASER ---
 
     function iniciarPhaserGame() {
         new Phaser.Game({
@@ -159,7 +134,6 @@
             width: window.innerWidth, 
             height: window.innerHeight,
             backgroundColor: '#070112',
-            parent: 'phaser-game', // Contenedor opcional
             scale: {
                 mode: Phaser.Scale.FIT,
                 autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -168,7 +142,6 @@
             },
             scene: {
                 preload: function() {
-                    // Carga de activos (cartas y dorso)
                     const cids = [
                         'bafybeifzkdoitiowwicqwnkfx6dnahydk5mm33h7r3j3wyv7c4rjp75ws4', 'bafybeiakl2nuugolggppxfttwcxfsv56zsjms4ityd5vjyyd54ctirzaeq', 
                         'bafybeicugqjr3uy2mvk32536qi3gf3astpwj53nlbeogx3vmzsmk2ia3wa', 'bafybeickwp5h3ew6bm4aim6r5v5sc5xha6h3hdsbrhja2zeruosphac5ba', 
@@ -178,8 +151,6 @@
                     ];
                     cids.forEach((c, i) => this.load.image('c'+i, 'https://ipfs.io/ipfs/'+c));
                     this.load.image('dorso', 'https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m');
-                    
-                    // Carga del avatar seleccionado desde el menú como textura 'avatarUsr'
                     this.load.image(avatarImageKey, LS_AVATAR_URL);
                 },
                 create: function() {
@@ -188,19 +159,16 @@
                     this.bloqueado = false;
                     this.primeraCarta = null;
                     
-                    // Fondo con brillo sutil
                     let bgGlow = this.add.circle(240, 400, 280, 0x5a189a, 0.25);
                     bgGlow.setBlendMode(Phaser.BlendModes.ADD);
 
-                    // UI Superior fija y compacta (Avatar, Nombre, Nivel, Vidas)
                     this.avatarImg = this.add.image(38, 38, avatarImageKey).setDisplaySize(42, 42).setOrigin(0.5);
-                    this.add.graphics().lineStyle(2, 0xd946ef, 1).strokeCircle(38, 38, 22); // Borde rosa
+                    this.add.graphics().lineStyle(2, 0xd946ef, 1).strokeCircle(38, 38, 22);
 
                     this.txtNombre = this.add.text(70, 20, LS_NOMBRE, { fontSize: '16px', color: '#00ffff', fontStyle: 'bold' });
                     this.txtNivel = this.add.text(70, 42, `Nivel: ${nivelActual} / 10`, { fontSize: '13px', color: '#a855f7', fontStyle: 'bold' });
                     this.txtVidas = this.add.text(465, 30, `Oportunidades: ${this.vidas}`, { fontSize: '14px', color: '#bc8fef' }).setOrigin(1, 0);
                     
-                    // Botón de Salir en el juego (Arriba derecha)
                     let btnSalir = this.add.text(465, 65, LS_IDIOMA === 'zh' ? "退出" : "SALIR", { fontSize: '14px', color: '#ff4444', fontStyle: 'bold' }).setOrigin(1, 0).setInteractive();
                     btnSalir.on('pointerdown', irAlMenuPrincipal);
 
@@ -210,7 +178,6 @@
                         }
                         sceneRef.cartasGroup = sceneRef.add.group();
 
-                        // Dificultad progresiva: de 5 pares (10 cartas) en Nivel 1 hasta 10 pares (20 cartas) en Nivel 10
                         let totalPares = Math.min(4 + nivelActual, 10);
                         let deck = []; 
                         for(let i = 0; i < totalPares; i++) { deck.push(i, i); }
@@ -222,7 +189,7 @@
                         let spacingY = 90;
                         
                         let startX = 240 - (((cols - 1) * spacingX) / 2);
-                        let startY = 180;
+                        let startY = 190;
                         
                         deck.forEach((val, idx) => {
                             let r = Math.floor(idx / cols);
@@ -240,3 +207,59 @@
                                 carta.setTexture('c' + carta.val);
                                 
                                 if (!sceneRef.primeraCarta) {
+                                    sceneRef.primeraCarta = carta;
+                                } else {
+                                    sceneRef.bloqueado = true;
+                                    let primera = sceneRef.primeraCarta;
+                                    sceneRef.primeraCarta = null;
+                                    
+                                    if (primera.val === carta.val) {
+                                        primera.revelada = true;
+                                        carta.revelada = true;
+                                        sceneRef.bloqueado = false;
+                                        
+                                        // Verificar si ganó el nivel
+                                        let todasResueltas = true;
+                                        sceneRef.cartasGroup.children.iterate((item) => {
+                                            if (item && !item.revelada) todasResueltas = false;
+                                        });
+                                        
+                                        if (todasResueltas) {
+                                            if (nivelActual >= 10) {
+                                                manejarVictoriaFinal(sceneRef);
+                                            } else {
+                                                nivelActual++;
+                                                sceneRef.time.delayedCall(800, () => {
+                                                    sceneRef.txtNivel.setText(`Nivel: ${nivelActual} / 10`);
+                                                    construirTablero();
+                                                });
+                                            }
+                                        }
+                                    } else {
+                                        sceneRef.vidas--;
+                                        sceneRef.txtVidas.setText(`Oportunidades: ${sceneRef.vidas}`);
+                                        
+                                        sceneRef.time.delayedCall(800, () => {
+                                            primera.setTexture('dorso');
+                                            carta.setTexture('dorso');
+                                            sceneRef.bloqueado = false;
+                                            
+                                            if (sceneRef.vidas <= 0) {
+                                                manejarDerrota(sceneRef);
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        });
+                    }
+
+                    construirTablero();
+                }
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

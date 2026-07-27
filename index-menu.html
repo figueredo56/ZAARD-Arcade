@@ -117,15 +117,15 @@
         .avatar-selection {
             display: flex;
             justify-content: center;
-            gap: 12px;
+            gap: 15px;
             margin-bottom: 25px;
             flex-wrap: wrap;
-            max-width: 450px;
+            max-width: 400px;
         }
 
         .avatar-option {
-            width: 60px;
-            height: 60px;
+            width: 65px;
+            height: 65px;
             border-radius: 50%;
             border: 3px solid #555;
             cursor: pointer;
@@ -282,10 +282,9 @@
         </div>
 
         <div class="avatar-selection">
-            <!-- Tus 5 nuevos avatares desde GitHub -->
+            <!-- 1era, 2da, 4ta y 5ta imagen operativas -->
             <img src="https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_lhyyv2lhyyv2lhyy_1.png" class="avatar-option selected" onclick="seleccionarAvatar(this)" alt="Avatar 1">
             <img src="https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_pwot5spwot5spwot.png" class="avatar-option" onclick="seleccionarAvatar(this)" alt="Avatar 2">
-            <img src="https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_m5ezom5ezom5ezom_1.png" class="avatar-option" onclick="seleccionarAvatar(this)" alt="Avatar 3">
             <img src="https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_m5ezom5ezom5ezom.png" class="avatar-option" onclick="seleccionarAvatar(this)" alt="Avatar 4">
             <img src="https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_majxg4majxg4majx_1.png" class="avatar-option" onclick="seleccionarAvatar(this)" alt="Avatar 5">
         </div>
@@ -319,7 +318,6 @@
         var avatarSeleccionadoUrl = "https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_lhyyv2lhyyv2lhyy_1.png";
         var idiomaActual = "es";
 
-        // Diccionario de Traducciones (Español, Inglés, Chino)
         const textos = {
             es: {
                 bienvenida: "¡BIENVENIDOS A ZAARD ARCADE!",
@@ -356,7 +354,6 @@
             }
         };
 
-        // Comprobar si ya hay una sesión guardada al cargar
         window.addEventListener('DOMContentLoaded', () => {
             const nombreGuardado = localStorage.getItem('zaard_nombre');
             const avatarGuardado = localStorage.getItem('zaard_avatar');
@@ -385,7 +382,6 @@
             document.querySelectorAll('.btn-lang').forEach(b => b.classList.remove('active'));
             elemento.classList.add('active');
 
-            // Actualizar textos dinámicamente
             const t = textos[lang];
             document.getElementById('txt-titulo-bienvenida').innerText = t.bienvenida;
             document.getElementById('txt-desc-bienvenida').innerText = t.descBienvenida;
@@ -463,4 +459,4 @@
         }
     </script>
 </body>
-</html>
+            </html>

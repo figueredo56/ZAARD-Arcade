@@ -17,195 +17,149 @@
             color: #fff;
             touch-action: none;
         }
-        #ui-container { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100vw; 
-            height: 100vh; 
-            z-index: 1000; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            background: rgba(10, 2, 25, 0.9); 
-            backdrop-filter: blur(12px);
-            padding: 10px;
-            box-sizing: border-box;
+        #loading-screen {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #070112; z-index: 2000;
+            display: flex; justify-content: center; align-items: center; color: #00ffff; font-weight: bold;
         }
-        @keyframes triColorGlow {
-            0% { border-color: #00ffff; box-shadow: 0 0 25px rgba(0, 255, 255, 0.4), inset 0 0 15px rgba(0, 255, 255, 0.15); }
-            33% { border-color: #22c55e; box-shadow: 0 0 30px rgba(34, 197, 94, 0.5), inset 0 0 15px rgba(34, 197, 94, 0.15); }
-            66% { border-color: #a855f7; box-shadow: 0 0 35px rgba(168, 85, 247, 0.6), inset 0 0 18px rgba(168, 85, 247, 0.2); }
-            100% { border-color: #00ffff; box-shadow: 0 0 25px rgba(0, 255, 255, 0.4), inset 0 0 15px rgba(0, 255, 255, 0.15); }
-        }
-        .ui-panel { 
-            width: 100%; 
-            max-width: 400px; 
-            background: linear-gradient(135deg, rgba(35, 12, 65, 0.98) 0%, rgba(12, 4, 25, 0.98) 100%); 
-            border: 2px solid #a855f7; 
-            border-radius: 20px; 
-            padding: 15px; 
-            text-align: center; 
-            animation: triColorGlow 5s infinite ease-in-out;
-            box-sizing: border-box;
-            max-height: 95vh;
-            overflow-y: auto;
-        }
-        .banner-neon { 
-            width: 100%; 
-            height: 90px; 
-            background: linear-gradient(135deg, #00ffff, #a855f7, #22c55e); 
-            border-radius: 12px; 
-            margin-bottom: 12px; 
-            border: 2px solid #00ffff; 
-            box-shadow: 0 0 15px rgba(0,255,255,0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 18px;
-            color: #17042f;
-            text-shadow: 0 0 5px rgba(255,255,255,0.6);
-        }
-        .btn-zaard { 
-            width: 100%; 
-            padding: 12px; 
-            margin-top: 8px; 
-            border: 2px solid #00ffff; 
-            border-radius: 12px; 
-            background: linear-gradient(135deg, #a855f7, #22c55e); 
-            color: white; 
-            font-weight: bold; 
-            font-size: 14px; 
-            cursor: pointer; 
-            text-transform: uppercase; 
-            box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .btn-zaard:hover { transform: scale(1.02); box-shadow: 0 0 18px rgba(0,255,255,0.6); }
-        h1 { font-size: 1.7em; margin: 0 0 5px 0; background: linear-gradient(135deg, #00ffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 12px rgba(168, 85, 247, 0.5); }
-        
-        .avatar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 8px 0; }
-        .avatar-item { background: rgba(0,0,0,0.6); border: 2px solid #a855f7; border-radius: 10px; padding: 4px; cursor: pointer; text-align: center; transition: 0.2s; }
-        .avatar-item.selected { border-color: #22c55e; box-shadow: 0 0 10px rgba(34,197,94,0.6); transform: scale(1.03); }
-        .avatar-item img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
     </style>
 </head>
 <body>
 
-<!-- Reproductor de audio global -->
-<div style="position: fixed; bottom: 10px; right: 10px; z-index: 2000; background: rgba(20,8,40,0.92); padding: 6px 12px; border-radius: 14px; border: 2px solid #00ffff; box-shadow: 0 0 12px rgba(0,255,255,0.3);">
-    <span style="font-size: 10px; color: #00ffff; font-weight: bold;">🎶 El Chupulún de Zaard</span>
-    <audio id="zaard-audio" controls autoplay loop style="height: 24px; width: 120px; vertical-align: middle; margin-left: 4px;">
-        <source src="El Chupulún de Zaard.mp3" type="audio/mpeg">
-    </audio>
-</div>
+<div id="loading-screen">CARGANDO PROTOCOLO...</div>
 
-<div id="ui-container">
-    <div id="pantalla-inicio" class="ui-panel">
-        <div class="banner-neon">⚡ PROTOCOLO PANGA ⚡</div>
-        <h1>ZAARD ARCADE</h1>
-        <p style="color: #00ffff; font-size: 13px; margin-bottom: 10px; font-weight: bold;">Elige tu Avatar y supera el desafío de 10 Niveles</p>
-        
-        <div style="margin-bottom: 8px;">
-            <p style="color: #bc8fef; font-size: 12px; margin-bottom: 6px;">Selecciona tu Avatar:</p>
-            <div class="avatar-grid" style="max-width: 260px; margin: 0 auto;">
-                <div class="avatar-item selected" onclick="seleccionarAvatarInicio(0, this)"><img src="https://ipfs.io/ipfs/bafybeicugqjr3uy2mvk32536qi3gf3astpwj53nlbeogx3vmzsmk2ia3wa"></div>
-                <div class="avatar-item" onclick="seleccionarAvatarInicio(1, this)"><img src="https://ipfs.io/ipfs/bafybeickwp5h3ew6bm4aim6r5v5sc5xha6h3hdsbrhja2zeruosphac5ba"></div>
-                <div class="avatar-item" onclick="seleccionarAvatarInicio(2, this)"><img src="https://ipfs.io/ipfs/bafybeigxro3eht2lctrk4akglifsxuvwolwqfzgqzvnstabnpjjiungza4"></div>
-                <div class="avatar-item" onclick="seleccionarAvatarInicio(3, this)"><img src="https://ipfs.io/ipfs/bafybeidwy5yeihhglhcuztl32loatlk3wccecimodl6m4ocuotuuru7gvi"></div>
-            </div>
-            <input type="text" id="input-nombre-inicio" placeholder="Tu Alias / Nombre" value="Panga" style="width: 70%; padding: 8px; border-radius: 8px; border: 2px solid #00ffff; background: #0d001a; color: #fff; text-align: center; font-size: 14px; margin-top: 6px; outline: none;">
-        </div>
-
-        <button class="btn-zaard" onclick="iniciarJuegoMenu(false)">MODO INVITADO 🚀</button>
-        <button class="btn-zaard" onclick="conectarYJugar()" style="background: linear-gradient(135deg, #00ffff, #3b0764);">CONECTAR BILLETERA WEB3</button>
-    </div>
-</div>
+<!-- Reproductor de audio global (oculto pero funcional si el usuario lo activo en el menú) -->
+<audio id="zaard-audio" loop>
+    <source src="El%20Chupulún%20de%20Zaard.mp3" type="audio/mpeg">
+</audio>
 
 <script>
-    const TOKEN_ADDR = "0x3468EA4e6CE13Ec4C7f8651f7eFC6AA6046F4d65";
-    const POOL_LP_ADDR = "0x7084D8562532AEA9F9239Cdd63EA289C85E6b0e9";
-    const ABI = [{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"type":"function"}];
-    
-    let web3, contract, userAccount, esWeb3 = false;
-    let nivelActual = 1;
-    let sfxHabilitado = true;
-    let avatarSeleccionado = 0;
-    let nombreUsuario = "Panga";
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // --- CONFIGURACIÓN OBTENIDA DEL MENÚ PRINCIPAL ---
+    const LS_NOMBRE = localStorage.getItem('zaard_nombre') || "Jugador Zaard";
+    // Obtenemos la URL del avatar seleccionado en el menú. Si no hay, usamos la primera opción por defecto.
+    const LS_AVATAR_URL = localStorage.getItem('zaard_avatar') || 'https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_lhyyv2lhyyv2lhyy_1.png';
+    const LS_IDIOMA = localStorage.getItem('zaard_lang') || 'es'; // 'es', 'en', 'zh'
 
-    const avatarUrls = [
-        'https://ipfs.io/ipfs/bafybeicugqjr3uy2mvk32536qi3gf3astpwj53nlbeogx3vmzsmk2ia3wa',
-        'https://ipfs.io/ipfs/bafybeickwp5h3ew6bm4aim6r5v5sc5xha6h3hdsbrhja2zeruosphac5ba',
-        'https://ipfs.io/ipfs/bafybeigxro3eht2lctrk4akglifsxuvwolwqfzgqzvnstabnpjjiungza4',
-        'https://ipfs.io/ipfs/bafybeidwy5yeihhglhcuztl32loatlk3wccecimodl6m4ocuotuuru7gvi'
-    ];
+    // Configuración Web3 y Apuestas
+    const TOKEN_ADDR = "0x3468EA4e6CE13Ec4C7f8651f7eFC6AA6046F4d65"; // Contrato Token ZARD
+    const BURN_WALLET = "0x000000000000000000000000000000000000dEaD"; // Billetera de Quema Oficial
+    const ABI_TRANSFER = [{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"type":"function"}];
+    const APUESTA_WEI = "100000000000000"; // 0.0001 ZARD (asumiendo 18 decimales)
+
+    let web3, contract, userAccount, esModoWeb3 = false;
+    let nivelActual = 1;
+    let musicaHabilitada = localStorage.getItem('zaard_musica') !== 'OFF'; // Por defecto ON si no se especifica
+    
+    // Precargar la imagen del avatar para usarla en Phaser
+    const avatarImageKey = 'avatarUsr';
 
     window.addEventListener('DOMContentLoaded', () => {
+        // Configurar y reproducir música si estaba activa en el menú
         const audio = document.getElementById('zaard-audio');
         audio.volume = 0.3;
-        audio.play().catch(e => console.log("Autoplay pendiente"));
+        if (musicaHabilitada) {
+            audio.play().catch(e => console.log("Autoplay pendiente de interacción"));
+        }
+        
+        // Ocultar pantalla de carga e iniciar Phaser
+        document.getElementById('loading-screen').style.display = 'none';
+        iniciarPhaserGame();
     });
 
-    function playSnd(freq, dur, type = 'sine') {
-        if (!sfxHabilitado) return;
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        let o = audioCtx.createOscillator();
-        let g = audioCtx.createGain();
-        o.type = type; 
-        o.frequency.value = freq;
-        g.gain.setValueAtTime(0.08, audioCtx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
-        o.connect(g); 
-        g.connect(audioCtx.destination);
-        o.start(); 
-        o.stop(audioCtx.currentTime + dur);
-    }
+    // --- FUNCIONES WEB3 Y LÓGICA ---
 
-    function seleccionarAvatarInicio(idx, el) {
-        document.querySelectorAll('#pantalla-inicio .avatar-item').forEach(i => i.classList.remove('selected'));
-        el.classList.add('selected');
-        avatarSeleccionado = idx;
-    }
-
-    function iniciarJuegoMenu(esModoWeb3) {
-        nombreUsuario = document.getElementById('input-nombre-inicio').value || "Panga";
-        lanzarJuego(esModoWeb3);
-    }
-
-    async function conectarYJugar() {
+    async function conectarBilletera() {
         if (window.ethereum) {
             try {
                 web3 = new Web3(window.ethereum);
                 const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                 userAccount = accounts[0];
-                contract = new web3.eth.Contract(ABI, TOKEN_ADDR);
-                esWeb3 = true;
-                iniciarJuegoMenu(true);
-            } catch (e) { alert("Conexión de billetera fallida."); }
-        } else { alert("Instala MetaMask o una billetera Web3 compatible."); }
-    }
-
-    async function ejecutarPerdida() {
-        if (esWeb3 && contract) {
-            try {
-                await contract.methods.transfer(POOL_LP_ADDR, "100000000000000").send({ from: userAccount });
-            } catch (e) { console.log("Transferencia omitida"); }
+                contract = new web3.eth.Contract(ABI_TRANSFER, TOKEN_ADDR);
+                esModoWeb3 = true;
+                alert(LS_IDIOMA === 'zh' ? "钱包已连接！" : "¡Billetera conectada!");
+                return true;
+            } catch (e) { 
+                alert(LS_IDIOMA === 'zh' ? "连接失败。" : "Conexión fallida."); 
+                esModoWeb3 = false;
+                return false;
+            }
+        } else { 
+            alert(LS_IDIOMA === 'zh' ? "请安装 Web3 钱包。" : "Por favor instala una billetera Web3."); 
+            return false;
         }
-        alert("¡Te has quedado sin oportunidades! Reiniciando desafío en Nivel 1.");
-        nivelActual = 1;
-        location.reload();
     }
 
-    function lanzarJuego(esModoWeb3) {
-        document.getElementById('ui-container').remove(); 
+    // Ejecuta la quema de tokens al perder la partida en modo Web3
+    async function ejecutarQuemaPorPerdida() {
+        if (esModoWeb3 && contract) {
+            try {
+                // Muestra mensaje de proceso
+                const msg = LS_IDIOMA === 'zh' ? "正在处理销毁交易..." : "Procesando transacción de quema...";
+                const msgDiv = document.createElement('div');
+                msgDiv.style.position = 'fixed'; msgDiv.style.top='50%'; msgDiv.style.left='50%';
+                msgDiv.style.transform='translate(-50%, -50%)'; msgDiv.style.background='rgba(0,0,0,0.8)';
+                msgDiv.style.color='#ff0000'; msgDiv.style.padding='20px'; msgDiv.style.borderRadius='15px';
+                msgDiv.innerText = msg;
+                document.body.appendChild(msgDiv);
+
+                // Ejecuta la transferencia al burn wallet
+                await contract.methods.transfer(BURN_WALLET, APUESTA_WEI).send({ from: userAccount });
+                
+                msgDiv.remove();
+                alert(LS_IDIOMA === 'zh' ? "代币已销毁。" : "Tokens quemados correctamente.");
+            } catch (e) { 
+                console.log("Error en la transacción de quema:", e); 
+                alert(LS_IDIOMA === 'zh' ? "销毁交易失败。" : "Transacción de quema fallida.");
+            }
+        }
+    }
+
+    // --- GESTIÓN DE ESTADOS DEL JUEGO ---
+
+    function irAlMenuPrincipal() {
+        // Redirige al usuario de vuelta al Hub principal
+        window.location.href = "index.html";
+    }
+
+    function manejarVictoriaFinal(sceneRef) {
+        // Mensajes de felicitación según el idioma
+        let mensaje = "¡FELICIDADES! Has completado los 10 niveles.";
+        if (LS_IDIOMA === 'en') mensaje = "CONGRATULATIONS! You have completed all 10 levels.";
+        if (LS_IDIOMA === 'zh') mensaje = "恭喜！您已完成所有 10 个关卡。";
         
+        alert(`${mensaje} ${LS_NOMBRE}`);
+        // Al ganar el juego, no se quema nada, solo reiniciamos el nivel por ahora o volvemos al menú
+        // irAlMenuPrincipal(); 
+        // Opcional: reiniciar el juego
+        nivelActual = 1;
+        sceneRef.scene.restart();
+    }
+
+    async function manejarDerrota(sceneRef) {
+        // Mensajes de derrota según el idioma
+        let mensaje = "¡Has perdido todas las oportunidades!";
+        if (LS_IDIOMA === 'en') mensaje = "You have lost all opportunities!";
+        if (LS_IDIOMA === 'zh') mensaje = "您已失去所有机会！";
+
+        // Si es modo Web3, ejecutamos la quema
+        if (esModoWeb3) {
+            await ejecutarQuemaPorPerdida();
+        }
+        
+        alert(mensaje);
+        // Al perder, regresamos al menú principal
+        irAlMenuPrincipal();
+    }
+
+    // --- CONFIGURACIÓN DE PHASER ---
+
+    function iniciarPhaserGame() {
         new Phaser.Game({
             type: Phaser.AUTO, 
             width: window.innerWidth, 
             height: window.innerHeight,
-            backgroundColor: '#17042f',
+            backgroundColor: '#070112',
+            parent: 'phaser-game', // Contenedor opcional
             scale: {
                 mode: Phaser.Scale.FIT,
                 autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -214,53 +168,56 @@
             },
             scene: {
                 preload: function() {
+                    // Carga de activos (cartas y dorso)
                     const cids = [
-                        'bafybeifzkdoitiowwicqwnkfx6dnahydk5mm33h7r3j3wyv7c4rjp75ws4', 
-                        'bafybeiakl2nuugolggppxfttwcxfsv56zsjms4ityd5vjyyd54ctirzaeq', 
-                        'bafybeicugqjr3uy2mvk32536qi3gf3astpwj53nlbeogx3vmzsmk2ia3wa', 
-                        'bafybeickwp5h3ew6bm4aim6r5v5sc5xha6h3hdsbrhja2zeruosphac5ba', 
-                        'bafybeigxro3eht2lctrk4akglifsxuvwolwqfzgqzvnstabnpjjiungza4', 
-                        'bafybeidwy5yeihhglhcuztl32loatlk3wccecimodl6m4ocuotuuru7gvi', 
-                        'bafybeiheko4izm53qfmhejmvz5elek4hb2lp3weaduwndvrvpxdamwklue', 
-                        'bafybeiggz26x26hncisti5s5y74ciuk4yuymtczhsbwdufoql2gidl57mu', 
-                        'bafybeiginlvb63afmlicnvsx4fwfekanoipydzgzv3ay7njpvq6nm4zzym', 
-                        'bafybeie5wqjyuwdezpoe5tqkqlojxv5evtdkv6mxhondx5hvod44txbobq',
-                        'bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m', 
-                        'bafybeiiuojv6snmh2vchhigyoq7s5vcdvel66ih5tacnhp6ceaveg3um', 
-                        'bafybeibpwlfqcnmrz67trsxsdaxq5xmdwrywvgbstgg7hvtshqggkjwd74', 
-                        'bafybeif2pjebwhe3eodqoxhu3rccaxt6frh2mb5lxro2gy6p5syacgtaly', 
-                        'bafybeif5pqgoxonxnxscoayvpzawsxzw5lm6upxkbslnkbgjeenf5cg24m', 
-                        'bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue'
+                        'bafybeifzkdoitiowwicqwnkfx6dnahydk5mm33h7r3j3wyv7c4rjp75ws4', 'bafybeiakl2nuugolggppxfttwcxfsv56zsjms4ityd5vjyyd54ctirzaeq', 
+                        'bafybeicugqjr3uy2mvk32536qi3gf3astpwj53nlbeogx3vmzsmk2ia3wa', 'bafybeickwp5h3ew6bm4aim6r5v5sc5xha6h3hdsbrhja2zeruosphac5ba', 
+                        'bafybeigxro3eht2lctrk4akglifsxuvwolwqfzgqzvnstabnpjjiungza4', 'bafybeidwy5yeihhglhcuztl32loatlk3wccecimodl6m4ocuotuuru7gvi', 
+                        'bafybeiheko4izm53qfmhejmvz5elek4hb2lp3weaduwndvrvpxdamwklue', 'bafybeiggz26x26hncisti5s5y74ciuk4yuymtczhsbwdufoql2gidl57mu', 
+                        'bafybeiginlvb63afmlicnvsx4fwfekanoipydzgzv3ay7njpvq6nm4zzym', 'bafybeie5wqjyuwdezpoe5tqkqlojxv5evtdkv6mxhondx5hvod44txbobq'
                     ];
                     cids.forEach((c, i) => this.load.image('c'+i, 'https://ipfs.io/ipfs/'+c));
                     this.load.image('dorso', 'https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m');
-                    this.load.image('avatarUsr', avatarUrls[avatarSeleccionado]);
+                    
+                    // Carga del avatar seleccionado desde el menú como textura 'avatarUsr'
+                    this.load.image(avatarImageKey, LS_AVATAR_URL);
                 },
                 create: function() {
                     let sceneRef = this;
                     this.vidas = 12;
+                    this.bloqueado = false;
+                    this.primeraCarta = null;
                     
-                    let bgGlow = this.add.circle(240, 400, 280, 0x5a189a, 0.22);
+                    // Fondo con brillo sutil
+                    let bgGlow = this.add.circle(240, 400, 280, 0x5a189a, 0.25);
                     bgGlow.setBlendMode(Phaser.BlendModes.ADD);
 
-                    this.avatarImg = this.add.image(38, 38, 'avatarUsr').setDisplaySize(42, 42);
-                    this.txtNombre = this.add.text(70, 20, `${nombreUsuario}`, { fontSize: '16px', color: '#00ffff', fontStyle: 'bold' });
+                    // UI Superior fija y compacta (Avatar, Nombre, Nivel, Vidas)
+                    this.avatarImg = this.add.image(38, 38, avatarImageKey).setDisplaySize(42, 42).setOrigin(0.5);
+                    this.add.graphics().lineStyle(2, 0xd946ef, 1).strokeCircle(38, 38, 22); // Borde rosa
+
+                    this.txtNombre = this.add.text(70, 20, LS_NOMBRE, { fontSize: '16px', color: '#00ffff', fontStyle: 'bold' });
                     this.txtNivel = this.add.text(70, 42, `Nivel: ${nivelActual} / 10`, { fontSize: '13px', color: '#a855f7', fontStyle: 'bold' });
                     this.txtVidas = this.add.text(465, 30, `Oportunidades: ${this.vidas}`, { fontSize: '14px', color: '#bc8fef' }).setOrigin(1, 0);
                     
+                    // Botón de Salir en el juego (Arriba derecha)
+                    let btnSalir = this.add.text(465, 65, LS_IDIOMA === 'zh' ? "退出" : "SALIR", { fontSize: '14px', color: '#ff4444', fontStyle: 'bold' }).setOrigin(1, 0).setInteractive();
+                    btnSalir.on('pointerdown', irAlMenuPrincipal);
+
                     function construirTablero() {
                         if (sceneRef.cartasGroup) {
                             sceneRef.cartasGroup.destroy(true);
                         }
                         sceneRef.cartasGroup = sceneRef.add.group();
 
+                        // Dificultad progresiva: de 5 pares (10 cartas) en Nivel 1 hasta 10 pares (20 cartas) en Nivel 10
                         let totalPares = Math.min(4 + nivelActual, 10);
                         let deck = []; 
                         for(let i = 0; i < totalPares; i++) { deck.push(i, i); }
                         Phaser.Utils.Array.Shuffle(deck);
                         
                         let cols = 4;
-                        let cardSize = 78;
+                        let cardSize = 78; 
                         let spacingX = 90;
                         let spacingY = 90;
                         
@@ -280,65 +237,6 @@
                             
                             carta.on('pointerdown', () => {
                                 if (sceneRef.bloqueado || carta.revelada || carta === sceneRef.primeraCarta) return;
-                                playSnd(500, 0.05);
                                 carta.setTexture('c' + carta.val);
                                 
                                 if (!sceneRef.primeraCarta) {
-                                    sceneRef.primeraCarta = carta;
-                                } else {
-                                    sceneRef.bloqueado = true;
-                                    let primera = sceneRef.primeraCarta;
-                                    sceneRef.primeraCarta = null;
-                                    
-                                    if (primera.val === carta.val) {
-                                        playSnd(800, 0.1, 'triangle');
-                                        primera.revelada = true;
-                                        carta.revelada = true;
-                                        sceneRef.bloqueado = false;
-                                        
-                                        let todasResueltas = true;
-                                        sceneRef.cartasGroup.getChildren().forEach(ch => {
-                                            if (!ch.revelada) todasResueltas = false;
-                                        });
-                                        
-                                        if (todasResueltas) {
-                                            playSnd(1200, 0.3, 'square');
-                                            if (nivelActual < 10) {
-                                                nivelActual++;
-                                                sceneRef.time.delayedCall(800, () => {
-                                                    sceneRef.txtNivel.setText(`Nivel: ${nivelActual} / 10`);
-                                                    construirTablero();
-                                                });
-                                            } else {
-                                                alert(`¡FELICIDADES ${nombreUsuario}! Has completado los 10 niveles del protocolo.`);
-                                                location.reload();
-                                            }
-                                        }
-                                    } else {
-                                        playSnd(200, 0.15, 'sawtooth');
-                                        sceneRef.vidas--;
-                                        sceneRef.txtVidas.setText(`Oportunidades: ${sceneRef.vidas}`);
-                                        
-                                        sceneRef.time.delayedCall(600, () => {
-                                            primera.setTexture('dorso');
-                                            carta.setTexture('dorso');
-                                            sceneRef.bloqueado = false;
-                                            
-                                            if (sceneRef.vidas <= 0) {
-                                                ejecutarPerdida();
-                                            }
-                                        });
-                                    }
-                                }
-                            });
-                        });
-                    }
-                    
-                    construirTablero();
-                }
-            }
-        });
-    }
-</script>
-</body>
-</html>

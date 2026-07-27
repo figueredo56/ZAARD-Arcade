@@ -27,40 +27,77 @@
             z-index: 0;
         }
 
-        #bienvenida { 
+        /* Pantallas de Bienvenida en Fases */
+        .pantalla-modal { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: radial-gradient(circle, rgba(15,5,30,0.85) 0%, rgba(0,0,0,0.95) 100%);
+            background: radial-gradient(circle, rgba(15,5,30,0.92) 0%, rgba(0,0,0,0.98) 100%);
             display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; 
             text-align: center; color: #fff; padding: 20px; box-sizing: border-box;
             overflow-y: auto;
+            transition: opacity 0.4s ease;
         }
 
-        #bienvenida h1 {
-            font-size: 2.2rem;
+        .oculto { display: none !important; }
+
+        h1 {
+            font-size: 2.3rem;
             color: #00ff00;
-            text-shadow: 0 0 15px #00ff00;
-            margin-bottom: 10px;
+            text-shadow: 0 0 20px #00ff00;
+            margin-bottom: 15px;
         }
 
-        #bienvenida p {
+        p {
             color: #d946ef;
-            font-size: 1rem;
-            margin-bottom: 20px;
-            text-shadow: 0 0 5px #d946ef;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            text-shadow: 0 0 8px #d946ef;
+            max-width: 500px;
+            line-height: 1.5;
         }
 
+        .btn-accion { 
+            padding: 15px 45px; background: linear-gradient(45deg, #d946ef, #8b5cf6); 
+            border: none; color: white; font-size: 1.2rem; cursor: pointer; 
+            border-radius: 50px; font-weight: bold; box-shadow: 0 0 20px #d946ef; transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .btn-accion:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px #d946ef;
+        }
+
+        /* Selector de Idiomas */
+        .idiomas-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-lang {
+            padding: 10px 20px;
+            background: rgba(0,0,0,0.5);
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-lang:hover, .btn-lang.active {
+            background: #00ff00;
+            color: #000;
+            box-shadow: 0 0 15px #00ff00;
+        }
+
+        /* Inputs y Avatares */
         .input-container {
             margin-bottom: 20px;
             width: 100%;
             max-width: 320px;
-        }
-
-        .input-container label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #fff;
-            font-size: 0.9rem;
         }
 
         .input-container input {
@@ -74,20 +111,21 @@
             font-size: 1rem;
             outline: none;
             box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+            box-sizing: border-box;
         }
 
         .avatar-selection {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 25px;
             flex-wrap: wrap;
-            max-width: 400px;
+            max-width: 450px;
         }
 
         .avatar-option {
-            width: 65px;
-            height: 65px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             border: 3px solid #555;
             cursor: pointer;
@@ -99,50 +137,56 @@
         .avatar-option.selected {
             border-color: #00ff00;
             box-shadow: 0 0 15px #00ff00;
-            transform: scale(1.1);
+            transform: scale(1.15);
         }
 
-        .btn-entrar { 
-            padding: 15px 45px; background: linear-gradient(45deg, #d946ef, #8b5cf6); 
-            border: none; color: white; font-size: 1.3rem; cursor: pointer; 
-            border-radius: 50px; font-weight: bold; box-shadow: 0 0 20px #d946ef; transition: 0.3s;
-            text-transform: uppercase;
-        }
-
-        .btn-entrar:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px #d946ef;
-        }
-
-        /* Indicador de Perfil Activo en el Hub */
-        #perfil-activo {
+        /* Panel Activo y Botón de Salir */
+        #panel-usuario-activo {
             position: absolute;
             top: 15px;
             left: 15px;
             z-index: 20;
             display: flex;
             align-items: center;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
             border: 2px solid #00ff00;
-            padding: 6px 15px;
+            padding: 6px 12px;
             border-radius: 30px;
             color: #fff;
             box-shadow: 0 0 10px rgba(0,255,0,0.5);
         }
 
-        #perfil-activo img {
-            width: 35px;
-            height: 35px;
+        #panel-usuario-activo img {
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             object-fit: cover;
-            margin-right: 10px;
+            margin-right: 8px;
             border: 2px solid #d946ef;
         }
 
-        #perfil-activo span {
-            font-size: 0.85rem;
+        #panel-usuario-activo span {
+            font-size: 0.8rem;
             font-weight: bold;
             color: #00ff00;
+            margin-right: 12px;
+        }
+
+        .btn-salir-menu {
+            background: #ff3333;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-salir-menu:hover {
+            background: #ff0000;
+            box-shadow: 0 0 10px #ff0000;
         }
 
         /* EFECTO PALPITANTE */
@@ -201,109 +245,196 @@
 </head>
 <body>
 
-    <!-- Audio de Fondo -->
+    <!-- Audio de Fondo y Sonidos -->
     <audio id="musicaFondo" loop>
         <source src="El%20Chupulún%20de%20Zaard.mp3" type="audio/mpeg">
     </audio>
-
-    <!-- Elemento de Audio para efectos de Sonido (Click / Botones) -->
     <audio id="sonidoClick" src="https://actions.google.com/sounds/v1/ui/click.ogg" preload="auto"></audio>
 
-    <!-- Pantalla de Bienvenida con Selección de Avatar y Nombre -->
-    <div id="bienvenida">
-        <h1>ZAARD ARCADE</h1>
-        <p>Elige tu identidad para entrar al ecosistema</p>
-        
-        <div class="input-container">
-            <label for="inputNombre">Tu Nombre o Alias:</label>
-            <input type="text" id="inputNombre" placeholder="Ej: Panga" maxlength="15">
-        </div>
-
-        <div class="input-container">
-            <label>Elige tu Avatar:</label>
-            <div class="avatar-selection">
-                <!-- Avatares Femeninos y Masculinos generados para el usuario -->
-                <img src="https://ipfs.io/ipfs/bafybeidnbe4knxriwgp3hjnpupozk5xg6f75xvvhuottvudryqmxvsrleu" class="avatar-option selected" onclick="seleccionarAvatar(this)" alt="Avatar 1">
-                <img src="https://ipfs.io/ipfs/bafybeiggz26x26hncisti5s5y74ciuk4yuymtczhsbwdufoql2gidl57mu" class="avatar-option" onclick="seleccionarAvatar(this)" alt="Avatar 2">
-            </div>
-        </div>
-
-        <button class="btn-entrar" onclick="iniciarExperiencia()">ENTRAR AL ARCADE</button>
+    <!-- FASE 1: BIENVENIDA POTENTE -->
+    <div id="pantalla-bienvenida" class="pantalla-modal">
+        <h1 id="txt-titulo-bienvenida">¡BIENVENIDOS A ZAARD ARCADE!</h1>
+        <p id="txt-desc-bienvenida">El universo descentralizado definitivo te espera. Prepárate para desafiar los límites, jugar y conquistar la red.</p>
+        <button class="btn-accion" onclick="irAIdioma()">CONTINUAR</button>
     </div>
 
-    <!-- Indicador visible del Perfil Activo en la Esquina Superior -->
-    <div id="perfil-activo" style="display: none;" onclick="cerrarSesion()" title="Haz clic para cambiar de perfil">
+    <!-- FASE 2: SELECCIÓN DE IDIOMA -->
+    <div id="pantalla-idioma" class="pantalla-modal oculto">
+        <h1 id="txt-titulo-idioma">ELIGE TU IDIOMA</h1>
+        <p id="txt-desc-idioma">Selecciona tu idioma preferido para vivir la experiencia.</p>
+        
+        <div class="idiomas-container">
+            <button class="btn-lang active" onclick="cambiarIdioma('es', this)">Español</button>
+            <button class="btn-lang" onclick="cambiarIdioma('en', this)">English</button>
+            <button class="btn-lang" onclick="cambiarIdioma('zh', this)">中文</button>
+        </div>
+
+        <button class="btn-accion" onclick="irAPerfil()">SIGUIENTE</button>
+    </div>
+
+    <!-- FASE 3: ELECCIÓN DE AVATAR Y NOMBRE -->
+    <div id="pantalla-perfil" class="pantalla-modal oculto">
+        <h1 id="txt-titulo-perfil">CREA TU IDENTIDAD</h1>
+        <p id="txt-desc-perfil">Introduce tu alias y selecciona el avatar que te representará en el ecosistema.</p>
+        
+        <div class="input-container">
+            <input type="text" id="inputNombre" placeholder="Tu Nombre o Alias" maxlength="15">
+        </div>
+
+        <div class="avatar-selection">
+            <!-- Tus 5 nuevos avatares desde GitHub -->
+            <img src="https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_lhyyv2lhyyv2lhyy_1.png" class="avatar-option selected" onclick="seleccionarAvatar(this)" alt="Avatar 1">
+            <img src="https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_pwot5spwot5spwot.png" class="avatar-option" onclick="seleccionarAvatar(this)" alt="Avatar 2">
+            <img src="https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_m5ezom5ezom5ezom_1.png" class="avatar-option" onclick="seleccionarAvatar(this)" alt="Avatar 3">
+            <img src="https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_m5ezom5ezom5ezom.png" class="avatar-option" onclick="seleccionarAvatar(this)" alt="Avatar 4">
+            <img src="https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_majxg4majxg4majx_1.png" class="avatar-option" onclick="seleccionarAvatar(this)" alt="Avatar 5">
+        </div>
+
+        <button class="btn-accion" onclick="comenzarAventura()">ENTRAR AL ARCADE</button>
+    </div>
+
+    <!-- PANEL SUPERIOR IZQUIERDO: PERFIL ACTIVO + BOTÓN SALIR -->
+    <div id="panel-usuario-activo" class="oculto">
         <img id="img-perfil-actual" src="" alt="Avatar">
         <span id="txt-nombre-actual"></span>
+        <button class="btn-salir-menu" onclick="cerrarSesion()">SALIR</button>
     </div>
 
     <div id="fondo"></div>
 
-    <div id="contenedor-botones">
-        <div id="btn-memoria" class="btn-juego" onclick="reproducirSonidoYRedirigir('https://figueredo56.github.io/ZAARD-Arcade/index-memoria.html')">MEMORIA</div>
-        <div id="btn-lucky" class="btn-juego" onclick="reproducirSonidoYRedirigir('https://figueredo56.github.io/ZAARD-Arcade/index-lucky.html')">LUCKY</div>
-        <div id="btn-battle" class="btn-juego" onclick="reproducirSonidoYRedirigir('https://figueredo56.github.io/ZAARD-Arcade/combat/')">BATTLE</div>
-        <div id="btn-runs" class="btn-juego" onclick="reproducirSonidoYRedirigir('https://figueredo56.github.io/ZAARD-Arcade/index.html')">RUNS</div>
-        <div id="btn-token" onclick="reproducirSonidoYAbrir('https://app.binance.com/uni-qr/web3-token-details?tokenCA=0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65&binanceChainId=56&chain=bsc', '_blank')"></div>
+    <!-- MENÚ PRINCIPAL DE JUEGOS -->
+    <div id="contenedor-botones" class="oculto">
+        <div id="btn-memoria" class="btn-juego" onclick="accionJuego('https://figueredo56.github.io/ZAARD-Arcade/index-memoria.html')">MEMORIA</div>
+        <div id="btn-lucky" class="btn-juego" onclick="accionJuego('https://figueredo56.github.io/ZAARD-Arcade/index-lucky.html')">LUCKY</div>
+        <div id="btn-battle" class="btn-juego" onclick="accionJuego('https://figueredo56.github.io/ZAARD-Arcade/combat/')">BATTLE</div>
+        <div id="btn-runs" class="btn-juego" onclick="accionJuego('https://figueredo56.github.io/ZAARD-Arcade/index.html')">RUNS</div>
+        <div id="btn-token" onclick="abrirEnlace('https://app.binance.com/uni-qr/web3-token-details?tokenCA=0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65&binanceChainId=56&chain=bsc', '_blank')"></div>
         <div id="btn-musica" onclick="toggleAudio()">MÚSICA</div>
-        <div id="btn-web" class="btn-juego" onclick="reproducirSonidoYAbrir('https://figueredo56.github.io/zaard-official/', '_blank')">WEB</div>
+        <div id="btn-web" class="btn-juego" onclick="abrirEnlace('https://figueredo56.github.io/zaard-official/', '_blank')">WEB</div>
     </div>
 
     <script>
         var musica = document.getElementById('musicaFondo');
         var sonidoClick = document.getElementById('sonidoClick');
-        var avatarSeleccionadoUrl = "https://ipfs.io/ipfs/bafybeidnbe4knxriwgp3hjnpupozk5xg6f75xvvhuottvudryqmxvsrleu";
+        var avatarSeleccionadoUrl = "https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_lhyyv2lhyyv2lhyy_1.png";
+        var idiomaActual = "es";
 
-        // Comprobar si ya hay una sesión guardada al cargar la página
-        window.addEventListener('DOMContentLoaded', (event) => {
+        // Diccionario de Traducciones (Español, Inglés, Chino)
+        const textos = {
+            es: {
+                bienvenida: "¡BIENVENIDOS A ZAARD ARCADE!",
+                descBienvenida: "El universo descentralizado definitivo te espera. Prepárate para desafiar los límites, jugar y conquistar la red.",
+                btnContinuar: "CONTINUAR",
+                tituloIdioma: "ELIGE TU IDIOMA",
+                descIdioma: "Selecciona tu idioma preferido para vivir la experiencia.",
+                btnSiguiente: "SIGUIENTE",
+                tituloPerfil: "CREA TU IDENTIDAD",
+                descPerfil: "Introduce tu alias y selecciona el avatar que te representará en el ecosistema.",
+                btnEntrar: "ENTRAR AL ARCADE"
+            },
+            en: {
+                bienvenida: "WELCOME TO ZAARD ARCADE!",
+                descBienvenida: "The ultimate decentralized universe awaits you. Get ready to push limits, play, and conquer the network.",
+                btnContinuar: "CONTINUE",
+                tituloIdioma: "CHOOSE YOUR LANGUAGE",
+                descIdioma: "Select your preferred language to enjoy the experience.",
+                btnSiguiente: "NEXT",
+                tituloPerfil: "CREATE YOUR IDENTITY",
+                descPerfil: "Enter your alias and select the avatar that will represent you in the ecosystem.",
+                btnEntrar: "ENTER ARCADE"
+            },
+            zh: {
+                bienvenida: "欢迎来到 ZAARD 游戏大厅！",
+                descBienvenida: "终极去中心化宇宙正等待着你。准备好突破极限、尽情游戏并征服网络吧。",
+                btnContinuar: "继续",
+                tituloIdioma: "选择您的语言",
+                descIdioma: "选择您偏好的语言来体验游戏。",
+                btnSiguiente: "下一步",
+                tituloPerfil: "创建您的身份",
+                descPerfil: "输入您的昵称并选择在生态系统中代表您的头像。",
+                btnEntrar: "进入大厅"
+            }
+        };
+
+        // Comprobar si ya hay una sesión guardada al cargar
+        window.addEventListener('DOMContentLoaded', () => {
             const nombreGuardado = localStorage.getItem('zaard_nombre');
             const avatarGuardado = localStorage.getItem('zaard_avatar');
 
             if (nombreGuardado && avatarGuardado) {
-                mostrarInterfazJugador(nombreGuardado, avatarGuardado);
+                activarMenuPrincipal(nombreGuardado, avatarGuardado);
             }
         });
 
-        function seleccionarAvatar(elemento) {
-            // Quitar la selección previa
-            document.querySelectorAll('.avatar-option').forEach(img => img.classList.remove('selected'));
-            // Seleccionar el nuevo
-            elemento.classList.add('selected');
-            avatarSeleccionadoUrl = elemento.src;
-            reproducirEfectoSonido();
-        }
-
-        function reproducirEfectoSonido() {
+        function reproducirSonido() {
             try {
                 sonidoClick.currentTime = 0;
                 sonidoClick.play().catch(e => {});
             } catch(e) {}
         }
 
-        function iniciarExperiencia() {
-            reproducirEfectoSonido();
-            const inputNombre = document.getElementById('inputNombre').value.trim();
-            const nombreFinal = inputNombre !== "" ? inputNombre : "Jugador Zaard";
+        function irAIdioma() {
+            reproducirSonido();
+            document.getElementById('pantalla-bienvenida').classList.add('oculto');
+            document.getElementById('pantalla-idioma').classList.remove('oculto');
+        }
 
-            // Guardar en el almacenamiento del navegador para mantener la sesión
+        function cambiarIdioma(lang, elemento) {
+            reproducirSonido();
+            idiomaActual = lang;
+            document.querySelectorAll('.btn-lang').forEach(b => b.classList.remove('active'));
+            elemento.classList.add('active');
+
+            // Actualizar textos dinámicamente
+            const t = textos[lang];
+            document.getElementById('txt-titulo-bienvenida').innerText = t.bienvenida;
+            document.getElementById('txt-desc-bienvenida').innerText = t.descBienvenida;
+            document.getElementById('txt-titulo-idioma').innerText = t.tituloIdioma;
+            document.getElementById('txt-desc-idioma').innerText = t.descIdioma;
+            document.getElementById('txt-titulo-perfil').innerText = t.tituloPerfil;
+            document.getElementById('txt-desc-perfil').innerText = t.descPerfil;
+        }
+
+        function irAPerfil() {
+            reproducirSonido();
+            document.getElementById('pantalla-idioma').classList.add('oculto');
+            document.getElementById('pantalla-perfil').classList.remove('oculto');
+        }
+
+        function seleccionarAvatar(elemento) {
+            reproducirSonido();
+            document.querySelectorAll('.avatar-option').forEach(img => img.classList.remove('selected'));
+            elemento.classList.add('selected');
+            avatarSeleccionadoUrl = elemento.src;
+        }
+
+        function comenzarAventura() {
+            reproducirSonido();
+            const inputNombre = document.getElementById('inputNombre').value.trim();
+            const nombreFinal = inputNombre !== "" ? inputNombre : "Zaard Player";
+
             localStorage.setItem('zaard_nombre', nombreFinal);
             localStorage.setItem('zaard_avatar', avatarSeleccionadoUrl);
+            localStorage.setItem('zaard_lang', idiomaActual);
 
-            mostrarInterfazJugador(nombreFinal, avatarSeleccionadoUrl);
-
-            // Intentar reproducir música de fondo
+            activarMenuPrincipal(nombreFinal, avatarSeleccionadoUrl);
             musica.play().catch(e => {});
         }
 
-        function mostrarInterfazJugador(nombre, avatar) {
-            document.getElementById('bienvenida').style.display = 'none';
+        function activarMenuPrincipal(nombre, avatar) {
+            document.getElementById('pantalla-perfil').classList.add('oculto');
+            document.getElementById('pantalla-bienvenida').classList.add('oculto');
+            document.getElementById('pantalla-idioma').classList.add('oculto');
+
             document.getElementById('img-perfil-actual').src = avatar;
             document.getElementById('txt-nombre-actual').innerText = nombre;
-            document.getElementById('perfil-activo').style.display = 'flex';
+            document.getElementById('panel-usuario-activo').classList.remove('oculto');
+            document.getElementById('contenedor-botones').classList.remove('oculto');
         }
 
         function cerrarSesion() {
-            if(confirm("¿Deseas cerrar sesión para cambiar de avatar o nombre?")) {
+            reproducirSonido();
+            if(confirm("¿Estás seguro de que deseas salir / cambiar de cuenta?")) {
                 localStorage.removeItem('zaard_nombre');
                 localStorage.removeItem('zaard_avatar');
                 location.reload();
@@ -311,7 +442,7 @@
         }
 
         function toggleAudio() {
-            reproducirEfectoSonido();
+            reproducirSonido();
             if (musica.paused) {
                 musica.play();
             } else {
@@ -319,15 +450,15 @@
             }
         }
 
-        function reproducirSonidoYRedirigir(url) {
-            reproducirEfectoSonido();
+        function accionJuego(url) {
+            reproducirSonido();
             setTimeout(() => {
                 window.location.href = url;
-            }, 200); // Pequeño retraso para que se alcance a escuchar el click
+            }, 200);
         }
 
-        function reproducirSonidoYAbrir(url, target) {
-            reproducirEfectoSonido();
+        function abrirEnlace(url, target) {
+            reproducirSonido();
             window.open(url, target);
         }
     </script>

@@ -2,17 +2,20 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ZAARD MEMORY ARCADE - Protocolo Panga</title>
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
     <style>
         body { 
             margin: 0; 
-            background: linear-gradient(135deg, #1e0033 0%, #0d001a 50%, #001f3f 100%);
+            padding: 0;
+            background: radial-gradient(circle at 50% 30%, #2e0854 0%, #120324 50%, #05010a 100%);
             background-attachment: fixed;
             overflow: hidden; 
             font-family: 'Arial', sans-serif; 
             color: #fff;
+            touch-action: none;
         }
         #ui-container { 
             position: fixed; 
@@ -24,7 +27,7 @@
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            background: rgba(10, 0, 25, 0.85); 
+            background: rgba(10, 2, 25, 0.88); 
             backdrop-filter: blur(12px);
         }
         @keyframes triColorGlow {
@@ -36,7 +39,7 @@
         .ui-panel { 
             width: 94%; 
             max-width: 700px; 
-            background: linear-gradient(135deg, rgba(25, 10, 45, 0.98) 0%, rgba(10, 5, 20, 0.98) 100%); 
+            background: linear-gradient(135deg, rgba(35, 12, 65, 0.96) 0%, rgba(12, 4, 25, 0.98) 100%); 
             border: 3px solid #a855f7; 
             border-radius: 35px; 
             padding: 35px; 
@@ -88,7 +91,7 @@
 <body>
 
 <!-- Reproductor de audio global -->
-<div style="position: fixed; bottom: 12px; right: 12px; z-index: 2000; background: rgba(10,5,25,0.9); padding: 8px 15px; border-radius: 18px; border: 2px solid #00ffff; box-shadow: 0 0 15px rgba(0,255,255,0.4);">
+<div style="position: fixed; bottom: 12px; right: 12px; z-index: 2000; background: rgba(20,8,40,0.92); padding: 8px 15px; border-radius: 18px; border: 2px solid #00ffff; box-shadow: 0 0 15px rgba(0,255,255,0.4);">
     <span style="font-size: 11px; color: #00ffff; font-weight: bold;">🎶 El Chupulún de Zaard</span>
     <audio id="zaard-audio" controls autoplay loop style="height: 28px; width: 140px; vertical-align: middle; margin-left: 5px;">
         <source src="El Chupulún de Zaard.mp3" type="audio/mpeg">
@@ -285,7 +288,11 @@
             type: Phaser.AUTO, 
             width: window.innerWidth, 
             height: window.innerHeight,
-            backgroundColor: '#0d001a',
+            backgroundColor: '#160429',
+            scale: {
+                mode: Phaser.Scale.RESIZE,
+                autoCenter: Phaser.Scale.CENTER_BOTH
+            },
             scene: {
                 preload: function() {
                     const cids = [
@@ -300,7 +307,7 @@
                         'bafybeiginlvb63afmlicnvsx4fwfekanoipydzgzv3ay7njpvq6nm4zzym', 
                         'bafybeie5wqjyuwdezpoe5tqkqlojxv5evtdkv6mxhondx5hvod44txbobq',
                         'bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m', 
-                        'bafybeieiiuojv6snmh2vchhigyoq7s5vcdvel66ih5tacnhp6ceaveg3um', 
+                        'bafybeiiuojv6snmh2vchhigyoq7s5vcdvel66ih5tacnhp6ceaveg3um', 
                         'bafybeibpwlfqcnmrz67trsxsdaxq5xmdwrywvgbstgg7hvtshqggkjwd74', 
                         'bafybeif2pjebwhe3eodqoxhu3rccaxt6frh2mb5lxro2gy6p5syacgtaly', 
                         'bafybeif5pqgoxonxnxscoayvpzawsxzw5lm6upxkbslnkbgjeenf5cg24m', 
@@ -311,89 +318,116 @@
                     this.load.image('avatarUsr', avatarUrls[avatarSeleccionado]);
                 },
                 create: function() {
+                    let sceneRef = this;
                     this.vidas = 12;
                     
-                    // Avatar y barra superior en pantalla de juego
-                    this.add.image(60, 55, 'avatarUsr').setDisplaySize(55, 55);
-                    this.add.text(105, 35, `${nombreUsuario}`, { fontSize: '22px', color: '#00ffff', fontStyle: 'bold' });
-                    this.add.text(105, 65, `Nivel: ${nivelActual} / 10`, { fontSize: '18px', color: '#a855f7', fontStyle: 'bold' });
-                    this.txtVidas = this.add.text(window.innerWidth - 240, 45, `Oportunidades: ${this.vidas}`, { fontSize: '20px', color: '#bc8fef' });
-                    
-                    // RETO PROGRESIVO: Desde 10 cartas (5 pares) en Nivel 1 hasta 20 cartas (10 pares) en Nivel 10
-                    let totalPares = 4 + nivelActual; // Nivel 1 = 5 pares (10 cartas), Nivel 10 = 14 pares (28 cartas)
-                    if(totalPares > 10) totalPares = 10; // Máximo 10 parejas únicas disponibles en el array de imágenes
-                    
-                    let deck = []; 
-                    for(let i=0; i<totalPares; i++) { deck.push(i, i); }
-                    Phaser.Utils.Array.Shuffle(deck);
-                    
-                    let cols = 5;
-                    let startX = (window.innerWidth / 2) - ((cols * 110) / 2) + 50;
-                    let startY = 180;
+                    // Fondo con brillo sutil y elegante estilo espacio sideral morado/azulado
+                    let bgGlow = this.add.circle(window.innerWidth / 2, window.innerHeight / 2, Math.max(window.innerWidth, window.innerHeight) * 0.6, 0x4a1285, 0.22);
+                    bgGlow.setBlendMode(Phaser.BlendModes.ADD);
 
-                    this.paresRestantes = totalPares;
-                    let sceneRef = this;
+                    // UI Superior fija en pantalla
+                    this.avatarImg = this.add.image(55, 55, 'avatarUsr').setDisplaySize(60, 60);
+                    this.txtNombre = this.add.text(105, 30, `${nombreUsuario}`, { fontSize: '24px', color: '#00ffff', fontStyle: 'bold' });
+                    this.txtNivel = this.add.text(105, 65, `Nivel: ${nivelActual} / 10`, { fontSize: '20px', color: '#a855f7', fontStyle: 'bold' });
+                    this.txtVidas = this.add.text(window.innerWidth - 250, 45, `Oportunidades: ${this.vidas}`, { fontSize: '22px', color: '#bc8fef' });
+                    
+                    function construirTablero() {
+                        if (sceneRef.cartasGroup) {
+                            sceneRef.cartasGroup.destroy(true);
+                        }
+                        sceneRef.cartasGroup = sceneRef.add.group();
 
-                    deck.forEach((id, i) => {
-                        let x = startX + (i % cols) * 115;
-                        let y = startY + Math.floor(i / cols) * 115;
-                        let card = this.add.sprite(x, y, 'dorso').setScale(0.18).setInteractive();
-                        card.cid = 'c'+id;
+                        // Desafío progresivo: de 5 pares (10 cartas) en Nivel 1 hasta 10 pares (20 cartas) en Nivel 10
+                        let totalPares = Math.min(4 + nivelActual, 10);
+                        let deck = []; 
+                        for(let i = 0; i < totalPares; i++) { deck.push(i, i); }
+                        Phaser.Utils.Array.Shuffle(deck);
                         
-                        card.on('pointerdown', () => {
-                            playSnd(500, 0.1, 'triangle');
-                            if(sceneRef.lock || card.texture.key !== 'dorso') return;
-                            card.setTexture(card.cid);
+                        let cols = (window.innerWidth < 600) ? 4 : 5;
+                        let cardSize = 130; // Tamaño aumentado generosamente para visibilidad óptima
+                        let spacingX = 145;
+                        let spacingY = 145;
+                        
+                        let startX = (window.innerWidth / 2) - (((cols - 1) * spacingX) / 2);
+                        let startY = 220;
+
+                        sceneRef.paresRestantes = totalPares;
+                        sceneRef.p1 = null;
+                        sceneRef.lock = false;
+
+                        deck.forEach((id, i) => {
+                            let x = startX + (i % cols) * spacingX;
+                            let y = startY + Math.floor(i / cols) * spacingY;
                             
-                            if(!sceneRef.p1) {
-                                sceneRef.p1 = card;
-                            } else {
-                                sceneRef.lock = true;
-                                if(sceneRef.p1.cid !== card.cid) {
-                                    setTimeout(() => {
-                                        sceneRef.p1.setTexture('dorso'); 
-                                        card.setTexture('dorso');
+                            let card = sceneRef.add.sprite(x, y, 'dorso').setDisplaySize(cardSize, cardSize).setInteractive();
+                            card.cid = 'c'+id;
+                            sceneRef.cartasGroup.add(card);
+                            
+                            card.on('pointerdown', () => {
+                                playSnd(500, 0.1, 'triangle');
+                                if(sceneRef.lock || card.texture.key !== 'dorso') return;
+                                card.setTexture(card.cid);
+                                card.setDisplaySize(cardSize, cardSize);
+                                
+                                if(!sceneRef.p1) {
+                                    sceneRef.p1 = card;
+                                } else {
+                                    sceneRef.lock = true;
+                                    if(sceneRef.p1.cid !== card.cid) {
+                                        setTimeout(() => {
+                                            sceneRef.p1.setTexture('dorso'); 
+                                            sceneRef.p1.setDisplaySize(cardSize, cardSize);
+                                            card.setTexture('dorso');
+                                            card.setDisplaySize(cardSize, cardSize);
+                                            sceneRef.p1 = null; 
+                                            sceneRef.lock = false;
+                                            sceneRef.vidas--; 
+                                            sceneRef.txtVidas.setText('Oportunidades: ' + sceneRef.vidas);
+                                            if(sceneRef.vidas <= 0) ejecutarPerdida();
+                                        }, 750);
+                                    } else { 
+                                        playSnd(850, 0.2, 'sine');
                                         sceneRef.p1 = null; 
                                         sceneRef.lock = false;
-                                        sceneRef.vidas--; 
-                                        sceneRef.txtVidas.setText('Oportunidades: ' + sceneRef.vidas);
-                                        if(sceneRef.vidas <= 0) ejecutarPerdida();
-                                    }, 750);
-                                } else { 
-                                    playSnd(850, 0.2, 'sine');
-                                    sceneRef.p1 = null; 
-                                    sceneRef.lock = false;
-                                    sceneRef.paresRestantes--;
-                                    
-                                    // Al completar todas las parejas del nivel actual
-                                    if(sceneRef.paresRestantes === 0) {
-                                        setTimeout(() => {
-                                            if(nivelActual < 10) {
-                                                mostrarModalVictoria(sceneRef);
-                                            } else {
-                                                alert("¡IMPRESIONANTE! ¡Has completado los 10 niveles del Protocolo Panga con éxito absoluto!");
-                                                location.reload();
-                                            }
-                                        }, 400);
+                                        sceneRef.paresRestantes--;
+                                        
+                                        if(sceneRef.paresRestantes === 0) {
+                                            setTimeout(() => {
+                                                if(nivelActual < 10) {
+                                                    mostrarModalVictoria(sceneRef, construirTablero);
+                                                } else {
+                                                    alert("¡IMPRESIONANTE! ¡Has completado los 10 niveles del Protocolo Panga con éxito absoluto!");
+                                                    location.reload();
+                                                }
+                                            }, 400);
+                                        }
                                     }
                                 }
-                            }
+                            });
                         });
+                    }
+
+                    construirTablero();
+
+                    // Evento de redimensionado automático y fluidez total sin romper la interfaz
+                    this.scale.on('resize', (gameSize) => {
+                        bgGlow.setPosition(gameSize.width / 2, gameSize.height / 2);
+                        sceneRef.txtVidas.x = gameSize.width - 250;
                     });
                 }
             }
         });
     }
 
-    function mostrarModalVictoria(scene) {
+    function mostrarModalVictoria(scene, callbackReiniciar) {
         let modalDiv = document.createElement('div');
-        modalDiv.style.cssText = "position:fixed; top:0; left:0; width:100vw; height:100vw; background:rgba(10,0,25,0.9); z-index:3000; display:flex; justify-content:center; align-items:center; backdrop-filter:blur(10px);";
+        modalDiv.style.cssText = "position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(10,2,25,0.92); z-index:3000; display:flex; justify-content:center; align-items:center; backdrop-filter:blur(12px);";
         
         modalDiv.innerHTML = `
-            <div style="background: linear-gradient(135deg, #1e0033, #0d001a); border: 3px solid #00ffff; border-radius: 30px; padding: 40px; text-align: center; width: 90%; max-width: 450px; box-shadow: 0 0 50px rgba(0,255,255,0.6);">
-                <h2 style="color: #00ffff; font-size: 2.5em; margin-bottom: 10px;">¡Felicitaciones! 🎉</h2>
-                <p style="color: #bc8fef; font-size: 18px; margin-bottom: 25px;">¡Has superado el Nivel ${nivelActual} con gran inteligencia estratégica!</p>
-                <button id="btn-siguiente-nivel" style="width: 100%; padding: 20px; border: none; border-radius: 18px; background: linear-gradient(135deg, #22c55e, #00ffff); color: #000; font-weight: bold; font-size: 20px; cursor: pointer; text-transform: uppercase; box-shadow: 0 0 20px rgba(34,197,94,0.7);">Aceptar y Pasar al Siguiente Nivel ⚡</button>
+            <div style="background: linear-gradient(135deg, #280a4f, #0d021a); border: 3px solid #00ffff; border-radius: 35px; padding: 40px; text-align: center; width: 90%; max-width: 480px; box-shadow: 0 0 60px rgba(0,255,255,0.7);">
+                <h2 style="color: #00ffff; font-size: 2.8em; margin-bottom: 12px; text-shadow: 0 0 20px rgba(0,255,255,0.6);">¡Felicitaciones! 🎉</h2>
+                <p style="color: #bc8fef; font-size: 20px; margin-bottom: 30px; font-weight: bold;">¡Has superado el Nivel ${nivelActual} con gran destreza mental!</p>
+                <button id="btn-siguiente-nivel" style="width: 100%; padding: 22px; border: 2px solid #00ffff; border-radius: 20px; background: linear-gradient(135deg, #22c55e, #00ffff); color: #05010a; font-weight: bold; font-size: 21px; cursor: pointer; text-transform: uppercase; box-shadow: 0 0 25px rgba(34,197,94,0.8);">Aceptar y Pasar al Siguiente Nivel ⚡</button>
             </div>
         `;
         document.body.appendChild(modalDiv);
@@ -401,7 +435,8 @@
         document.getElementById('btn-siguiente-nivel').onclick = () => {
             modalDiv.remove();
             nivelActual++;
-            scene.scene.restart();
+            scene.txtNivel.setText(`Nivel: ${nivelActual} / 10`);
+            callbackReiniciar();
         };
     }
 </script>

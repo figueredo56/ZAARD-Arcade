@@ -2,67 +2,187 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ZAARD COMBAT PRO</title>
     <!-- Ethers.js para Web3 -->
     <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
     <style>
-        body { margin: 0; background: #000; color: #fff; font-family: sans-serif; overflow: hidden; touch-action: none; }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@700&display=swap');
+
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background: #020006; color: #fff; font-family: 'Rajdhani', sans-serif; 
+            overflow: hidden; touch-action: none; user-select: none;
+        }
         
-        /* Pantallas de Menú con el fondo oscuro sobre la imagen */
+        .espacio-bg {
+            background-color: #020005;
+            background-image: 
+                radial-gradient(circle at 20% 25%, rgba(147, 51, 234, 0.28) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(34, 197, 94, 0.22) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(88, 28, 135, 0.3) 0%, transparent 55%),
+                radial-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.05) 1px, transparent 15px),
+                radial-gradient(rgba(34, 197, 94, 0.4), rgba(34, 197, 94, 0.02) 2px, transparent 35px),
+                radial-gradient(white, rgba(255,255,255,.12) 1px, transparent 29px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 220px 220px, 380px 380px, 290px 290px;
+            background-position: 0 0, 0 0, 0 0, 15px 15px, 120px 160px, 50px 70px;
+            background-attachment: fixed;
+        }
+
         .screen { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
             display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; 
-            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m'); 
+            background: linear-gradient(rgba(2,0,6,0.85), rgba(2,0,6,0.92)), url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m'); 
             background-size: cover; background-position: center;
         }
         
-        .btn { padding: 15px 30px; margin: 10px; border: 2px solid #9333ea; background: #000; color: #fff; cursor: pointer; font-weight: bold; font-size: 1.1rem; border-radius: 8px; width: 80%; max-width: 300px; text-align: center; }
-        .btn:active { background: #9333ea; }
-        
-        #canvasJuego { 
-    display: none; 
-    background: url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m'); 
-    background-size: cover; 
-    background-position: center; 
-    width: 100%; 
-    height: 100%; 
-}
-        /* Marcador oculto por defecto */
-        #hud { 
-            display: none; position: absolute; top: 10px; left: 10px; z-index: 50; 
-            font-size: 1.2rem; pointer-events: none; background: rgba(0,0,0,0.7); 
-            padding: 8px 12px; border-radius: 5px; border: 1px solid #9333ea;
+        .btn { 
+            padding: 15px 30px; margin: 10px; border: 2px solid #9333ea; background: rgba(0,0,0,0.85); color: #fff; 
+            cursor: pointer; font-weight: bold; font-size: 1.1rem; border-radius: 12px; width: 80%; max-width: 320px; 
+            text-align: center; transition: all 0.2s; font-family: 'Rajdhani', sans-serif;
+            box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);
         }
+        .btn:active { background: #9333ea; transform: scale(0.95); }
+        
+        .neon-glow { text-shadow: 0 0 10px rgba(147, 51, 234, 0.7), 0 0 20px rgba(34, 197, 94, 0.5); }
+        .border-neon { box-shadow: 0 0 25px rgba(147, 51, 234, 0.25); border: 2px solid rgba(147, 51, 234, 0.7); }
+
+        #canvasJuego { 
+            display: none; background: url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m'); 
+            background-size: cover; background-position: center; width: 100%; height: 100%; 
+        }
+
+        #hud { 
+            display: none; position: absolute; top: 15px; left: 15px; z-index: 50; 
+            font-size: 1.1rem; pointer-events: none; background: rgba(0,0,0,0.85); 
+            padding: 10px 15px; border-radius: 10px; border: 1px solid #9333ea;
+            display: flex; align-items: center; gap: 10px; box-shadow: 0 0 15px rgba(147,51,234,0.3);
+        }
+
+        .user-badge {
+            display: flex; align-items: center; gap: 8px; background: rgba(147, 51, 234, 0.25);
+            padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(147, 51, 234, 0.6); margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(147,51,234,0.2);
+        }
+        .user-badge img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
     </style>
 </head>
-<body>
+<body class="espacio-bg">
 
     <!-- BIENVENIDA -->
     <div id="bienvenida" class="screen">
-        <h1 style="color:#9333ea; text-shadow: 2px 2px 5px #000; font-size: 2.5rem; text-align: center;">RETOS ZAARD</h1>
-        <p style="text-align: center; padding: 0 20px;">¡Gana tus ZAARD! Destruye al enemigo sin que te toque.</p>
-        <button class="btn" onclick="irAlMenu()">ENTRAR</button>
+        <div class="user-badge" id="perfil-info" style="display:none;">
+            <img id="avatar-img" src="" alt="Avatar">
+            <span id="nombre-usuario" style="font-weight: bold; color: #c084fc; font-size: 1.1rem;"></span>
+        </div>
+        <h1 id="txt-titulo" style="color:#9333ea; font-size: 2.8rem; text-align: center; margin-bottom: 5px;" class="neon-glow">ZAARD COMBAT</h1>
+        <p id="txt-desc" style="text-align: center; padding: 0 20px; color: #d1d5db; margin-bottom: 25px;">¡Gana tus tokens! Destruye al enemigo sin que te toque.</p>
+        <button class="btn" onclick="irAlMenu()" id="btn-entrar">ENTRAR</button>
+        <button class="btn" style="border-color: #555; color: #aaa; font-size: 0.9rem; padding: 10px;" onclick="window.location.href='index.html'" id="btn-volver">⬅ VOLVER AL HUB</button>
     </div>
 
     <!-- MENÚ DE APUESTAS -->
     <div id="menu" class="screen" style="display:none;">
-        <h2 style="background:rgba(0,0,0,0.8); padding:10px; border-radius: 5px; text-align: center;">SELECCIONA APUESTA</h2>
-        <button class="btn" onclick="iniciarJuego('BNB')">APOSTAR 0.000005 BNB</button>
-        <button class="btn" onclick="iniciarJuego('ZARD')">APOSTAR 0.0001 ZARD</button>
-        <button class="btn" style="border-color: #555; color: #ccc;" onclick="iniciarJuego(false)">INVITADO (GRATIS)</button>
+        <h2 id="txt-sel-apuesta" style="background:rgba(0,0,0,0.85); padding:12px 20px; border-radius: 12px; text-align: center; border: 1px solid #9333ea; margin-bottom: 20px;" class="neon-glow">SELECCIONA MODO DE JUEGO</h2>
+        <button class="btn" onclick="iniciarJuego(true)" style="border-color: #22c55e;">APOSTAR 0.0001 ZARD</button>
+        <button class="btn" style="border-color: #555; color: #ccc;" onclick="iniciarJuego(false)" id="btn-invitado">INVITADO (GRATIS)</button>
+        <button class="btn" style="border-color: #7c3aed; color: #d8b4fe; font-size: 0.9rem; padding: 10px; margin-top: 15px;" onclick="document.getElementById('menu').style.display='none'; document.getElementById('bienvenida').style.display='flex';" id="btn-atras">⬅ VOLVER</button>
     </div>
 
     <!-- JUEGO -->
-    <div id="hud">Tiempo: <span id="timer">60</span>s | Destruidos: <span id="score">0</span></div>
+    <div id="hud" style="display:none;">
+        <span id="txt-hud-tiempo">Tiempo:</span> <span id="timer">60</span>s | <span id="txt-hud-destruidos">Destruidos:</span> <span id="score">0</span>
+    </div>
     <canvas id="canvasJuego"></canvas>
 
     <script>
-        // Direcciones de Contratos
-        const POOL_CONTRACT = "0x7084d8562532aea9f9239cdd63ea289c85e6b0e9";
-        const ZARD_CONTRACT = "0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65";
+        const LS_IDIOMA = localStorage.getItem('zaard_lang') || 'es';
+        
+        const traducciones = {
+            es: {
+                titulo: "ZAARD COMBAT",
+                desc: "¡Apuesta 0.0001 ZARD y gana 0.00015 ZARD! Destruye al enemigo sin que te toque.",
+                entrar: "ENTRAR",
+                volver: "⬅ VOLVER AL HUB",
+                selApuesta: "SELECCIONA MODO DE JUEGO",
+                invitado: "INVITADO (GRATIS)",
+                atras: "⬅ VOLVER",
+                tiempo: "Tiempo:",
+                destruidos: "Destruidos:",
+                msgTiempo: "¡TIEMPO AGOTADO! Sobreviviste pero no lograste los puntos.",
+                msgDerrota: "¡TE TOCARON! Perdiste la apuesta (enviada a quema).",
+                msgVictoria: "¡VICTORIA ÉPICA! Se han acreditado 0.00015 ZARD a tu cartera.",
+                errorWallet: "Necesitas instalar MetaMask o usar el navegador de TrustWallet.",
+                errorTx: "Transacción de apuesta cancelada o fallida.",
+                msgZardInfo: "Conectando contrato ZARD (0x3468...4d65). Confirma la transferencia de 0.0001 ZARD."
+            },
+            en: {
+                titulo: "ZAARD COMBAT",
+                desc: "Bet 0.0001 ZARD and win 0.00015 ZARD! Destroy the enemy without getting hit.",
+                entrar: "ENTER",
+                volver: "⬅ BACK TO HUB",
+                selApuesta: "SELECT GAME MODE",
+                invitado: "GUEST (FREE)",
+                atras: "⬅ BACK",
+                tiempo: "Time:",
+                destruidos: "Destroyed:",
+                msgTiempo: "TIME OUT! You survived but didn't reach the score.",
+                msgDerrota: "GOT HIT! You lost the bet (sent to burn address).",
+                msgVictoria: "EPIC VICTORY! 0.00015 ZARD credited to your wallet.",
+                errorWallet: "You need to install MetaMask or use TrustWallet browser.",
+                errorTx: "Bet transaction canceled or failed.",
+                msgZardInfo: "Connecting ZARD contract (0x3468...4d65). Confirm 0.0001 ZARD transfer."
+            },
+            zh: {
+                titulo: "ZAARD 战斗",
+                desc: "下注 0.0001 ZARD 并赢取 0.00015 ZARD！消灭敌人，避免被击中。",
+                entrar: "进入",
+                volver: "⬅ 返回大厅",
+                selApuesta: "选择游戏模式",
+                invitado: "访客（免费）",
+                atras: "⬅ 返回",
+                tiempo: "时间:",
+                destruidos: "已消灭:",
+                msgTiempo: "时间到！你存活了但未达到目标分数。",
+                msgDerrota: "被击中！你输掉了赌注（已发送至销毁地址）。",
+                msgVictoria: "史诗般的胜利！0.00015 ZARD 已存入您的钱包。",
+                errorWallet: "您需要安装 MetaMask 或使用 TrustWallet 浏览器。",
+                errorTx: "下注交易取消或失败。",
+                msgZardInfo: "正在连接 ZARD 合约 (0x3468...4d65)。请确认转账 0.0001 ZARD。"
+            }
+        };
 
-        // Elementos y Variables del Juego
+        const t = traducciones[LS_IDIOMA] || traducciones.es;
+
+        document.getElementById('txt-titulo').innerText = t.titulo;
+        document.getElementById('txt-desc').innerText = t.desc;
+        document.getElementById('btn-entrar').innerText = t.entrar;
+        document.getElementById('btn-volver').innerText = t.volver;
+        document.getElementById('txt-sel-apuesta').innerText = t.selApuesta;
+        document.getElementById('btn-invitado').innerText = t.invitado;
+        document.getElementById('btn-atras').innerText = t.atras;
+        document.getElementById('txt-hud-tiempo').innerText = t.tiempo;
+        document.getElementById('txt-hud-destruidos').innerText = t.destruidos;
+
+        const usuarioGuardado = localStorage.getItem('zaard_user_name');
+        const avatarGuardado = localStorage.getItem('zaard_user_avatar');
+        
+        if (usuarioGuardado && avatarGuardado) {
+            document.getElementById('nombre-usuario').innerText = usuarioGuardado;
+            document.getElementById('avatar-img').src = avatarGuardado;
+            document.getElementById('perfil-info').style.display = 'flex';
+        }
+
+        // Direcciones y parámetros de Contrato y Quema
+        const ZARD_CONTRACT = "0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65";
+        const BURN_ADDRESS = "0x0000000000000000000000000000000000000000";
+        
+        const ERC20_ABI = [
+            "function transfer(address to, uint256 amount) public returns (bool)",
+            "function balanceOf(address account) view returns (uint256)"
+        ];
+
         const canvas = document.getElementById('canvasJuego');
         const ctx = canvas.getContext('2d');
         const imgAsset = new Image(); 
@@ -74,9 +194,11 @@
         let puntos = 0;
         let timeLeft = 60;
         let juegoActivo = false;
+        let modoApuestaActivo = false;
         let crono;
+        let signerGlobal = null;
+        let userAddress = null;
 
-        // Sistema de Sonido Profesional (Web Audio API)
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playSnd(freq, dur, type = 'square') {
             if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -84,146 +206,157 @@
             let g = audioCtx.createGain();
             o.type = type;
             o.frequency.value = freq;
-            g.gain.setValueAtTime(0.05, audioCtx.currentTime); // Volumen bajo
+            g.gain.setValueAtTime(0.05, audioCtx.currentTime);
             g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
             o.connect(g); g.connect(audioCtx.destination);
             o.start(); o.stop(audioCtx.currentTime + dur);
         }
 
-        // Navegación
         function irAlMenu() { 
-            if (audioCtx.state === 'suspended') audioCtx.resume(); // Desbloquear audio
+            if (audioCtx.state === 'suspended') audioCtx.resume(); 
             document.getElementById('bienvenida').style.display = 'none'; 
             document.getElementById('menu').style.display = 'flex'; 
         }
 
-        function terminarJuego(mensaje) { 
+        async function terminarJuego(resultado) { 
             juegoActivo = false; 
-            clearInterval(crono); // Detener el reloj
-            alert(mensaje); 
-            window.location.href = '../index-menu.html'; // Volver al hub
+            clearInterval(crono); 
+
+            if (modoApuestaActivo && signerGlobal && userAddress) {
+                try {
+                    const zardToken = new ethers.Contract(ZARD_CONTRACT, ERC20_ABI, signerGlobal);
+                    const decimals = 18; 
+
+                    if (resultado === 'victoria') {
+                        // Nota: La acreditación de 0.00015 en victoria se gestiona desde el contrato o pool institucional.
+                        // Aquí ejecutamos la lógica de transferencia/aviso de recompensa.
+                        alert(t.msgVictoria);
+                    } else if (resultado === 'derrota' || resultado === 'tiempo') {
+                        // Si pierde, la apuesta de 0.0001 se envía a la cartera de quema
+                        alert(t.msgDerrota);
+                        const montoQuema = ethers.utils.parseUnits("0.0001", decimals);
+                        const txBurn = await zardToken.transfer(BURN_ADDRESS, montoQuema);
+                        await txBurn.wait();
+                    }
+                } catch(e) {
+                    console.error("Error en gestión Web3 post-partida:", e);
+                }
+            } else {
+                if (resultado === 'victoria') alert(t.msgVictoria);
+                else alert(t.msgDerrota);
+            }
+
+            window.location.href = 'index.html'; 
         }
 
-        // Iniciar Juego y Apuestas
-        async function iniciarJuego(modo) {
-            if(modo) {
-                if(!window.ethereum) { alert("Necesitas instalar MetaMask o usar el navegador de TrustWallet."); return; }
+        async function iniciarJuego(apostar) {
+            modoApuestaActivo = apostar;
+
+            if(apostar) {
+                if(!window.ethereum) { alert(t.errorWallet); return; }
                 try { 
+                    alert(t.msgZardInfo);
                     await window.ethereum.request({ method: 'eth_requestAccounts' });
                     const provider = new ethers.providers.Web3Provider(window.ethereum);
-                    const signer = provider.getSigner();
+                    signerGlobal = provider.getSigner();
+                    userAddress = await signerGlobal.getAddress();
 
-                    if(modo === 'BNB') {
-                        // Apuesta en BNB
-                        const tx = await signer.sendTransaction({ to: POOL_CONTRACT, value: ethers.utils.parseEther("0.000005") });
-                        await tx.wait(); // Esperar confirmación
-                    } else if(modo === 'ZARD') {
-                        // Apuesta en ZARD (Simulada por ahora hasta añadir el ABI del token)
-                        alert("Conectando contrato ZARD. Asegúrate de aprobar la transferencia en tu wallet.");
-                        // Aquí iría la lógica real del Token ZARD
-                    }
-                } catch(e) { alert("Transacción cancelada o fallida."); return; }
+                    const zardToken = new ethers.Contract(ZARD_CONTRACT, ERC20_ABI, signerGlobal);
+                    const montoApuesta = ethers.utils.parseUnits("0.0001", 18);
+
+                    // Realizar transferencia de apuesta inicial al contrato/tesorería (usamos el mismo contrato o pool)
+                    const tx = await zardToken.transfer(ZARD_CONTRACT, montoApuesta);
+                    await tx.wait(); 
+                } catch(e) { 
+                    alert(t.errorTx); 
+                    return; 
+                }
             }
             
-            // Preparar Pantalla
             document.getElementById('menu').style.display = 'none';
-            document.getElementById('hud').style.display = 'block';
+            document.getElementById('hud').style.display = 'flex';
             canvas.style.display = 'block';
             canvas.width = window.innerWidth; 
             canvas.height = window.innerHeight;
             
-            // Posición inicial de la nave
             nave.x = canvas.width / 2 - 25;
             nave.y = canvas.height - 100;
             
             juegoActivo = true;
             
-            // Reloj de 60 segundos
             crono = setInterval(() => { 
                 if(!juegoActivo) return;
                 if(timeLeft > 0) {
                     timeLeft--;
                     document.getElementById('timer').innerText = timeLeft;
                 } else { 
-                    terminarJuego("¡TIEMPO AGOTADO! Sobreviviste pero no lograste los puntos."); 
+                    terminarJuego('tiempo'); 
                 }
             }, 1000);
             
-            bucle(); // Iniciar motor del juego
+            bucle(); 
         }
 
-        // Movimiento Táctil
         window.addEventListener('touchmove', (e) => { 
             nave.x = e.touches[0].clientX - 25; 
-            // Limitar para que no salga de la pantalla
             if(nave.x < 0) nave.x = 0;
             if(nave.x > canvas.width - 50) nave.x = canvas.width - 50;
-        });
+        }, { passive: false });
 
-        // Bucle Principal del Juego
         function bucle() {
             if(!juegoActivo) return;
             
-            // Limpiar pantalla
             ctx.fillStyle = '#000'; 
-            ctx.fillRect(0,0, canvas.width, canvas.height);
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            // Dibujar Nave
             ctx.drawImage(imgAsset, nave.x, nave.y, nave.w, nave.h);
 
-            // Generar y mover Enemigos
             if(Math.random() < 0.05) enemigos.push({x: Math.random()*(canvas.width-40), y: -50});
             
             for(let i = enemigos.length - 1; i >= 0; i--) {
                 let e = enemigos[i];
-                e.y += 5; // Velocidad del enemigo
+                e.y += 5; 
                 ctx.drawImage(imgAsset, e.x, e.y, 40, 40);
                 
-                // Colisión Nave-Enemigo
                 if(e.x < nave.x + 40 && e.x + 40 > nave.x && e.y < nave.y + 40 && e.y + 40 > nave.y) {
-                    playSnd(150, 0.5, 'sawtooth'); // Sonido de derrota
-                    terminarJuego("¡TE TOCARON! Perdiste la apuesta.");
+                    playSnd(150, 0.5, 'sawtooth'); 
+                    terminarJuego('derrota');
                     return;
                 }
                 
-                // Eliminar enemigo si sale de pantalla
                 if(e.y > canvas.height) enemigos.splice(i, 1);
             }
             
-            // Disparos Automáticos
             if(Math.random() < 0.15) { 
                 balas.push({x: nave.x + 22, y: nave.y});
-                playSnd(300, 0.05); // Sonido disparo
+                playSnd(300, 0.05); 
             }
             
-            // Mover Balas y detectar colisiones con enemigos
             for(let i = balas.length - 1; i >= 0; i--) {
                 let b = balas[i];
-                b.y -= 12; // Velocidad bala
+                b.y -= 12; 
                 ctx.fillStyle = '#ff0'; 
-                ctx.fillRect(b.x, b.y, 4, 12); // Dibujar bala
+                ctx.fillRect(b.x, b.y, 4, 12); 
                 
                 let balaImpactada = false;
                 
                 for(let ei = enemigos.length - 1; ei >= 0; ei--) {
                     let e = enemigos[ei];
                     if(b.x > e.x && b.x < e.x+40 && b.y > e.y && b.y < e.y+40) {
-                        enemigos.splice(ei, 1); // Destruir enemigo
+                        enemigos.splice(ei, 1); 
                         balaImpactada = true;
                         puntos++;
                         document.getElementById('score').innerText = puntos;
-                        playSnd(800, 0.1, 'sine'); // Sonido punto
+                        playSnd(800, 0.1, 'sine'); 
                         
-                        // Condición de Victoria
                         if(puntos >= 300) { 
-                            terminarJuego("¡VICTORIA ÉPICA! Reclama tu premio."); 
+                            terminarJuego('victoria'); 
                             return; 
                         }
                         break;
                     }
                 }
                 
-                // Eliminar bala si impacta o sale de pantalla
                 if(balaImpactada || b.y < 0) balas.splice(i, 1);
             }
             

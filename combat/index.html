@@ -19,12 +19,12 @@
         .espacio-bg {
             background-color: #020005;
             background-image: 
-                radial-gradient(circle at 20% 25%, rgba(147, 51, 234, 0.28) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(34, 197, 94, 0.22) 0%, transparent 45%),
-                radial-gradient(circle at 50% 50%, rgba(88, 28, 135, 0.3) 0%, transparent 55%),
-                radial-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.05) 1px, transparent 15px),
-                radial-gradient(rgba(34, 197, 94, 0.4), rgba(34, 197, 94, 0.02) 2px, transparent 35px),
-                radial-gradient(white, rgba(255,255,255,.12) 1px, transparent 29px);
+                radial-gradient(circle at 20% 25%, rgba(147, 51, 234, 0.35) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(34, 197, 94, 0.28) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(88, 28, 135, 0.4) 0%, transparent 55%),
+                radial-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.08) 1px, transparent 15px),
+                radial-gradient(rgba(34, 197, 94, 0.5), rgba(34, 197, 94, 0.03) 2px, transparent 35px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 29px);
             background-size: 100% 100%, 100% 100%, 100% 100%, 220px 220px, 380px 380px, 290px 290px;
             background-position: 0 0, 0 0, 0 0, 15px 15px, 120px 160px, 50px 70px;
             background-attachment: fixed;
@@ -33,7 +33,7 @@
         .screen { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
             display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; 
-            background: linear-gradient(rgba(2,0,6,0.85), rgba(2,0,6,0.92)), url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m'); 
+            background: linear-gradient(rgba(2,0,6,0.8), rgba(2,0,6,0.9)), url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m'); 
             background-size: cover; background-position: center;
         }
         
@@ -49,7 +49,7 @@
         .border-neon { box-shadow: 0 0 25px rgba(147, 51, 234, 0.25); border: 2px solid rgba(147, 51, 234, 0.7); }
 
         #canvasJuego { 
-            display: none; width: 100%; height: 100%; 
+            display: none; width: 100%; height: 100%; background: transparent; position: absolute; top: 0; left: 0; z-index: 10;
         }
 
         #hud { 
@@ -164,7 +164,7 @@
         document.getElementById('txt-hud-tiempo').innerText = t.tiempo;
         document.getElementById('txt-hud-destruidos').innerText = t.destruidos;
 
-        // Carga correcta del nombre y avatar desde el Hub
+        // Lectura corregida de llaves del menú principal
         const usuarioGuardado = localStorage.getItem('zaard_nombre');
         const avatarGuardado = localStorage.getItem('zaard_avatar');
         
@@ -308,8 +308,8 @@
         function bucle() {
             if(!juegoActivo) return;
             
-            ctx.fillStyle = 'rgba(2, 0, 6, 0.4)'; 
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // Limpiar canvas de manera transparente para que se luzca el fondo de estrellas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             // Dibujar Nave
             ctx.drawImage(imgAsset, nave.x, nave.y, nave.w, nave.h);
@@ -342,7 +342,7 @@
                 let b = balas[i];
                 b.y -= 14; 
                 ctx.fillStyle = '#22c55e'; 
-                ctx.shadowBlur = 10;
+                ctx.shadowBlur = 12;
                 ctx.shadowColor = '#22c55e';
                 ctx.fillRect(b.x, b.y, 5, 15); 
                 ctx.shadowBlur = 0; 

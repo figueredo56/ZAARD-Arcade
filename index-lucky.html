@@ -2,113 +2,299 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>ZAARD LUCKY CHEST</title>
-    <!-- Librería necesaria para interactuar con la Blockchain -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ZAARD LUCKY CHEST - Protocolo Panga</title>
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@900&family=Rajdhani:wght@700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@700&display=swap');
         
         body { 
             margin: 0; 
-            background: url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m') no-repeat center center fixed; 
-            background-size: cover; 
-            background-color: #000;
-            color: #fff; 
-            text-align: center; 
+            padding: 0;
+            background: radial-gradient(circle at 50% 30%, #3d106b 0%, #17042f 50%, #070112 100%);
+            background-attachment: fixed;
+            overflow: hidden; 
             font-family: 'Rajdhani', sans-serif; 
-            min-height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
+            color: #fff;
+            touch-action: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             justify-content: center;
+            height: 100vh;
         }
 
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: -1; }
+        #loading-screen {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #070112; z-index: 2000;
+            display: flex; justify-content: center; align-items: center; color: #00ffff; font-weight: bold; font-size: 20px;
+        }
+
+        /* Modal de Bienvenida */
+        #modal-bienvenida {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(7, 1, 18, 0.95); z-index: 1500;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 20px; box-sizing: border-box; text-align: center;
+        }
+        .modal-card {
+            background: linear-gradient(135deg, #240a4a 0%, #100323 100%);
+            border: 2px solid #00ffff; border-radius: 20px;
+            padding: 25px; width: 100%; max-width: 380px;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
+        }
+        .btn-accion {
+            width: 100%; padding: 14px; margin: 10px 0; border: none; border-radius: 12px;
+            font-weight: bold; font-size: 16px; cursor: pointer; text-transform: uppercase;
+            font-family: 'Rajdhani', sans-serif;
+        }
+        .btn-invitado { background: linear-gradient(90deg, #10b981, #059669); color: #fff; }
+        .btn-web3 { background: linear-gradient(90deg, #00ffff, #0088cc); color: #000; }
+
+        /* Panel Superior de Usuario */
+        .user-panel {
+            position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 440px; height: 75px;
+            background: rgba(24, 5, 54, 0.85);
+            border: 2px solid rgba(0, 255, 255, 0.8); border-radius: 16px;
+            display: flex; align-items: center; padding: 0 15px; box-sizing: border-box;
+            box-shadow: 0 0 15px rgba(0,255,255,0.2); z-index: 10;
+        }
+        .user-avatar {
+            width: 52px; height: 52px; border-radius: 50%; border: 2px solid #d946ef;
+            object-fit: cover; margin-right: 12px;
+        }
+        .user-info { flex-grow: 1; text-align: left; }
+        .user-name { font-size: 18px; color: #00ffff; font-weight: bold; line-height: 1.2; }
+        .user-sub { font-size: 13px; color: #e879f9; font-weight: bold; }
+        .btn-salir {
+            background: none; border: none; color: #ff6b6b; font-size: 14px; font-weight: bold;
+            cursor: pointer; font-family: 'Rajdhani', sans-serif; text-transform: uppercase;
+        }
+
+        /* Contenedor del Juego y Cofres */
+        .game-container {
+            margin-top: 80px; width: 100%; max-width: 480px; display: flex; flex-direction: column; align-items: center;
+        }
+        h1 { font-size: 2.2rem; color: #c77dff; text-shadow: 0 0 15px #7b2cbf; margin: 15px 0; text-transform: uppercase; }
         
-        h1 { font-size: 4rem; color: #c77dff; text-shadow: 0 0 25px #7b2cbf; margin-bottom: 30px; text-transform: uppercase; }
+        .chests-container { display: flex; gap: 12px; margin-top: 15px; flex-wrap: wrap; justify-content: center; padding: 0 10px; }
+        .chest { 
+            width: 75px; height: 85px; cursor: pointer; border: 3px solid #c77dff; border-radius: 14px; 
+            overflow: hidden; transition: 0.2s; background: rgba(50, 10, 90, 0.5);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .chest img { width: 85%; transition: 0.2s; }
+        .chest.active { transform: scale(1.15); border-color: #00ffff; box-shadow: 0 0 20px #00ffff; background: rgba(0,255,255,0.2); }
+        .chest:hover { transform: scale(1.08); box-shadow: 0 0 25px #c77dff; }
+
+        #status-msg { font-size: 1.3rem; margin-top: 20px; color: #e0aaff; font-weight: bold; padding: 0 20px; text-shadow: 2px 2px 8px #000; min-height: 50px; }
         
-        .aviso { background: rgba(40, 0, 70, 0.95); border: 5px solid #c77dff; padding: 30px; margin: 30px; border-radius: 25px; font-size: 2rem; color: #fff; box-shadow: 0 0 40px #7b2cbf; }
-        
-        .btn { padding: 25px 50px; background: linear-gradient(45deg, #7b2cbf, #3c096c); cursor: pointer; border: 4px solid #c77dff; border-radius: 20px; color: white; font-weight: bold; font-size: 2rem; margin: 20px; text-transform: uppercase; box-shadow: 0 0 30px #7b2cbf; }
-        
-        .chests-container { display: flex; gap: 30px; margin-top: 50px; flex-wrap: wrap; justify-content: center; }
-        .chest { width: 200px; cursor: pointer; border: 5px solid #c77dff; border-radius: 20px; overflow: hidden; transition: 0.3s; }
-        .chest:hover { transform: scale(1.1); box-shadow: 0 0 50px #c77dff; }
-        
-        #status-msg { font-size: 2.5rem; margin-top: 50px; color: #e0aaff; font-weight: bold; padding: 0 30px; text-shadow: 3px 3px 10px #000; }
+        .btn-reiniciar {
+            padding: 12px 30px; background: linear-gradient(45deg, #7b2cbf, #3c096c); cursor: pointer; 
+            border: 2px solid #c77dff; border-radius: 14px; color: white; font-weight: bold; font-size: 1.2rem; 
+            margin-top: 15px; text-transform: uppercase; box-shadow: 0 0 15px #7b2cbf; font-family: 'Rajdhani', sans-serif;
+        }
     </style>
 </head>
 <body>
-    <div class="overlay"></div>
 
-    <div id="welcome-area">
-        <h1>ZAARD LUCKY CHEST</h1>
-        <div class="aviso">
-            APUESTA: 0.0001 ZAARD<br>
-            PREMIO: 0.00015 ZAARD<br>
-            <small>CONTRATO: 0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65</small>
+    <div id="loading-screen">CARGANDO PROTOCOLO...</div>
+
+    <!-- MODAL DE BIENVENIDA -->
+    <div id="modal-bienvenida">
+        <div class="modal-card">
+            <h2 id="txt-titulo-modal" style="color: #00ffff; margin-top: 0;">⚡ PROTOCOLO PANGA ⚡</h2>
+            <p id="txt-desc-modal" style="font-size: 14px; color: #ccc; margin-bottom: 20px;">
+                Apuesta: 0.0001 ZARD<br>Premio: 0.00015 ZARD<br>Quema automática al perder.
+            </p>
+            <button class="btn-accion btn-invitado" onclick="elegirModo('invitado')">MODO INVITADO 🚀</button>
+            <button class="btn-accion btn-web3" onclick="conectarYJugar()">CONECTAR BILLETERA WEB3</button>
         </div>
-        <button class="btn" onclick="conectarCartera()">CONECTAR CARTERA</button>
-        <button class="btn" onclick="iniciarJuego()">MODO INVITADO</button>
     </div>
 
-    <div id="game-area" style="display:none;">
-        <h1 style="font-size: 4rem;">¡ELIGE TU CAJA!</h1>
-        <div class="chests-container">
-            <div class="chest" onclick="abrirCaja(1)"><img src="https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4" width="100%"></div>
-            <div class="chest" onclick="abrirCaja(2)"><img src="https://ipfs.io/ipfs/bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue" width="100%"></div>
-            <div class="chest" onclick="abrirCaja(3)"><img src="https://ipfs.io/ipfs/bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34" width="100%"></div>
-            <div class="chest" onclick="abrirCaja(4)"><img src="https://ipfs.io/ipfs/bafybeiefhnawny7nlgixveiia7aaougqxsird6or4nws52vp36ndbfvixa" width="100%"></div>
-            <div class="chest" onclick="abrirCaja(5)"><img src="https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m" width="100%"></div>
+    <!-- AUDIO DE FONDO -->
+    <audio id="zaard-audio" loop>
+        <source src="El%20Chupulún%20de%20Zaard.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- PANEL SUPERIOR DE USUARIO -->
+    <div class="user-panel">
+        <img id="img-avatar-usr" class="user-avatar" src="" alt="Avatar">
+        <div class="user-info">
+            <div id="txt-nombre-usr" class="user-name">Jugador</div>
+            <div id="txt-rol-usr" class="user-sub">LUCKY CHEST</div>
         </div>
-        <div id="status-msg"></div>
-        <br><button class="btn" onclick="location.reload()">REINICIAR</button>
+        <button class="btn-salir" onclick="irAlMenuPrincipal()">SALIR</button>
+    </div>
+
+    <!-- ÁREA DE JUEGO -->
+    <div class="game-container">
+        <h1 id="txt-titulo-juego">⚡ ELIGE TU COFRE ⚡</h1>
+        
+        <div class="chests-container">
+            <div class="chest" id="chest-1" onclick="intentarAbrir(1)"><img src="https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4"></div>
+            <div class="chest" id="chest-2" onclick="intentarAbrir(2)"><img src="https://ipfs.io/ipfs/bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue"></div>
+            <div class="chest" id="chest-3" onclick="intentarAbrir(3)"><img src="https://ipfs.io/ipfs/bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34"></div>
+            <div class="chest" id="chest-4" onclick="intentarAbrir(4)"><img src="https://ipfs.io/ipfs/bafybeiefhnawny7nlgixveiia7aaougqxsird6or4nws52vp36ndbfvixa"></div>
+            <div class="chest" id="chest-5" onclick="intentarAbrir(5)"><img src="https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m"></div>
+        </div>
+
+        <div id="status-msg">Selecciona un cofre con cuidado...</div>
+        <button class="btn-reiniciar" onclick="location.reload()">REINICIAR</button>
     </div>
 
     <script>
-        // Configuración de direcciones
-        const POOL_LP_ADDR = "0x7084D8562532AEA9F9239Cdd63EA289C85E6b0e9";
-        const TOKEN_ADDR = "0x3468EA4e6CE13Ec4C7f8651f7eFC6AA6046F4d65";
-        const ABI = [{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"type":"function"}];
-        
-        let web3, contract, userAccount;
+        // Configuración obtenida del almacenamiento local del menú principal
+        const LS_NOMBRE = localStorage.getItem('zaard_nombre') || "Jugador Zaard";
+        const LS_AVATAR_URL = localStorage.getItem('zaard_avatar') || 'https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_lhyyv2lhyyv2lhyy_1.png';
+        const LS_IDIOMA = localStorage.getItem('zaard_lang') || 'es'; 
 
-        async function conectarCartera() {
+        // Configuración Web3 y Apuestas oficiales
+        const TOKEN_ADDR = "0x3468EA4e6CE13Ec4C7f8651f7eFC6AA6046F4d65"; 
+        const BURN_WALLET = "0x000000000000000000000000000000000000dEaD"; 
+        const ABI_TRANSFER = [{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"type":"function"}];
+        const APUESTA_WEI = "100000000000000"; // 0.0001 ZARD
+
+        let web3, contract, userAccount, esModoWeb3 = false;
+        let juegoBloqueado = false;
+        let musicaHabilitada = localStorage.getItem('zaard_musica') !== 'OFF';
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // Cargar datos de perfil en la interfaz
+            document.getElementById('txt-nombre-usr').innerText = LS_NOMBRE;
+            document.getElementById('img-avatar-usr').src = LS_AVATAR_URL;
+
+            // Textos según idioma
+            if (LS_IDIOMA === 'zh') {
+                document.getElementById('txt-desc-modal').innerHTML = "下注: 0.0001 ZARD<br>奖励: 0.00015 ZARD<br>失败时自动销毁。";
+                document.querySelector('.btn-invitado').innerText = "游客模式 🚀";
+                document.querySelector('.btn-web3').innerText = "连接 Web3 钱包";
+                document.getElementById('txt-titulo-juego').innerText = "⚡ 选择你的宝箱 ⚡";
+                document.querySelector('.btn-salir').innerText = "退出";
+                document.querySelector('.btn-reiniciar').innerText = "重新开始";
+                document.getElementById('status-msg').innerText = "小心选择一个宝箱...";
+            } else if (LS_IDIOMA === 'en') {
+                document.getElementById('txt-desc-modal').innerHTML = "Bet: 0.0001 ZARD<br>Win: 0.00015 ZARD<br>Auto-burn on loss.";
+                document.querySelector('.btn-invitado').innerText = "GUEST MODE 🚀";
+                document.querySelector('.btn-web3').innerText = "CONNECT WEB3 WALLET";
+                document.getElementById('txt-titulo-juego').innerText = "⚡ CHOOSE YOUR CHEST ⚡";
+                document.querySelector('.btn-salir').innerText = "EXIT";
+                document.querySelector('.btn-reiniciar').innerText = "RESTART";
+                document.getElementById('status-msg').innerText = "Choose a chest carefully...";
+            }
+
+            // Audio
+            const audio = document.getElementById('zaard-audio');
+            audio.volume = 0.3;
+            if (musicaHabilitada) {
+                audio.play().catch(e => console.log("Autoplay pendiente"));
+            }
+            document.getElementById('loading-screen').style.display = 'none';
+        });
+
+        function elegirModo(modo) {
+            esModoWeb3 = false;
+            document.getElementById('modal-bienvenida').style.display = 'none';
+        }
+
+        async function conectarYJugar() {
             if (window.ethereum) {
-                web3 = new Web3(window.ethereum);
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                userAccount = accounts[0];
-                contract = new web3.eth.Contract(ABI, TOKEN_ADDR);
-                iniciarJuego();
-            } else { alert("Instala MetaMask"); }
+                try {
+                    web3 = new Web3(window.ethereum);
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    userAccount = accounts[0];
+                    contract = new web3.eth.Contract(ABI_TRANSFER, TOKEN_ADDR);
+                    esModoWeb3 = true;
+                    alert(LS_IDIOMA === 'zh' ? "钱包已连接！" : "¡Billetera conectada con éxito!");
+                    document.getElementById('modal-bienvenida').style.display = 'none';
+                } catch (e) { 
+                    alert(LS_IDIOMA === 'zh' ? "连接失败。" : "Conexión cancelada o fallida."); 
+                }
+            } else { 
+                alert(LS_IDIOMA === 'zh' ? "请安装 Web3 钱包。" : "Por favor instala MetaMask o una billetera Web3."); 
+            }
         }
 
-        function iniciarJuego() {
-            document.getElementById('welcome-area').style.display = 'none';
-            document.getElementById('game-area').style.display = 'flex';
+        function irAlMenuPrincipal() {
+            window.location.href = "index.html";
         }
 
-        async function abrirCaja(n) {
+        async function ejecutarQuemaPorPerdida() {
+            if (esModoWeb3 && contract && userAccount) {
+                try {
+                    const msg = LS_IDIOMA === 'zh' ? "正在处理销毁交易..." : "Procesando quema de 0.0001 ZARD...";
+                    const msgDiv = document.createElement('div');
+                    msgDiv.style.position = 'fixed'; msgDiv.style.top='50%'; msgDiv.style.left='50%';
+                    msgDiv.style.transform='translate(-50%, -50%)'; msgDiv.style.background='rgba(0,0,0,0.9)';
+                    msgDiv.style.color='#ff4444'; msgDiv.style.padding='20px'; msgDiv.style.borderRadius='15px';
+                    msgDiv.style.zIndex='3000'; msgDiv.style.fontWeight='bold';
+                    msgDiv.innerText = msg;
+                    document.body.appendChild(msgDiv);
+
+                    await contract.methods.transfer(BURN_WALLET, APUESTA_WEI).send({ from: userAccount });
+                    msgDiv.remove();
+                    alert(LS_IDIOMA === 'zh' ? "代币已销毁至 Dead 地址。" : "Apuesta enviada a la billetera de quema oficial.");
+                } catch (e) { 
+                    console.log("Error en quema:", e); 
+                }
+            }
+        }
+
+        // Animación tipo Ruleta Escaneando los cofres antes de dar el resultado
+        async function intentarAbrir(cofreSeleccionado) {
+            if (juegoBloqueado) return;
+            juegoBloqueado = true;
+
             const msg = document.getElementById('status-msg');
-            const gano = Math.random() < 0.25; 
-            const amount = "100000000000000"; // 0.0001 ZAARD
+            msg.style.color = "#00ffff";
+            msg.innerText = LS_IDIOMA === 'zh' ? "正在扫描宝箱..." : "Escaneando cofres...";
+
+            // Efecto de luces tipo ruleta pasando por los cofres
+            let pasos = 10;
+            let actual = 1;
+            for (let i = 0; i < pasos; i++) {
+                document.querySelectorAll('.chest').forEach(c => c.classList.remove('active'));
+                document.getElementById(`chest-${actual}`).classList.add('active');
+                actual = (actual % 5) + 1;
+                await new Promise(r => setTimeout(r, 120));
+            }
+
+            // Quitar luces y dejar activo el elegido por el usuario
+            document.querySelectorAll('.chest').forEach(c => c.classList.remove('active'));
+            document.getElementById(`chest-${cofreSeleccionado}`).classList.add('active');
+
+            // Probabilidad baja de ganar (25%) para proteger los ZARD
+            const gano = Math.random() < 0.25;
 
             if (gano) {
-                msg.innerText = "¡FELICIDADES! Tus 0.00015 ZAARD ya están en tu cartera.";
                 msg.style.color = "#c77dff";
-            } else {
-                if (contract && userAccount) {
-                    try {
-                        msg.innerText = "Procesando...";
-                        await contract.methods.transfer(POOL_LP_ADDR, amount).send({ from: userAccount });
-                        msg.innerText = "Mejor suerte la próxima. Tu apuesta fortalece el Pool de Liquidez.";
-                    } catch (e) {
-                        msg.innerText = "Transacción cancelada o error.";
-                    }
+                if (LS_IDIOMA === 'zh') {
+                    msg.innerText = `🎉 恭喜 ${LS_NOMBRE}！ 0.00015 ZARD 已发送至您的钱包！`;
+                } else if (LS_IDIOMA === 'en') {
+                    msg.innerText = `🎉 CONGRATS ${LS_NOMBRE}! 0.00015 ZARD sent to your wallet!`;
                 } else {
-                    msg.innerText = "Intenta luego, sigue intentando. Mejor suerte la próxima, ¡no te desanimes!";
+                    msg.innerText = `🎉 ¡FELICIDADES ${LS_NOMBRE}! Has ganado 0.00015 ZARD.`;
                 }
+                juegoBloqueado = false;
+            } else {
                 msg.style.color = "#ff4d6d";
+                if (LS_IDIOMA === 'zh') {
+                    msg.innerText = "😢 未中奖。代币已燃烧，再接再厉！";
+                } else if (LS_IDIOMA === 'en') {
+                    msg.innerText = "😢 Better luck next time! Tokens burned.";
+                } else {
+                    msg.innerText = `😢 Ups ${LS_NOMBRE}, cofre vacío. Tu apuesta quema suministro.`;
+                }
+
+                if (esModoWeb3) {
+                    await ejecutarQuemaPorPerdida();
+                }
+
+                // Al perder, tras un breve momento regresa al menú principal como pediste
+                setTimeout(() => {
+                    irAlMenuPrincipal();
+                }, 3500);
             }
         }
     </script>

@@ -11,9 +11,7 @@
         body { 
             margin: 0; 
             padding: 0;
-            background: radial-gradient(circle at 50% 30%, #3d106b 0%, #17042f 50%, #070112 100%);
-            background-attachment: fixed;
-            overflow: hidden; 
+            background-color: #070112; /* Fondo base */
             font-family: 'Rajdhani', sans-serif; 
             color: #fff;
             touch-action: none;
@@ -22,6 +20,7 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
+            overflow: hidden;
         }
 
         #loading-screen {
@@ -30,82 +29,107 @@
             display: flex; justify-content: center; align-items: center; color: #00ffff; font-weight: bold; font-size: 20px;
         }
 
-        /* Modal de Bienvenida */
+        /* Fondo de Bienvenida Mejorado (Vórtice Cósmico) */
         #modal-bienvenida {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(7, 1, 18, 0.95); z-index: 1500;
+            background: radial-gradient(circle at 50% 50%, #240a6a 0%, #070112 70%), url('https://www.transparenttextures.com/patterns/stardust.png');
+            background-blend-mode: overlay;
+            z-index: 1500;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             padding: 20px; box-sizing: border-box; text-align: center;
         }
         .modal-card {
-            background: linear-gradient(135deg, #240a4a 0%, #100323 100%);
+            background: rgba(10, 3, 35, 0.85);
             border: 2px solid #00ffff; border-radius: 20px;
-            padding: 25px; width: 100%; max-width: 380px;
-            box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
+            padding: 30px; width: 100%; max-width: 400px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4), inset 0 0 15px rgba(0, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
         }
         .btn-accion {
-            width: 100%; padding: 14px; margin: 10px 0; border: none; border-radius: 12px;
-            font-weight: bold; font-size: 16px; cursor: pointer; text-transform: uppercase;
-            font-family: 'Rajdhani', sans-serif;
+            width: 100%; padding: 16px; margin: 12px 0; border: none; border-radius: 12px;
+            font-weight: bold; font-size: 18px; cursor: pointer; text-transform: uppercase;
+            font-family: 'Rajdhani', sans-serif; transition: 0.2s;
         }
-        .btn-invitado { background: linear-gradient(90deg, #10b981, #059669); color: #fff; }
-        .btn-web3 { background: linear-gradient(90deg, #00ffff, #0088cc); color: #000; }
+        .btn-accion:hover { transform: scale(1.03); }
+        .btn-invitado { background: linear-gradient(90deg, #10b981, #059669); color: #fff; box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
+        .btn-web3 { background: linear-gradient(90deg, #00ffff, #0088cc); color: #000; box-shadow: 0 0 15px rgba(0, 255, 255, 0.5); }
 
-        /* Panel Superior de Usuario */
+        /* Panel Superior de Usuario (Estilo Panga) */
         .user-panel {
             position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 440px; height: 75px;
-            background: rgba(24, 5, 54, 0.85);
-            border: 2px solid rgba(0, 255, 255, 0.8); border-radius: 16px;
+            width: 90%; max-width: 460px; height: 80px;
+            background: rgba(24, 5, 54, 0.95);
+            border: 2px solid rgba(0, 255, 255, 0.8); border-radius: 18px;
             display: flex; align-items: center; padding: 0 15px; box-sizing: border-box;
-            box-shadow: 0 0 15px rgba(0,255,255,0.2); z-index: 10;
+            box-shadow: 0 0 20px rgba(0,255,255,0.3); z-index: 10;
         }
         .user-avatar {
-            width: 52px; height: 52px; border-radius: 50%; border: 2px solid #d946ef;
-            object-fit: cover; margin-right: 12px;
+            width: 58px; height: 58px; border-radius: 50%; border: 3px solid #d946ef;
+            object-fit: cover; margin-right: 15px; box-shadow: 0 0 10px #d946ef;
         }
         .user-info { flex-grow: 1; text-align: left; }
-        .user-name { font-size: 18px; color: #00ffff; font-weight: bold; line-height: 1.2; }
-        .user-sub { font-size: 13px; color: #e879f9; font-weight: bold; }
+        .user-name { font-size: 20px; color: #00ffff; font-weight: bold; line-height: 1.2; text-shadow: 0 0 5px #00ffff; }
+        .user-sub { font-size: 14px; color: #e879f9; font-weight: bold; }
         .btn-salir {
-            background: none; border: none; color: #ff6b6b; font-size: 14px; font-weight: bold;
-            cursor: pointer; font-family: 'Rajdhani', sans-serif; text-transform: uppercase;
+            background: none; border: none; color: #ff6b6b; font-size: 16px; font-weight: bold;
+            cursor: pointer; font-family: 'Rajdhani', sans-serif; text-transform: uppercase; transition: 0.2s;
         }
+        .btn-salir:hover { color: #ff4444; text-shadow: 0 0 5px #ff4444; }
 
-        /* Contenedor del Juego y Cofres */
+        /* Área de Juego y Ruleta de Cofres */
         .game-container {
-            margin-top: 80px; width: 100%; max-width: 480px; display: flex; flex-direction: column; align-items: center;
+            margin-top: 100px; width: 100%; max-width: 500px; display: flex; flex-direction: column; align-items: center;
         }
-        h1 { font-size: 2.2rem; color: #c77dff; text-shadow: 0 0 15px #7b2cbf; margin: 15px 0; text-transform: uppercase; }
+        h1 { font-size: 2.5rem; color: #c77dff; text-shadow: 0 0 20px #7b2cbf; margin: 20px 0; text-transform: uppercase; }
         
-        .chests-container { display: flex; gap: 12px; margin-top: 15px; flex-wrap: wrap; justify-content: center; padding: 0 10px; }
+        .chests-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 25px; padding: 0 10px; width: 100%; box-sizing: border-box; }
         .chest { 
-            width: 75px; height: 85px; cursor: pointer; border: 3px solid #c77dff; border-radius: 14px; 
-            overflow: hidden; transition: 0.2s; background: rgba(50, 10, 90, 0.5);
+            aspect-ratio: 1/1; cursor: pointer; border: 4px solid #c77dff; border-radius: 16px; 
+            overflow: hidden; transition: 0.15s; background: rgba(50, 10, 90, 0.5);
             display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 10px rgba(199,125,255,0.3);
         }
-        .chest img { width: 85%; transition: 0.2s; }
-        .chest.active { transform: scale(1.15); border-color: #00ffff; box-shadow: 0 0 20px #00ffff; background: rgba(0,255,255,0.2); }
-        .chest:hover { transform: scale(1.08); box-shadow: 0 0 25px #c77dff; }
-
-        #status-msg { font-size: 1.3rem; margin-top: 20px; color: #e0aaff; font-weight: bold; padding: 0 20px; text-shadow: 2px 2px 8px #000; min-height: 50px; }
+        .chest img { width: 80%; transition: 0.15s; filter: brightness(0.8); }
         
-        .btn-reiniciar {
-            padding: 12px 30px; background: linear-gradient(45deg, #7b2cbf, #3c096c); cursor: pointer; 
-            border: 2px solid #c77dff; border-radius: 14px; color: white; font-weight: bold; font-size: 1.2rem; 
-            margin-top: 15px; text-transform: uppercase; box-shadow: 0 0 15px #7b2cbf; font-family: 'Rajdhani', sans-serif;
+        /* Efecto Ruleta: Iluminación Activa (más lento al final) */
+        .chest.active { 
+            transform: scale(1.1); border-color: #00ffff; box-shadow: 0 0 25px #00ffff; background: rgba(0,255,255,0.3); 
+            z-index: 5;
         }
+        .chest.active img { filter: brightness(1.1); }
+
+        /* Estado del Juego y Animación de Mensaje */
+        #status-msg { 
+            font-size: 1.6rem; margin-top: 30px; color: #e0aaff; font-weight: bold; padding: 0 20px; 
+            text-shadow: 2px 2px 8px #000; min-height: 60px; display: flex; align-items: center; justify-content: center;
+        }
+        
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .mensaje-ganaste { color: #10b981 !important; text-shadow: 0 0 15px #10b981 !important; animation: popIn 0.5s ease-out; }
+        .mensaje-perdiste { color: #ef4444 !important; text-shadow: 0 0 15px #ef4444 !important; animation: popIn 0.5s ease-out; }
+
+        .btn-reiniciar {
+            padding: 14px 40px; background: linear-gradient(45deg, #7b2cbf, #3c096c); cursor: pointer; 
+            border: 3px solid #c77dff; border-radius: 16px; color: white; font-weight: bold; font-size: 1.4rem; 
+            margin-top: 25px; text-transform: uppercase; box-shadow: 0 0 20px #7b2cbf; font-family: 'Rajdhani', sans-serif;
+            transition: 0.2s;
+        }
+        .btn-reiniciar:hover { transform: scale(1.05); box-shadow: 0 0 25px #c77dff; }
     </style>
 </head>
 <body>
 
     <div id="loading-screen">CARGANDO PROTOCOLO...</div>
 
-    <!-- MODAL DE BIENVENIDA -->
+    <!-- MODAL DE BIENVENIDA (Fondo Mejorado) -->
     <div id="modal-bienvenida">
         <div class="modal-card">
             <h2 id="txt-titulo-modal" style="color: #00ffff; margin-top: 0;">⚡ PROTOCOLO PANGA ⚡</h2>
-            <p id="txt-desc-modal" style="font-size: 14px; color: #ccc; margin-bottom: 20px;">
+            <p id="txt-desc-modal" style="font-size: 16px; color: #ccc; margin-bottom: 25px; line-height: 1.4;">
                 Apuesta: 0.0001 ZARD<br>Premio: 0.00015 ZARD<br>Quema automática al perder.
             </p>
             <button class="btn-accion btn-invitado" onclick="elegirModo('invitado')">MODO INVITADO 🚀</button>
@@ -113,35 +137,41 @@
         </div>
     </div>
 
-    <!-- AUDIO DE FONDO -->
+    <!-- AUDIO DE FONDO (Global) -->
     <audio id="zaard-audio" loop>
         <source src="El%20Chupulún%20de%20Zaard.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- PANEL SUPERIOR DE USUARIO -->
+    <!-- PANEL SUPERIOR DE USUARIO (Estilo Panga) -->
     <div class="user-panel">
         <img id="img-avatar-usr" class="user-avatar" src="" alt="Avatar">
         <div class="user-info">
             <div id="txt-nombre-usr" class="user-name">Jugador</div>
-            <div id="txt-rol-usr" class="user-sub">LUCKY CHEST</div>
+            <div id="txt-rol-usr" class="user-sub">LUCKY CHEST 8</div>
         </div>
         <button class="btn-salir" onclick="irAlMenuPrincipal()">SALIR</button>
     </div>
 
-    <!-- ÁREA DE JUEGO -->
+    <!-- ÁREA DE JUEGO (Ruleta de 8 Cofres) -->
     <div class="game-container">
-        <h1 id="txt-titulo-juego">⚡ ELIGE TU COFRE ⚡</h1>
+        <h1 id="txt-titulo-juego">⚡ ELIJA SU COFRE ⚡</h1>
         
         <div class="chests-container">
+            <!-- Fila 1 (4 cofres) -->
             <div class="chest" id="chest-1" onclick="intentarAbrir(1)"><img src="https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4"></div>
             <div class="chest" id="chest-2" onclick="intentarAbrir(2)"><img src="https://ipfs.io/ipfs/bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue"></div>
             <div class="chest" id="chest-3" onclick="intentarAbrir(3)"><img src="https://ipfs.io/ipfs/bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34"></div>
             <div class="chest" id="chest-4" onclick="intentarAbrir(4)"><img src="https://ipfs.io/ipfs/bafybeiefhnawny7nlgixveiia7aaougqxsird6or4nws52vp36ndbfvixa"></div>
+            
+            <!-- Fila 2 (4 cofres) -->
             <div class="chest" id="chest-5" onclick="intentarAbrir(5)"><img src="https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m"></div>
+            <div class="chest" id="chest-6" onclick="intentarAbrir(6)"><img src="https://ipfs.io/ipfs/bafybeiheko4izm53qfmhejmvz5elek4hb2lp3weaduwndvrvpxdamwklue"></div>
+            <div class="chest" id="chest-7" onclick="intentarAbrir(7)"><img src="https://ipfs.io/ipfs/bafybeiggz26x26hncisti5s5y74ciuk4yuymtczhsbwdufoql2gidl57mu"></div>
+            <div class="chest" id="chest-8" onclick="intentarAbrir(8)"><img src="https://ipfs.io/ipfs/bafybeiginlvb63afmlicnvsx4fwfekanoipydzgzv3ay7njpvq6nm4zzym"></div>
         </div>
 
-        <div id="status-msg">Selecciona un cofre con cuidado...</div>
-        <button class="btn-reiniciar" onclick="location.reload()">REINICIAR</button>
+        <div id="status-msg">Seleccione su cofre con sabiduría...</div>
+        <button class="btn-reiniciar" onclick="location.reload()">REINICIAR RULETA</button>
     </div>
 
     <script>
@@ -151,152 +181,4 @@
         const LS_IDIOMA = localStorage.getItem('zaard_lang') || 'es'; 
 
         // Configuración Web3 y Apuestas oficiales
-        const TOKEN_ADDR = "0x3468EA4e6CE13Ec4C7f8651f7eFC6AA6046F4d65"; 
-        const BURN_WALLET = "0x000000000000000000000000000000000000dEaD"; 
-        const ABI_TRANSFER = [{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"type":"function"}];
-        const APUESTA_WEI = "100000000000000"; // 0.0001 ZARD
-
-        let web3, contract, userAccount, esModoWeb3 = false;
-        let juegoBloqueado = false;
-        let musicaHabilitada = localStorage.getItem('zaard_musica') !== 'OFF';
-
-        window.addEventListener('DOMContentLoaded', () => {
-            // Cargar datos de perfil en la interfaz
-            document.getElementById('txt-nombre-usr').innerText = LS_NOMBRE;
-            document.getElementById('img-avatar-usr').src = LS_AVATAR_URL;
-
-            // Textos según idioma
-            if (LS_IDIOMA === 'zh') {
-                document.getElementById('txt-desc-modal').innerHTML = "下注: 0.0001 ZARD<br>奖励: 0.00015 ZARD<br>失败时自动销毁。";
-                document.querySelector('.btn-invitado').innerText = "游客模式 🚀";
-                document.querySelector('.btn-web3').innerText = "连接 Web3 钱包";
-                document.getElementById('txt-titulo-juego').innerText = "⚡ 选择你的宝箱 ⚡";
-                document.querySelector('.btn-salir').innerText = "退出";
-                document.querySelector('.btn-reiniciar').innerText = "重新开始";
-                document.getElementById('status-msg').innerText = "小心选择一个宝箱...";
-            } else if (LS_IDIOMA === 'en') {
-                document.getElementById('txt-desc-modal').innerHTML = "Bet: 0.0001 ZARD<br>Win: 0.00015 ZARD<br>Auto-burn on loss.";
-                document.querySelector('.btn-invitado').innerText = "GUEST MODE 🚀";
-                document.querySelector('.btn-web3').innerText = "CONNECT WEB3 WALLET";
-                document.getElementById('txt-titulo-juego').innerText = "⚡ CHOOSE YOUR CHEST ⚡";
-                document.querySelector('.btn-salir').innerText = "EXIT";
-                document.querySelector('.btn-reiniciar').innerText = "RESTART";
-                document.getElementById('status-msg').innerText = "Choose a chest carefully...";
-            }
-
-            // Audio
-            const audio = document.getElementById('zaard-audio');
-            audio.volume = 0.3;
-            if (musicaHabilitada) {
-                audio.play().catch(e => console.log("Autoplay pendiente"));
-            }
-            document.getElementById('loading-screen').style.display = 'none';
-        });
-
-        function elegirModo(modo) {
-            esModoWeb3 = false;
-            document.getElementById('modal-bienvenida').style.display = 'none';
-        }
-
-        async function conectarYJugar() {
-            if (window.ethereum) {
-                try {
-                    web3 = new Web3(window.ethereum);
-                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    userAccount = accounts[0];
-                    contract = new web3.eth.Contract(ABI_TRANSFER, TOKEN_ADDR);
-                    esModoWeb3 = true;
-                    alert(LS_IDIOMA === 'zh' ? "钱包已连接！" : "¡Billetera conectada con éxito!");
-                    document.getElementById('modal-bienvenida').style.display = 'none';
-                } catch (e) { 
-                    alert(LS_IDIOMA === 'zh' ? "连接失败。" : "Conexión cancelada o fallida."); 
-                }
-            } else { 
-                alert(LS_IDIOMA === 'zh' ? "请安装 Web3 钱包。" : "Por favor instala MetaMask o una billetera Web3."); 
-            }
-        }
-
-        function irAlMenuPrincipal() {
-            window.location.href = "index.html";
-        }
-
-        async function ejecutarQuemaPorPerdida() {
-            if (esModoWeb3 && contract && userAccount) {
-                try {
-                    const msg = LS_IDIOMA === 'zh' ? "正在处理销毁交易..." : "Procesando quema de 0.0001 ZARD...";
-                    const msgDiv = document.createElement('div');
-                    msgDiv.style.position = 'fixed'; msgDiv.style.top='50%'; msgDiv.style.left='50%';
-                    msgDiv.style.transform='translate(-50%, -50%)'; msgDiv.style.background='rgba(0,0,0,0.9)';
-                    msgDiv.style.color='#ff4444'; msgDiv.style.padding='20px'; msgDiv.style.borderRadius='15px';
-                    msgDiv.style.zIndex='3000'; msgDiv.style.fontWeight='bold';
-                    msgDiv.innerText = msg;
-                    document.body.appendChild(msgDiv);
-
-                    await contract.methods.transfer(BURN_WALLET, APUESTA_WEI).send({ from: userAccount });
-                    msgDiv.remove();
-                    alert(LS_IDIOMA === 'zh' ? "代币已销毁至 Dead 地址。" : "Apuesta enviada a la billetera de quema oficial.");
-                } catch (e) { 
-                    console.log("Error en quema:", e); 
-                }
-            }
-        }
-
-        // Animación tipo Ruleta Escaneando los cofres antes de dar el resultado
-        async function intentarAbrir(cofreSeleccionado) {
-            if (juegoBloqueado) return;
-            juegoBloqueado = true;
-
-            const msg = document.getElementById('status-msg');
-            msg.style.color = "#00ffff";
-            msg.innerText = LS_IDIOMA === 'zh' ? "正在扫描宝箱..." : "Escaneando cofres...";
-
-            // Efecto de luces tipo ruleta pasando por los cofres
-            let pasos = 10;
-            let actual = 1;
-            for (let i = 0; i < pasos; i++) {
-                document.querySelectorAll('.chest').forEach(c => c.classList.remove('active'));
-                document.getElementById(`chest-${actual}`).classList.add('active');
-                actual = (actual % 5) + 1;
-                await new Promise(r => setTimeout(r, 120));
-            }
-
-            // Quitar luces y dejar activo el elegido por el usuario
-            document.querySelectorAll('.chest').forEach(c => c.classList.remove('active'));
-            document.getElementById(`chest-${cofreSeleccionado}`).classList.add('active');
-
-            // Probabilidad baja de ganar (25%) para proteger los ZARD
-            const gano = Math.random() < 0.25;
-
-            if (gano) {
-                msg.style.color = "#c77dff";
-                if (LS_IDIOMA === 'zh') {
-                    msg.innerText = `🎉 恭喜 ${LS_NOMBRE}！ 0.00015 ZARD 已发送至您的钱包！`;
-                } else if (LS_IDIOMA === 'en') {
-                    msg.innerText = `🎉 CONGRATS ${LS_NOMBRE}! 0.00015 ZARD sent to your wallet!`;
-                } else {
-                    msg.innerText = `🎉 ¡FELICIDADES ${LS_NOMBRE}! Has ganado 0.00015 ZARD.`;
-                }
-                juegoBloqueado = false;
-            } else {
-                msg.style.color = "#ff4d6d";
-                if (LS_IDIOMA === 'zh') {
-                    msg.innerText = "😢 未中奖。代币已燃烧，再接再厉！";
-                } else if (LS_IDIOMA === 'en') {
-                    msg.innerText = "😢 Better luck next time! Tokens burned.";
-                } else {
-                    msg.innerText = `😢 Ups ${LS_NOMBRE}, cofre vacío. Tu apuesta quema suministro.`;
-                }
-
-                if (esModoWeb3) {
-                    await ejecutarQuemaPorPerdida();
-                }
-
-                // Al perder, tras un breve momento regresa al menú principal como pediste
-                setTimeout(() => {
-                    irAlMenuPrincipal();
-                }, 3500);
-            }
-        }
-    </script>
-</body>
-</html>
+        const TOKEN_ADDR = "

@@ -49,23 +49,22 @@
         .border-neon { box-shadow: 0 0 25px rgba(147, 51, 234, 0.25); border: 2px solid rgba(147, 51, 234, 0.7); }
 
         #canvasJuego { 
-            display: none; background: url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m'); 
-            background-size: cover; background-position: center; width: 100%; height: 100%; 
+            display: none; width: 100%; height: 100%; 
         }
 
         #hud { 
             display: none; position: absolute; top: 15px; left: 15px; z-index: 50; 
             font-size: 1.1rem; pointer-events: none; background: rgba(0,0,0,0.85); 
             padding: 10px 15px; border-radius: 10px; border: 1px solid #9333ea;
-            display: flex; align-items: center; gap: 10px; box-shadow: 0 0 15px rgba(147,51,234,0.3);
+            align-items: center; gap: 10px; box-shadow: 0 0 15px rgba(147,51,234,0.3);
         }
 
         .user-badge {
-            display: flex; align-items: center; gap: 8px; background: rgba(147, 51, 234, 0.25);
-            padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(147, 51, 234, 0.6); margin-bottom: 20px;
-            box-shadow: 0 0 15px rgba(147,51,234,0.2);
+            display: flex; align-items: center; gap: 10px; background: rgba(147, 51, 234, 0.25);
+            padding: 8px 16px; border-radius: 30px; border: 1px solid rgba(147, 51, 234, 0.6); margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(147,51,234,0.3);
         }
-        .user-badge img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+        .user-badge img { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #a855f7; }
     </style>
 </head>
 <body class="espacio-bg">
@@ -74,10 +73,10 @@
     <div id="bienvenida" class="screen">
         <div class="user-badge" id="perfil-info" style="display:none;">
             <img id="avatar-img" src="" alt="Avatar">
-            <span id="nombre-usuario" style="font-weight: bold; color: #c084fc; font-size: 1.1rem;"></span>
+            <span id="nombre-usuario" style="font-weight: bold; color: #c084fc; font-size: 1.2rem;"></span>
         </div>
         <h1 id="txt-titulo" style="color:#9333ea; font-size: 2.8rem; text-align: center; margin-bottom: 5px;" class="neon-glow">ZAARD COMBAT</h1>
-        <p id="txt-desc" style="text-align: center; padding: 0 20px; color: #d1d5db; margin-bottom: 25px;">¡Gana tus tokens! Destruye al enemigo sin que te toque.</p>
+        <p id="txt-desc" style="text-align: center; padding: 0 20px; color: #d1d5db; margin-bottom: 25px;">¡Apuesta 0.0001 ZARD y gana 0.00015 ZARD! Destruye al enemigo sin que te toque.</p>
         <button class="btn" onclick="irAlMenu()" id="btn-entrar">ENTRAR</button>
         <button class="btn" style="border-color: #555; color: #aaa; font-size: 0.9rem; padding: 10px;" onclick="window.location.href='index.html'" id="btn-volver">⬅ VOLVER AL HUB</button>
     </div>
@@ -91,7 +90,7 @@
     </div>
 
     <!-- JUEGO -->
-    <div id="hud" style="display:none;">
+    <div id="hud">
         <span id="txt-hud-tiempo">Tiempo:</span> <span id="timer">60</span>s | <span id="txt-hud-destruidos">Destruidos:</span> <span id="score">0</span>
     </div>
     <canvas id="canvasJuego"></canvas>
@@ -165,8 +164,9 @@
         document.getElementById('txt-hud-tiempo').innerText = t.tiempo;
         document.getElementById('txt-hud-destruidos').innerText = t.destruidos;
 
-        const usuarioGuardado = localStorage.getItem('zaard_user_name');
-        const avatarGuardado = localStorage.getItem('zaard_user_avatar');
+        // Carga correcta del nombre y avatar desde el Hub
+        const usuarioGuardado = localStorage.getItem('zaard_nombre');
+        const avatarGuardado = localStorage.getItem('zaard_avatar');
         
         if (usuarioGuardado && avatarGuardado) {
             document.getElementById('nombre-usuario').innerText = usuarioGuardado;
@@ -174,7 +174,6 @@
             document.getElementById('perfil-info').style.display = 'flex';
         }
 
-        // Direcciones y parámetros de Contrato y Quema
         const ZARD_CONTRACT = "0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65";
         const BURN_ADDRESS = "0x0000000000000000000000000000000000000000";
         
@@ -188,7 +187,7 @@
         const imgAsset = new Image(); 
         imgAsset.src = 'https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m';
         
-        let nave = { x: 0, y: 0, w: 50, h: 50 };
+        let nave = { x: 0, y: 0, w: 55, h: 55 };
         let enemigos = [];
         let balas = [];
         let puntos = 0;
@@ -206,7 +205,7 @@
             let g = audioCtx.createGain();
             o.type = type;
             o.frequency.value = freq;
-            g.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            g.gain.setValueAtTime(0.08, audioCtx.currentTime);
             g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
             o.connect(g); g.connect(audioCtx.destination);
             o.start(); o.stop(audioCtx.currentTime + dur);
@@ -228,18 +227,15 @@
                     const decimals = 18; 
 
                     if (resultado === 'victoria') {
-                        // Nota: La acreditación de 0.00015 en victoria se gestiona desde el contrato o pool institucional.
-                        // Aquí ejecutamos la lógica de transferencia/aviso de recompensa.
                         alert(t.msgVictoria);
                     } else if (resultado === 'derrota' || resultado === 'tiempo') {
-                        // Si pierde, la apuesta de 0.0001 se envía a la cartera de quema
                         alert(t.msgDerrota);
                         const montoQuema = ethers.utils.parseUnits("0.0001", decimals);
                         const txBurn = await zardToken.transfer(BURN_ADDRESS, montoQuema);
                         await txBurn.wait();
                     }
                 } catch(e) {
-                    console.error("Error en gestión Web3 post-partida:", e);
+                    console.error("Error en transacción Web3:", e);
                 }
             } else {
                 if (resultado === 'victoria') alert(t.msgVictoria);
@@ -264,7 +260,6 @@
                     const zardToken = new ethers.Contract(ZARD_CONTRACT, ERC20_ABI, signerGlobal);
                     const montoApuesta = ethers.utils.parseUnits("0.0001", 18);
 
-                    // Realizar transferencia de apuesta inicial al contrato/tesorería (usamos el mismo contrato o pool)
                     const tx = await zardToken.transfer(ZARD_CONTRACT, montoApuesta);
                     await tx.wait(); 
                 } catch(e) { 
@@ -279,8 +274,8 @@
             canvas.width = window.innerWidth; 
             canvas.height = window.innerHeight;
             
-            nave.x = canvas.width / 2 - 25;
-            nave.y = canvas.height - 100;
+            nave.x = canvas.width / 2 - 27;
+            nave.y = canvas.height - 120;
             
             juegoActivo = true;
             
@@ -298,28 +293,38 @@
         }
 
         window.addEventListener('touchmove', (e) => { 
-            nave.x = e.touches[0].clientX - 25; 
+            nave.x = e.touches[0].clientX - 27; 
             if(nave.x < 0) nave.x = 0;
-            if(nave.x > canvas.width - 50) nave.x = canvas.width - 50;
+            if(nave.x > canvas.width - 55) nave.x = canvas.width - 55;
         }, { passive: false });
+
+        window.addEventListener('mousemove', (e) => {
+            if(!juegoActivo) return;
+            nave.x = e.clientX - 27;
+            if(nave.x < 0) nave.x = 0;
+            if(nave.x > canvas.width - 55) nave.x = canvas.width - 55;
+        });
 
         function bucle() {
             if(!juegoActivo) return;
             
-            ctx.fillStyle = '#000'; 
+            ctx.fillStyle = 'rgba(2, 0, 6, 0.4)'; 
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
+            // Dibujar Nave
             ctx.drawImage(imgAsset, nave.x, nave.y, nave.w, nave.h);
 
-            if(Math.random() < 0.05) enemigos.push({x: Math.random()*(canvas.width-40), y: -50});
+            // Generar Enemigos
+            if(Math.random() < 0.04) enemigos.push({x: Math.random()*(canvas.width-45), y: -50});
             
             for(let i = enemigos.length - 1; i >= 0; i--) {
                 let e = enemigos[i];
-                e.y += 5; 
-                ctx.drawImage(imgAsset, e.x, e.y, 40, 40);
+                e.y += 4.5; 
+                ctx.drawImage(imgAsset, e.x, e.y, 45, 45);
                 
-                if(e.x < nave.x + 40 && e.x + 40 > nave.x && e.y < nave.y + 40 && e.y + 40 > nave.y) {
-                    playSnd(150, 0.5, 'sawtooth'); 
+                // Colisión Nave-Enemigo
+                if(e.x < nave.x + 45 && e.x + 45 > nave.x && e.y < nave.y + 55 && e.y + 45 > nave.y) {
+                    playSnd(120, 0.4, 'sawtooth'); 
                     terminarJuego('derrota');
                     return;
                 }
@@ -327,27 +332,31 @@
                 if(e.y > canvas.height) enemigos.splice(i, 1);
             }
             
-            if(Math.random() < 0.15) { 
-                balas.push({x: nave.x + 22, y: nave.y});
-                playSnd(300, 0.05); 
+            // Disparos Automáticos
+            if(Math.random() < 0.18) { 
+                balas.push({x: nave.x + 25, y: nave.y});
+                playSnd(450, 0.04, 'triangle'); 
             }
             
             for(let i = balas.length - 1; i >= 0; i--) {
                 let b = balas[i];
-                b.y -= 12; 
-                ctx.fillStyle = '#ff0'; 
-                ctx.fillRect(b.x, b.y, 4, 12); 
+                b.y -= 14; 
+                ctx.fillStyle = '#22c55e'; 
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#22c55e';
+                ctx.fillRect(b.x, b.y, 5, 15); 
+                ctx.shadowBlur = 0; 
                 
                 let balaImpactada = false;
                 
                 for(let ei = enemigos.length - 1; ei >= 0; ei--) {
                     let e = enemigos[ei];
-                    if(b.x > e.x && b.x < e.x+40 && b.y > e.y && b.y < e.y+40) {
+                    if(b.x > e.x && b.x < e.x+45 && b.y > e.y && b.y < e.y+45) {
                         enemigos.splice(ei, 1); 
                         balaImpactada = true;
                         puntos++;
                         document.getElementById('score').innerText = puntos;
-                        playSnd(800, 0.1, 'sine'); 
+                        playSnd(750, 0.08, 'sine'); 
                         
                         if(puntos >= 300) { 
                             terminarJuego('victoria'); 

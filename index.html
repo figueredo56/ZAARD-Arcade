@@ -6,14 +6,15 @@
     <title>ZARD: Golden Run</title>
     <meta property="og:title" content="ZAARD INNOVATION | Golden Run">
     <meta property="og:description" content="Bienvenido al ecosistema ZAARD. Desafía tus habilidades y atrapa las cajas de gas.">
-    <meta property="og:image" content="https://ipfs.io/ipfs/bafybeicsg3uv7e3gc17h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4">
+    <meta property="og:image" content="https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4">
     <meta property="og:type" content="website">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@700&display=swap');
         
         body, html {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Rajdhani', sans-serif;
             background: #020006;
             overflow: hidden;
             user-select: none;
@@ -22,6 +23,7 @@
             padding: 0;
             width: 100%;
             height: 100%;
+            color: #fff;
         }
 
         .espacio-bg {
@@ -38,107 +40,102 @@
             background-attachment: fixed;
         }
 
-        .neon-glow { 
-            text-shadow: 0 0 10px rgba(147, 51, 234, 0.7), 0 0 20px rgba(34, 197, 94, 0.5); 
-        }
-        
-        .border-neon { 
-            box-shadow: 0 0 25px rgba(147, 51, 234, 0.25); 
-            border: 2px solid rgba(147, 51, 234, 0.7); 
-        }
-
-        .btn-epic { 
-            background: linear-gradient(135deg, #9333ea 0%, #16a34a 100%); 
-            color: white !important;
-        }
+        .neon-glow { text-shadow: 0 0 10px rgba(147, 51, 234, 0.7), 0 0 20px rgba(34, 197, 94, 0.5); }
+        .border-neon { box-shadow: 0 0 25px rgba(147, 51, 234, 0.25); border: 2px solid rgba(147, 51, 234, 0.7); }
+        .btn-epic { background: linear-gradient(135deg, #9333ea 0%, #16a34a 100%); color: white !important; font-family: 'Rajdhani', sans-serif; }
 
         .img-bienvenida-css {
             background: url('https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4') center/cover no-repeat;
-            min-height: 140px;
+            min-height: 130px;
         }
 
         .img-menu-css {
             background: url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m') center/cover no-repeat;
-            min-height: 140px;
+            min-height: 130px;
         }
 
-        canvas { 
-            display: block; 
-            margin: 0 auto; 
-            max-width: 100%; 
-            height: auto; 
-            background: transparent;
-        }
+        canvas { display: block; margin: 0 auto; max-width: 100%; height: auto; background: transparent; }
     </style>
 </head>
 <body class="espacio-bg w-screen h-screen flex flex-col items-center justify-center text-white">
 
+    <!-- PANTALLA AUDIO -->
     <div id="pantalla-audio" class="absolute z-30 w-full max-w-xl p-6 rounded-3xl bg-black/95 border-neon text-center mx-4">
-        <h1 class="text-2xl font-black text-purple-400 tracking-wider mb-2 neon-glow">ZAARD ARCADE</h1>
-        <p class="text-sm text-gray-400 mb-6">Sincronizando sistemas táctiles, interfaz gráfica y audio cósmico...</p>
-        <button onclick="activarSistemas()" class="btn-epic w-full py-4 rounded-xl font-black tracking-widest text-lg shadow-lg active:scale-95 transition-transform">
+        <h1 id="txt-audio-titulo" class="text-2xl font-black text-purple-400 tracking-wider mb-2 neon-glow">ZAARD ARCADE</h1>
+        <p id="txt-audio-desc" class="text-sm text-gray-400 mb-6">Sincronizando sistemas táctiles, interfaz gráfica y audio cósmico...</p>
+        <button onclick="activarSistemas()" id="btn-audio-entrar" class="btn-epic w-full py-4 rounded-xl font-black tracking-widest text-lg shadow-lg active:scale-95 transition-transform">
             ¡ENTRAR AL JUEGO!
         </button>
     </div>
 
-    <div id="pantalla-bienvenida" class="hidden absolute z-20 w-full max-w-xl p-6 rounded-3xl bg-black/95 backdrop-blur-md border-neon text-center mx-4">
-        <div class="w-full rounded-2xl mb-4 border border-purple-500/40 img-bienvenida-css relative">
+    <!-- PANTALLA BIENVENIDA -->
+    <div id="pantalla-bienvenida" class="hidden absolute z-20 w-full max-w-xl p-5 rounded-3xl bg-black/95 backdrop-blur-md border-neon text-center mx-4">
+        <div class="w-full rounded-2xl mb-3 border border-purple-500/40 img-bienvenida-css relative">
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent"></div>
         </div>
 
-        <h1 class="text-2xl font-black text-purple-400 tracking-wider mb-1 neon-glow">BIENVENIDOS A</h1>
-        <h2 class="text-3xl font-black text-white tracking-widest mb-4 border-b border-purple-500/20 pb-3">ZAARD INNOVATION</h2>
+        <h1 id="txt-bienvenida-sub" class="text-xl font-black text-purple-400 tracking-wider mb-1 neon-glow">BIENVENIDOS A</h1>
+        <h2 class="text-2xl font-black text-white tracking-widest mb-3 border-b border-purple-500/20 pb-2">ZAARD INNOVATION</h2>
         
-        <div class="bg-purple-950/20 border border-purple-500/30 rounded-2xl p-4 text-left text-xs text-gray-300 space-y-2 mb-6">
+        <div id="txt-instrucciones" class="bg-purple-950/20 border border-purple-500/30 rounded-2xl p-3 text-left text-xs text-gray-300 space-y-2 mb-4">
             <p><span class="text-green-400 font-bold">🔥 CONTROL:</span> Desliza tu dedo libremente por la pantalla para mover al fénix arriba y abajo.</p>
             <p><span class="text-green-400 font-bold">📦 META:</span> Atrapa 150 cajas de gas. Tienes 7 oportunidades de escudo.</p>
         </div>
 
-        <button onclick="irAlMenuModos()" class="btn-epic w-full py-3 rounded-xl font-black tracking-widest text-base active:scale-95 transition-transform">
+        <button onclick="irAlMenuModos()" id="btn-bienvenida-cont" class="btn-epic w-full py-3 rounded-xl font-black tracking-widest text-base active:scale-95 transition-transform">
             CONTINUAR
         </button>
     </div>
 
-    <div id="menu-modos" class="hidden absolute z-10 w-full max-w-xl p-6 rounded-3xl bg-black/95 backdrop-blur-md border-neon text-center mx-4">
-        <div class="w-full rounded-2xl mb-4 border border-purple-500/40 img-menu-css relative">
+    <!-- MENÚ MODOS -->
+    <div id="menu-modos" class="hidden absolute z-10 w-full max-w-xl p-5 rounded-3xl bg-black/95 backdrop-blur-md border-neon text-center mx-4">
+        <div class="w-full rounded-2xl mb-3 border border-purple-500/40 img-menu-css relative">
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent"></div>
         </div>
 
-        <h1 class="text-3xl font-black text-purple-400 tracking-wider mb-1 neon-glow">GOLDEN RUN</h1>
-        <p class="text-[10px] text-gray-400 tracking-widest mb-6">SELECCIONA TU ENTRADA</p>
+        <h1 class="text-2xl font-black text-purple-400 tracking-wider mb-1 neon-glow">GOLDEN RUN</h1>
+        <p id="txt-sel-entrada" class="text-[10px] text-gray-400 tracking-widest mb-4">SELECCIONA TU ENTRADA</p>
 
         <div class="space-y-3 max-w-sm mx-auto">
             <button onclick="prepararJuego('prueba')" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl font-bold text-gray-300 flex flex-col items-center active:scale-95 transition-transform">
-                <span class="text-green-400 font-black text-sm">MODO INVITADO</span>
-                <span class="text-[10px] font-normal opacity-75">Juega gratis de prueba</span>
+                <span id="txt-modo-inv" class="text-green-400 font-black text-sm">MODO INVITADO</span>
+                <span id="txt-sub-inv" class="text-[10px] font-normal opacity-75">Juega gratis de prueba</span>
             </button>
             <button onclick="prepararJuego('wallet')" class="w-full border border-purple-500 bg-purple-950/40 p-3 rounded-xl font-bold text-purple-300 flex flex-col items-center active:scale-95 transition-transform">
-                <span class="text-purple-400 font-black text-sm">CONECTAR BILLETERA</span>
+                <span id="txt-modo-web3" class="text-purple-400 font-black text-sm">CONECTAR BILLETERA</span>
                 <span class="text-[10px] font-normal text-purple-400">Contrato: 0x3468...4d65</span>
             </button>
         </div>
-        <p id="mensaje-animo" class="mt-4 text-purple-400/80 font-medium italic text-xs px-2"></p>
+
+        <!-- Botón Volver al Menú Principal del Arcade -->
+        <button onclick="window.location.href='index.html'" id="txt-volver-menu" class="mt-4 text-xs text-purple-300 underline font-bold tracking-wider hover:text-white transition-colors">
+            ⬅ VOLVER AL MENÚ PRINCIPAL
+        </button>
+
+        <p id="mensaje-animo" class="mt-3 text-purple-400/80 font-medium italic text-xs px-2"></p>
     </div>
 
-    <div id="contenedor-juego" class="hidden relative w-full h-full flex flex-col items-center justify-between p-4">
+    <!-- CONTENEDOR JUEGO -->
+    <div id="contenedor-juego" class="hidden relative w-full h-full flex flex-col items-center justify-between p-3">
         
-        <div class="w-full max-w-2xl bg-black/80 backdrop-blur-md border-b-2 border-purple-500/80 rounded-b-2xl p-4 flex justify-between items-center z-10 shadow-lg">
-            <div class="bg-gray-950/90 px-5 py-2 rounded-xl border border-purple-500/40 text-center">
-                <span class="text-[10px] text-gray-400 block font-bold tracking-widest">GAS COLLECTED</span>
-                <span id="hud-gas" class="text-2xl font-black text-green-400 neon-glow">0/150</span>
+        <div class="w-full max-w-2xl bg-black/80 backdrop-blur-md border-b-2 border-purple-500/85 rounded-b-2xl p-3 flex justify-between items-center z-10 shadow-lg">
+            <div class="bg-gray-950/90 px-4 py-1.5 rounded-xl border border-purple-500/40 text-center">
+                <span id="txt-hud-gas" class="text-[9px] text-gray-400 block font-bold tracking-widest">GAS COLLECTED</span>
+                <span id="hud-gas" class="text-xl font-black text-green-400 neon-glow">0/150</span>
             </div>
-            <div class="bg-gray-950/90 px-5 py-2 rounded-xl border border-red-500/40 text-center">
-                <span class="text-[10px] text-gray-400 block font-bold tracking-widest">SHIELD STATUS</span>
-                <div id="hud-vidas" class="text-lg font-bold text-red-500 tracking-wider">⚡⚡⚡⚡⚡⚡⚡</div>
+            <button onclick="window.location.href='index.html'" class="text-xs text-red-400 font-bold border border-red-500/40 px-3 py-1 rounded-lg bg-red-950/20 active:scale-95">SALIR</button>
+            <div class="bg-gray-950/90 px-4 py-1.5 rounded-xl border border-red-500/40 text-center">
+                <span id="txt-hud-shield" class="text-[9px] text-gray-400 block font-bold tracking-widest">SHIELD STATUS</span>
+                <div id="hud-vidas" class="text-base font-bold text-red-500 tracking-wider">⚡⚡⚡⚡⚡⚡⚡</div>
             </div>
         </div>
 
         <div class="w-full flex justify-center items-center my-auto">
-            <canvas id="canvasJuego" width="800" height="480" class="rounded-2xl max-h-[65vh] w-full object-contain"></canvas>
+            <canvas id="canvasJuego" width="800" height="480" class="rounded-2xl max-h-[62vh] w-full object-contain"></canvas>
         </div>
 
-        <div class="w-full max-w-2xl bg-black/80 backdrop-blur-md border-t-2 border-purple-500/80 rounded-t-2xl p-3 text-center z-10 shadow-lg">
-            <p class="text-[11px] text-purple-400 font-bold tracking-widest uppercase">
+        <div class="w-full max-w-2xl bg-black/80 backdrop-blur-md border-t-2 border-purple-500/85 rounded-t-2xl p-2.5 text-center z-10 shadow-lg">
+            <p id="txt-hud-control" class="text-[11px] text-purple-400 font-bold tracking-widest uppercase">
                 DESLIZA EN CUALQUIER LADO PARA MANIOBRAR LA NAVE FÉNIX
             </p>
         </div>
@@ -146,6 +143,98 @@
 
     <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
     <script>
+        const LS_IDIOMA = localStorage.getItem('zaard_lang') || 'es';
+
+        const trads = {
+            es: {
+                audioTit: "ZAARD ARCADE",
+                audioDesc: "Sincronizando sistemas táctiles, interfaz gráfica y audio cósmico...",
+                audioBtn: "¡ENTRAR AL JUEGO!",
+                bienvSub: "BIENVENIDOS A",
+                instrucc: `<p><span class="text-green-400 font-bold">🔥 CONTROL:</span> Desliza tu dedo libremente por la pantalla para mover al fénix arriba y abajo.</p><p><span class="text-green-400 font-bold">📦 META:</span> Atrapa 150 cajas de gas. Tienes 7 oportunidades de escudo.</p>`,
+                continuar: "CONTINUAR",
+                selEntrada: "SELECCIONA TU ENTRADA",
+                modoInv: "MODO INVITADO",
+                subInv: "Juega gratis de prueba",
+                modoWeb3: "CONECTAR BILLETERA",
+                volMenu: "⬅ VOLVER AL MENÚ PRINCIPAL",
+                hudGas: "GAS COLLECTED",
+                hudShield: "SHIELD STATUS",
+                controlMsg: "DESLIZA EN CUALQUIER LADO PARA MANIOBRAR LA NAVE FÉNIX",
+                victoriaMsg: "¡VICTORIA ÉPICA! ¡Has completado la recolección de gas con éxito!",
+                gameOverMsg: "GAME OVER\n\n⚠️ RECOMENDACIÓN:\n\"Fatiga de mercado detectada. ¡Toma un respiro y regresa con la mente fría!\"",
+                frases: [
+                    "¡No te sobreoperes! Si la racha es mala, respira y analiza.",
+                    "¡El fénix aprende de cada impacto, sigue adelante!",
+                    "¡Disciplina y consistencia, mantén el vuelo!"
+                ]
+            },
+            en: {
+                audioTit: "ZAARD ARCADE",
+                audioDesc: "Synchronizing touch systems, graphic interface and cosmic audio...",
+                audioBtn: "ENTER GAME!",
+                bienvSub: "WELCOME TO",
+                instrucc: `<p><span class="text-green-400 font-bold">🔥 CONTROL:</span> Slide your finger freely across the screen to move the phoenix up and down.</p><p><span class="text-green-400 font-bold">📦 GOAL:</span> Catch 150 gas boxes. You have 7 shield opportunities.</p>`,
+                continuar: "CONTINUE",
+                selEntrada: "SELECT YOUR ENTRY",
+                modoInv: "GUEST MODE",
+                subInv: "Play free trial",
+                modoWeb3: "CONNECT WALLET",
+                volMenu: "⬅ BACK TO MAIN MENU",
+                hudGas: "GAS COLLECTED",
+                hudShield: "SHIELD STATUS",
+                controlMsg: "SLIDE ANYWHERE TO MANEUVER THE PHOENIX SHIP",
+                victoriaMsg: "EPIC VICTORY! You successfully completed the gas collection!",
+                gameOverMsg: "GAME OVER\n\n⚠️ RECOMMENDATION:\n\"Market fatigue detected. Take a breather and return with a cool mind!\"",
+                frases: [
+                    "Don't overtrade! If the streak is bad, breathe and analyze.",
+                    "The phoenix learns from every impact, keep going!",
+                    "Discipline and consistency, keep flying!"
+                ]
+            },
+            zh: {
+                audioTit: "ZAARD 游戏机",
+                audioDesc: "正在同步触控系统、图形界面和宇宙音效...",
+                audioBtn: "进入游戏！",
+                bienvSub: "欢迎来到",
+                instrucc: `<p><span class="text-green-400 font-bold">🔥 控制：</span> 在屏幕上自由滑动手指上下移动凤凰飞船。</p><p><span class="text-green-400 font-bold">📦 目标：</span> 收集150个燃气箱。你有7次护盾机会。</p>`,
+                continuar: "继续",
+                selEntrada: "选择您的模式",
+                modoInv: "访客模式",
+                subInv: "免费试玩",
+                modoWeb3: "连接钱包",
+                volMenu: "⬅ 返回主菜单",
+                hudGas: "已收集燃气",
+                hudShield: "护盾状态",
+                controlMsg: "在任意位置滑动以操纵凤凰飞船",
+                victoriaMsg: "史诗级胜利！您已成功完成燃气收集！",
+                gameOverMsg: "游戏结束\n\n⚠️ 建议：\n“检测到市场疲劳。深呼吸，冷静后再来！”",
+                frases: [
+                    "不要过度交易！如果状态不好，请深呼吸并分析。",
+                    "凤凰从每次冲击中学习，继续前进！",
+                    "纪律与坚持，保持飞行！"
+                ]
+            }
+        };
+
+        const t = trads[LS_IDIOMA] || trads.es;
+
+        // Inyectar traducciones al DOM
+        document.getElementById('txt-audio-titulo').innerText = t.audioTit;
+        document.getElementById('txt-audio-desc').innerText = t.audioDesc;
+        document.getElementById('btn-audio-entrar').innerText = t.audioBtn;
+        document.getElementById('txt-bienvenida-sub').innerText = t.bienvSub;
+        document.getElementById('txt-instrucciones').innerHTML = t.instrucc;
+        document.getElementById('btn-bienvenida-cont').innerText = t.continuar;
+        document.getElementById('txt-sel-entrada').innerText = t.selEntrada;
+        document.getElementById('txt-modo-inv').innerText = t.modoInv;
+        document.getElementById('txt-sub-inv').innerText = t.subInv;
+        document.getElementById('txt-modo-web3').innerText = t.modoWeb3;
+        document.getElementById('txt-volver-menu').innerText = t.volMenu;
+        document.getElementById('txt-hud-gas').innerText = t.hudGas;
+        document.getElementById('txt-hud-shield').innerText = t.hudShield;
+        document.getElementById('txt-hud-control').innerText = t.controlMsg;
+
         const canvas = document.getElementById('canvasJuego');
         const ctx = canvas.getContext('2d');
 
@@ -153,7 +242,6 @@
         let musicaLoopId = null;
         
         const CONTRATO_ZARD = "0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65";
-        // Destino cambiado a POOL LP
         const RECAUDADORA = "0x7084D8562532AEA9F9239Cdd63EA289C85E6b0e9";
 
         const imgFenix = new Image();
@@ -166,13 +254,13 @@
 
         let juegoActivo = false;
         let animacionId;
-        
         let fenixY, fenixX, fenixAncho, fenixAlto;
         let obstaculos, cajas, particulas;
         let totalGasRecolectado = 0;
         let oportunidadesRestantes = 7;
         let velocidadActual = 5;
         let distanciaRecorrida = 0;
+        let musicaHabilitada = localStorage.getItem('zaard_musica') !== 'OFF';
 
         function activarSistemas() {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -193,19 +281,13 @@
         canvas.addEventListener('touchstart', (e) => { mapearMovimientoTactil(e); }, { passive: false });
         canvas.addEventListener('touchmove', mapearMovimientoTactil, { passive: false });
 
-        const frasesAnimo = [
-            "¡No te sobreoperes! Si la racha es mala, respira y analiza.",
-            "¡El fénix aprende de cada impacto, sigue adelante!",
-            "¡Disciplina y consistencia, mantén el vuelo!"
-        ];
-
         function irAlMenuModos() {
             document.getElementById('pantalla-bienvenida').style.display = 'none';
             document.getElementById('menu-modos').style.display = 'block';
         }
 
         function sonarEfecto(tipo) {
-            if (!audioCtx) return;
+            if (!audioCtx || !musicaHabilitada) return;
             try {
                 if (audioCtx.state === 'suspended') audioCtx.resume();
                 const osc = audioCtx.createOscillator();
@@ -232,7 +314,7 @@
         }
 
         function iniciarMusicaDeFondo() {
-            if (!audioCtx) return;
+            if (!audioCtx || !musicaHabilitada) return;
             try {
                 if (audioCtx.state === 'suspended') audioCtx.resume();
                 detenerMusicaDeFondo();
@@ -267,11 +349,10 @@
                     const provider = new ethers.providers.Web3Provider(window.ethereum);
                     await provider.send("eth_requestAccounts", []);
                     const signer = provider.getSigner();
-                    // Ejecuta la transferencia al POOL definido en RECAUDADORA
                     const contrato = new ethers.Contract(CONTRATO_ZARD, ["function transfer(address, uint256) public returns (bool)"], signer);
                     await (await contrato.transfer(RECAUDADORA, ethers.utils.parseUnits("0.0001", 18))).wait();
                 } catch (e) {
-                    alert("⚠️ Error: Transacción cancelada o fallida.");
+                    alert(LS_IDIOMA === 'zh' ? "⚠️ 错误：交易已取消或失败。" : LS_IDIOMA === 'en' ? "⚠️ Error: Transaction cancelled or failed." : "⚠️ Error: Transacción cancelada o fallida.");
                     return;
                 }
             }
@@ -314,13 +395,13 @@
             detenerMusicaDeFondo(); 
             cancelAnimationFrame(animacionId);
             if (resultado === 'victoria') {
-                alert(`¡VICTORIA ÉPICA!`);
+                alert(t.victoriaMsg);
             } else {
-                alert(`GAME OVER\n\n⚠️ RECOMENDACIÓN:\n"Fatiga de mercado detectada. ¡Toma un respiro y regresa con la mente fría!"`);
+                alert(t.gameOverMsg);
             }
             document.getElementById('contenedor-juego').style.display = 'none';
             document.getElementById('menu-modos').style.display = 'block';
-            document.getElementById('mensaje-animo').innerText = frasesAnimo[Math.floor(Math.random() * frasesAnimo.length)];
+            document.getElementById('mensaje-animo').innerText = t.frases[Math.floor(Math.random() * t.frases.length)];
         }
 
         function buclePrincipal() {
@@ -333,6 +414,7 @@
             if (fenixY < 0) fenixY = 0;
             if (fenixY > canvas.height - fenixAlto) fenixY = canvas.height - fenixAlto;
             ctx.drawImage(imgFenix, fenixX, fenixY, fenixAncho, fenixAlto);
+            
             for (let i = obstaculos.length - 1; i >= 0; i--) {
                 let obs = obstaculos[i]; obs.x -= velocidadActual;
                 ctx.drawImage(imgObstaculo, obs.x, obs.y, obs.w, obs.h);
@@ -346,6 +428,7 @@
                 }
                 if (obs.x < -60) obstaculos.splice(i, 1);
             }
+
             for (let i = cajas.length - 1; i >= 0; i--) {
                 let box = cajas[i]; box.x -= velocidadActual;
                 ctx.drawImage(imgGas, box.x, box.y, box.w, box.h);

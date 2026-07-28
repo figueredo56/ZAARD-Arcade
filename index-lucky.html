@@ -11,7 +11,7 @@
         body { 
             margin: 0; 
             padding: 0;
-            background-color: #070112; /* Fondo base */
+            background-color: #070112;
             font-family: 'Rajdhani', sans-serif; 
             color: #fff;
             touch-action: none;
@@ -32,14 +32,13 @@
         /* Fondo de Bienvenida Mejorado (Vórtice Cósmico) */
         #modal-bienvenida {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: radial-gradient(circle at 50% 50%, #240a6a 0%, #070112 70%), url('https://www.transparenttextures.com/patterns/stardust.png');
-            background-blend-mode: overlay;
+            background: radial-gradient(circle at 50% 50%, #240a6a 0%, #070112 70%);
             z-index: 1500;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             padding: 20px; box-sizing: border-box; text-align: center;
         }
         .modal-card {
-            background: rgba(10, 3, 35, 0.85);
+            background: rgba(10, 3, 35, 0.9);
             border: 2px solid #00ffff; border-radius: 20px;
             padding: 30px; width: 100%; max-width: 400px;
             box-shadow: 0 0 30px rgba(0, 255, 255, 0.4), inset 0 0 15px rgba(0, 255, 255, 0.2);
@@ -54,7 +53,7 @@
         .btn-invitado { background: linear-gradient(90deg, #10b981, #059669); color: #fff; box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
         .btn-web3 { background: linear-gradient(90deg, #00ffff, #0088cc); color: #000; box-shadow: 0 0 15px rgba(0, 255, 255, 0.5); }
 
-        /* Panel Superior de Usuario (Estilo Panga) */
+        /* Panel Superior de Usuario */
         .user-panel {
             position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 460px; height: 80px;
@@ -76,109 +75,216 @@
         }
         .btn-salir:hover { color: #ff4444; text-shadow: 0 0 5px #ff4444; }
 
-        /* Área de Juego y Ruleta de Cofres */
+        /* Área de Juego y Ruleta de 8 Cofres */
         .game-container {
-            margin-top: 100px; width: 100%; max-width: 500px; display: flex; flex-direction: column; align-items: center;
+            margin-top: 90px; width: 100%; max-width: 460px; display: flex; flex-direction: column; align-items: center;
         }
-        h1 { font-size: 2.5rem; color: #c77dff; text-shadow: 0 0 20px #7b2cbf; margin: 20px 0; text-transform: uppercase; }
+        h1 { font-size: 2.2rem; color: #c77dff; text-shadow: 0 0 20px #7b2cbf; margin: 15px 0; text-transform: uppercase; }
         
-        .chests-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 25px; padding: 0 10px; width: 100%; box-sizing: border-box; }
+        .chests-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; padding: 0 10px; width: 100%; box-sizing: border-box; }
         .chest { 
-            aspect-ratio: 1/1; cursor: pointer; border: 4px solid #c77dff; border-radius: 16px; 
-            overflow: hidden; transition: 0.15s; background: rgba(50, 10, 90, 0.5);
+            aspect-ratio: 1/1; cursor: pointer; border: 3px solid #c77dff; border-radius: 14px; 
+            overflow: hidden; transition: 0.1s; background: rgba(50, 10, 90, 0.5);
             display: flex; align-items: center; justify-content: center;
             box-shadow: 0 0 10px rgba(199,125,255,0.3);
         }
-        .chest img { width: 80%; transition: 0.15s; filter: brightness(0.8); }
+        .chest img { width: 80%; transition: 0.1s; filter: brightness(0.7); }
         
-        /* Efecto Ruleta: Iluminación Activa (más lento al final) */
+        /* Efecto Ruleta Activa */
         .chest.active { 
-            transform: scale(1.1); border-color: #00ffff; box-shadow: 0 0 25px #00ffff; background: rgba(0,255,255,0.3); 
+            transform: scale(1.18); border-color: #00ffff; box-shadow: 0 0 25px #00ffff; background: rgba(0,255,255,0.3); 
             z-index: 5;
         }
-        .chest.active img { filter: brightness(1.1); }
+        .chest.active img { filter: brightness(1.2); }
 
-        /* Estado del Juego y Animación de Mensaje */
+        /* Estado del Juego y Animación */
         #status-msg { 
-            font-size: 1.6rem; margin-top: 30px; color: #e0aaff; font-weight: bold; padding: 0 20px; 
-            text-shadow: 2px 2px 8px #000; min-height: 60px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; margin-top: 20px; color: #e0aaff; font-weight: bold; padding: 0 15px; 
+            text-shadow: 2px 2px 8px #000; min-height: 55px; display: flex; align-items: center; justify-content: center; text-align: center;
         }
         
         @keyframes popIn {
-            0% { transform: scale(0); opacity: 0; }
+            0% { transform: scale(0.5); opacity: 0; }
             80% { transform: scale(1.1); }
             100% { transform: scale(1); opacity: 1; }
         }
-        .mensaje-ganaste { color: #10b981 !important; text-shadow: 0 0 15px #10b981 !important; animation: popIn 0.5s ease-out; }
-        .mensaje-perdiste { color: #ef4444 !important; text-shadow: 0 0 15px #ef4444 !important; animation: popIn 0.5s ease-out; }
+        .mensaje-ganaste { color: #10b981 !important; text-shadow: 0 0 15px #10b981 !important; animation: popIn 0.4s ease-out; }
+        .mensaje-perdiste { color: #ff4d6d !important; text-shadow: 0 0 15px #ff4d6d !important; animation: popIn 0.4s ease-out; }
 
         .btn-reiniciar {
-            padding: 14px 40px; background: linear-gradient(45deg, #7b2cbf, #3c096c); cursor: pointer; 
-            border: 3px solid #c77dff; border-radius: 16px; color: white; font-weight: bold; font-size: 1.4rem; 
-            margin-top: 25px; text-transform: uppercase; box-shadow: 0 0 20px #7b2cbf; font-family: 'Rajdhani', sans-serif;
+            padding: 12px 35px; background: linear-gradient(45deg, #7b2cbf, #3c096c); cursor: pointer; 
+            border: 3px solid #c77dff; border-radius: 14px; color: white; font-weight: bold; font-size: 1.2rem; 
+            margin-top: 15px; text-transform: uppercase; box-shadow: 0 0 20px #7b2cbf; font-family: 'Rajdhani', sans-serif;
             transition: 0.2s;
         }
-        .btn-reiniciar:hover { transform: scale(1.05); box-shadow: 0 0 25px #c77dff; }
+        .btn-reiniciar:hover { transform: scale(1.05); }
     </style>
 </head>
 <body>
 
     <div id="loading-screen">CARGANDO PROTOCOLO...</div>
 
-    <!-- MODAL DE BIENVENIDA (Fondo Mejorado) -->
+    <!-- MODAL DE BIENVENIDA -->
     <div id="modal-bienvenida">
         <div class="modal-card">
-            <h2 id="txt-titulo-modal" style="color: #00ffff; margin-top: 0;">⚡ PROTOCOLO PANGA ⚡</h2>
-            <p id="txt-desc-modal" style="font-size: 16px; color: #ccc; margin-bottom: 25px; line-height: 1.4;">
+            <h2 style="color: #00ffff; margin-top: 0;">⚡ PROTOCOLO PANGA ⚡</h2>
+            <p style="font-size: 15px; color: #ccc; margin-bottom: 20px; line-height: 1.4;">
                 Apuesta: 0.0001 ZARD<br>Premio: 0.00015 ZARD<br>Quema automática al perder.
             </p>
-            <button class="btn-accion btn-invitado" onclick="elegirModo('invitado')">MODO INVITADO 🚀</button>
+            <button class="btn-accion btn-invitado" onclick="elegirModo()">MODO INVITADO 🚀</button>
             <button class="btn-accion btn-web3" onclick="conectarYJugar()">CONECTAR BILLETERA WEB3</button>
         </div>
     </div>
 
-    <!-- AUDIO DE FONDO (Global) -->
+    <!-- AUDIO DE FONDO -->
     <audio id="zaard-audio" loop>
         <source src="El%20Chupulún%20de%20Zaard.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- PANEL SUPERIOR DE USUARIO (Estilo Panga) -->
+    <!-- PANEL SUPERIOR -->
     <div class="user-panel">
         <img id="img-avatar-usr" class="user-avatar" src="" alt="Avatar">
         <div class="user-info">
             <div id="txt-nombre-usr" class="user-name">Jugador</div>
-            <div id="txt-rol-usr" class="user-sub">LUCKY CHEST 8</div>
+            <div class="user-sub">LUCKY CHEST 8</div>
         </div>
         <button class="btn-salir" onclick="irAlMenuPrincipal()">SALIR</button>
     </div>
 
-    <!-- ÁREA DE JUEGO (Ruleta de 8 Cofres) -->
+    <!-- ÁREA DE JUEGO (8 COFRES) -->
     <div class="game-container">
-        <h1 id="txt-titulo-juego">⚡ ELIJA SU COFRE ⚡</h1>
+        <h1>⚡ ELIJA SU COFRE ⚡</h1>
         
         <div class="chests-container">
-            <!-- Fila 1 (4 cofres) -->
-            <div class="chest" id="chest-1" onclick="intentarAbrir(1)"><img src="https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4"></div>
-            <div class="chest" id="chest-2" onclick="intentarAbrir(2)"><img src="https://ipfs.io/ipfs/bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue"></div>
-            <div class="chest" id="chest-3" onclick="intentarAbrir(3)"><img src="https://ipfs.io/ipfs/bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34"></div>
-            <div class="chest" id="chest-4" onclick="intentarAbrir(4)"><img src="https://ipfs.io/ipfs/bafybeiefhnawny7nlgixveiia7aaougqxsird6or4nws52vp36ndbfvixa"></div>
-            
-            <!-- Fila 2 (4 cofres) -->
-            <div class="chest" id="chest-5" onclick="intentarAbrir(5)"><img src="https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m"></div>
-            <div class="chest" id="chest-6" onclick="intentarAbrir(6)"><img src="https://ipfs.io/ipfs/bafybeiheko4izm53qfmhejmvz5elek4hb2lp3weaduwndvrvpxdamwklue"></div>
-            <div class="chest" id="chest-7" onclick="intentarAbrir(7)"><img src="https://ipfs.io/ipfs/bafybeiggz26x26hncisti5s5y74ciuk4yuymtczhsbwdufoql2gidl57mu"></div>
-            <div class="chest" id="chest-8" onclick="intentarAbrir(8)"><img src="https://ipfs.io/ipfs/bafybeiginlvb63afmlicnvsx4fwfekanoipydzgzv3ay7njpvq6nm4zzym"></div>
+            <div class="chest" id="chest-1" onclick="jugarRuleta(1)"><img src="https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4"></div>
+            <div class="chest" id="chest-2" onclick="jugarRuleta(2)"><img src="https://ipfs.io/ipfs/bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue"></div>
+            <div class="chest" id="chest-3" onclick="jugarRuleta(3)"><img src="https://ipfs.io/ipfs/bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34"></div>
+            <div class="chest" id="chest-4" onclick="jugarRuleta(4)"><img src="https://ipfs.io/ipfs/bafybeiefhnawny7nlgixveiia7aaougqxsird6or4nws52vp36ndbfvixa"></div>
+            <div class="chest" id="chest-5" onclick="jugarRuleta(5)"><img src="https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m"></div>
+            <div class="chest" id="chest-6" onclick="jugarRuleta(6)"><img src="https://ipfs.io/ipfs/bafybeiheko4izm53qfmhejmvz5elek4hb2lp3weaduwndvrvpxdamwklue"></div>
+            <div class="chest" id="chest-7" onclick="jugarRuleta(7)"><img src="https://ipfs.io/ipfs/bafybeiggz26x26hncisti5s5y74ciuk4yuymtczhsbwdufoql2gidl57mu"></div>
+            <div class="chest" id="chest-8" onclick="jugarRuleta(8)"><img src="https://ipfs.io/ipfs/bafybeiginlvb63afmlicnvsx4fwfekanoipydzgzv3ay7njpvq6nm4zzym"></div>
         </div>
 
         <div id="status-msg">Seleccione su cofre con sabiduría...</div>
-        <button class="btn-reiniciar" onclick="location.reload()">REINICIAR RULETA</button>
+        <button class="btn-reiniciar" onclick="reiniciarJuego()">OTRA RONDA</button>
     </div>
 
     <script>
-        // Configuración obtenida del almacenamiento local del menú principal
         const LS_NOMBRE = localStorage.getItem('zaard_nombre') || "Jugador Zaard";
         const LS_AVATAR_URL = localStorage.getItem('zaard_avatar') || 'https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_lhyyv2lhyyv2lhyy_1.png';
-        const LS_IDIOMA = localStorage.getItem('zaard_lang') || 'es'; 
+        
+        const TOKEN_ADDR = "0x3468EA4e6CE13Ec4C7f8651f7eFC6AA6046F4d65"; 
+        const BURN_WALLET = "0x000000000000000000000000000000000000dEaD"; 
+        const ABI_TRANSFER = [{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"type":"function"}];
+        const APUESTA_WEI = "100000000000000"; 
 
-        // Configuración Web3 y Apuestas oficiales
-        const TOKEN_ADDR = "
+        let web3, contract, userAccount, esModoWeb3 = false;
+        let juegoBloqueado = false;
+        let musicaHabilitada = localStorage.getItem('zaard_musica') !== 'OFF';
+
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('txt-nombre-usr').innerText = LS_NOMBRE;
+            document.getElementById('img-avatar-usr').src = LS_AVATAR_URL;
+
+            const audio = document.getElementById('zaard-audio');
+            audio.volume = 0.3;
+            if (musicaHabilitada) {
+                audio.play().catch(e => console.log("Audio pendiente de interacción"));
+            }
+            document.getElementById('loading-screen').style.display = 'none';
+        });
+
+        function elegirModo() {
+            esModoWeb3 = false;
+            document.getElementById('modal-bienvenida').style.display = 'none';
+        }
+
+        async function conectarYJugar() {
+            if (window.ethereum) {
+                try {
+                    web3 = new Web3(window.ethereum);
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    userAccount = accounts[0];
+                    contract = new web3.eth.Contract(ABI_TRANSFER, TOKEN_ADDR);
+                    esModoWeb3 = true;
+                    alert("¡Billetera conectada con éxito!");
+                    document.getElementById('modal-bienvenida').style.display = 'none';
+                } catch (e) { 
+                    alert("Conexión cancelada o fallida."); 
+                }
+            } else { 
+                alert("Por favor instala MetaMask o una billetera Web3."); 
+            }
+        }
+
+        function irAlMenuPrincipal() {
+            window.location.href = "index.html"; // Redirige al menú arcade principal
+        }
+
+        function reiniciarJuego() {
+            if (juegoBloqueado) return;
+            document.querySelectorAll('.chest').forEach(c => c.classList.remove('active'));
+            const msg = document.getElementById('status-msg');
+            msg.className = "";
+            msg.innerText = "¡Elige un nuevo cofre y prueba tu suerte!";
+        }
+
+        async function ejecutarQuema() {
+            if (esModoWeb3 && contract && userAccount) {
+                try {
+                    await contract.methods.transfer(BURN_WALLET, APUESTA_WEI).send({ from: userAccount });
+                } catch (e) { 
+                    console.log("Error en quema:", e); 
+                }
+            }
+        }
+
+        // Ruleta con desaceleración progresiva (expectativa real)
+        async function jugarRuleta(cofreElegido) {
+            if (juegoBloqueado) return;
+            juegoBloqueado = true;
+
+            const msg = document.getElementById('status-msg');
+            msg.className = "";
+            msg.innerText = "⚡ Escaneando tesoros del protocolo...";
+
+            let cofreActual = Math.floor(Math.random() * 8) + 1;
+            let velocidad = 50; // Comienza súper rápido
+            let vueltasTotales = 22; // Cantidad de pasos antes de detenerse
+
+            for (let i = 0; i < vueltasTotales; i++) {
+                document.querySelectorAll('.chest').forEach(c => c.classList.remove('active'));
+                document.getElementById(`chest-${cofreActual}`).classList.add('active');
+                
+                await new Promise(r => setTimeout(r, velocidad));
+                
+                // Va desacelerando gradualmente para aumentar la expectativa
+                velocidad += 15; 
+                cofreActual = (cofreActual % 8) + 1;
+            }
+
+            // Seleccionar el cofre final (determinado por el usuario o aleatorio para la ruleta)
+            // Aquí hacemos que se detenga exactamente en el que tocó el usuario para darle control total
+            document.querySelectorAll('.chest').forEach(c => c.classList.remove('active'));
+            document.getElementById(`chest-${cofreElegido}`).classList.add('active');
+
+            const gano = Math.random() < 0.3; // 30% de probabilidad de ganar
+
+            setTimeout(async () => {
+                if (gano) {
+                    msg.className = "mensaje-ganaste";
+                    msg.innerHTML = `🎉 ¡IMPRESIONANTE ${LS_NOMBRE}! ¡GANASTE 0.00015 ZARD! 🚀`;
+                } else {
+                    msg.className = "mensaje-perdiste";
+                    msg.innerHTML = `💪 ¡Ánimo ${LS_NOMBRE}! Cofre vacío, pero tu fe fortalece el suministro. ¡Inténtalo de nuevo!`;
+                    if (esModoWeb3) {
+                        await ejecutarQuema();
+                    }
+                }
+                juegoBloqueado = false; // Permite seguir jugando sin salir del juego
+            }, 300);
+        }
+    </script>
+</body>
+</html>

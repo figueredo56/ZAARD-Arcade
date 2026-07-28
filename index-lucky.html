@@ -35,7 +35,6 @@
             background: radial-gradient(circle at 50% 30%, #3a0ca3 0%, #10002b 60%, #050014 100%);
             background-image: radial-gradient(white 1px, transparent 0);
             background-size: 30px 30px;
-            background-position: 0 0;
             z-index: 1500;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             padding: 20px; box-sizing: border-box; text-align: center;
@@ -58,19 +57,19 @@
 
         /* Panel Superior */
         .user-panel {
-            position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
-            width: 94%; max-width: 440px; height: 68px;
+            position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+            width: 94%; max-width: 440px; height: 64px;
             background: rgba(24, 5, 54, 0.95);
             border: 2px solid rgba(0, 255, 255, 0.8); border-radius: 16px;
             display: flex; align-items: center; padding: 0 12px; box-sizing: border-box;
             box-shadow: 0 0 15px rgba(0,255,255,0.3); z-index: 10;
         }
         .user-avatar {
-            width: 48px; height: 48px; border-radius: 50%; border: 2px solid #d946ef;
-            object-fit: cover; margin-right: 12px; box-shadow: 0 0 8px #d946ef;
+            width: 44px; height: 44px; border-radius: 50%; border: 2px solid #d946ef;
+            object-fit: cover; margin-right: 10px; box-shadow: 0 0 8px #d946ef;
         }
         .user-info { flex-grow: 1; text-align: left; }
-        .user-name { font-size: 17px; color: #00ffff; font-weight: bold; line-height: 1.1; text-shadow: 0 0 4px #00ffff; }
+        .user-name { font-size: 16px; color: #00ffff; font-weight: bold; line-height: 1.1; text-shadow: 0 0 4px #00ffff; }
         .user-sub { font-size: 12px; color: #e879f9; font-weight: bold; }
         .btn-salir {
             background: none; border: none; color: #ff6b6b; font-size: 15px; font-weight: bold;
@@ -78,14 +77,14 @@
         }
         .btn-salir:hover { color: #ff4444; }
 
-        /* Área de Juego - 16 Cofres Compactos */
+        /* Área de Juego - 16 Cofres Ultra Compactos */
         .game-container {
-            margin-top: 80px; width: 100%; max-width: 440px; display: flex; flex-direction: column; align-items: center;
+            margin-top: 75px; width: 100%; max-width: 440px; display: flex; flex-direction: column; align-items: center;
         }
-        h1 { font-size: 1.8rem; color: #c77dff; text-shadow: 0 0 15px #7b2cbf; margin: 10px 0; text-transform: uppercase; }
+        h1 { font-size: 1.7rem; color: #c77dff; text-shadow: 0 0 15px #7b2cbf; margin: 8px 0; text-transform: uppercase; }
         
         .chests-container { 
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 5px; padding: 0 10px; width: 100%; box-sizing: border-box; 
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 2px; padding: 0 10px; width: 100%; box-sizing: border-box; 
         }
         .chest { 
             aspect-ratio: 1/1; cursor: pointer; border: 2px solid #c77dff; border-radius: 10px; 
@@ -93,24 +92,24 @@
             display: flex; align-items: center; justify-content: center;
             box-shadow: 0 0 6px rgba(199,125,255,0.3);
         }
-        .chest img { width: 82%; transition: 0.1s; filter: brightness(0.7); }
+        .chest img { width: 85%; height: 85%; object-fit: cover; transition: 0.1s; filter: brightness(0.75); border-radius: 8px; }
         
-        /* Efecto Ruleta Activa */
+        /* Efecto Ruleta Activa (Aumento de tamaño y super brillo) */
         .chest.active { 
-            transform: scale(1.15); border-color: #00ffff; box-shadow: 0 0 20px #00ffff; background: rgba(0,255,255,0.3); 
+            transform: scale(1.2); border-color: #00ffff; box-shadow: 0 0 25px #00ffff; background: rgba(0,255,255,0.4); 
             z-index: 5;
         }
-        .chest.active img { filter: brightness(1.2); }
+        .chest.active img { filter: brightness(1.25); }
 
         /* Estado del Juego */
         #status-msg { 
-            font-size: 1.15rem; margin-top: 12px; color: #e0aaff; font-weight: bold; padding: 0 10px; 
-            text-shadow: 1px 1px 6px #000; min-height: 45px; display: flex; align-items: center; justify-content: center; text-align: center;
+            font-size: 1.1rem; margin-top: 10px; color: #e0aaff; font-weight: bold; padding: 0 10px; 
+            text-shadow: 1px 1px 6px #000; min-height: 40px; display: flex; align-items: center; justify-content: center; text-align: center;
         }
         
         @keyframes popIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            80% { transform: scale(1.1); }
+            0% { transform: scale(0.4); opacity: 0; }
+            80% { transform: scale(1.15); }
             100% { transform: scale(1); opacity: 1; }
         }
         .mensaje-ganaste { color: #10b981 !important; text-shadow: 0 0 12px #10b981 !important; animation: popIn 0.4s ease-out; }
@@ -119,7 +118,7 @@
         .btn-reiniciar {
             padding: 10px 30px; background: linear-gradient(45deg, #7b2cbf, #3c096c); cursor: pointer; 
             border: 2px solid #c77dff; border-radius: 12px; color: white; font-weight: bold; font-size: 1.1rem; 
-            margin-top: 10px; text-transform: uppercase; box-shadow: 0 0 15px #7b2cbf; font-family: 'Rajdhani', sans-serif;
+            margin-top: 8px; text-transform: uppercase; box-shadow: 0 0 15px #7b2cbf; font-family: 'Rajdhani', sans-serif;
             transition: 0.2s;
         }
         .btn-reiniciar:hover { transform: scale(1.05); }
@@ -161,7 +160,7 @@
         <h1 id="txt-titulo-juego">⚡ ELIJA SU COFRE ⚡</h1>
         
         <div class="chests-container" id="grid-cofres">
-            <!-- Se generan dinámicamente los 16 cofres -->
+            <!-- Se generan dinámicamente los 16 cofres con variedad de avatares y cofres -->
         </div>
 
         <div id="status-msg">Seleccione su cofre con sabiduría...</div>
@@ -173,7 +172,7 @@
         const LS_AVATAR_URL = localStorage.getItem('zaard_avatar') || 'https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_lhyyv2lhyyv2lhyy_1.png';
         const LS_IDIOMA = localStorage.getItem('zaard_lang') || 'es'; 
 
-        // Diccionario de Traducciones (Soporte Chino, Inglés y Español)
+        // Diccionario de Traducciones
         const trads = {
             es: {
                 tituloModal: "⚡ PROTOCOLO PANGA ⚡",
@@ -232,7 +231,7 @@
         document.getElementById('status-msg').innerText = t.msgInicio;
         document.getElementById('btn-otra-ronda').innerText = t.btnRonda;
 
-        // Generar dinámicamente los 16 cofres rotando las imágenes del protocolo
+        // Banco de imágenes ampliado con cofres y avatares para evitar repeticiones
         const imagenesCofres = [
             "https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4",
             "https://ipfs.io/ipfs/bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue",
@@ -241,7 +240,11 @@
             "https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m",
             "https://ipfs.io/ipfs/bafybeiheko4izm53qfmhejmvz5elek4hb2lp3weaduwndvrvpxdamwklue",
             "https://ipfs.io/ipfs/bafybeiggz26x26hncisti5s5y74ciuk4yuymtczhsbwdufoql2gidl57mu",
-            "https://ipfs.io/ipfs/bafybeiginlvb63afmlicnvsx4fwfekanoipydzgzv3ay7njpvq6nm4zzym"
+            "https://ipfs.io/ipfs/bafybeiginlvb63afmlicnvsx4fwfekanoipydzgzv3ay7njpvq6nm4zzym",
+            LS_AVATAR_URL,
+            "https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_lhyyv2lhyyv2lhyy_1.png",
+            "https://ipfs.io/ipfs/bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue",
+            "https://ipfs.io/ipfs/bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34"
         ];
 
         const gridCofres = document.getElementById('grid-cofres');
@@ -320,7 +323,7 @@
             }
         }
 
-        // Ruleta con 16 cofres y desaceleración gradual
+        // Ruleta optimizada a ~6 segundos de duración con desaceleración progresiva
         async function jugarRuleta(cofreElegido) {
             if (juegoBloqueado) return;
             juegoBloqueado = true;
@@ -330,8 +333,8 @@
             msg.innerText = t.msgEscaneo;
 
             let cofreActual = Math.floor(Math.random() * 16) + 1;
-            let velocidad = 35; // Comienza rápido
-            let pasosTotales = 28; // Cantidad de saltos antes de detenerse
+            let velocidad = 25; // Comienza extremadamente rápido
+            let pasosTotales = 45; // Mayor cantidad de pasos para durar aproximadamente 6 segundos
 
             for (let i = 0; i < pasosTotales; i++) {
                 document.querySelectorAll('.chest').forEach(c => c.classList.remove('active'));
@@ -339,12 +342,12 @@
                 
                 await new Promise(r => setTimeout(r, velocidad));
                 
-                // Desaceleración progresiva para generar alta expectativa
-                velocidad += 12; 
+                // Incremento de velocidad gradual (desaceleración suave y prolongada)
+                velocidad += Math.floor(i / 3) + 4; 
                 cofreActual = (cofreActual % 16) + 1;
             }
 
-            // Detener en el cofre seleccionado por el usuario
+            // Asegurar parada exacta en el cofre seleccionado con el efecto super calidad
             document.querySelectorAll('.chest').forEach(c => c.classList.remove('active'));
             document.getElementById(`chest-${cofreElegido}`).classList.add('active');
 

@@ -107,7 +107,7 @@
             </button>
         </div>
 
-        <!-- Botón de retorno al menú principal de arcade desde el selector de modos -->
+        <!-- Botón de retorno al menú principal de arcade -->
         <button onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index-menu.html'" id="txt-volver-menu" class="mt-4 text-xs text-purple-300 underline font-bold tracking-wider hover:text-white transition-colors">
             ⬅ VOLVER AL MENÚ PRINCIPAL
         </button>
@@ -278,7 +278,6 @@
             fenixY = relativeY - (fenixAlto / 2);
         };
 
-        // Eventos Táctiles (Móvil)
         canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
             estaArrastrando = true;
@@ -299,7 +298,6 @@
             estaArrastrando = false;
         }, { passive: false });
 
-        // Eventos de Mouse (PC)
         canvas.addEventListener('mousedown', (e) => {
             e.preventDefault();
             estaArrastrando = true;
@@ -315,7 +313,6 @@
         window.addEventListener('mouseup', () => {
             estaArrastrando = false;
         });
-        // ------------------------------------------------
 
         function irAlMenuModos() {
             document.getElementById('pantalla-bienvenida').style.display = 'none';
@@ -445,16 +442,44 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             distanciaRecorrida++;
             velocidadActual = 5 + Math.floor(distanciaRecorrida / 400) * 0.6;
-            if (distanciaRecorrida % 135 === 0) obstaculos.push({ x: canvas.width, y: Math.random() * (canvas.height - 70) + 10, w: 55, h: 55 });
-            if (distanciaRecorrida % 110 === 0) cajas.push({ x: canvas.width, y: Math.random() * (canvas.height - 50) + 10, w: 45, h: 45 });
+
+            if (distanciaRecorrida % 135 === 0) {
+                // Generamos con una posición base Y aleatoria, y guardamos un offset de fase aleatorio para el movimiento ondulante
+                obstaculos.push({ 
+                    x: canvas.width, 
+                    baseY: Math.random() * (canvas.height - 120) + 30, 
+                    w: 55, 
+                    h: 55, 
+                    fase: Math.random() * Math.PI * 2 
+                });
+            }
+
+            if (distanciaRecorrida % 110 === 0) {
+                cajas.push({ 
+                    x: canvas.width, 
+                    baseY: Math.random() * (canvas.height - 100) + 30, 
+                    w: 45, 
+                    h: 45, 
+                    fase: Math.random() * Math.PI * 2 
+                });
+            }
+
             if (fenixY < 0) fenixY = 0;
             if (fenixY > canvas.height - fenixAlto) fenixY = canvas.height - fenixAlto;
             ctx.drawImage(imgFenix, fenixX, fenixY, fenixAncho, fenixAlto);
             
+            // --- ACTUALIZAR Y DIBUJAR OBSTÁCULOS (CON MOVIMIENTO ONDULANTE SUAVE) ---
             for (let i = obstaculos.length - 1; i >= 0; i--) {
-                let obs = obstaculos[i]; obs.x -= velocidadActual;
-                ctx.drawImage(imgObstaculo, obs.x, obs.y, obs.w, obs.h);
-                if (fenixX < obs.x + obs.w && fenixX + fenixAncho > obs.x && fenixY < obs.y + obs.h && fenixY + fenixAlto > obs.y) {
+                let obs = obstaculos[i]; 
+                obs.x -= velocidadActual;
+                
+                // Efecto visual de reto: movimiento vertical suave en seno (amplitud de 25 píxeles, velocidad moderada)
+                let yActual = obs.baseY + Math.sin(distanciaRecorrida * 0.05 + obs.fase) * 25;
+
+                ctx.drawImage(imgObstaculo, obs.x, yActual, obs.w, obs.h);
+
+                // Colisión ajustada con la posición real en movimiento
+                if (fenixX < obs.x + obs.w && fenixX + fenixAncho > obs.x && fenixY < yActual + obs.h && fenixY + fenixAlto > yActual) {
                     sonarEfecto('choque');
                     oportunidadesRestantes--;
                     actualizarHUD();
@@ -465,10 +490,18 @@
                 if (obs.x < -60) obstaculos.splice(i, 1);
             }
 
+            // --- ACTUALIZAR Y DIBUJAR CAJAS DE GAS (CON MOVIMIENTO ONDULANTE SUAVE) ---
             for (let i = cajas.length - 1; i >= 0; i--) {
-                let box = cajas[i]; box.x -= velocidadActual;
-                ctx.drawImage(imgGas, box.x, box.y, box.w, box.h);
-                if (fenixX < box.x + box.w && fenixX + fenixAncho > obs.x && fenixY < box.y + box.h && fenixY + fenixAlto > box.y) {
+                let box = cajas[i]; 
+                box.x -= velocidadActual;
+                
+                // Efecto visual de reto similar para el gas
+                let yActual = box.baseY + Math.cos(distanciaRecorrida * 0.04 + box.fase) * 30;
+
+                ctx.drawImage(imgGas, box.x, yActual, box.w, box.h);
+
+                // Colisión ajustada con la posición real en movimiento
+                if (fenixX < box.x + box.w && fenixX + fenixAncho > box.x && fenixY < yActual + box.h && fenixY + fenixAlto > yActual) {
                     sonarEfecto('gas');
                     totalGasRecolectado++;
                     actualizarHUD();
@@ -478,6 +511,7 @@
                 }
                 if (box.x < -60) cajas.splice(i, 1);
             }
+
             animacionId = requestAnimationFrame(buclePrincipal);
         }
     </script>

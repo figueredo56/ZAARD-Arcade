@@ -11,7 +11,7 @@
             padding: 0;
         }
         body {
-            /* Nueva imagen de fondo integrada */
+            /* Tu imagen con los botones integrados */
             background: url('https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/206%20sin%20t%C3%ADtulo_20260729130605_1.png') no-repeat center center fixed;
             background-size: cover;
             color: #ffffff;
@@ -24,32 +24,33 @@
             overflow-x: hidden;
             padding: 20px;
         }
+        
         .container {
             width: 100%;
-            max-width: 450px;
+            max-width: 400px;
             text-align: center;
-            background: rgba(20, 0, 40, 0.65); /* Fondo semitransparente para que luzca tu imagen */
-            border: 2px solid #00ffcc;
-            border-radius: 20px;
-            padding: 25px 20px;
-            box-shadow: 0 0 25px rgba(0, 255, 204, 0.4);
             position: relative;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
-        /* Botón de acceso rápido a ZAARD Wallet con la imagen del token */
+        /* Botón flotante de la billetera con la imagen del token */
         .wallet-float-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 50px;
-            height: 50px;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 55px;
+            height: 55px;
             border-radius: 50%;
             background-image: url('https://raw.githubusercontent.com/figueredo56/index.html/main/Screenshot_20260724-221435_1.png');
             background-size: cover;
             background-position: center;
             border: 2px solid #00ffcc;
-            box-shadow: 0 0 10px #00ffcc;
+            box-shadow: 0 0 15px #00ffcc;
             cursor: pointer;
+            z-index: 1000;
             transition: transform 0.2s ease;
             text-decoration: none;
         }
@@ -57,76 +58,56 @@
             transform: scale(1.1);
         }
 
-        h1 {
-            font-size: clamp(22px, 5vw, 32px);
-            color: #00ffcc;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(0,255,204,0.5);
-        }
-        p.subtitle {
-            font-size: clamp(13px, 3vw, 15px);
-            color: #00ff00;
-            margin-bottom: 25px;
-            font-weight: bold;
-        }
-        .menu-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+        /* Botones adaptados para coincidir con tu diseño visual */
         .btn-game {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 100%;
-            padding: 14px;
-            font-size: clamp(15px, 4vw, 18px);
+            padding: 16px;
+            font-size: 18px;
             font-weight: bold;
             color: #00ff00;
-            background: rgba(75, 0, 130, 0.85);
+            background: rgba(40, 0, 80, 0.75);
             border: 2px solid #00ffcc;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
             text-decoration: none;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 255, 204, 0.3);
         }
         .btn-game:hover, .btn-game:active {
             background: #00ffcc;
             color: #0d001a;
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0, 255, 204, 0.5);
         }
         .btn-back {
-            margin-top: 10px;
-            background: rgba(40, 0, 80, 0.85);
+            background: rgba(80, 0, 40, 0.75);
             color: #ff0055;
             border-color: #ff0055;
+            box-shadow: 0 4px 15px rgba(255, 0, 85, 0.3);
         }
         .btn-back:hover, .btn-back:active {
             background: #ff0055;
             color: #ffffff;
-            box-shadow: 0 6px 15px rgba(255, 0, 85, 0.5);
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Acceso directo a ZAARD Wallet con la imagen del token -->
-        <a href="https://figueredo56.github.io/zaard-wallet/wallet.html" class="wallet-float-btn" title="Ir a ZAARD Wallet"></a>
+    <!-- Acceso directo flotante a ZAARD Wallet -->
+    <a href="https://figueredo56.github.io/zaard-wallet/wallet.html" class="wallet-float-btn" title="Ir a ZAARD Wallet"></a>
 
-        <h1>ZAARD Arcade</h1>
-        <p class="subtitle">Selecciona un juego para comenzar</p>
+    <div class="container">
+        <div style="height: 120px;"></div> <!-- Espacio superior para que respete el título de tu imagen -->
         
-        <div class="menu-grid">
-            <a href="juego-fenix.html" class="btn-game">🔥 Golden Run (Fénix)</a>
-            <a href="juego-memory.html" class="btn-game">🧩 Memory HD</a>
-            <a href="juego-combat.html" class="btn-game">⚔️ Combat</a>
-            
-            <!-- Botón para volver al Ecosistema general -->
-            <a href="index.html" class="btn-game btn-back">⬅ Volver al Ecosistema</a>
-        </div>
+        <!-- Opciones de juegos (Ajusta los enlaces 'href' si tus archivos tienen nombres distintos en el repositorio) -->
+        <a href="index-fenix.html" class="btn-game">🔥 Golden Run (Fénix)</a>
+        <a href="index-memory.html" class="btn-game">🧩 Memory HD</a>
+        <a href="index-combat.html" class="btn-game">⚔️ Combat</a>
+        
+        <!-- Botón para volver al Ecosistema general -->
+        <a href="https://figueredo56.github.io/index.html/" class="btn-game btn-back">⬅ Volver al Ecosistema</a>
     </div>
 
 </body>

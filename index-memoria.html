@@ -10,8 +10,7 @@
         body { 
             margin: 0; 
             padding: 0;
-            background: radial-gradient(circle at 50% 30%, #3d106b 0%, #17042f 50%, #070112 100%);
-            background-attachment: fixed;
+            background: #070112;
             overflow: hidden; 
             font-family: 'Arial', sans-serif; 
             color: #fff;
@@ -28,10 +27,11 @@
             display: flex; justify-content: center; align-items: center; color: #00ffff; font-weight: bold;
         }
 
-        /* Capa de fondo con imágenes cósmicas seleccionadas para dar impacto visual */
+        /* Fondo dinámico más vivo y brillante usando otra textura IPFS más luminosa */
         .fondo-cosmico {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-image: url('https://ipfs.io/ipfs/bafybeigxro3eht2lctrk4akglifsxuvwolwqfzgqzvnstabnpjjiungza4');
+            background: linear-gradient(135deg, rgba(61,16,107,0.85) 0%, rgba(23,4,47,0.9) 50%, rgba(7,1,18,0.95) 100%),
+                        url('https://ipfs.io/ipfs/bafybeicugqjr3uy2mvk32536qi3gf3astpwj53nlbeogx3vmzsmk2ia3wa');
             background-size: cover;
             background-position: center;
             z-index: 999;
@@ -45,17 +45,67 @@
             display: none;
         }
 
+        /* Caja translúcida más clara y luminosa (menos oscura) con marco que cambia de color y titila */
         .modal-card {
-            background: linear-gradient(135deg, rgba(24, 5, 54, 0.92) 0%, rgba(10, 2, 23, 0.95) 100%);
-            border: 2px solid #00ffff; border-radius: 22px;
+            background: linear-gradient(135deg, rgba(50, 15, 95, 0.75) 0%, rgba(25, 8, 50, 0.82) 100%);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 3px solid #00ffff; 
+            border-radius: 22px;
             padding: 30px; width: 100%; max-width: 420px;
-            box-shadow: 0 0 35px rgba(0, 255, 255, 0.4), inset 0 0 20px rgba(217, 70, 239, 0.3);
-            animation: pulseGlow 3s infinite alternate;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+            animation: borderGlowPulse 3s infinite alternate;
         }
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 25px rgba(0, 255, 255, 0.3); }
-            100% { box-shadow: 0 0 45px rgba(217, 70, 239, 0.6); }
+
+        @keyframes borderGlowPulse {
+            0% {
+                border-color: #00ffff;
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.5), inset 0 0 15px rgba(0, 255, 255, 0.2);
+            }
+            33% {
+                border-color: #d946ef;
+                box-shadow: 0 0 30px rgba(217, 70, 239, 0.7), inset 0 0 20px rgba(217, 70, 239, 0.3);
+            }
+            66% {
+                border-color: #10b981;
+                box-shadow: 0 0 30px rgba(16, 185, 129, 0.7), inset 0 0 20px rgba(16, 185, 129, 0.3);
+            }
+            100% {
+                border-color: #38bdf8;
+                box-shadow: 0 0 25px rgba(56, 189, 248, 0.6), inset 0 0 15px rgba(56, 189, 248, 0.2);
+            }
         }
+
+        /* Estilos de tipografía solicitados: Títulos en degradé Morado/Azul, Descripciones en Verde brillante */
+        .titulo-impacto {
+            font-size: 25px;
+            font-weight: 900;
+            margin-top: 0;
+            background: linear-gradient(90deg, #c084fc, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(192, 132, 252, 0.5);
+            letter-spacing: 1px;
+        }
+
+        .subtitulo-impacto {
+            font-size: 19px;
+            font-weight: bold;
+            margin: 12px 0;
+            background: linear-gradient(90deg, #e879f9, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .desc-verde {
+            font-size: 15px;
+            font-weight: bold;
+            color: #4ade80; /* Verde brillante muy llamativo */
+            text-shadow: 0 0 8px rgba(74, 222, 128, 0.4);
+            margin-bottom: 25px; 
+            line-height: 1.6;
+        }
+
         .btn-accion {
             width: 100%; padding: 14px; margin: 12px 0; border: none; border-radius: 12px;
             font-weight: bold; font-size: 16px; cursor: pointer; text-transform: uppercase;
@@ -72,12 +122,12 @@
 
 <div id="loading-screen">CARGANDO PROTOCOLO...</div>
 
-<!-- 1. PANTALLA DE BIENVENIDA IMPACTANTE (Expectativa) -->
+<!-- 1. PANTALLA DE BIENVENIDA IMPACTANTE -->
 <div id="pantalla-bienvenida" class="fondo-cosmico">
     <div class="modal-card">
-        <h1 style="color: #00ffff; margin-top: 0; font-size: 26px; text-shadow: 0 0 15px rgba(0,255,255,0.8);">⚡ PROTOCOLO PANGA ⚡</h1>
-        <h2 style="color: #d946ef; font-size: 20px; margin: 10px 0;">¡PON A PRUEBA TU MEMORIA Y GANA ZARD!</h2>
-        <p style="font-size: 14px; color: #ccc; margin-bottom: 25px; line-height: 1.6;">
+        <h1 class="titulo-impacto">⚡ PROTOCOLO PANGA ⚡</h1>
+        <h2 class="subtitulo-impacto">¡PON A PRUEBA TU MEMORIA Y GANA ZARD!</h2>
+        <p class="desc-verde">
             Desafía los 10 niveles cósmicos, supera los obstáculos y demuestra tu destreza en el arcade Web3 definitivo.
         </p>
         <button class="btn-accion btn-aceptar" onclick="irASeleccionModo()">¡ACEPTAR Y JUGAR! 🚀</button>
@@ -85,11 +135,11 @@
     </div>
 </div>
 
-<!-- 2. PANTALLA DE SELECCIÓN DE MODO (Invitado / Web3) -->
+<!-- 2. PANTALLA DE SELECCIÓN DE MODO -->
 <div id="pantalla-seleccion" class="fondo-cosmico oculto">
     <div class="modal-card">
-        <h2 id="txt-titulo-sel" style="color: #00ffff; margin-top: 0; text-shadow: 0 0 10px rgba(0,255,255,0.6);">⚡ MODO DE JUEGO ⚡</h2>
-        <p id="txt-desc-sel" style="font-size: 14px; color: #ddd; margin-bottom: 20px; line-height: 1.5;">
+        <h2 id="txt-titulo-sel" class="titulo-impacto">⚡ MODO DE JUEGO ⚡</h2>
+        <p id="txt-desc-sel" class="desc-verde">
             Apuesta: 0.0001 ZARD<br>Premio: 0.00015 ZARD<br>Quema automática al perder.
         </p>
         <button class="btn-accion btn-invitado" onclick="elegirModo('invitado')">MODO INVITADO 🚀</button>
@@ -98,7 +148,6 @@
     </div>
 </div>
 
-<!-- Efectos de sonido estilo Arcade / Chiptune (estilo Mario Bros / Retro) usando Web Audio API -->
 <script>
     const LS_NOMBRE = localStorage.getItem('zaard_nombre') || "Jugador Zaard";
     const LS_AVATAR_URL = localStorage.getItem('zaard_avatar') || 'https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_lhyyv2lhyyv2lhyy_1.png';
@@ -123,7 +172,6 @@
         }
     }
 
-    // Efectos de sonido estilo chiptune / arcade clásico
     function reproducirSonidoRetro(tipo) {
         try {
             initAudioContext();
@@ -143,7 +191,6 @@
                 osc.start(now);
                 osc.stop(now + 0.08);
             } else if (tipo === 'acierto') {
-                // Sonido alegre estilo moneda / salto Mario
                 let notes = [523.25, 659.25, 783.99, 1046.50];
                 notes.forEach((freq, idx) => {
                     let t = now + idx * 0.07;
@@ -159,7 +206,6 @@
                     o.stop(t + 0.1);
                 });
             } else if (tipo === 'error') {
-                // Sonido de fallo retro
                 let osc = audioCtx.createOscillator();
                 let gain = audioCtx.createGain();
                 osc.type = 'sawtooth';
@@ -347,7 +393,6 @@
                     this.bloqueado = false;
                     this.primeraCarta = null;
                     
-                    // Fondo espacial limpio para el juego en sí (sin imagen pesada para no perder las cartas)
                     let bgGlow = this.add.circle(240, 400, 320, 0x3d106b, 0.35);
                     bgGlow.setBlendMode(Phaser.BlendModes.ADD);
 
@@ -381,7 +426,6 @@
                     
                     this.txtVidas = this.add.text(435, 32, `❤️ ${this.vidas}`, { fontSize: '18px', color: '#f87171', fontStyle: 'bold' }).setOrigin(1, 0);
 
-                    // Botones superiores con enlace seguro al menú arcade provisto
                     let txtMenuText = LS_IDIOMA === 'zh' ? "菜单" : (LS_IDIOMA === 'en' ? "MENU" : "MENÚ");
                     let btnMenu = this.add.text(435, 62, txtMenuText, { fontSize: '13px', color: '#38bdf8', fontStyle: 'bold' }).setOrigin(1, 0).setInteractive();
                     btnMenu.on('pointerdown', volverAlMenuSeleccion);

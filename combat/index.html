@@ -60,9 +60,9 @@
             align-items: center; gap: 10px; box-shadow: 0 0 15px rgba(147,51,234,0.3);
         }
 
-        /* Botón de Emergencia / Salida Rápida dentro del Juego */
+        /* Botón de Emergencia colocado más abajo para no tapar el marcador */
         #btn-emergencia {
-            display: none; position: absolute; top: 15px; right: 15px; z-index: 50;
+            display: none; position: absolute; top: 75px; right: 15px; z-index: 50;
             background: rgba(220, 38, 38, 0.85); border: 2px solid #ef4444; color: #fff;
             padding: 8px 14px; border-radius: 10px; font-weight: bold; cursor: pointer;
             font-family: 'Rajdhani', sans-serif; font-size: 1rem; box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
@@ -189,17 +189,14 @@
         const avatarGuardado = localStorage.getItem('zaard_avatar') || localStorage.getItem('avatar') || 'https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m';
         
         if (usuarioGuardado) {
-            // Bienvenida
             document.getElementById('nombre-usuario').innerText = usuarioGuardado;
             document.getElementById('avatar-img').src = avatarGuardado;
             document.getElementById('perfil-info').style.display = 'flex';
 
-            // Menú
             document.getElementById('nombre-usuario-menu').innerText = usuarioGuardado;
             document.getElementById('avatar-img-menu').src = avatarGuardado;
             document.getElementById('perfil-info-menu').style.display = 'flex';
 
-            // HUD de Juego
             document.getElementById('hud-nombre').innerText = usuarioGuardado;
             document.getElementById('hud-avatar').src = avatarGuardado;
             document.getElementById('hud-avatar').style.display = 'block';
@@ -216,11 +213,9 @@
         const canvas = document.getElementById('canvasJuego');
         const ctx = canvas.getContext('2d');
         
-        // Imagen principal para la nave y disparos
         const imgNave = new Image(); 
         imgNave.src = 'https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m';
 
-        // Imágenes de los enemigos solicitadas
         const imgEnemigo1 = new Image();
         imgEnemigo1.src = 'https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/CC_20260621_144651.png';
 
@@ -269,7 +264,6 @@
         function salidaEmergencia() {
             juegoActivo = false;
             clearInterval(crono);
-            // Regresa automáticamente al menú de selección de modo de juego
             document.getElementById('hud').style.display = 'none';
             document.getElementById('btn-emergencia').style.display = 'none';
             canvas.style.display = 'none';
@@ -301,7 +295,6 @@
                 else alert(t.msgDerrota);
             }
 
-            // Al finalizar el juego, regresa automáticamente a la pantalla de selección de modo (menú de apuestas)
             document.getElementById('hud').style.display = 'none';
             document.getElementById('btn-emergencia').style.display = 'none';
             canvas.style.display = 'none';
@@ -362,7 +355,6 @@
             bucle(); 
         }
 
-        // Control fluido mediante movimiento del mouse y táctil
         window.addEventListener('touchmove', (e) => { 
             if(!juegoActivo) return;
             nave.x = e.touches[0].clientX - 27; 
@@ -382,16 +374,15 @@
             
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Dibujar Nave Principal del jugador
             ctx.drawImage(imgNave, nave.x, nave.y, nave.w, nave.h);
 
-            // Generar Enemigos / Obstáculos con velocidad de caída más lenta y rotación elegante
+            // Generar Enemigos con velocidad de caída un poquito más rápida pero sin exagerar
             if(Math.random() < 0.035) {
                 enemigos.push({
                     x: Math.random() * (canvas.width - 45), 
                     y: -50,
-                    velX: (Math.random() - 0.5) * 2.5, // Movimiento lateral moderado
-                    velY: 2.0 + Math.random() * 1.5,  // Velocidad de caída más lenta como se solicitó
+                    velX: (Math.random() - 0.5) * 2.5, 
+                    velY: 3.2 + Math.random() * 1.8,  // Ligeramente incrementada la velocidad vertical
                     img: Math.random() > 0.5 ? imgEnemigo1 : imgEnemigo2,
                     rotacionSpeed: (Math.random() - 0.5) * 0.015
                 });
@@ -402,19 +393,17 @@
                 e.y += e.velY; 
                 e.x += e.velX; 
 
-                // Rebote en los bordes laterales
                 if (e.x < 0 || e.x > canvas.width - 45) {
                     e.velX *= -1;
                 }
                 
-                // Efecto visual de rotación mientras cae rodando
+                // Efecto visual de rotación conservado a la misma velocidad original de giro
                 ctx.save();
                 ctx.translate(e.x + 22.5, e.y + 22.5);
                 ctx.rotate((e.y * 0.015));
                 ctx.drawImage(e.img, -22.5, -22.5, 45, 45);
                 ctx.restore();
                 
-                // Colisión Nave-Enemigo
                 if(e.x < nave.x + 45 && e.x + 45 > nave.x && e.y < nave.y + 55 && e.y + 45 > nave.y) {
                     playSnd(120, 0.4, 'sawtooth'); 
                     terminarJuego('derrota');
@@ -424,7 +413,6 @@
                 if(e.y > canvas.height) enemigos.splice(i, 1);
             }
             
-            // Disparos Automáticos
             if(Math.random() < 0.18) { 
                 balas.push({x: nave.x + 25, y: nave.y});
                 playSnd(450, 0.04, 'triangle'); 

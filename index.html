@@ -54,7 +54,7 @@
             min-height: 130px;
         }
 
-        canvas { display: block; margin: 0 auto; max-width: 100%; height: auto; background: transparent; }
+        canvas { display: block; margin: 0 auto; max-width: 100%; height: auto; background: transparent; cursor: pointer; }
     </style>
 </head>
 <body class="espacio-bg w-screen h-screen flex flex-col items-center justify-center text-white">
@@ -78,7 +78,7 @@
         <h2 class="text-2xl font-black text-white tracking-widest mb-3 border-b border-purple-500/20 pb-2">ZAARD INNOVATION</h2>
         
         <div id="txt-instrucciones" class="bg-purple-950/20 border border-purple-500/30 rounded-2xl p-3 text-left text-xs text-gray-300 space-y-2 mb-4">
-            <p><span class="text-green-400 font-bold">🔥 CONTROL:</span> Desliza tu dedo libremente por la pantalla para mover al fénix arriba y abajo.</p>
+            <p><span class="text-green-400 font-bold">🔥 CONTROL:</span> Desliza o arrastra con el dedo/mouse para mover al fénix arriba y abajo.</p>
             <p><span class="text-green-400 font-bold">📦 META:</span> Atrapa 150 cajas de gas. Tienes 7 oportunidades de escudo.</p>
         </div>
 
@@ -107,8 +107,8 @@
             </button>
         </div>
 
-        <!-- Botón Volver al Menú Principal del Arcade -->
-        <button onclick="window.location.href='index.html'" id="txt-volver-menu" class="mt-4 text-xs text-purple-300 underline font-bold tracking-wider hover:text-white transition-colors">
+        <!-- Botón Volver al Menú Principal del Arcade (Modificado para ir a index-menu.html como en los otros módulos) -->
+        <button onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index-menu.html'" id="txt-volver-menu" class="mt-4 text-xs text-purple-300 underline font-bold tracking-wider hover:text-white transition-colors">
             ⬅ VOLVER AL MENÚ PRINCIPAL
         </button>
 
@@ -123,7 +123,8 @@
                 <span id="txt-hud-gas" class="text-[9px] text-gray-400 block font-bold tracking-widest">GAS COLLECTED</span>
                 <span id="hud-gas" class="text-xl font-black text-green-400 neon-glow">0/150</span>
             </div>
-            <button onclick="window.location.href='index.html'" class="text-xs text-red-400 font-bold border border-red-500/40 px-3 py-1 rounded-lg bg-red-950/20 active:scale-95">SALIR</button>
+            <!-- Botón SALIR modificado para que devuelva al menú principal correctamente -->
+            <button onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index-menu.html'" class="text-xs text-red-400 font-bold border border-red-500/40 px-3 py-1 rounded-lg bg-red-950/20 active:scale-95">SALIR</button>
             <div class="bg-gray-950/90 px-4 py-1.5 rounded-xl border border-red-500/40 text-center">
                 <span id="txt-hud-shield" class="text-[9px] text-gray-400 block font-bold tracking-widest">SHIELD STATUS</span>
                 <div id="hud-vidas" class="text-base font-bold text-red-500 tracking-wider">⚡⚡⚡⚡⚡⚡⚡</div>
@@ -136,7 +137,7 @@
 
         <div class="w-full max-w-2xl bg-black/80 backdrop-blur-md border-t-2 border-purple-500/85 rounded-t-2xl p-2.5 text-center z-10 shadow-lg">
             <p id="txt-hud-control" class="text-[11px] text-purple-400 font-bold tracking-widest uppercase">
-                DESLIZA EN CUALQUIER LADO PARA MANIOBRAR LA NAVE FÉNIX
+                DESLIZA O ARRASTRA EN CUALQUIER LADO PARA MANIOBRAR LA NAVE FÉNIX
             </p>
         </div>
     </div>
@@ -151,7 +152,7 @@
                 audioDesc: "Sincronizando sistemas táctiles, interfaz gráfica y audio cósmico...",
                 audioBtn: "¡ENTRAR AL JUEGO!",
                 bienvSub: "BIENVENIDOS A",
-                instrucc: `<p><span class="text-green-400 font-bold">🔥 CONTROL:</span> Desliza tu dedo libremente por la pantalla para mover al fénix arriba y abajo.</p><p><span class="text-green-400 font-bold">📦 META:</span> Atrapa 150 cajas de gas. Tienes 7 oportunidades de escudo.</p>`,
+                instrucc: `<p><span class="text-green-400 font-bold">🔥 CONTROL:</span> Desliza o arrastra con el dedo o mouse para mover al fénix arriba y abajo.</p><p><span class="text-green-400 font-bold">📦 META:</span> Atrapa 150 cajas de gas. Tienes 7 oportunidades de escudo.</p>`,
                 continuar: "CONTINUAR",
                 selEntrada: "SELECCIONA TU ENTRADA",
                 modoInv: "MODO INVITADO",
@@ -160,7 +161,7 @@
                 volMenu: "⬅ VOLVER AL MENÚ PRINCIPAL",
                 hudGas: "GAS COLLECTED",
                 hudShield: "SHIELD STATUS",
-                controlMsg: "DESLIZA EN CUALQUIER LADO PARA MANIOBRAR LA NAVE FÉNIX",
+                controlMsg: "DESLIZA O ARRASTRA EN CUALQUIER LADO PARA MANIOBRAR LA NAVE FÉNIX",
                 victoriaMsg: "¡VICTORIA ÉPICA! ¡Has completado la recolección de gas con éxito!",
                 gameOverMsg: "GAME OVER\n\n⚠️ RECOMENDACIÓN:\n\"Fatiga de mercado detectada. ¡Toma un respiro y regresa con la mente fría!\"",
                 frases: [
@@ -174,7 +175,7 @@
                 audioDesc: "Synchronizing touch systems, graphic interface and cosmic audio...",
                 audioBtn: "ENTER GAME!",
                 bienvSub: "WELCOME TO",
-                instrucc: `<p><span class="text-green-400 font-bold">🔥 CONTROL:</span> Slide your finger freely across the screen to move the phoenix up and down.</p><p><span class="text-green-400 font-bold">📦 GOAL:</span> Catch 150 gas boxes. You have 7 shield opportunities.</p>`,
+                instrucc: `<p><span class="text-green-400 font-bold">🔥 CONTROL:</span> Slide or drag with your finger or mouse to move the phoenix up and down.</p><p><span class="text-green-400 font-bold">📦 GOAL:</span> Catch 150 gas boxes. You have 7 shield opportunities.</p>`,
                 continuar: "CONTINUE",
                 selEntrada: "SELECT YOUR ENTRY",
                 modoInv: "GUEST MODE",
@@ -183,7 +184,7 @@
                 volMenu: "⬅ BACK TO MAIN MENU",
                 hudGas: "GAS COLLECTED",
                 hudShield: "SHIELD STATUS",
-                controlMsg: "SLIDE ANYWHERE TO MANEUVER THE PHOENIX SHIP",
+                controlMsg: "SLIDE OR DRAG ANYWHERE TO MANEUVER THE PHOENIX SHIP",
                 victoriaMsg: "EPIC VICTORY! You successfully completed the gas collection!",
                 gameOverMsg: "GAME OVER\n\n⚠️ RECOMMENDATION:\n\"Market fatigue detected. Take a breather and return with a cool mind!\"",
                 frases: [
@@ -197,7 +198,7 @@
                 audioDesc: "正在同步触控系统、图形界面和宇宙音效...",
                 audioBtn: "进入游戏！",
                 bienvSub: "欢迎来到",
-                instrucc: `<p><span class="text-green-400 font-bold">🔥 控制：</span> 在屏幕上自由滑动手指上下移动凤凰飞船。</p><p><span class="text-green-400 font-bold">📦 目标：</span> 收集150个燃气箱。你有7次护盾机会。</p>`,
+                instrucc: `<p><span class="text-green-400 font-bold">🔥 控制：</span> 用手指或鼠标在屏幕上滑动或拖动以上下移动凤凰飞船。</p><p><span class="text-green-400 font-bold">📦 目标：</span> 收集150个燃气箱。你有7次护盾机会。</p>`,
                 continuar: "继续",
                 selEntrada: "选择您的模式",
                 modoInv: "访客模式",
@@ -206,7 +207,7 @@
                 volMenu: "⬅ 返回主菜单",
                 hudGas: "已收集燃气",
                 hudShield: "护盾状态",
-                controlMsg: "在任意位置滑动以操纵凤凰飞船",
+                controlMsg: "在任意位置滑动或拖动以操纵凤凰飞船",
                 victoriaMsg: "史诗级胜利！您已成功完成燃气收集！",
                 gameOverMsg: "游戏结束\n\n⚠️ 建议：\n“检测到市场疲劳。深呼吸，冷静后再来！”",
                 frases: [
@@ -261,6 +262,7 @@
         let velocidadActual = 5;
         let distanciaRecorrida = 0;
         let musicaHabilitada = localStorage.getItem('zaard_musica') !== 'OFF';
+        let estaArrastrando = false; // Control unificado para PC y móvil
 
         function activarSistemas() {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -269,17 +271,52 @@
             sonarEfecto('gas');
         }
 
-        const mapearMovimientoTactil = (e) => {
-            e.preventDefault();
+        // --- SISTEMA DE CONTROL UNIFICADO (PC Y MÓVIL AUTOMÁTICO) ---
+        const moverNavePosicionY = (clientY) => {
             if (!juegoActivo) return;
-            const touch = e.touches[0];
             const rect = canvas.getBoundingClientRect();
-            const relativeY = ((touch.clientY - rect.top) / rect.height) * canvas.height;
+            const relativeY = ((clientY - rect.top) / rect.height) * canvas.height;
             fenixY = relativeY - (fenixAlto / 2);
         };
 
-        canvas.addEventListener('touchstart', (e) => { mapearMovimientoTactil(e); }, { passive: false });
-        canvas.addEventListener('touchmove', mapearMovimientoTactil, { passive: false });
+        // Eventos táctiles (Móvil)
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            estaArrastrando = true;
+            if (e.touches.length > 0) {
+                moverNavePosicionY(e.touches[0].clientY);
+            }
+        }, { passive: false });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (estaArrastrando && e.touches.length > 0) {
+                moverNavePosicionY(e.touches[0].clientY);
+            }
+        }, { passive: false });
+
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            estaArrastrando = false;
+        }, { passive: false });
+
+        // Eventos de Mouse (PC)
+        canvas.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            estaArrastrando = true;
+            moverNavePosicionY(e.clientY);
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (estaArrastrando && juegoActivo) {
+                moverNavePosicionY(e.clientY);
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            estaArrastrando = false;
+        });
+        // -----------------------------------------------------------
 
         function irAlMenuModos() {
             document.getElementById('pantalla-bienvenida').style.display = 'none';

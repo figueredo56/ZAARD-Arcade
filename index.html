@@ -107,7 +107,7 @@
             </button>
         </div>
 
-        <!-- Botón Volver al Menú Principal del Arcade (Modificado para ir a index-menu.html como en los otros módulos) -->
+        <!-- Botón de retorno al menú principal de arcade desde el selector de modos -->
         <button onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index-menu.html'" id="txt-volver-menu" class="mt-4 text-xs text-purple-300 underline font-bold tracking-wider hover:text-white transition-colors">
             ⬅ VOLVER AL MENÚ PRINCIPAL
         </button>
@@ -123,7 +123,7 @@
                 <span id="txt-hud-gas" class="text-[9px] text-gray-400 block font-bold tracking-widest">GAS COLLECTED</span>
                 <span id="hud-gas" class="text-xl font-black text-green-400 neon-glow">0/150</span>
             </div>
-            <!-- Botón SALIR modificado para que devuelva al menú principal correctamente -->
+            <!-- Botón SALIR para devolver al menú principal del arcade -->
             <button onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index-menu.html'" class="text-xs text-red-400 font-bold border border-red-500/40 px-3 py-1 rounded-lg bg-red-950/20 active:scale-95">SALIR</button>
             <div class="bg-gray-950/90 px-4 py-1.5 rounded-xl border border-red-500/40 text-center">
                 <span id="txt-hud-shield" class="text-[9px] text-gray-400 block font-bold tracking-widest">SHIELD STATUS</span>
@@ -220,7 +220,6 @@
 
         const t = trads[LS_IDIOMA] || trads.es;
 
-        // Inyectar traducciones al DOM
         document.getElementById('txt-audio-titulo').innerText = t.audioTit;
         document.getElementById('txt-audio-desc').innerText = t.audioDesc;
         document.getElementById('btn-audio-entrar').innerText = t.audioBtn;
@@ -262,7 +261,7 @@
         let velocidadActual = 5;
         let distanciaRecorrida = 0;
         let musicaHabilitada = localStorage.getItem('zaard_musica') !== 'OFF';
-        let estaArrastrando = false; // Control unificado para PC y móvil
+        let estaArrastrando = false;
 
         function activarSistemas() {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -271,7 +270,7 @@
             sonarEfecto('gas');
         }
 
-        // --- SISTEMA DE CONTROL UNIFICADO (PC Y MÓVIL AUTOMÁTICO) ---
+        // --- SISTEMA DE CONTROL UNIFICADO (PC Y MÓVIL) ---
         const moverNavePosicionY = (clientY) => {
             if (!juegoActivo) return;
             const rect = canvas.getBoundingClientRect();
@@ -279,7 +278,7 @@
             fenixY = relativeY - (fenixAlto / 2);
         };
 
-        // Eventos táctiles (Móvil)
+        // Eventos Táctiles (Móvil)
         canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
             estaArrastrando = true;
@@ -316,7 +315,7 @@
         window.addEventListener('mouseup', () => {
             estaArrastrando = false;
         });
-        // -----------------------------------------------------------
+        // ------------------------------------------------
 
         function irAlMenuModos() {
             document.getElementById('pantalla-bienvenida').style.display = 'none';
@@ -469,7 +468,7 @@
             for (let i = cajas.length - 1; i >= 0; i--) {
                 let box = cajas[i]; box.x -= velocidadActual;
                 ctx.drawImage(imgGas, box.x, box.y, box.w, box.h);
-                if (fenixX < box.x + box.w && fenixX + fenixAncho > box.x && fenixY < box.y + box.h && fenixY + fenixAlto > box.y) {
+                if (fenixX < box.x + box.w && fenixX + fenixAncho > obs.x && fenixY < box.y + box.h && fenixY + fenixAlto > box.y) {
                     sonarEfecto('gas');
                     totalGasRecolectado++;
                     actualizarHUD();

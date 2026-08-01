@@ -87,8 +87,12 @@
             <p><span class="text-green-400 font-bold">📦 META:</span> Atrapa 150 elementos de gas. Tienes 7 oportunidades de escudo.</p>
         </div>
 
-        <button onclick="irAlMenuModos()" id="btn-bienvenida-cont" class="btn-epic w-full py-3 rounded-xl font-black tracking-widest text-base active:scale-95 transition-transform">
+        <button onclick="irAlMenuModos()" id="btn-bienvenida-cont" class="btn-epic w-full py-3 rounded-xl font-black tracking-widest text-base active:scale-95 transition-transform mb-3">
             CONTINUAR
+        </button>
+
+        <button onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index-menu.html'" class="text-xs text-green-400 underline font-bold tracking-wider hover:text-white transition-colors">
+            ⬅ VOLVER AL MENÚ PRINCIPAL
         </button>
     </div>
 
@@ -112,7 +116,6 @@
             </button>
         </div>
 
-        <!-- Botón de retorno al menú principal de arcade -->
         <button onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index-menu.html'" id="txt-volver-menu" class="mt-4 text-xs text-green-400 underline font-bold tracking-wider hover:text-white transition-colors">
             ⬅ VOLVER AL MENÚ PRINCIPAL
         </button>
@@ -129,13 +132,11 @@
                 <span id="hud-gas" class="text-lg font-black text-green-400 neon-glow">0/150</span>
             </div>
 
-            <!-- Avatar y Nombre seleccionado debajo de la barra superior / centro -->
             <div class="flex flex-col items-center justify-center bg-gray-950/90 px-3 py-1 rounded-xl border border-purple-500/30">
-                <img id="hud-avatar" src="https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/CC_20260527_151822.png" class="w-7 h-7 rounded-full border border-green-400 object-cover shadow-md mb-0.5" alt="Avatar">
+                <img id="hud-avatar" src="https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/bb2103a3f5cb405ae3ff744bfb447c78f909c6ec/213%20sin%20t%C3%ADtulo_20260731172859.png" class="w-7 h-7 rounded-full border border-green-400 object-cover shadow-md mb-0.5" alt="Avatar">
                 <span id="hud-nombre-jugador" class="text-[10px] text-green-400 font-black tracking-wider max-w-[90px] truncate">Invitado</span>
             </div>
 
-            <!-- Botón SALIR para devolver al menú principal del arcade -->
             <button onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index-menu.html'" class="text-xs text-red-400 font-bold border border-red-500/40 px-2.5 py-1 rounded-lg bg-red-950/20 active:scale-95">SALIR</button>
             
             <div class="bg-gray-950/90 px-3 py-1.5 rounded-xl border border-red-500/40 text-center">
@@ -261,8 +262,7 @@
         const imgGas = new Image();
         const imgObstaculo = new Image();
 
-        // Imágenes asignadas correctamente
-        const urlCorredor = 'https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/CC_20260527_151822.png';
+        const urlCorredor = 'https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/bb2103a3f5cb405ae3ff744bfb447c78f909c6ec/213%20sin%20t%C3%ADtulo_20260731172859.png';
         const urlGas = 'https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/CC_20260621_145200.png';
         const urlObstaculo = 'https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/CC_20260621_144651.png';
 
@@ -416,7 +416,6 @@
             document.getElementById('menu-modos').style.display = 'none';
             document.getElementById('contenedor-juego').style.display = 'flex';
             
-            // Asignar avatar y nombre en el HUD superior
             document.getElementById('hud-avatar').src = avatarJugadorActual;
             document.getElementById('hud-nombre-jugador').innerText = nombreJugadorActual;
 
@@ -510,7 +509,18 @@
 
             if (corredorY < 0) corredorY = 0;
             if (corredorY > canvas.height - corredorAlto) corredorY = canvas.height - corredorAlto;
-            ctx.drawImage(imgCorredor, corredorX, corredorY, corredorAncho, corredorAlto);
+
+            // --- EFECTO DE PÁLPITO / PROPULSIÓN ESPACIAL ---
+            // Usamos Math.sin() para calcular una variación sutil de escala basada en el tiempo/distancia
+            const pulso = Math.sin(distanciaRecorrida * 0.15) * 4; // Cambia el '4' si quieres que crezca/reduzca más o menos
+            const anchoDinamico = corredorAncho + pulso;
+            const altoDinamico = corredorAlto + pulso;
+            // Ajustamos la posición X e Y ligeramente para que palpite desde su propio centro
+            const offsetX = (anchoDinamico - corredorAncho) / 2;
+            const offsetY = (altoDinamico - corredorAlto) / 2;
+
+            ctx.drawImage(imgCorredor, corredorX - offsetX, corredorY - offsetY, anchoDinamico, altoDinamico);
+            // -----------------------------------------------
             
             for (let i = obstaculos.length - 1; i >= 0; i--) {
                 let obs = obstaculos[i]; 

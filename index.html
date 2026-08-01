@@ -445,8 +445,8 @@
             velocidadActual = 5;
             distanciaRecorrida = 0;
             corredorX = 60;
-            corredorAncho = 85;  // <--- Tamaño base intermedio (85x85)
-            corredorAlto = 85;   // <--- Tamaño base intermedio (85x85)
+            corredorAncho = 95;  // <--- Tamaño base ampliado para que sea más grande
+            corredorAlto = 95;   // <--- Tamaño base ampliado para que sea más grande
             corredorY = (canvas.height / 2) - (corredorAlto / 2);
             obstaculos = [];
             cajas = [];
@@ -510,15 +510,16 @@
             if (corredorY < 0) corredorY = 0;
             if (corredorY > canvas.height - corredorAlto) corredorY = canvas.height - corredorAlto;
 
-            // --- EFECTO DE VUELO Y PÁLPITO DINÁMICO ---
-            const pulso = Math.sin(distanciaRecorrida * 0.22) * 7; 
+            // --- EFECTO DE VUELO Y PÁLPITO MÁS LLAMATIVO ---
+            // Aumentamos la frecuencia y la amplitud para que el titileo/crecimiento de vuelo sea más perceptible
+            const pulso = Math.sin(distanciaRecorrida * 0.22) * 8; 
             const anchoDinamico = corredorAncho + pulso;
             const altoDinamico = corredorAlto + pulso;
             const offsetX = (anchoDinamico - corredorAncho) / 2;
             const offsetY = (altoDinamico - corredorAlto) / 2;
 
             ctx.drawImage(imgCorredor, corredorX - offsetX, corredorY - offsetY, anchoDinamico, altoDinamico);
-            // ------------------------------------------
+            // ----------------------------------------------
             
             for (let i = obstaculos.length - 1; i >= 0; i--) {
                 let obs = obstaculos[i]; 

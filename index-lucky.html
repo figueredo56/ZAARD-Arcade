@@ -29,7 +29,6 @@
             display: flex; justify-content: center; align-items: center; color: #00ffff; font-weight: bold; font-size: 20px;
         }
 
-        /* Fondo de Bienvenida Ultra Brillante y Estético */
         #modal-bienvenida {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: radial-gradient(circle at 50% 30%, #3a0ca3 0%, #10002b 60%, #050014 100%);
@@ -55,7 +54,6 @@
         .btn-invitado { background: linear-gradient(90deg, #10b981, #059669); color: #fff; box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
         .btn-web3 { background: linear-gradient(90deg, #00ffff, #0088cc); color: #000; box-shadow: 0 0 15px rgba(0, 255, 255, 0.5); }
 
-        /* Panel Superior */
         .user-panel {
             position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
             width: 94%; max-width: 440px; height: 64px;
@@ -77,7 +75,6 @@
         }
         .btn-salir:hover { color: #ff4444; }
 
-        /* Área de Juego - 16 Cofres Ultra Compactos */
         .game-container {
             margin-top: 75px; width: 100%; max-width: 440px; display: flex; flex-direction: column; align-items: center;
         }
@@ -94,14 +91,12 @@
         }
         .chest img { width: 85%; height: 85%; object-fit: cover; transition: 0.1s; filter: brightness(0.75); border-radius: 8px; }
         
-        /* Efecto Ruleta Activa (Aumento de tamaño y super brillo) */
         .chest.active { 
             transform: scale(1.2); border-color: #00ffff; box-shadow: 0 0 25px #00ffff; background: rgba(0,255,255,0.4); 
             z-index: 5;
         }
         .chest.active img { filter: brightness(1.25); }
 
-        /* Estado del Juego */
         #status-msg { 
             font-size: 1.1rem; margin-top: 10px; color: #e0aaff; font-weight: bold; padding: 0 10px; 
             text-shadow: 1px 1px 6px #000; min-height: 40px; display: flex; align-items: center; justify-content: center; text-align: center;
@@ -131,12 +126,12 @@
     <!-- MODAL DE BIENVENIDA -->
     <div id="modal-bienvenida">
         <div class="modal-card">
-            <h2 id="txt-modal-titulo" style="color: #00ffff; margin-top: 0; font-size: 1.5rem;">⚡ PROTOCOLO PANGA ⚡</h2>
-            <p id="txt-modal-desc" style="font-size: 14px; color: #ccc; margin-bottom: 15px; line-height: 1.3;">
-                Apuesta: 0.0001 ZARD<br>Premio: 0.00015 ZARD<br>Quema automática al perder.
+            <h2 style="color: #00ffff; margin-top: 0; font-size: 1.5rem;">⚡ PRUEBA DE PROTOCOLO ⚡</h2>
+            <p style="font-size: 14px; color: #ccc; margin-bottom: 15px; line-height: 1.3;">
+                Modo de prueba: Cofre 7 (Token Negro) otorga 0.0001 ZARD de recompensa. Sin riesgo de apuestas.
             </p>
-            <button class="btn-accion btn-invitado" id="btn-modo-inv" onclick="elegirModo()">MODO INVITADO 🚀</button>
-            <button class="btn-accion btn-web3" id="btn-modo-web3" onclick="conectarYJugar()">CONECTAR BILLETERA WEB3</button>
+            <button class="btn-accion btn-invitado" onclick="elegirModo()">MODO INVITADO 🚀</button>
+            <button class="btn-accion btn-web3" onclick="conectarYJugar()">CONECTAR BILLETERA WEB3</button>
         </div>
     </div>
 
@@ -150,88 +145,27 @@
         <img id="img-avatar-usr" class="user-avatar" src="" alt="Avatar">
         <div class="user-info">
             <div id="txt-nombre-usr" class="user-name">Jugador</div>
-            <div id="txt-sub-panel" class="user-sub">LUCKY CHEST 16</div>
+            <div class="user-sub">LUCKY CHEST TEST</div>
         </div>
-        <button class="btn-salir" id="btn-salir-txt" onclick="irAlMenuPrincipal()">SALIR</button>
+        <button class="btn-salir" onclick="irAlMenuPrincipal()">SALIR</button>
     </div>
 
     <!-- ÁREA DE JUEGO (16 COFRES) -->
     <div class="game-container">
-        <h1 id="txt-titulo-juego">⚡ ELIJA SU COFRE ⚡</h1>
+        <h1>⚡ ELIJA SU COFRE ⚡</h1>
         
         <div class="chests-container" id="grid-cofres">
-            <!-- Se generan dinámicamente los 16 cofres con variedad de avatares y cofres -->
+            <!-- Se generan dinámicamente los 16 cofres -->
         </div>
 
-        <div id="status-msg">Seleccione su cofre con sabiduría...</div>
-        <button class="btn-reiniciar" id="btn-otra-ronda" onclick="reiniciarJuego()">OTRA RONDA</button>
+        <div id="status-msg">Seleccione su cofre para la prueba...</div>
+        <button class="btn-reiniciar" onclick="reiniciarJuego()">OTRA RONDA</button>
     </div>
 
     <script>
         const LS_NOMBRE = localStorage.getItem('zaard_nombre') || "Jugador Zaard";
         const LS_AVATAR_URL = localStorage.getItem('zaard_avatar') || 'https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_lhyyv2lhyyv2lhyy_1.png';
-        const LS_IDIOMA = localStorage.getItem('zaard_lang') || 'es'; 
 
-        // Diccionario de Traducciones
-        const trads = {
-            es: {
-                tituloModal: "⚡ PROTOCOLO PANGA ⚡",
-                descModal: "Apuesta: 0.0001 ZARD<br>Premio: 0.00015 ZARD<br>Quema automática al perder.",
-                btnInv: "MODO INVITADO 🚀",
-                btnWeb3: "CONECTAR BILLETERA WEB3",
-                subPanel: "LUCKY CHEST 16",
-                salir: "SALIR",
-                tituloJuego: "⚡ ELIJA SU COFRE ⚡",
-                msgInicio: "Seleccione su cofre con sabiduría...",
-                msgEscaneo: "⚡ Escaneando tesoros del protocolo...",
-                btnRonda: "OTRA RONDA",
-                ganaste: (n) => `🎉 ¡IMPRESIONANTE ${n}! ¡GANASTE 0.00015 ZARD! 🚀`,
-                perdiste: (n) => `💪 ¡Ánimo ${n}! Cofre vacío, pero tu fe fortalece el suministro. ¡Inténtalo de nuevo!`
-            },
-            en: {
-                tituloModal: "⚡ PANGA PROTOCOL ⚡",
-                descModal: "Bet: 0.0001 ZARD<br>Reward: 0.00015 ZARD<br>Auto-burn on loss.",
-                btnInv: "GUEST MODE 🚀",
-                btnWeb3: "CONNECT WEB3 WALLET",
-                subPanel: "LUCKY CHEST 16",
-                salir: "EXIT",
-                tituloJuego: "⚡ CHOOSE YOUR CHEST ⚡",
-                msgInicio: "Select your chest wisely...",
-                msgEscaneo: "⚡ Scanning protocol treasures...",
-                btnRonda: "ANOTHER ROUND",
-                ganaste: (n) => `🎉 AMAZING ${n}! YOU WON 0.00015 ZARD! 🚀`,
-                perdiste: (n) => `💪 Keep it up ${n}! Empty chest, but your faith strengthens the supply. Try again!`
-            },
-            zh: {
-                tituloModal: "⚡ 盘古协议 ⚡",
-                descModal: "下注: 0.0001 ZARD<br>奖励: 0.00015 ZARD<br>失败自动销毁。",
-                btnInv: "访客模式 🚀",
-                btnWeb3: "连接WEB3钱包",
-                subPanel: "幸运宝箱 16",
-                salir: "退出",
-                tituloJuego: "⚡ 选择你的宝箱 ⚡",
-                msgInicio: "请明智地选择你的宝箱...",
-                msgEscaneo: "⚡ 正在扫描协议宝藏...",
-                btnRonda: "再来一局",
-                ganaste: (n) => `🎉 太棒了 ${n}! 你赢得了 0.00015 ZARD! 🚀`,
-                perdiste: (n) => `💪 加油 ${n}! 空宝箱，但你的信念增强了供应，再试一次！`
-            }
-        };
-
-        const t = trads[LS_IDIOMA] || trads.es;
-
-        // Inyectar traducciones al DOM
-        document.getElementById('txt-modal-titulo').innerHTML = t.tituloModal;
-        document.getElementById('txt-modal-desc').innerHTML = t.descModal;
-        document.getElementById('btn-modo-inv').innerText = t.btnInv;
-        document.getElementById('btn-modo-web3').innerText = t.btnWeb3;
-        document.getElementById('txt-sub-panel').innerText = t.subPanel;
-        document.getElementById('btn-salir-txt').innerText = t.salir;
-        document.getElementById('txt-titulo-juego').innerText = t.tituloJuego;
-        document.getElementById('status-msg').innerText = t.msgInicio;
-        document.getElementById('btn-otra-ronda').innerText = t.btnRonda;
-
-        // Banco de imágenes ampliado con cofres y avatares para evitar repeticiones
         const imagenesCofres = [
             "https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4",
             "https://ipfs.io/ipfs/bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue",
@@ -239,7 +173,7 @@
             "https://ipfs.io/ipfs/bafybeiefhnawny7nlgixveiia7aaougqxsird6or4nws52vp36ndbfvixa",
             "https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m",
             "https://ipfs.io/ipfs/bafybeiheko4izm53qfmhejmvz5elek4hb2lp3weaduwndvrvpxdamwklue",
-            "https://ipfs.io/ipfs/bafybeiggz26x26hncisti5s5y74ciuk4yuymtczhsbwdufoql2gidl57mu",
+            "https://ipfs.io/ipfs/bafybeiggz26x26hncisti5s5y74ciuk4yuymtczhsbwdufoql2gidl57mu", // Coincide con el cofre 7 (token negro)
             "https://ipfs.io/ipfs/bafybeiginlvb63afmlicnvsx4fwfekanoipydzgzv3ay7njpvq6nm4zzym",
             LS_AVATAR_URL,
             "https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_lhyyv2lhyyv2lhyy_1.png",
@@ -258,9 +192,8 @@
         }
 
         const TOKEN_ADDR = "0x3468EA4e6CE13Ec4C7f8651f7eFC6AA6046F4d65"; 
-        const BURN_WALLET = "0x000000000000000000000000000000000000dEaD"; 
         const ABI_TRANSFER = [{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"type":"function"}];
-        const APUESTA_WEI = "100000000000000"; 
+        const PREMIO_WEI = "100000000000000"; // 0.0001 ZARD
 
         let web3, contract, userAccount, esModoWeb3 = false;
         let juegoBloqueado = false;
@@ -291,13 +224,13 @@
                     userAccount = accounts[0];
                     contract = new web3.eth.Contract(ABI_TRANSFER, TOKEN_ADDR);
                     esModoWeb3 = true;
-                    alert("Wallet Connected!");
+                    alert("¡Wallet conectada para la prueba!");
                     document.getElementById('modal-bienvenida').style.display = 'none';
                 } catch (e) { 
-                    alert("Connection cancelled."); 
+                    alert("Conexión cancelada."); 
                 }
             } else { 
-                alert("Please install MetaMask."); 
+                alert("Por favor instala MetaMask."); 
             }
         }
 
@@ -310,31 +243,36 @@
             document.querySelectorAll('.chest').forEach(c => c.classList.remove('active'));
             const msg = document.getElementById('status-msg');
             msg.className = "";
-            msg.innerText = t.msgInicio;
+            msg.innerText = "Seleccione su cofre para la prueba...";
         }
 
-        async function ejecutarQuema() {
+        // Función para enviar recompensa en modo prueba
+        async function pagarRecompensa() {
             if (esModoWeb3 && contract && userAccount) {
                 try {
-                    await contract.methods.transfer(BURN_WALLET, APUESTA_WEI).send({ from: userAccount });
+                    // NOTA DE PRUEBA: Esto requeriría que el contrato permita transferir al usuario, 
+                    // o simulará la orden de pago desde la interfaz expuesta.
+                    await contract.methods.transfer(userAccount, PREMIO_WEI).send({ from: userAccount });
                 } catch (e) { 
-                    console.log("Burn error:", e); 
+                    console.log("Error en pago de prueba:", e); 
                 }
             }
         }
 
-        // Ruleta optimizada a ~6 segundos de duración con desaceleración progresiva
         async function jugarRuleta(cofreElegido) {
             if (juegoBloqueado) return;
             juegoBloqueado = true;
 
             const msg = document.getElementById('status-msg');
             msg.className = "";
-            msg.innerText = t.msgEscaneo;
+            msg.innerText = "⚡ Escaneando tesoros de prueba...";
+
+            // REGLA DE PRUEBA: Forzar la parada exacta en el cofre 7 (Token negro)
+            const cofreGanador = 7;
 
             let cofreActual = Math.floor(Math.random() * 16) + 1;
-            let velocidad = 25; // Comienza extremadamente rápido
-            let pasosTotales = 45; // Mayor cantidad de pasos para durar aproximadamente 6 segundos
+            let velocidad = 25;
+            let pasosTotales = 45;
 
             for (let i = 0; i < pasosTotales; i++) {
                 document.querySelectorAll('.chest').forEach(c => c.classList.remove('active'));
@@ -342,27 +280,24 @@
                 
                 await new Promise(r => setTimeout(r, velocidad));
                 
-                // Incremento de velocidad gradual (desaceleración suave y prolongada)
-                velocidad += Math.floor(i / 3) + 4; 
+                velocidad += Math.floor(i / 3) + 4;
                 cofreActual = (cofreActual % 16) + 1;
             }
 
-            // Asegurar parada exacta en el cofre seleccionado con el efecto super calidad
+            // Forzar que siempre se detenga en el cofre 7 para esta prueba
             document.querySelectorAll('.chest').forEach(c => c.classList.remove('active'));
-            document.getElementById(`chest-${cofreElegido}`).classList.add('active');
-
-            const gano = Math.random() < 0.3; // 30% de probabilidad
+            document.getElementById(`chest-${cofreGanador}`).classList.add('active');
 
             setTimeout(async () => {
-                if (gano) {
+                if (cofreElegido === cofreGanador) {
                     msg.className = "mensaje-ganaste";
-                    msg.innerHTML = t.ganaste(LS_NOMBRE);
+                    msg.innerHTML = `🎉 ¡EXCELENTE PRUEBA ${LS_NOMBRE}! ¡COFRE 7 GANADOR (0.0001 ZARD)! 🚀`;
+                    if (esModoWeb3) {
+                        await pagarRecompensa();
+                    }
                 } else {
                     msg.className = "mensaje-perdiste";
-                    msg.innerHTML = t.perdiste(LS_NOMBRE);
-                    if (esModoWeb3) {
-                        await ejecutarQuema();
-                    }
+                    msg.innerHTML = `💪 El cofre ganador de la prueba era el 7 (Token negro). ¡Inténtalo de nuevo!`;
                 }
                 juegoBloqueado = false; 
             }, 300);

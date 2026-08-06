@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZAARD LUCKY CHEST - Protocolo Panga</title>
+    <title>ZAARD LUKY - Protocolo Panga</title>
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@700&display=swap');
@@ -32,14 +32,12 @@
         #modal-bienvenida {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: radial-gradient(circle at 50% 30%, #3a0ca3 0%, #10002b 60%, #050014 100%);
-            background-image: radial-gradient(white 1px, transparent 0);
-            background-size: 30px 30px;
             z-index: 1500;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             padding: 20px; box-sizing: border-box; text-align: center;
         }
         .modal-card {
-            background: rgba(15, 5, 45, 0.92);
+            background: rgba(15, 5, 45, 0.95);
             border: 2px solid #00ffff; border-radius: 22px;
             padding: 25px; width: 100%; max-width: 380px;
             box-shadow: 0 0 35px rgba(0, 255, 255, 0.5), inset 0 0 20px rgba(123, 44, 191, 0.4);
@@ -76,62 +74,89 @@
         .btn-salir:hover { color: #ff4444; }
 
         .game-container {
-            margin-top: 75px; width: 100%; max-width: 440px; display: flex; flex-direction: column; align-items: center;
+            margin-top: 75px; width: 100%; max-width: 440px; display: flex; flex-direction: column; align-items: center; padding: 0 15px; box-sizing: border-box;
         }
-        h1 { font-size: 1.7rem; color: #c77dff; text-shadow: 0 0 15px #7b2cbf; margin: 8px 0; text-transform: uppercase; }
-        
-        .chests-container { 
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 2px; padding: 0 10px; width: 100%; box-sizing: border-box; 
+        h1 { font-size: 1.6rem; color: #c77dff; text-shadow: 0 0 15px #7b2cbf; margin: 5px 0; text-transform: uppercase; text-align: center; }
+
+        .stats-bar {
+            display: flex; justify-content: space-between; width: 100%; background: rgba(50, 10, 90, 0.4);
+            border: 1px solid #7b2cbf; border-radius: 10px; padding: 8px 15px; box-sizing: border-box; margin-bottom: 10px;
+            font-size: 1.1rem; color: #00ffff;
         }
-        .chest { 
-            aspect-ratio: 1/1; cursor: pointer; border: 2px solid #c77dff; border-radius: 10px; 
-            overflow: hidden; transition: 0.1s; background: rgba(50, 10, 90, 0.5);
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 0 6px rgba(199,125,255,0.3);
+
+        /* MAQUINITA DE POTENCIA / SLOTS DE PRECISIÓN */
+        .slot-machine {
+            width: 100%; background: rgba(20, 5, 45, 0.85); border: 2px solid #c77dff; border-radius: 18px;
+            padding: 15px; box-sizing: border-box; box-shadow: 0 0 20px rgba(199,125,255,0.4);
+            display: flex; flex-direction: column; align-items: center;
         }
-        .chest img { width: 85%; height: 85%; object-fit: cover; transition: 0.1s; filter: brightness(0.75); border-radius: 8px; }
-        
-        .chest.active { 
-            transform: scale(1.2); border-color: #00ffff; box-shadow: 0 0 25px #00ffff; background: rgba(0,255,255,0.4); 
-            z-index: 5;
+
+        .reels-window {
+            display: flex; justify-content: space-around; width: 100%; gap: 10px; margin-bottom: 15px;
         }
-        .chest.active img { filter: brightness(1.25); }
+
+        .reel {
+            flex: 1; height: 110px; background: #070112; border: 2px solid #00ffff; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;
+            box-shadow: inset 0 0 15px rgba(0,255,255,0.3);
+        }
+
+        .reel img {
+            width: 70px; height: 70px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(255,255,255,0.5));
+        }
+
+        .power-bar-container {
+            width: 100%; height: 24px; background: #070112; border: 2px solid #7b2cbf; border-radius: 12px;
+            position: relative; overflow: hidden; margin-bottom: 15px;
+        }
+
+        .power-target {
+            position: absolute; top: 0; width: 25%; height: 100%; background: rgba(0, 255, 255, 0.4);
+            border-left: 2px dashed #00ffff; border-right: 2px dashed #00ffff; left: 37%;
+            transition: 0.3s;
+        }
+
+        .power-indicator {
+            position: absolute; top: 0; left: 0%; width: 6px; height: 100%; background: #ff007f;
+            box-shadow: 0 0 10px #ff007f;
+        }
 
         #status-msg { 
-            font-size: 1.1rem; margin-top: 10px; color: #e0aaff; font-weight: bold; padding: 0 10px; 
-            text-shadow: 1px 1px 6px #000; min-height: 40px; display: flex; align-items: center; justify-content: center; text-align: center;
+            font-size: 1rem; margin: 10px 0; color: #e0aaff; font-weight: bold; min-height: 45px; 
+            display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 5px;
         }
-        
+
+        .btn-game {
+            width: 100%; padding: 14px; background: linear-gradient(45deg, #7b2cbf, #00ffff); cursor: pointer; 
+            border: none; border-radius: 12px; color: #000; font-weight: bold; font-size: 1.2rem; 
+            text-transform: uppercase; box-shadow: 0 0 15px rgba(0,255,255,0.5); font-family: 'Rajdhani', sans-serif;
+            transition: 0.2s;
+        }
+        .btn-game:hover { transform: scale(1.02); }
+        .btn-game:disabled { opacity: 0.5; cursor: not-allowed; }
+
         @keyframes popIn {
             0% { transform: scale(0.4); opacity: 0; }
             80% { transform: scale(1.15); }
             100% { transform: scale(1); opacity: 1; }
         }
-        .mensaje-ganaste { color: #10b981 !important; text-shadow: 0 0 12px #10b981 !important; animation: popIn 0.4s ease-out; }
-        .mensaje-perdiste { color: #ff4d6d !important; text-shadow: 0 0 12px #ff4d6d !important; animation: popIn 0.4s ease-out; }
-
-        .btn-reiniciar {
-            padding: 10px 30px; background: linear-gradient(45deg, #7b2cbf, #3c096c); cursor: pointer; 
-            border: 2px solid #c77dff; border-radius: 12px; color: white; font-weight: bold; font-size: 1.1rem; 
-            margin-top: 8px; text-transform: uppercase; box-shadow: 0 0 15px #7b2cbf; font-family: 'Rajdhani', sans-serif;
-            transition: 0.2s;
-        }
-        .btn-reiniciar:hover { transform: scale(1.05); }
+        .mensaje-ganaste { color: #10b981 !important; text-shadow: 0 0 10px #10b981 !important; animation: popIn 0.3s ease-out; font-size: 1.05rem !important; }
+        .mensaje-perdiste { color: #ff4d6d !important; text-shadow: 0 0 10px #ff4d6d !important; animation: popIn 0.3s ease-out; }
     </style>
 </head>
 <body>
 
-    <div id="loading-screen">CARGANDO...</div>
+    <div id="loading-screen">CARGANDO MÁQUINA LUKY...</div>
 
     <!-- MODAL DE BIENVENIDA -->
     <div id="modal-bienvenida">
         <div class="modal-card">
-            <h2 style="color: #00ffff; margin-top: 0; font-size: 1.5rem;">⚡ PRUEBA DE PROTOCOLO ⚡</h2>
+            <h2 style="color: #00ffff; margin-top: 0; font-size: 1.5rem;">⚡ ZAARD LUKY ARCADE ⚡</h2>
             <p style="font-size: 14px; color: #ccc; margin-bottom: 15px; line-height: 1.3;">
-                Modo de prueba: Cofre 7 (Token Negro) otorga 0.0001 ZARD de recompensa. Sin riesgo de apuestas.
+                Detén el medidor de potencia en el objetivo exacto para alinear los símbolos y ganar recompensas verificadas.
             </p>
             <button class="btn-accion btn-invitado" onclick="elegirModo()">MODO INVITADO 🚀</button>
-            <button class="btn-accion btn-web3" onclick="conectarYJugar()">CONECTAR BILLETERA WEB3</button>
+            <button class="btn-accion btn-web3" onclick="conectarWallet()">CONECTAR BILLETERA</button>
         </div>
     </div>
 
@@ -145,63 +170,66 @@
         <img id="img-avatar-usr" class="user-avatar" src="" alt="Avatar">
         <div class="user-info">
             <div id="txt-nombre-usr" class="user-name">Jugador</div>
-            <div class="user-sub">LUCKY CHEST TEST</div>
+            <div class="user-sub">LUKY POWER SLOT</div>
         </div>
         <button class="btn-salir" onclick="irAlMenuPrincipal()">SALIR</button>
     </div>
 
-    <!-- ÁREA DE JUEGO (16 COFRES) -->
+    <!-- ÁREA DE JUEGO -->
     <div class="game-container">
-        <h1>⚡ ELIJA SU COFRE ⚡</h1>
+        <h1>⚡ LUKY POWER MACHINE ⚡</h1>
         
-        <div class="chests-container" id="grid-cofres">
-            <!-- Se generan dinámicamente los 16 cofres -->
+        <div class="stats-bar">
+            <span id="txt-nivel">NIVEL: 1 / 3</span>
+            <span id="txt-intentos">INTENTOS: 3</span>
         </div>
 
-        <div id="status-msg">Seleccione su cofre para la prueba...</div>
-        <button class="btn-reiniciar" onclick="reiniciarJuego()">OTRA RONDA</button>
+        <div class="slot-machine">
+            <div class="reels-window">
+                <div class="reel" id="reel-1"><img id="img-r1" src="" alt="R1"></div>
+                <div class="reel" id="reel-2"><img id="img-r2" src="" alt="R2"></div>
+                <div class="reel" id="reel-3"><img id="img-r3" src="" alt="R3"></div>
+            </div>
+
+            <div class="power-bar-container">
+                <div class="power-target" id="power-target"></div>
+                <div class="power-indicator" id="power-indicator"></div>
+            </div>
+
+            <div id="status-msg">Presiona GIRAR para iniciar el motor de potencia</div>
+            
+            <button class="btn-game" id="btn-accion-juego" onclick="accionarBoton()">GIRAR / DETENER</button>
+        </div>
     </div>
 
     <script>
         const LS_NOMBRE = localStorage.getItem('zaard_nombre') || "Jugador Zaard";
         const LS_AVATAR_URL = localStorage.getItem('zaard_avatar') || 'https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_lhyyv2lhyyv2lhyy_1.png';
 
-        const imagenesCofres = [
+        const simbolos = [
             "https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4",
             "https://ipfs.io/ipfs/bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue",
             "https://ipfs.io/ipfs/bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34",
             "https://ipfs.io/ipfs/bafybeiefhnawny7nlgixveiia7aaougqxsird6or4nws52vp36ndbfvixa",
-            "https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m",
-            "https://ipfs.io/ipfs/bafybeiheko4izm53qfmhejmvz5elek4hb2lp3weaduwndvrvpxdamwklue",
-            "https://ipfs.io/ipfs/bafybeiggz26x26hncisti5s5y74ciuk4yuymtczhsbwdufoql2gidl57mu", // Coincide con el cofre 7 (token negro)
-            "https://ipfs.io/ipfs/bafybeiginlvb63afmlicnvsx4fwfekanoipydzgzv3ay7njpvq6nm4zzym",
-            LS_AVATAR_URL,
-            "https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_lhyyv2lhyyv2lhyy_1.png",
-            "https://ipfs.io/ipfs/bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue",
-            "https://ipfs.io/ipfs/bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34"
+            "https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m"
         ];
 
-        const gridCofres = document.getElementById('grid-cofres');
-        for (let i = 1; i <= 16; i++) {
-            let imgUrl = imagenesCofres[(i - 1) % imagenesCofres.length];
-            gridCofres.innerHTML += `
-                <div class="chest" id="chest-${i}" onclick="jugarRuleta(${i})">
-                    <img src="${imgUrl}" alt="Cofre ${i}">
-                </div>
-            `;
-        }
+        let nivel = 1;
+        let intentos = 3;
+        let estadoJuego = "ESPERANDO"; // ESPERANDO, GIRANDO, DETENIDO
+        let animacionInterval;
+        let barraInterval;
+        let posBarra = 0;
+        let direccionBarra = 1;
+        let velocidadBarra = 3;
 
-        const TOKEN_ADDR = "0x3468EA4e6CE13Ec4C7f8651f7eFC6AA6046F4d65"; 
-        const ABI_TRANSFER = [{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"type":"function"}];
-        const PREMIO_WEI = "100000000000000"; // 0.0001 ZARD
-
-        let web3, contract, userAccount, esModoWeb3 = false;
-        let juegoBloqueado = false;
         let musicaHabilitada = localStorage.getItem('zaard_musica') !== 'OFF';
 
         window.addEventListener('DOMContentLoaded', () => {
             document.getElementById('txt-nombre-usr').innerText = LS_NOMBRE;
             document.getElementById('img-avatar-usr').src = LS_AVATAR_URL;
+            actualizarUI();
+            randomizarReelsEsteticos();
 
             const audio = document.getElementById('zaard-audio');
             audio.volume = 0.3;
@@ -212,95 +240,120 @@
         });
 
         function elegirModo() {
-            esModoWeb3 = false;
             document.getElementById('modal-bienvenida').style.display = 'none';
         }
 
-        async function conectarYJugar() {
+        async function conectarWallet() {
             if (window.ethereum) {
                 try {
-                    web3 = new Web3(window.ethereum);
-                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    userAccount = accounts[0];
-                    contract = new web3.eth.Contract(ABI_TRANSFER, TOKEN_ADDR);
-                    esModoWeb3 = true;
-                    alert("¡Wallet conectada para la prueba!");
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    alert("¡Billetera conectada con éxito!");
                     document.getElementById('modal-bienvenida').style.display = 'none';
-                } catch (e) { 
-                    alert("Conexión cancelada."); 
-                }
-            } else { 
-                alert("Por favor instala MetaMask."); 
-            }
+                } catch (e) { alert("Conexión cancelada."); }
+            } else { alert("MetaMask no detectado."); }
         }
 
         function irAlMenuPrincipal() {
             window.location.href = "index.html";
         }
 
-        function reiniciarJuego() {
-            if (juegoBloqueado) return;
-            document.querySelectorAll('.chest').forEach(c => c.classList.remove('active'));
-            const msg = document.getElementById('status-msg');
-            msg.className = "";
-            msg.innerText = "Seleccione su cofre para la prueba...";
+        function actualizarUI() {
+            document.getElementById('txt-nivel').innerText = `NIVEL: ${nivel} / 3`;
+            document.getElementById('txt-intentos').innerText = `INTENTOS: ${intentos}`;
+            
+            // Ajustar tamaño del objetivo según el nivel (mayor nivel, más difícil/pequeño)
+            const target = document.getElementById('power-target');
+            let anchoTarget = 30 - (nivel * 6); // Nivel 1: 24%, Nivel 2: 18%, Nivel 3: 12%
+            target.style.width = `${anchoTarget}%`;
+            target.style.left = `${35 + (nivel * 2)}%`;
         }
 
-        // Función para enviar recompensa en modo prueba
-        async function pagarRecompensa() {
-            if (esModoWeb3 && contract && userAccount) {
-                try {
-                    // NOTA DE PRUEBA: Esto requeriría que el contrato permita transferir al usuario, 
-                    // o simulará la orden de pago desde la interfaz expuesta.
-                    await contract.methods.transfer(userAccount, PREMIO_WEI).send({ from: userAccount });
-                } catch (e) { 
-                    console.log("Error en pago de prueba:", e); 
+        function randomizarReelsEsteticos() {
+            document.getElementById('img-r1').src = simbolos[Math.floor(Math.random() * simbolos.length)];
+            document.getElementById('img-r2').src = simbolos[Math.floor(Math.random() * simbolos.length)];
+            document.getElementById('img-r3').src = simbolos[Math.floor(Math.random() * simbolos.length)];
+        }
+
+        function accionarBoton() {
+            const msg = document.getElementById('status-msg');
+            const btn = document.getElementById('btn-accion-juego');
+
+            if (estadoJuego === "ESPERANDO" || estadoJuego === "FIN") {
+                if (intentos <= 0) {
+                    msg.className = "mensaje-perdiste";
+                    msg.innerText = "¡Sin intentos! Reinicia la sesión para reintentar.";
+                    return;
                 }
-            }
-        }
+                // Iniciar giro y barra de potencia
+                estadoJuego = "GIRANDO";
+                msg.className = "";
+                msg.innerText = "⚡ ¡MANTÉN EL RITMO Y DETÉN EN LA ZONA VERDE!";
+                btn.innerText = "¡DETENER POTENCIA!";
 
-        async function jugarRuleta(cofreElegido) {
-            if (juegoBloqueado) return;
-            juegoBloqueado = true;
+                // Velocidad de barra según nivel
+                velocidadBarra = 2 + (nivel * 1.5);
 
-            const msg = document.getElementById('status-msg');
-            msg.className = "";
-            msg.innerText = "⚡ Escaneando tesoros de prueba...";
+                animacionInterval = setInterval(() => {
+                    randomizarReelsEsteticos();
+                }, 80);
 
-            // REGLA DE PRUEBA: Forzar la parada exacta en el cofre 7 (Token negro)
-            const cofreGanador = 7;
+                barraInterval = setInterval(() => {
+                    posBarra += velocidadBarra * direccionBarra;
+                    if (posBarra >= 95 || posBarra <= 0) {
+                        direccionBarra *= -1;
+                    }
+                    document.getElementById('power-indicator').style.left = `${posBarra}%`;
+                }, 20);
 
-            let cofreActual = Math.floor(Math.random() * 16) + 1;
-            let velocidad = 25;
-            let pasosTotales = 45;
+            } else if (estadoJuego === "GIRANDO") {
+                // Detener juego y evaluar precisión
+                estadoJuego = "DETENIDO";
+                clearInterval(animacionInterval);
+                clearInterval(barraInterval);
+                btn.innerText = "GIRAR / DETENER";
 
-            for (let i = 0; i < pasosTotales; i++) {
-                document.querySelectorAll('.chest').forEach(c => c.classList.remove('active'));
-                document.getElementById(`chest-${cofreActual}`).classList.add('active');
-                
-                await new Promise(r => setTimeout(r, velocidad));
-                
-                velocidad += Math.floor(i / 3) + 4;
-                cofreActual = (cofreActual % 16) + 1;
-            }
+                // Evaluar si cayó dentro del objetivo actual
+                const targetElem = document.getElementById('power-target');
+                const leftTarget = parseFloat(targetElem.style.left);
+                const widthTarget = parseFloat(targetElem.style.width);
 
-            // Forzar que siempre se detenga en el cofre 7 para esta prueba
-            document.querySelectorAll('.chest').forEach(c => c.classList.remove('active'));
-            document.getElementById(`chest-${cofreGanador}`).classList.add('active');
+                let aciertoPrecision = (posBarra >= leftTarget && posBarra <= (leftTarget + widthTarget));
 
-            setTimeout(async () => {
-                if (cofreElegido === cofreGanador) {
-                    msg.className = "mensaje-ganaste";
-                    msg.innerHTML = `🎉 ¡EXCELENTE PRUEBA ${LS_NOMBRE}! ¡COFRE 7 GANADOR (0.0001 ZARD)! 🚀`;
-                    if (esModoWeb3) {
-                        await pagarRecompensa();
+                if (aciertoPrecision) {
+                    // Forzar que los 3 reels coincidan visualmente
+                    let simboloGanador = simbolos[Math.floor(Math.random() * simbolos.length)];
+                    document.getElementById('img-r1').src = simboloGanador;
+                    document.getElementById('img-r2').src = simboloGanador;
+                    document.getElementById('img-r3').src = simboloGanador;
+
+                    if (nivel < 3) {
+                        nivel++;
+                        msg.className = "mensaje-ganaste";
+                        msg.innerText = `🌟 ¡NIVEL ${nivel - 1} SUPERADO! Avanzando a dificultad alta...`;
+                        estadoJuego = "ESPERANDO";
+                        setTimeout(() => { actualizarUI(); msg.innerText = "Presiona GIRAR para el siguiente nivel"; }, 2000);
+                    } else {
+                        // ¡JUEGO COMPLETADO AL MÁXIMO NIVEL!
+                        estadoJuego = "FIN";
+                        msg.className = "mensaje-ganaste";
+                        msg.innerHTML = `🎉 ¡VICTORIA TOTAL ${LS_NOMBRE}!<br>De 24 a 48 horas se acreditarán tus ZARD. 🚀`;
+                        btn.disabled = true;
                     }
                 } else {
-                    msg.className = "mensaje-perdiste";
-                    msg.innerHTML = `💪 El cofre ganador de la prueba era el 7 (Token negro). ¡Inténtalo de nuevo!`;
+                    intentos--;
+                    actualizarUI();
+                    if (intentos > 0) {
+                        msg.className = "mensaje-perdiste";
+                        msg.innerText = `❌ Fuera del objetivo. Te quedan ${intentos} intentos. ¡Inténtalo de nuevo!`;
+                        estadoJuego = "ESPERANDO";
+                    } else {
+                        estadoJuego = "FIN";
+                        msg.className = "mensaje-perdiste";
+                        msg.innerText = "💥 ¡AGOTASTE TUS INTENTOS! La máquina se ha bloqueado.";
+                        btn.disabled = true;
+                    }
                 }
-                juegoBloqueado = false; 
-            }, 300);
+            }
         }
     </script>
 </body>

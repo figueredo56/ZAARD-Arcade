@@ -2,574 +2,171 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZARD: Golden Run</title>
-    <meta property="og:title" content="ZAARD INNOVATION | Golden Run">
-    <meta property="og:description" content="Bienvenido al ecosistema ZAARD. Desafía tus habilidades y atrapa las cajas de gas.">
-    <meta property="og:image" content="https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4">
-    <meta property="og:type" content="website">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZAARD: Golden Run</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.60.0/phaser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@700&display=swap');
-        
-        body, html {
-            font-family: 'Rajdhani', sans-serif;
-            background: #020006;
-            overflow: hidden;
-            user-select: none;
-            touch-action: none;
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            color: #fff;
-        }
-
-        .espacio-bg {
-            background-color: #020005;
-            background-image: 
-                radial-gradient(circle at 20% 25%, rgba(147, 51, 234, 0.22) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(34, 197, 94, 0.18) 0%, transparent 45%),
-                radial-gradient(circle at 50% 50%, rgba(88, 28, 135, 0.25) 0%, transparent 55%),
-                radial-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.05) 1px, transparent 15px),
-                radial-gradient(rgba(34, 197, 94, 0.4), rgba(34, 197, 94, 0.02) 2px, transparent 35px),
-                radial-gradient(white, rgba(255,255,255,.12) 1px, transparent 25px);
-            background-size: 100% 100%, 100% 100%, 100% 100%, 220px 220px, 380px 380px, 290px 290px;
-            background-position: 0 0, 0 0, 0 0, 15px 15px, 120px 160px, 50px 70px;
-            background-attachment: fixed;
-        }
-
-        .neon-glow { text-shadow: 0 0 10px rgba(147, 51, 234, 0.7), 0 0 20px rgba(34, 197, 94, 0.5); }
-        .text-gradient-purple-blue {
-            background: linear-gradient(135deg, #c084fc 0%, #38bdf8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .border-neon { box-shadow: 0 0 25px rgba(147, 51, 234, 0.25); border: 2px solid rgba(147, 51, 234, 0.7); }
-        .btn-epic { background: linear-gradient(135deg, #9333ea 0%, #16a34a 100%); color: white !important; font-family: 'Rajdhani', sans-serif; }
-
-        .img-bienvenida-css {
-            background: url('https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4') center/cover no-repeat;
-            min-height: 130px;
-        }
-
-        .img-menu-css {
-            background: url('https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m') center/cover no-repeat;
-            min-height: 130px;
-        }
-
-        canvas { display: block; margin: 0 auto; max-width: 100%; height: auto; background: transparent; cursor: pointer; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #0f172a; color: #f8fafc; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; }
+        #game-container { width: 100%; max-width: 800px; height: 500px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); border-radius: 12px; overflow: hidden; border: 2px solid #334155; position: relative; background: #1e293b; }
+        .hud-bar { width: 100%; max-width: 800px; display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: #1e293b; border-top-left-radius: 12px; border-top-right-radius: 12px; border: 2px solid #334155; border-bottom: none; }
+        .btn-web3 { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.3); }
+        .btn-web3:hover { opacity: 0.9; transform: translateY(-1px); }
+        .lang-select { background: #334155; color: #fff; border: 1px solid #475569; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
     </style>
 </head>
-<body class="espacio-bg w-screen h-screen flex flex-col items-center justify-center text-white">
+<body>
 
-    <!-- PANTALLA AUDIO -->
-    <div id="pantalla-audio" class="absolute z-30 w-full max-w-xl p-6 rounded-3xl bg-black/95 border-neon text-center mx-4">
-        <h1 id="txt-audio-titulo" class="text-2xl font-black text-purple-400 tracking-wider mb-2 neon-glow">ZAARD ARCADE</h1>
-        <p id="txt-audio-desc" class="text-sm text-gray-400 mb-6">Sincronizando sistemas táctiles, interfaz gráfica y audio cósmico...</p>
-        <button onclick="activarSistemas()" id="btn-audio-entrar" class="btn-epic w-full py-4 rounded-xl font-black tracking-widest text-lg shadow-lg active:scale-95 transition-transform">
-            ¡ENTRAR AL JUEGO!
-        </button>
-    </div>
-
-    <!-- PANTALLA BIENVENIDA -->
-    <div id="pantalla-bienvenida" class="hidden absolute z-20 w-full max-w-xl p-5 rounded-3xl bg-black/95 backdrop-blur-md border-neon text-center mx-4">
-        <div class="w-full rounded-2xl mb-3 border border-purple-500/40 img-bienvenida-css relative">
-            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent"></div>
+    <div class="hud-bar">
+        <div>
+            <button id="connectWallet" class="btn-web3">Conectar Wallet</button>
+            <span id="walletAddress" style="font-size: 0.85rem; color: #94a3b8; margin-left: 10px;">No conectado</span>
         </div>
-
-        <h1 id="txt-bienvenida-sub" class="text-xl font-black text-gradient-purple-400 tracking-wider mb-1 neon-glow">BIENVENIDOS A</h1>
-        <h2 class="text-2xl font-black text-gradient-purple-blue tracking-widest mb-3 border-b border-purple-500/20 pb-2">ZAARD INNOVATION</h2>
-        
-        <div id="txt-instrucciones" class="bg-purple-950/20 border border-purple-500/30 rounded-2xl p-3 text-left text-xs text-gray-300 space-y-2 mb-4">
-            <p><span class="text-green-400 font-bold">🔥 CONTROL TOTAL:</span> Desliza en cualquier dirección (arriba, abajo, adelante, atrás y diagonales) para pilotar con total libertad.</p>
-            <p><span class="text-green-400 font-bold">📦 META:</span> Atrapa 150 elementos de gas. Tienes 7 oportunidades de escudo.</p>
-        </div>
-
-        <button onclick="irAlMenuModos()" id="btn-bienvenida-cont" class="btn-epic w-full py-3 rounded-xl font-black tracking-widest text-base active:scale-95 transition-transform mb-3">
-            CONTINUAR
-        </button>
-
-        <button onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index-menu.html'" class="text-xs text-green-400 underline font-bold tracking-wider hover:text-white transition-colors">
-            ⬅ VOLVER AL MENÚ PRINCIPAL
-        </button>
-    </div>
-
-    <!-- MENÚ MODOS -->
-    <div id="menu-modos" class="hidden absolute z-10 w-full max-w-xl p-5 rounded-3xl bg-black/95 backdrop-blur-md border-neon text-center mx-4">
-        <div class="w-full rounded-2xl mb-3 border border-purple-500/40 img-menu-css relative">
-            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent"></div>
-        </div>
-
-        <h1 class="text-2xl font-black text-gradient-purple-blue tracking-wider mb-1 neon-glow">GOLDEN RUN</h1>
-        <p id="txt-sel-entrada" class="text-[10px] text-green-400 tracking-widest mb-4 font-bold">SELECCIONA TU ENTRADA</p>
-
-        <div class="space-y-3 max-w-sm mx-auto">
-            <button onclick="prepararJuego('prueba', 'Invitado Estelar')" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl font-bold text-gray-300 flex flex-col items-center active:scale-95 transition-transform">
-                <span id="txt-modo-inv" class="text-green-400 font-black text-sm">MODO INVITADO</span>
-                <span id="txt-sub-inv" class="text-[10px] font-normal text-green-400 opacity-90">Juega gratis de prueba</span>
-            </button>
-            <button onclick="conectarWalletModo()" class="w-full border border-purple-500 bg-purple-950/40 p-3 rounded-xl font-bold text-purple-300 flex flex-col items-center active:scale-95 transition-transform">
-                <span id="txt-modo-web3" class="text-green-400 font-black text-sm">CONECTAR BILLETERA</span>
-                <span class="text-[10px] font-normal text-green-400">Contrato: 0x3468...4d65</span>
-            </button>
-        </div>
-
-        <button onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index-menu.html'" id="txt-volver-menu" class="mt-4 text-xs text-green-400 underline font-bold tracking-wider hover:text-white transition-colors">
-            ⬅ VOLVER AL MENÚ PRINCIPAL
-        </button>
-
-        <p id="mensaje-animo" class="mt-3 text-green-400/90 font-medium italic text-xs px-2"></p>
-    </div>
-
-    <!-- CONTENEDOR JUEGO -->
-    <div id="contenedor-juego" class="hidden relative w-full h-full flex flex-col items-center justify-between p-3">
-        
-        <div class="w-full max-w-2xl bg-black/80 backdrop-blur-md border-b-2 border-purple-500/85 rounded-b-2xl p-3 flex justify-between items-center z-10 shadow-lg">
-            <div class="bg-gray-950/90 px-3 py-1.5 rounded-xl border border-purple-500/40 text-center">
-                <span id="txt-hud-gas" class="text-[9px] text-gray-400 block font-bold tracking-widest">GAS COLLECTED</span>
-                <span id="hud-gas" class="text-lg font-black text-green-400 neon-glow">0/150</span>
-            </div>
-
-            <div class="flex flex-col items-center justify-center bg-gray-950/90 px-3 py-1 rounded-xl border border-purple-500/30">
-                <img id="hud-avatar" src="https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/bb2103a3f5cb405ae3ff744bfb447c78f909c6ec/213%20sin%20t%C3%ADtulo_20260731172859.png" class="w-7 h-7 rounded-full border border-green-400 object-cover shadow-md mb-0.5" alt="Avatar">
-                <span id="hud-nombre-jugador" class="text-[10px] text-green-400 font-black tracking-wider max-w-[90px] truncate">Invitado</span>
-            </div>
-
-            <button onclick="window.location.href='https://figueredo56.github.io/ZAARD-Arcade/index-menu.html'" class="text-xs text-red-400 font-bold border border-red-500/40 px-2.5 py-1 rounded-lg bg-red-950/20 active:scale-95">SALIR</button>
-            
-            <div class="bg-gray-950/90 px-3 py-1.5 rounded-xl border border-red-500/40 text-center">
-                <span id="txt-hud-shield" class="text-[9px] text-gray-400 block font-bold tracking-widest">SHIELD STATUS</span>
-                <div id="hud-vidas" class="text-sm font-bold text-red-500 tracking-wider">⚡⚡⚡⚡⚡⚡⚡</div>
-            </div>
-        </div>
-
-        <div class="w-full flex justify-center items-center my-auto">
-            <canvas id="canvasJuego" width="800" height="480" class="rounded-2xl max-h-[62vh] w-full object-contain"></canvas>
-        </div>
-
-        <div class="w-full max-w-2xl bg-black/80 backdrop-blur-md border-t-2 border-purple-500/85 rounded-t-2xl p-2.5 text-center z-10 shadow-lg">
-            <p id="txt-hud-control" class="text-[11px] text-purple-400 font-bold tracking-widest uppercase">
-                PILOTA LIBREMENTE: ARRASTRA EN CUALQUIER DIRECCIÓN (360°)
-            </p>
+        <div>
+            <select id="langSelect" class="lang-select">
+                <option value="es">Español</option>
+                <option value="en">English</option>
+                <option value="zh">中文</option>
+            </select>
         </div>
     </div>
 
-    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+    <div id="game-container"></div>
+
     <script>
-        const LS_IDIOMA = localStorage.getItem('zaard_lang') || 'es';
+        let zaard_lang = 'es';
+        let userAccount = null;
+        let provider = null;
 
         const trads = {
-            es: {
-                audioTit: "ZAARD ARCADE",
-                audioDesc: "Sincronizando sistemas táctiles, interfaz gráfica y audio cósmico...",
-                audioBtn: "¡ENTRAR AL JUEGO!",
-                bienvSub: "BIENVENIDOS A",
-                instrucc: `<p><span class="text-green-400 font-bold">🔥 CONTROL TOTAL:</span> Desliza en cualquier dirección (arriba, abajo, adelante, atrás y diagonales) para pilotar con total libertad.</p><p><span class="text-green-400 font-bold">📦 META:</span> Atrapa 150 elementos de gas. Tienes 7 oportunidades de escudo.</p>`,
-                continuar: "CONTINUAR",
-                selEntrada: "SELECCIONA TU ENTRADA",
-                modoInv: "MODO INVITADO",
-                subInv: "Juega gratis de prueba",
-                modoWeb3: "CONECTAR BILLETERA",
-                volMenu: "⬅ VOLVER AL MENÚ PRINCIPAL",
-                hudGas: "GAS COLLECTED",
-                hudShield: "SHIELD STATUS",
-                controlMsg: "PILOTA LIBREMENTE: ARRASTRA EN CUALQUIER DIRECCIÓN (360°)",
-                victoriaMsg: "¡VICTORIA ÉPICA! ¡Has completado la recolección de gas con éxito!",
-                gameOverMsg: "GAME OVER\n\n⚠️ RECOMENDACIÓN:\n\"Fatiga de mercado detectada. ¡Toma un respiro y regresa con la mente fría!\"",
-                frases: [
-                    "¡No te sobreoperes! Si la racha es mala, respira y analiza.",
-                    "¡El corredor aprende de cada impacto, sigue adelante!",
-                    "¡Disciplina y consistencia, mantén el vuelo!"
-                ]
-            },
-            en: {
-                audioTit: "ZAARD ARCADE",
-                audioDesc: "Synchronizing touch systems, graphic interface and cosmic audio...",
-                audioBtn: "ENTER GAME!",
-                bienvSub: "WELCOME TO",
-                instrucc: `<p><span class="text-green-400 font-bold">🔥 FULL CONTROL:</span> Slide in any direction (up, down, forward, backward and diagonals) to pilot freely.</p><p><span class="text-green-400 font-bold">📦 GOAL:</span> Catch 150 gas elements. You have 7 shield opportunities.</p>`,
-                continuar: "CONTINUE",
-                selEntrada: "SELECT YOUR ENTRY",
-                modoInv: "GUEST MODE",
-                subInv: "Play free trial",
-                modoWeb3: "CONNECT WALLET",
-                volMenu: "⬅ BACK TO MAIN MENU",
-                hudGas: "GAS COLLECTED",
-                hudShield: "SHIELD STATUS",
-                controlMsg: "FREE PILOTING: DRAG IN ANY DIRECTION (360°)",
-                victoriaMsg: "EPIC VICTORY! You successfully completed the gas collection!",
-                gameOverMsg: "GAME OVER\n\n⚠️ RECOMMENDATION:\n\"Market fatigue detected. Take a breather and return with a cool mind!\"",
-                frases: [
-                    "Don't overtrade! If the streak is bad, breathe and analyze.",
-                    "The runner learns from every impact, keep going!",
-                    "Discipline and consistency, keep flying!"
-                ]
-            },
-            zh: {
-                audioTit: "ZAARD 游戏机",
-                audioDesc: "正在同步触控系统、图形界面和宇宙音效...",
-                audioBtn: "进入游戏！",
-                bienvSub: "欢迎来到",
-                instrucc: `<p><span class="text-green-400 font-bold">🔥 全面控制：</span> 向任意方向滑动（上、下、前、后及对角线）以自由驾驶。</p><p><span class="text-green-400 font-bold">📦 目标：</span> 收集150个燃气元素。你有7次护盾机会。</p>`,
-                continuar: "继续",
-                selEntrada: "选择您的模式",
-                modoInv: "访客模式",
-                subInv: "免费试玩",
-                modoWeb3: "连接钱包",
-                volMenu: "⬅ 返回主菜单",
-                hudGas: "已收集燃气",
-                hudShield: "护盾状态",
-                controlMsg: "自由驾驶：向任意方向拖动 (360°)",
-                victoriaMsg: "史诗级胜利！您已成功完成燃气收集！",
-                gameOverMsg: "游戏结束\n\n⚠️ 建议：\n“检测到市场疲劳。深呼吸，冷静后再来！”",
-                frases: [
-                    "不要过度交易！如果状态不好，请深呼吸并分析。",
-                    "跑步者从每次冲击中学习，继续前进！",
-                    "纪律与坚持，保持飞行！"
-                ]
-            }
+            es: { title: "ZAARD: GOLDEN RUN", score: "Puntuación", shields: "Escudos", tap: "¡Mueve para esquivar y atrapar oro!", btnStart: "JUGAR", gameOver: "¡JUEGO TERMINADO!", restart: "Click para reiniciar" },
+            en: { title: "ZAARD: GOLDEN RUN", score: "Score", shields: "Shields", tap: "Move to dodge and collect gold!", btnStart: "PLAY", gameOver: "GAME OVER", restart: "Click to restart" },
+            zh: { title: "ZAARD: GOLDEN RUN", score: "得分", shields: "护盾", tap: "移动躲避并收集黄金！", btnStart: "开始", gameOver: "游戏结束", restart: "点击重试" }
         };
 
-        const t = trads[LS_IDIOMA] || trads.es;
-
-        document.getElementById('txt-audio-titulo').innerText = t.audioTit;
-        document.getElementById('txt-audio-desc').innerText = t.audioDesc;
-        document.getElementById('btn-audio-entrar').innerText = t.audioBtn;
-        document.getElementById('txt-bienvenida-sub').innerText = t.bienvSub;
-        document.getElementById('txt-instrucciones').innerHTML = t.instrucc;
-        document.getElementById('btn-bienvenida-cont').innerText = t.continuar;
-        document.getElementById('txt-sel-entrada').innerText = t.selEntrada;
-        document.getElementById('txt-modo-inv').innerText = t.modoInv;
-        document.getElementById('txt-sub-inv').innerText = t.subInv;
-        document.getElementById('txt-modo-web3').innerText = t.modoWeb3;
-        document.getElementById('txt-volver-menu').innerText = t.volMenu;
-        document.getElementById('txt-hud-gas').innerText = t.hudGas;
-        document.getElementById('txt-hud-shield').innerText = t.hudShield;
-        document.getElementById('txt-hud-control').innerText = t.controlMsg;
-
-        const canvas = document.getElementById('canvasJuego');
-        const ctx = canvas.getContext('2d');
-
-        let audioCtx = null;
-        let musicaLoopId = null;
-        
-        const CONTRATO_ZARD = "0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65";
-        const RECAUDADORA = "0x7084D8562532AEA9F9239Cdd63EA289C85E6b0e9";
-
-        const imgCorredor = new Image();
-        const imgGas = new Image();
-        const imgObstaculo = new Image();
-
-        const urlCorredor = 'https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/bb2103a3f5cb405ae3ff744bfb447c78f909c6ec/213%20sin%20t%C3%ADtulo_20260731172859.png';
-        const urlGas = 'https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/CC_20260621_145200.png';
-        const urlObstaculo = 'https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/CC_20260621_144651.png';
-
-        imgCorredor.src = urlCorredor;
-        imgGas.src = urlGas;
-        imgObstaculo.src = urlObstaculo;
-
-        let juegoActivo = false;
-        let animacionId;
-        let corredorY, corredorX, corredorAncho, corredorAlto;
-        let targetX, targetY; // Coordenadas objetivo para el movimiento suave en 360°
-        let obstaculos, cajas;
-        let totalGasRecolectado = 0;
-        let oportunidadesRestantes = 7;
-        let velocidadActual = 5;
-        let distanciaRecorrida = 0;
-        let musicaHabilitada = localStorage.getItem('zaard_musica') !== 'OFF';
-        let estaArrastrando = false;
-        let nombreJugadorActual = "Invitado";
-        let avatarJugadorActual = urlCorredor;
-
-        function activarSistemas() {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            document.getElementById('pantalla-audio').style.display = 'none';
-            document.getElementById('pantalla-bienvenida').style.display = 'block';
-            sonarEfecto('gas');
-        }
-
-        const actualizarPosicionPiloteo = (clientX, clientY) => {
-            if (!juegoActivo) return;
-            const rect = canvas.getBoundingClientRect();
-            const relX = ((clientX - rect.left) / rect.width) * canvas.width;
-            const relY = ((clientY - rect.top) / rect.height) * canvas.height;
-            
-            targetX = relX - (corredorAncho / 2);
-            targetY = relY - (corredorAlto / 2);
-        };
-
-        canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            estaArrastrando = true;
-            if (e.touches.length > 0) {
-                actualizarPosicionPiloteo(e.touches[0].clientX, e.touches[0].clientY);
-            }
-        }, { passive: false });
-
-        canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            if (estaArrastrando && e.touches.length > 0) {
-                actualizarPosicionPiloteo(e.touches[0].clientX, e.touches[0].clientY);
-            }
-        }, { passive: false });
-
-        canvas.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            estaArrastrando = false;
-        }, { passive: false });
-
-        canvas.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-            estaArrastrando = true;
-            actualizarPosicionPiloteo(e.clientX, e.clientY);
+        document.getElementById('langSelect').addEventListener('change', (e) => {
+            zaard_lang = e.target.value;
         });
 
-        window.addEventListener('mousemove', (e) => {
-            if (estaArrastrando && juegoActivo) {
-                actualizarPosicionPiloteo(e.clientX, e.clientY);
-            }
-        });
-
-        window.addEventListener('mouseup', () => {
-            estaArrastrando = false;
-        });
-
-        function irAlMenuModos() {
-            document.getElementById('pantalla-bienvenida').style.display = 'none';
-            document.getElementById('menu-modos').style.display = 'block';
-        }
-
-        function sonarEfecto(tipo) {
-            if (!audioCtx || !musicaHabilitada) return;
-            try {
-                if (audioCtx.state === 'suspended') audioCtx.resume();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                if (tipo === 'choque') {
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(180, audioCtx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.4);
-                    gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-                    osc.start(); osc.stop(audioCtx.currentTime + 0.4);
-                } else if (tipo === 'gas') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(650, audioCtx.currentTime);
-                    osc.frequency.setValueAtTime(950, audioCtx.currentTime + 0.07);
-                    gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.18);
-                    osc.start(); osc.stop(audioCtx.currentTime + 0.18);
-                }
-            } catch(e) {}
-        }
-
-        function iniciarMusicaDeFondo() {
-            if (!audioCtx || !musicaHabilitada) return;
-            try {
-                if (audioCtx.state === 'suspended') audioCtx.resume();
-                detenerMusicaDeFondo();
-                musicaLoopId = setInterval(() => {
-                    if (!juegoActivo) return;
-                    try {
-                        let osc = audioCtx.createOscillator();
-                        let gain = audioCtx.createGain();
-                        osc.type = 'triangle';
-                        osc.frequency.setValueAtTime(92.50, audioCtx.currentTime); 
-                        gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
-                        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.48);
-                        osc.connect(gain);
-                        gain.connect(audioCtx.destination);
-                        osc.start();
-                        osc.stop(audioCtx.currentTime + 0.5);
-                    } catch(e){}
-                }, 500);
-            } catch(e) {}
-        }
-
-        function detenerMusicaDeFondo() {
-            if (musicaLoopId) {
-                clearInterval(musicaLoopId);
-                musicaLoopId = null;
-            }
-        }
-
-        async function prepararJuego(modo, nombreCustom) {
-            nombreJugadorActual = nombreCustom || "Invitado";
-            avatarJugadorActual = urlCorredor;
-
-            if (modo !== 'prueba') {
+        document.getElementById('connectWallet').addEventListener('click', async () => {
+            if (window.ethereum) {
                 try {
-                    const provider = new ethers.providers.Web3Provider(window.ethereum);
-                    await provider.send("eth_requestAccounts", []);
-                    const signer = provider.getSigner();
-                    const address = await signer.getAddress();
-                    nombreJugadorActual = address.substring(0, 6) + "..." + address.substring(address.length - 4);
-                    const contrato = new ethers.Contract(CONTRATO_ZARD, ["function transfer(address, uint256) public returns (bool)"], signer);
-                    await (await contrato.transfer(RECAUDADORA, ethers.utils.parseUnits("0.0001", 18))).wait();
-                } catch (e) {
-                    alert(LS_IDIOMA === 'zh' ? "⚠️ 错误：交易已取消或失败。" : LS_IDIOMA === 'en' ? "⚠️ Error: Transaction cancelled or failed." : "⚠️ Error: Transacción cancelada o fallida.");
-                    return;
+                    provider = new ethers.providers.Web3Provider(window.ethereum);
+                    const accounts = await provider.send("eth_requestAccounts", []);
+                    userAccount = accounts[0];
+                    document.getElementById('walletAddress').innerText = userAccount.substring(0, 6) + "..." + userAccount.substring(38);
+                    document.getElementById('connectWallet').innerText = "Conectado";
+                } catch (err) {
+                    console.error(err);
                 }
+            } else {
+                alert("Por favor instala MetaMask");
             }
-            document.getElementById('menu-modos').style.display = 'none';
-            document.getElementById('contenedor-juego').style.display = 'flex';
+        });
+
+        class BootScene extends Phaser.Scene {
+            constructor() { super('BootScene'); }
+            create() { this.scene.start('GameScene'); }
+        }
+
+        class GameScene extends Phaser.Scene {
+            constructor() { super('GameScene'); }
             
-            document.getElementById('hud-avatar').src = avatarJugadorActual;
-            document.getElementById('hud-nombre-jugador').innerText = nombreJugadorActual;
+            create() {
+                this.score = 0;
+                this.shields = 3;
+                this.isGameOver = false;
 
-            iniciarEngine();
-        }
+                // Fondo dinámico
+                this.add.rectangle(400, 250, 800, 500, 0x0f172a);
+                
+                // Jugador (Nave/Personaje ZAARD)
+                this.player = this.add.rectangle(400, 420, 50, 30, 0xf59e0b);
+                this.physics.add.existing(this.player);
+                this.player.body.setCollideWorldBounds(true);
 
-        async function conectarWalletModo() {
-            try {
-                if (!window.ethereum) {
-                    alert("Por favor instala MetaMask o una billetera Web3 compatible.");
-                    return;
+                // Grupos
+                this.golds = this.physics.add.group();
+                this.obstacles = this.physics.add.group();
+
+                // Textos HUD
+                this.scoreText = this.add.text(20, 20, `${trads[zaard_lang].score}: 0`, { fontSize: '18px', fill: '#f8fafc' });
+                this.shieldText = this.add.text(20, 50, `${trads[zaard_lang].shields}: 3`, { fontSize: '18px', fill: '#38bdf8' });
+
+                // Controles Táctiles y Mouse
+                this.input.on('pointermove', (pointer) => {
+                    if (!this.isGameOver) {
+                        this.player.x = Phaser.Math.Clamp(pointer.x, 30, 770);
+                    }
+                });
+
+                // Spawns
+                this.time.addEvent({ delay: 800, callback: this.spawnGold, callbackScope: this, loop: true });
+                this.time.addEvent({ delay: 1200, callback: this.spawnObstacle, callbackScope: this, loop: true });
+
+                // Colisiones
+                this.physics.add.overlap(this.player, this.golds, this.collectGold, null, this);
+                this.physics.add.overlap(this.player, this.obstacles, this.hitObstacle, null, this);
+            }
+
+            spawnGold() {
+                if (this.isGameOver) return;
+                let x = Phaser.Math.Between(30, 770);
+                let gold = this.add.circle(x, -20, 12, 0x10b981);
+                this.physics.add.existing(gold);
+                gold.body.setVelocityY(200);
+                this.golds.add(gold);
+            }
+
+            spawnObstacle() {
+                if (this.isGameOver) return;
+                let x = Phaser.Math.Between(30, 770);
+                let obs = this.add.rectangle(x, -20, 35, 35, 0xef4444);
+                this.physics.add.existing(obs);
+                obs.body.setVelocityY(250);
+                this.obstacles.add(obs);
+            }
+
+            collectGold(player, gold) {
+                gold.destroy();
+                this.score += 10;
+                this.scoreText.setText(`${trads[zaard_lang].score}: ${this.score}`);
+            }
+
+            hitObstacle(player, obs) {
+                obs.destroy();
+                this.shields -= 1;
+                this.shieldText.setText(`${trads[zaard_lang].shields}: ${this.shields}`);
+                if (this.shields <= 0) {
+                    this.gameOver();
                 }
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
-                await provider.send("eth_requestAccounts", []);
-                const signer = provider.getSigner();
-                const address = await signer.getAddress();
-                prepararJuego('wallet', address.substring(0, 6) + "..." + address.substring(address.length - 4));
-            } catch(err) {
-                alert("Conexión de billetera cancelada o fallida.");
             }
-        }
 
-        function iniciarEngine() {
-            juegoActivo = true;
-            totalGasRecolectado = 0;
-            oportunidadesRestantes = 7;
-            velocidadActual = 5;
-            distanciaRecorrida = 0;
-            corredorAncho = 95;  // <--- Tamaño perfecto de 95x95
-            corredorAlto = 95;   // <--- Tamaño perfecto de 95x95
-            corredorX = 100;
-            corredorY = (canvas.height / 2) - (corredorAlto / 2);
-            targetX = corredorX;
-            targetY = corredorY;
-            obstaculos = [];
-            cajas = [];
-            actualizarHUD();
-            if (audioCtx && audioCtx.state === 'suspended') {
-                audioCtx.resume().then(() => iniciarMusicaDeFondo());
-            } else {
-                iniciarMusicaDeFondo();
-            }
-            buclePrincipal();
-        }
-
-        function actualizarHUD() {
-            document.getElementById('hud-gas').innerText = `${totalGasRecolectado}/150`;
-            const hudVidas = document.getElementById('hud-vidas');
-            hudVidas.innerHTML = '';
-            for(let i = 0; i < oportunidadesRestantes; i++) { hudVidas.innerHTML += '⚡'; }
-        }
-
-        function terminarJuego(resultado) {
-            juegoActivo = false;
-            detenerMusicaDeFondo(); 
-            cancelAnimationFrame(animacionId);
-            if (resultado === 'victoria') {
-                alert(t.victoriaMsg);
-            } else {
-                alert(t.gameOverMsg);
-            }
-            document.getElementById('contenedor-juego').style.display = 'none';
-            document.getElementById('menu-modos').style.display = 'block';
-            document.getElementById('mensaje-animo').innerText = t.frases[Math.floor(Math.random() * t.frases.length)];
-        }
-
-        function buclePrincipal() {
-            if (!juegoActivo) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            distanciaRecorrida++;
-            velocidadActual = 5 + Math.floor(distanciaRecorrida / 400) * 0.6;
-
-            // Movimiento suave (Inercia) hacia las coordenadas del objetivo (360 grados)
-            corredorX += (targetX - corredorX) * 0.15;
-            corredorY += (targetY - corredorY) * 0.15;
-
-            // Restringir límites de la pantalla para que la nave no se salga
-            if (corredorX < 20) corredorX = 20;
-            if (corredorX > canvas.width - corredorAncho - 50) corredorX = canvas.width - corredorAncho - 50;
-            if (corredorY < 0) corredorY = 0;
-            if (corredorY > canvas.height - corredorAlto) corredorY = canvas.height - corredorAlto;
-
-            if (distanciaRecorrida % 135 === 0) {
-                obstaculos.push({ 
-                    x: canvas.width, 
-                    baseY: Math.random() * (canvas.height - 120) + 30, 
-                    w: 55, 
-                    h: 55, 
-                    fase: Math.random() * Math.PI * 2 
+            gameOver() {
+                this.isGameOver = true;
+                this.physics.pause();
+                this.add.text(400, 220, trads[zaard_lang].gameOver, { fontSize: '32px', fill: '#ef4444', fontStyle: 'bold' }).setOrigin(0.5);
+                let restartText = this.add.text(400, 280, trads[zaard_lang].restart, { fontSize: '18px', fill: '#94a3b8' }).setOrigin(0.5);
+                
+                this.input.once('pointerdown', () => {
+                    this.scene.restart();
                 });
             }
 
-            if (distanciaRecorrida % 110 === 0) {
-                cajas.push({ 
-                    x: canvas.width, 
-                    baseY: Math.random() * (canvas.height - 100) + 30, 
-                    w: 45, 
-                    h: 45, 
-                    fase: Math.random() * Math.PI * 2 
-                });
-            }
-
-            // --- EFECTO DE VUELO Y PÁLPITO 360° ---
-            const pulso = Math.sin(distanciaRecorrida * 0.22) * 8; 
-            const anchoDinamico = corredorAncho + pulso;
-            const altoDinamico = corredorAlto + pulso;
-            const offsetX = (anchoDinamico - corredorAncho) / 2;
-            const offsetY = (altoDinamico - corredorAlto) / 2;
-
-            ctx.drawImage(imgCorredor, corredorX - offsetX, corredorY - offsetY, anchoDinamico, altoDinamico);
-            // --------------------------------------
-            
-            for (let i = obstaculos.length - 1; i >= 0; i--) {
-                let obs = obstaculos[i]; 
-                obs.x -= velocidadActual;
-                let yActual = obs.baseY + Math.sin(distanciaRecorrida * 0.07 + obs.fase) * 42;
-
-                ctx.drawImage(imgObstaculo, obs.x, yActual, obs.w, obs.h);
-
-                if (corredorX < obs.x + obs.w && corredorX + corredorAncho > obs.x && corredorY < yActual + obs.h && corredorY + corredorAlto > yActual) {
-                    sonarEfecto('choque');
-                    oportunidadesRestantes--;
-                    actualizarHUD();
-                    obstaculos.splice(i, 1);
-                    if (oportunidadesRestantes <= 0) { terminarJuego('derrota'); return; }
-                    continue;
-                }
-                if (obs.x < -60) obstaculos.splice(i, 1);
-            }
-
-            for (let i = cajas.length - 1; i >= 0; i--) {
-                let box = cajas[i]; 
-                box.x -= velocidadActual;
-                let yActual = box.baseY + Math.cos(distanciaRecorrida * 0.06 + box.fase) * 48;
-
-                ctx.drawImage(imgGas, box.x, yActual, box.w, box.h);
-
-                if (corredorX < box.x + box.w && corredorX + corredorAncho > box.x && corredorY < yActual + box.h && corredorY + corredorAlto > yActual) {
-                    sonarEfecto('gas');
-                    totalGasRecolectado++;
-                    actualizarHUD();
-                    cajas.splice(i, 1);
-                    if (totalGasRecolectado >= 150) { terminarJuego('victoria'); return; }
-                    continue;
-                }
-                if (box.x < -60) cajas.splice(i, 1);
-            }
-
-            animacionId = requestAnimationFrame(buclePrincipal);
+            update() {}
         }
+
+        const config = {
+            type: Phaser.AUTO,
+            width: 800,
+            height: 500,
+            parent: 'game-container',
+            physics: { default: 'arcade', arcade: { debug: false } },
+            scene: [BootScene, GameScene]
+        };
+
+        const game = new Phaser.Game(config);
     </script>
 </body>
 </html>

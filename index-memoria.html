@@ -27,11 +27,10 @@
             display: flex; justify-content: center; align-items: center; color: #00ffff; font-weight: bold;
         }
 
-        /* Fondo dinámico más vivo y brillante usando otra textura IPFS más luminosa */
         .fondo-cosmico {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: linear-gradient(135deg, rgba(61,16,107,0.85) 0%, rgba(23,4,47,0.9) 50%, rgba(7,1,18,0.95) 100%),
-                        url('https://ipfs.io/ipfs/bafybeicugqjr3uy2mvk32536qi3gf3astpwj53nlbeogx3vmzsmk2ia3wa');
+                    url('https://ipfs.io/ipfs/bafybeicugqjr3uy2mvk32536qi3gf3astpwj53nlbeogx3vmzsmk2ia3wa');
             background-size: cover;
             background-position: center;
             z-index: 999;
@@ -45,7 +44,6 @@
             display: none;
         }
 
-        /* Caja translúcida más clara y luminosa (menos oscura) con marco que cambia de color y titila */
         .modal-card {
             background: linear-gradient(135deg, rgba(50, 15, 95, 0.75) 0%, rgba(25, 8, 50, 0.82) 100%);
             backdrop-filter: blur(8px);
@@ -58,25 +56,12 @@
         }
 
         @keyframes borderGlowPulse {
-            0% {
-                border-color: #00ffff;
-                box-shadow: 0 0 20px rgba(0, 255, 255, 0.5), inset 0 0 15px rgba(0, 255, 255, 0.2);
-            }
-            33% {
-                border-color: #d946ef;
-                box-shadow: 0 0 30px rgba(217, 70, 239, 0.7), inset 0 0 20px rgba(217, 70, 239, 0.3);
-            }
-            66% {
-                border-color: #10b981;
-                box-shadow: 0 0 30px rgba(16, 185, 129, 0.7), inset 0 0 20px rgba(16, 185, 129, 0.3);
-            }
-            100% {
-                border-color: #38bdf8;
-                box-shadow: 0 0 25px rgba(56, 189, 248, 0.6), inset 0 0 15px rgba(56, 189, 248, 0.2);
-            }
+            0% { border-color: #00ffff; box-shadow: 0 0 20px rgba(0, 255, 255, 0.5), inset 0 0 15px rgba(0, 255, 255, 0.2); }
+            33% { border-color: #d946ef; box-shadow: 0 0 30px rgba(217, 70, 239, 0.7), inset 0 0 20px rgba(217, 70, 239, 0.3); }
+            66% { border-color: #10b981; box-shadow: 0 0 30px rgba(16, 185, 129, 0.7), inset 0 0 20px rgba(16, 185, 129, 0.3); }
+            100% { border-color: #38bdf8; box-shadow: 0 0 25px rgba(56, 189, 248, 0.6), inset 0 0 15px rgba(56, 189, 248, 0.2); }
         }
 
-        /* Estilos de tipografía solicitados: Títulos en degradé Morado/Azul, Descripciones en Verde brillante */
         .titulo-impacto {
             font-size: 25px;
             font-weight: 900;
@@ -100,7 +85,7 @@
         .desc-verde {
             font-size: 15px;
             font-weight: bold;
-            color: #4ade80; /* Verde brillante muy llamativo */
+            color: #4ade80;
             text-shadow: 0 0 8px rgba(74, 222, 128, 0.4);
             margin-bottom: 25px; 
             line-height: 1.6;
@@ -122,15 +107,15 @@
 
 <div id="loading-screen">CARGANDO PROTOCOLO...</div>
 
-<!-- 1. PANTALLA DE BIENVENIDA IMPACTANTE -->
+<!-- 1. PANTALLA DE BIENVENIDA -->
 <div id="pantalla-bienvenida" class="fondo-cosmico">
     <div class="modal-card">
         <h1 class="titulo-impacto">⚡ PROTOCOLO PANGA ⚡</h1>
-        <h2 class="subtitulo-impacto">¡PON A PRUEBA TU MEMORIA Y GANA ZARD!</h2>
+        <h2 class="subtitulo-impacto">¡PON A PRUEBA TU MEMORIA CÓSMICA!</h2>
         <p class="desc-verde">
-            Desafía los 10 niveles cósmicos, supera los obstáculos y demuestra tu destreza en el arcade Web3 definitivo.
+            Desafía los 10 niveles de habilidad, supera los obstáculos y demuestra tu destreza en el arcade Web3.
         </p>
-        <button class="btn-accion btn-aceptar" onclick="irASeleccionModo()">¡ACEPTAR Y JUGAR! 🚀</button>
+        <button class="btn-accion btn-aceptar" onclick="irASeleccionModo()">¡EMPEZAR A JUGAR! 🚀</button>
         <button class="btn-accion btn-volver" onclick="irAlMenuArcade()">⬅ MENÚ PRINCIPAL ARCADE</button>
     </div>
 </div>
@@ -140,10 +125,10 @@
     <div class="modal-card">
         <h2 id="txt-titulo-sel" class="titulo-impacto">⚡ MODO DE JUEGO ⚡</h2>
         <p id="txt-desc-sel" class="desc-verde">
-            Apuesta: 0.0001 ZARD<br>Premio: 0.00015 ZARD<br>Quema automática al perder.
+            Modo Arcade de Memoria<br>Demuestra tu destreza sin riesgos en la red.
         </p>
-        <button class="btn-accion btn-invitado" onclick="elegirModo('invitado')">MODO INVITADO 🚀</button>
-        <button class="btn-accion btn-web3" onclick="conectarYJugar()">CONECTAR BILLETERA WEB3</button>
+        <button class="btn-accion btn-invitado" onclick="elegirModo('invitado')">JUGAR DIRECTO 🚀</button>
+        <button class="btn-accion btn-web3" onclick="conectarBilleteraVisual()">CONECTAR BILLETERA WEB3</button>
         <button class="btn-accion btn-volver" onclick="volverABienvenida()">⬅ VOLVER</button>
     </div>
 </div>
@@ -153,12 +138,7 @@
     const LS_AVATAR_URL = localStorage.getItem('zaard_avatar') || 'https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_lhyyv2lhyyv2lhyy_1.png';
     const LS_IDIOMA = localStorage.getItem('zaard_lang') || 'es'; 
 
-    const TOKEN_ADDR = "0x3468EA4e6CE13Ec4C7f8651f7eFC6AA6046F4d65"; 
-    const BURN_WALLET = "0x000000000000000000000000000000000000dEaD"; 
-    const ABI_TRANSFER = [{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"type":"function"}];
-    const APUESTA_WEI = "100000000000000"; 
-
-    let web3, contract, userAccount, esModoWeb3 = false;
+    let web3, userAccount, esModoWeb3 = false;
     let nivelActual = 1;
     const avatarImageKey = 'avatarUsr';
     let audioCtx = null;
@@ -240,26 +220,6 @@
 
     window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('loading-screen').style.display = 'none';
-
-        if (LS_IDIOMA === 'zh') {
-            document.querySelector('#pantalla-bienvenida h2').innerText = "测试你的记忆力并赢得 ZARD！";
-            document.querySelector('#pantalla-bienvenida p').innerText = "挑战 10 个宇宙关卡，克服障碍，在终极 Web3 街机中证明你的技能。";
-            document.querySelector('.btn-aceptar').innerText = "接受并开始！ 🚀";
-            document.querySelector('.btn-volver').innerText = "⬅ 街机主菜单";
-            document.getElementById('txt-titulo-sel').innerText = "⚡ 游戏模式 ⚡";
-            document.getElementById('txt-desc-sel').innerHTML = "下注: 0.0001 ZARD<br>奖励: 0.00015 ZARD<br>失败时自动销毁。";
-            document.querySelector('#pantalla-seleccion .btn-invitado').innerText = "游客模式 🚀";
-            document.querySelector('#pantalla-seleccion .btn-web3').innerText = "连接 Web3 钱包";
-        } else if (LS_IDIOMA === 'en') {
-            document.querySelector('#pantalla-bienvenida h2').innerText = "TEST YOUR MEMORY & WIN ZARD!";
-            document.querySelector('#pantalla-bienvenida p').innerText = "Challenge the 10 cosmic levels, overcome obstacles, and prove your skills in the ultimate Web3 arcade.";
-            document.querySelector('.btn-aceptar').innerText = "ACCEPT & PLAY! 🚀";
-            document.querySelector('.btn-volver').innerText = "⬅ ARCADE MAIN MENU";
-            document.getElementById('txt-titulo-sel').innerText = "⚡ GAME MODE ⚡";
-            document.getElementById('txt-desc-sel').innerHTML = "Bet: 0.0001 ZARD<br>Win: 0.00015 ZARD<br>Auto-burn on loss.";
-            document.querySelector('#pantalla-seleccion .btn-invitado').innerText = "GUEST MODE 🚀";
-            document.querySelector('#pantalla-seleccion .btn-web3').innerText = "CONNECT WEB3 WALLET";
-        }
     });
 
     function irASeleccionModo() {
@@ -286,44 +246,22 @@
         iniciarPhaserGame();
     }
 
-    async function conectarYJugar() {
+    async function conectarBilleteraVisual() {
         reproducirSonidoRetro('click');
         if (window.ethereum) {
             try {
                 web3 = new Web3(window.ethereum);
                 const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                 userAccount = accounts[0];
-                contract = new web3.eth.Contract(ABI_TRANSFER, TOKEN_ADDR);
                 esModoWeb3 = true;
-                alert(LS_IDIOMA === 'zh' ? "钱包已连接！" : (LS_IDIOMA === 'en' ? "Wallet connected successfully!" : "¡Billetera conectada con éxito!"));
+                alert("¡Billetera conectada visualmente con éxito!");
                 document.getElementById('pantalla-seleccion').classList.add('oculto');
                 iniciarPhaserGame();
             } catch (e) { 
-                alert(LS_IDIOMA === 'zh' ? "连接失败。" : (LS_IDIOMA === 'en' ? "Connection cancelled or failed." : "Conexión cancelada o fallida.")); 
+                alert("Conexión cancelada o fallida."); 
             }
         } else { 
-            alert(LS_IDIOMA === 'zh' ? "请安装 Web3 钱包。" : (LS_IDIOMA === 'en' ? "Please install MetaMask or a Web3 wallet." : "Por favor instala MetaMask o una billetera Web3.")); 
-        }
-    }
-
-    async function ejecutarQuemaPorPerdida() {
-        if (esModoWeb3 && contract && userAccount) {
-            try {
-                const msg = LS_IDIOMA === 'zh' ? "正在处理销毁交易..." : (LS_IDIOMA === 'en' ? "Processing burn transaction..." : "Procesando quema de 0.0001 ZARD...");
-                const msgDiv = document.createElement('div');
-                msgDiv.style.position = 'fixed'; msgDiv.style.top='50%'; msgDiv.style.left='50%';
-                msgDiv.style.transform='translate(-50%, -50%)'; msgDiv.style.background='rgba(0,0,0,0.9)';
-                msgDiv.style.color='#ff4444'; msgDiv.style.padding='20px'; msgDiv.style.borderRadius='15px';
-                msgDiv.style.zIndex='3000'; msgDiv.style.fontWeight='bold';
-                msgDiv.innerText = msg;
-                document.body.appendChild(msgDiv);
-
-                await contract.methods.transfer(BURN_WALLET, APUESTA_WEI).send({ from: userAccount });
-                msgDiv.remove();
-                alert(LS_IDIOMA === 'zh' ? "代币已销毁至 Dead 地址。" : (LS_IDIOMA === 'en' ? "Bet tokens sent to burn wallet." : "Tokens de apuesta enviados a la billetera de quema."));
-            } catch (e) { 
-                console.log("Error en quema:", e); 
-            }
+            alert("Por favor instala MetaMask o una billetera Web3."); 
         }
     }
 
@@ -337,25 +275,13 @@
 
     function manejarVictoriaFinal(sceneRef) {
         reproducirSonidoRetro('victoria');
-        let mensaje = `🌟 ¡MAGNÍFICO, ${LS_NOMBRE.toUpperCase()}! 🌟\n\n¡Has completado con éxito los 10 niveles del Protocolo Panga y ganado Gloria Cósmica y ZARD!`;
-        if (LS_IDIOMA === 'en') mensaje = `🌟 MAGNIFICENT, ${LS_NOMBRE.toUpperCase()}! 🌟\n\nYou successfully completed all 10 levels and won cosmic glory!`;
-        if (LS_IDIOMA === 'zh') mensaje = `🌟 太棒了，${LS_NOMBRE.toUpperCase()}！ 🌟\n\n您已成功通过所有 10 个关卡！`;
-        
-        alert(mensaje);
+        alert(`🌟 ¡MAGNÍFICO, ${LS_NOMBRE.toUpperCase()}! 🌟\n\n¡Has completado con éxito los 10 niveles del Protocolo Panga!`);
         volverAlMenuSeleccion();
     }
 
-    async function manejarDerrota(sceneRef) {
+    function manejarDerrota(sceneRef) {
         reproducirSonidoRetro('error');
-        let mensaje = "¡Te has quedado sin oportunidades! Vuelve a intentarlo.";
-        if (LS_IDIOMA === 'en') mensaje = "You lost all opportunities! Try again.";
-        if (LS_IDIOMA === 'zh') mensaje = "您已失去所有机会！请再试一次。";
-
-        if (esModoWeb3) {
-            await ejecutarQuemaPorPerdida();
-        }
-        
-        alert(mensaje);
+        alert("¡Te has quedado sin oportunidades! Vuelve a intentarlo.");
         volverAlMenuSeleccion();
     }
 
@@ -422,16 +348,14 @@
                     avatarBorder.strokeCircle(65, 55, 32);
 
                     this.txtNombre = this.add.text(115, 30, LS_NOMBRE, { fontSize: '18px', color: '#00ffff', fontStyle: 'bold' });
-                    this.txtNivel = this.add.text(115, 58, (LS_IDIOMA === 'zh' ? "关卡: " : (LS_IDIOMA === 'en' ? "Level: " : "Nivel: ")) + `${nivelActual} / 10`, { fontSize: '15px', color: '#e879f9', fontStyle: 'bold' });
+                    this.txtNivel = this.add.text(115, 58, "Nivel: " + `${nivelActual} / 10`, { fontSize: '15px', color: '#e879f9', fontStyle: 'bold' });
                     
                     this.txtVidas = this.add.text(435, 32, `❤️ ${this.vidas}`, { fontSize: '18px', color: '#f87171', fontStyle: 'bold' }).setOrigin(1, 0);
 
-                    let txtMenuText = LS_IDIOMA === 'zh' ? "菜单" : (LS_IDIOMA === 'en' ? "MENU" : "MENÚ");
-                    let btnMenu = this.add.text(435, 62, txtMenuText, { fontSize: '13px', color: '#38bdf8', fontStyle: 'bold' }).setOrigin(1, 0).setInteractive();
+                    let btnMenu = this.add.text(435, 62, "MENÚ", { fontSize: '13px', color: '#38bdf8', fontStyle: 'bold' }).setOrigin(1, 0).setInteractive();
                     btnMenu.on('pointerdown', volverAlMenuSeleccion);
 
-                    let txtArcadeText = LS_IDIOMA === 'zh' ? "街机" : (LS_IDIOMA === 'en' ? "ARCADE" : "ARCADE");
-                    let btnArcade = this.add.text(370, 62, txtArcadeText, { fontSize: '13px', color: '#f43f5e', fontStyle: 'bold' }).setOrigin(1, 0).setInteractive();
+                    let btnArcade = this.add.text(370, 62, "ARCADE", { fontSize: '13px', color: '#f43f5e', fontStyle: 'bold' }).setOrigin(1, 0).setInteractive();
                     btnArcade.on('pointerdown', irAlMenuArcade);
 
                     function construirTablero() {
@@ -493,7 +417,7 @@
                                             } else {
                                                 nivelActual++;
                                                 sceneRef.time.delayedCall(800, () => {
-                                                    sceneRef.txtNivel.setText((LS_IDIOMA === 'zh' ? "关卡: " : (LS_IDIOMA === 'en' ? "Level: " : "Nivel: ")) + `${nivelActual} / 10`);
+                                                    sceneRef.txtNivel.setText("Nivel: " + `${nivelActual} / 10`);
                                                     construirTablero();
                                                 });
                                             }

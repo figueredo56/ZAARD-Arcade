@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ZAARD COMBAT PRO</title>
-    <!-- Ethers.js para Web3 -->
+    <!-- Ethers.js para lectura de Perfil / UI -->
     <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
@@ -60,7 +60,6 @@
             align-items: center; gap: 10px; box-shadow: 0 0 15px rgba(147,51,234,0.3);
         }
 
-        /* Botón de Emergencia colocado más abajo para no tapar el marcador */
         #btn-emergencia {
             display: none; position: absolute; top: 75px; right: 15px; z-index: 50;
             background: rgba(220, 38, 38, 0.85); border: 2px solid #ef4444; color: #fff;
@@ -86,20 +85,19 @@
             <span id="nombre-usuario" style="font-weight: bold; color: #c084fc; font-size: 1.2rem;"></span>
         </div>
         <h1 id="txt-titulo" style="color:#9333ea; font-size: 2.8rem; text-align: center; margin-bottom: 5px;" class="neon-glow">ZAARD COMBAT</h1>
-        <p id="txt-desc" style="text-align: center; padding: 0 20px; color: #d1d5db; margin-bottom: 25px; font-size: 1.15rem; line-height: 1.4;">¡Gana tus ZARD y conquista el ciberespacio! Apuesta 0.0001 ZARD y llévate 0.00015 ZARD destruyendo cada amenaza sin piedad.</p>
+        <p id="txt-desc" style="text-align: center; padding: 0 20px; color: #d1d5db; margin-bottom: 25px; font-size: 1.15rem; line-height: 1.4;">¡Conquista el ciberespacio! Destruye cada amenaza sin piedad y demuestra tu habilidad.</p>
         <button class="btn" onclick="irAlMenu()" id="btn-entrar">ENTRAR</button>
         <button class="btn" style="border-color: #555; color: #aaa; font-size: 0.9rem; padding: 10px;" onclick="irAlHub()" id="btn-volver">⬅ VOLVER AL HUB</button>
     </div>
 
-    <!-- MENÚ DE APUESTAS -->
+    <!-- MENÚ DE JUEGO -->
     <div id="menu" class="screen" style="display:none;">
         <div class="user-badge" id="perfil-info-menu" style="display:none;">
             <img id="avatar-img-menu" src="" alt="Avatar">
             <span id="nombre-usuario-menu" style="font-weight: bold; color: #c084fc; font-size: 1.2rem;"></span>
         </div>
         <h2 id="txt-sel-apuesta" style="background:rgba(0,0,0,0.85); padding:12px 20px; border-radius: 12px; text-align: center; border: 1px solid #9333ea; margin-bottom: 20px;" class="neon-glow">SELECCIONA MODO DE JUEGO</h2>
-        <button class="btn" onclick="iniciarJuego(true)" style="border-color: #22c55e;">APOSTAR 0.0001 ZARD</button>
-        <button class="btn" style="border-color: #555; color: #ccc;" onclick="iniciarJuego(false)" id="btn-invitado">INVITADO (GRATIS)</button>
+        <button class="btn" onclick="iniciarJuego()" style="border-color: #22c55e;">INICIAR COMBATE</button>
         <button class="btn" style="border-color: #7c3aed; color: #d8b4fe; font-size: 0.9rem; padding: 10px; margin-top: 15px;" onclick="volverAlBienvenida()" id="btn-atras">⬅ VOLVER</button>
     </div>
 
@@ -121,54 +119,42 @@
         const traducciones = {
             es: {
                 titulo: "ZAARD COMBAT",
-                desc: "¡Gana tus ZARD y conquista el ciberespacio! Apuesta 0.0001 ZARD y llévate 0.00015 ZARD destruyendo cada amenaza sin piedad.",
+                desc: "¡Conquista el ciberespacio! Destruye cada amenaza sin piedad y demuestra tu habilidad.",
                 entrar: "ENTRAR",
                 volver: "⬅ VOLVER AL HUB",
                 selApuesta: "SELECCIONA MODO DE JUEGO",
-                invitado: "INVITADO (GRATIS)",
                 atras: "⬅ VOLVER",
                 tiempo: "Tiempo:",
                 destruidos: "Destruidos:",
-                msgTiempo: "¡TIEMPO AGOTADO! Redirigiendo a selección de modo...",
-                msgDerrota: "¡TE TOCARON! Perdiste la apuesta (enviada a quema). Redirigiendo...",
-                msgVictoria: "¡VICTORIA ÉPICA! Se han acreditado 0.00015 ZARD a tu cartera. Redirigiendo...",
-                errorWallet: "Necesitas instalar MetaMask o usar el navegador de TrustWallet.",
-                errorTx: "Transacción de apuesta cancelada o fallida.",
-                msgZardInfo: "Conectando contrato ZARD (0x3468...4d65). Confirma la transferencia de 0.0001 ZARD."
+                msgTiempo: "¡TIEMPO AGOTADO! Redirigiendo al menú...",
+                msgDerrota: "¡TE TOCARON! Misión fallida. Redirigiendo...",
+                msgVictoria: "¡VICTORIA ÉPICA! Has completado el combate con éxito. Redirigiendo..."
             },
             en: {
                 titulo: "ZAARD COMBAT",
-                desc: "Win your ZARD and conquer cyberspace! Bet 0.0001 ZARD and take 0.00015 ZARD destroying every threat.",
+                desc: "Conquer cyberspace! Destroy every threat without mercy and prove your skill.",
                 entrar: "ENTER",
                 volver: "⬅ BACK TO HUB",
                 selApuesta: "SELECT GAME MODE",
-                invitado: "GUEST (FREE)",
                 atras: "⬅ BACK",
                 tiempo: "Time:",
                 destruidos: "Destroyed:",
-                msgTiempo: "TIME OUT! Redirecting to mode selection...",
-                msgDerrota: "GOT HIT! You lost the bet (sent to burn address). Redirecting...",
-                msgVictoria: "EPIC VICTORY! 0.00015 ZARD credited to your wallet. Redirecting...",
-                errorWallet: "You need to install MetaMask or use TrustWallet browser.",
-                errorTx: "Bet transaction canceled or failed.",
-                msgZardInfo: "Connecting ZARD contract (0x3468...4d65). Confirm 0.0001 ZARD transfer."
+                msgTiempo: "TIME OUT! Redirecting to menu...",
+                msgDerrota: "GOT HIT! Mission failed. Redirecting...",
+                msgVictoria: "EPIC VICTORY! Combat successfully completed. Redirecting..."
             },
             zh: {
                 titulo: "ZAARD 战斗",
-                desc: "赢得你的 ZARD 并征服网络空间！下注 0.0001 ZARD 并带走 0.00015 ZARD。",
+                desc: "征服网络空间！毫不留情地消灭每一个威胁。",
                 entrar: "进入",
                 volver: "⬅ 返回大厅",
                 selApuesta: "选择游戏模式",
-                invitado: "访客（免费）",
                 atras: "⬅ 返回",
                 tiempo: "时间:",
                 destruidos: "已消灭:",
-                msgTiempo: "时间到！正在重定向至模式选择...",
-                msgDerrota: "被击中！你输掉了赌注（已发送至销毁地址）。正在重定向...",
-                msgVictoria: "史诗般的胜利！0.00015 ZARD 已存入您的钱包。正在重定向...",
-                errorWallet: "您需要安装 MetaMask 或使用 TrustWallet 浏览器。",
-                errorTx: "下注交易取消或失败。",
-                msgZardInfo: "正在连接 ZARD 合约 (0x3468...4d65)。请确认转账 0.0001 ZARD。"
+                msgTiempo: "时间到！正在重定向...",
+                msgDerrota: "被击中！任务失败。正在重定向...",
+                msgVictoria: "史诗般的胜利！战斗成功完成。正在重定向..."
             }
         };
 
@@ -179,7 +165,6 @@
         document.getElementById('btn-entrar').innerText = t.entrar;
         document.getElementById('btn-volver').innerText = t.volver;
         document.getElementById('txt-sel-apuesta').innerText = t.selApuesta;
-        document.getElementById('btn-invitado').innerText = t.invitado;
         document.getElementById('btn-atras').innerText = t.atras;
         document.getElementById('txt-hud-tiempo').innerText = t.tiempo;
         document.getElementById('txt-hud-destruidos').innerText = t.destruidos;
@@ -202,14 +187,6 @@
             document.getElementById('hud-avatar').style.display = 'block';
         }
 
-        const ZARD_CONTRACT = "0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65";
-        const BURN_ADDRESS = "0x0000000000000000000000000000000000000000";
-        
-        const ERC20_ABI = [
-            "function transfer(address to, uint256 amount) public returns (bool)",
-            "function balanceOf(address account) view returns (uint256)"
-        ];
-
         const canvas = document.getElementById('canvasJuego');
         const ctx = canvas.getContext('2d');
         
@@ -228,10 +205,7 @@
         let puntos = 0;
         let timeLeft = 60;
         let juegoActivo = false;
-        let modoApuestaActivo = false;
         let crono;
-        let signerGlobal = null;
-        let userAddress = null;
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playSnd(freq, dur, type = 'square') {
@@ -270,29 +244,14 @@
             document.getElementById('menu').style.display = 'flex';
         }
 
-        async function terminarJuego(resultado) { 
+        function terminarJuego(resultado) { 
             juegoActivo = false; 
             clearInterval(crono); 
 
-            if (modoApuestaActivo && signerGlobal && userAddress) {
-                try {
-                    const zardToken = new ethers.Contract(ZARD_CONTRACT, ERC20_ABI, signerGlobal);
-                    const decimals = 18; 
-
-                    if (resultado === 'victoria') {
-                        alert(t.msgVictoria);
-                    } else if (resultado === 'derrota' || resultado === 'tiempo') {
-                        alert(t.msgDerrota);
-                        const montoQuema = ethers.utils.parseUnits("0.0001", decimals);
-                        const txBurn = await zardToken.transfer(BURN_ADDRESS, montoQuema);
-                        await txBurn.wait();
-                    }
-                } catch(e) {
-                    console.error("Error en transacción Web3:", e);
-                }
+            if (resultado === 'victoria') {
+                alert(t.msgVictoria);
             } else {
-                if (resultado === 'victoria') alert(t.msgVictoria);
-                else alert(t.msgDerrota);
+                alert(t.msgDerrota);
             }
 
             document.getElementById('hud').style.display = 'none';
@@ -301,29 +260,7 @@
             document.getElementById('menu').style.display = 'flex';
         }
 
-        async function iniciarJuego(apostar) {
-            modoApuestaActivo = apostar;
-
-            if(apostar) {
-                if(!window.ethereum) { alert(t.errorWallet); return; }
-                try { 
-                    alert(t.msgZardInfo);
-                    await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    const provider = new ethers.providers.Web3Provider(window.ethereum);
-                    signerGlobal = provider.getSigner();
-                    userAddress = await signerGlobal.getAddress();
-
-                    const zardToken = new ethers.Contract(ZARD_CONTRACT, ERC20_ABI, signerGlobal);
-                    const montoApuesta = ethers.utils.parseUnits("0.0001", 18);
-
-                    const tx = await zardToken.transfer(ZARD_CONTRACT, montoApuesta);
-                    await tx.wait(); 
-                } catch(e) { 
-                    alert(t.errorTx); 
-                    return; 
-                }
-            }
-            
+        function iniciarJuego() {
             document.getElementById('menu').style.display = 'none';
             document.getElementById('hud').style.display = 'flex';
             document.getElementById('btn-emergencia').style.display = 'block';
@@ -376,13 +313,12 @@
             
             ctx.drawImage(imgNave, nave.x, nave.y, nave.w, nave.h);
 
-            // Generar Enemigos con velocidad de caída un poquito más rápida pero sin exagerar
             if(Math.random() < 0.035) {
                 enemigos.push({
                     x: Math.random() * (canvas.width - 45), 
                     y: -50,
                     velX: (Math.random() - 0.5) * 2.5, 
-                    velY: 3.2 + Math.random() * 1.8,  // Ligeramente incrementada la velocidad vertical
+                    velY: 3.2 + Math.random() * 1.8, 
                     img: Math.random() > 0.5 ? imgEnemigo1 : imgEnemigo2,
                     rotacionSpeed: (Math.random() - 0.5) * 0.015
                 });
@@ -397,7 +333,6 @@
                     e.velX *= -1;
                 }
                 
-                // Efecto visual de rotación conservado a la misma velocidad original de giro
                 ctx.save();
                 ctx.translate(e.x + 22.5, e.y + 22.5);
                 ctx.rotate((e.y * 0.015));

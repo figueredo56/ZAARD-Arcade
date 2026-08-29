@@ -86,7 +86,6 @@
             font-size: 15px;
         }
 
-        /* Botón de Wallet con Bordes Palpadeantes Azul y Morado */
         @keyframes pulseGlow {
             0% {
                 border-color: var(--neon-blue);
@@ -134,7 +133,6 @@
             word-break: break-all;
         }
 
-        /* Cuadrícula de Cajas Cibernéticas */
         .grid-cajas {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -219,24 +217,21 @@
     </select>
 
     <header>
-        <!-- Contenedor para el Logo del Token -->
         <div class="logo-container" id="logoContainer">
             <span>💎</span>
         </div>
         <h1 id="txtTitle">ZAARD Cyber Vault</h1>
-        <p id="txtSubtitle">Despliega tu energía cuántica, apuesta <strong>0.00001 BNB</strong> y desbloquea <strong>0.5 ZARD</strong> en la caja maestra.</p>
+        <p id="txtSubtitle">Despliega tu energía cuántica, compra tu cupo por <strong>0.00001 BNB</strong> y desbloquea <strong>0.5 ZARD</strong> en la caja maestra.</p>
     </header>
 
     <button id="btnWallet" onclick="gestionarConexion()">Conectar Wallet</button>
 
     <div class="info-panel">
         <p id="walletStatus">Wallet: Desconectada</p>
-        <p><span id="txtContractLabel">Contrato ZARD</span>: <small>0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65</small></p>
+        <p><span id="txtContractLabel">Cartera Creadora (Cupo)</span>: <small>0x84f529525fae84b1f1d7ea66939592094426cdc8</small></p>
     </div>
 
-    <div class="grid-cajas" id="gridCajas">
-        <!-- Las 12 cajas se generan dinámicamente -->
-    </div>
+    <div class="grid-cajas" id="gridCajas"></div>
 
     <div id="mensaje">Conecta tu billetera para iniciar la secuencia cibernética.</div>
 
@@ -244,23 +239,23 @@
         let provider, signer, userAddress;
         let conectado = false;
         
-        const DESTINO_CONTRACT = "0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65";
+        // Cartera Creadora para recibir el pago del cupo (0.00001 BNB)
+        const CARTERA_CREADORA = "0x84f529525fae84b1f1d7ea66939592094426cdc8";
         const APUESTA_BNB = ethers.utils.parseEther("0.00001");
         const CAJA_GANADORA = 4; // Caja #4
 
-        // Diccionario de Traducciones
         const traducciones = {
             es: {
                 title: "ZAARD Cyber Vault",
-                subtitle: "Despliega tu energía cuántica, apuesta 0.00001 BNB y desbloquea 0.5 ZARD en la caja maestra.",
+                subtitle: "Despliega tu energía cuántica, compra tu cupo por 0.00001 BNB y desbloquea 0.5 ZARD en la caja maestra.",
                 connect: "Conectar Wallet",
                 disconnect: "Desconectar Wallet",
                 statusDisc: "Wallet: Desconectada",
                 statusConn: "Conectado",
-                contractLabel: "Contrato ZARD",
+                contractLabel: "Cartera Creadora (Cupo)",
                 msgInit: "Conecta tu billetera para iniciar la secuencia cibernética.",
-                msgReady: "¡Elige una caja cibernética para apostar 0.00001 BNB!",
-                msgSending: "Iniciando enlace cuántico y transferencia de 0.00001 BNB...",
+                msgReady: "¡Elige una caja cibernética para comprar tu cupo de 0.00001 BNB!",
+                msgSending: "Enviando pago de 0.00001 BNB a la cartera creadora...",
                 msgWait: "Procesando bloque en la red BSC...",
                 win: "🏆 ¡IMPACTO CRÍTICO! Encontraste la caja maestra #4. ¡Has ganado 0.5 ZARD!",
                 loss: "⚡ Caja vacía (#). ¡La energía se dispersó, inténtalo de nuevo!",
@@ -268,15 +263,15 @@
             },
             en: {
                 title: "ZAARD Cyber Vault",
-                subtitle: "Deploy your quantum energy, bet 0.00001 BNB and unlock 0.5 ZARD in the master box.",
+                subtitle: "Deploy your quantum energy, buy your slot for 0.00001 BNB and unlock 0.5 ZARD in the master box.",
                 connect: "Connect Wallet",
                 disconnect: "Disconnect Wallet",
                 statusDisc: "Wallet: Disconnected",
                 statusConn: "Connected",
-                contractLabel: "ZARD Contract",
+                contractLabel: "Creator Wallet (Slot)",
                 msgInit: "Connect your wallet to start the cyber sequence.",
-                msgReady: "Choose a cyber box to bet 0.00001 BNB!",
-                msgSending: "Initializing quantum link & transferring 0.00001 BNB...",
+                msgReady: "Choose a cyber box to buy your 0.00001 BNB slot!",
+                msgSending: "Sending 0.00001 BNB payment to creator wallet...",
                 msgWait: "Processing block on BSC network...",
                 win: "🏆 CRITICAL IMPACT! You found master box #4. You won 0.5 ZARD!",
                 loss: "⚡ Empty box (#). Energy dispersed, try again!",
@@ -284,15 +279,15 @@
             },
             ar: {
                 title: "ZAARD Cyber Vault",
-                subtitle: "ان نشر طاقتك الكمومية، راهن بـ 0.00001 BNB وافتح 0.5 ZARD في الصندوق الرئيسي.",
+                subtitle: "انشر طاقتك الكمومية، واشترِ حصتك بـ 0.00001 BNB وافتح 0.5 ZARD في الصندوق الرئيسي.",
                 connect: "ربط المحفظة",
                 disconnect: "قطع الاتصال",
                 statusDisc: "المحفظة: غير متصلة",
                 statusConn: "متصل",
-                contractLabel: "عقد ZARD",
+                contractLabel: "محفظة المنشئ",
                 msgInit: "قم بربط محفظتك لبدء التسلسل السيبراني.",
-                msgReady: "اختر صندوقاً سيبرانياً للرهان بـ 0.00001 BNB!",
-                msgSending: "جاري بدء الرابط الكمومي ونقل 0.00001 BNB...",
+                msgReady: "اختر صندوقاً سيبرانياً لشراء حصتك بقيمة 0.00001 BNB!",
+                msgSending: "جاري إرسال دفعة 0.00001 BNB إلى محفظة المنشئ...",
                 msgWait: "جاري معالجة الكتلة على شبكة BSC...",
                 win: "🏆 تأثير حاسم! لقد وجدت الصندوق الرئيسي #4. لقد ربحت 0.5 ZARD!",
                 loss: "⚡ صندوق فارغ (#). تشتت الطاقة، حاول مرة أخرى!",
@@ -300,15 +295,15 @@
             },
             zh: {
                 title: "ZAARD Cyber Vault",
-                subtitle: "部署您的量子能量，下注 0.00001 BNB 并在主宝箱中解锁 0.5 ZARD。",
+                subtitle: "部署您的量子能量，以 0.00001 BNB 购买名额并在主宝箱中解锁 0.5 ZARD。",
                 connect: "连接钱包",
                 disconnect: "断开连接",
                 statusDisc: "钱包：未连接",
                 statusConn: "已连接",
-                contractLabel: "ZARD 合约",
+                contractLabel: "创建者钱包",
                 msgInit: "连接您的钱包以启动网络序列。",
-                msgReady: "选择一个网络宝箱下注 0.00001 BNB！",
-                msgSending: "正在初始化量子链接并转账 0.00001 BNB...",
+                msgReady: "选择一个网络宝箱购买 0.00001 BNB 的名额！",
+                msgSending: "正在向创建者钱包发送 0.00001 BNB 支付...",
                 msgWait: "正在 BSC 网络上处理区块...",
                 win: "🏆 暴击！你找到了主宝箱 #4。你赢得了 0.5 ZARD！",
                 loss: "⚡ 空宝箱 (#)。能量消散，再试一次！",
@@ -420,8 +415,9 @@
             try {
                 mensajeEl.innerText = t.msgSending;
                 
+                // Envío directo del BNB de compra de cupo a la cartera creadora indicada
                 const tx = await signer.sendTransaction({
-                    to: DESTINO_CONTRACT,
+                    to: CARTERA_CREADORA,
                     value: APUESTA_BNB,
                     gasLimit: ethers.utils.hexlify(100000)
                 });
@@ -439,11 +435,9 @@
                     mensajeEl.innerText = t.loss.replace("#", numeroCaja);
                 }
 
-                // Desactivar las cajas de esta ronda
                 const cajas = document.querySelectorAll(".caja");
                 cajas.forEach(c => c.onclick = null);
 
-                // Botón de nueva partida
                 setTimeout(() => {
                     const btnReiniciar = document.createElement("button");
                     btnReiniciar.innerText = t.retry;

@@ -135,11 +135,18 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 28px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
             position: relative;
             overflow: hidden;
+        }
+
+        .caja img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 13px;
+            transition: transform 0.3s ease;
         }
 
         .caja:hover:not(.abierta) {
@@ -148,24 +155,26 @@
             box-shadow: 0 0 20px var(--neon-purple);
         }
 
-        .caja.abierta { cursor: default; }
-
-        .caja.ganadora {
-            background: rgba(0, 255, 100, 0.2);
-            border-color: #00ff66;
-            box-shadow: 0 0 30px #00ff66;
-            animation: winPulse 1s infinite alternate;
+        .caja:hover img {
+            transform: scale(1.1);
         }
 
-        .caja.perdedora {
-            background: rgba(255, 0, 60, 0.2);
-            border-color: #ff003c;
-            box-shadow: 0 0 20px #ff003c;
+        .caja.abierta { 
+            cursor: default; 
+            border-color: var(--neon-blue);
+            background: rgba(0, 243, 255, 0.1);
         }
 
-        @keyframes winPulse {
-            from { transform: scale(1); }
-            to { transform: scale(1.06); }
+        .caja span.numero-caja {
+            position: absolute;
+            bottom: 5px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            color: var(--neon-blue);
+            border: 1px solid var(--neon-blue);
         }
 
         #mensaje {
@@ -197,15 +206,14 @@
     <header>
         <div class="logo-container"><span>💎</span></div>
         <h1 id="txtTitle">ZAARD Cyber Vault</h1>
-        <p id="txtSubtitle">Apuesta <strong>0.00001 BNB</strong>, elige tu caja y reclama <strong>0.5 ZARD</strong> directos del contrato.</p>
+        <p id="txtSubtitle">Participa con <strong>0.0001 BNB</strong>, abre tu caja misteriosa y ayuda a fondear el ecosistema para activar los premios ZARD.</p>
     </header>
 
     <button id="btnWallet" onclick="gestionarConexion()">Conectar Wallet</button>
 
     <div class="info-panel">
         <p id="walletStatus">Wallet: Desconectada</p>
-        <p><strong>Cartera Creadora (Apuesta BNB):</strong> <small>0x84f529525fae84b1f1d7ea66939592094426cdc8</small></p>
-        <p><strong>Contrato ZARD (Premio):</strong> <small>0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65</small></p>
+        <p><strong>Cartera Creadora (Fondo):</strong> <small>0x84f529525fae84b1f1d7ea66939592094426cdc8</small></p>
     </div>
 
     <div class="grid-cajas" id="gridCajas"></div>
@@ -217,80 +225,77 @@
         let conectado = false;
         
         const CARTERA_CREADORA = "0x84f529525fae84b1f1d7ea66939592094426cdc8";
-        const CONTRATO_ZARD = "0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65";
-        const APUESTA_BNB = ethers.utils.parseEther("0.00001");
-        const PREMIO_ZARD = ethers.utils.parseUnits("0.5", 18);
-        const CAJA_GANADORA = 4;
+        const APUESTA_BNB = ethers.utils.parseEther("0.0001"); // Actualizado a 0.0001 BNB
 
-        const ERC20_ABI = [
-            "function transfer(address to, uint256 amount) public returns (bool)",
-            "function balanceOf(address account) view returns (uint256)"
+        // Array con los CIDs de IPFS provistos para las cajas
+        const ipfsCIDs = [
+            "bafybeifzkdoitiowwicqwnkfx6dnahydk5mm33h7r3j3wyv7c4rjp75ws4",
+            "bafybeiakl2nuugolggppxfttwcxfsv56zsjms4ityd5vjyyd54ctirzaeq",
+            "bafybeicugqjr3uy2mvk32536qi3gf3astpwj53nlbeogx3vmzsmk2ia3wa",
+            "bafybeickwp5h3ew6bm4aim6r5v5sc5xha6h3hdsbrhja2zeruosphac5ba",
+            "bafybeigxro3eht2lctrk4akglifsxuvwolwqfzgqzvnstabnpjjiungza4",
+            "bafybeidwy5yeihhglhcuztl32loatlk3wccecimodl6m4ocuotuuru7gvi",
+            "bafybeiheko4izm53qfmhejmvz5elek4hb2lp3weaduwndvrvpxdamwklue",
+            "bafybeiggz26x26hncisti5s5y74ciuk4yuymtczhsbwdufoql2gidl57mu",
+            "bafybeiginlvb63afmlicnvsx4fwfekanoipydzgzv3ay7njpvq6nm4zzym"
         ];
 
         const traducciones = {
             es: {
                 title: "ZAARD Cyber Vault",
-                subtitle: "Apuesta 0.00001 BNB, elige tu caja y reclama 0.5 ZARD directos del contrato.",
+                subtitle: "Participa con 0.0001 BNB, abre tu caja misteriosa y ayuda a fondear el ecosistema para activar los premios ZARD.",
                 connect: "Conectar Wallet",
                 disconnect: "Desconectar Wallet",
                 statusDisc: "Wallet: Desconectada",
                 statusConn: "Conectado",
                 msgInit: "Conecta tu billetera para iniciar la secuencia cibernética.",
-                msgReady: "⚡ ¡Elige una caja! Se procesará la apuesta de 0.00001 BNB.",
-                msgSuspenso: "🔮 Canalizando energía cuántica...",
-                msgWaitBNB: "⏳ Autoriza el pago de 0.00001 BNB...",
-                msgWaitZARD: "💎 ¡Acertaste! Solicitando 0.5 ZARD al contrato ZARD...",
-                win: "🏆 ¡IMPACTO CRÍTICO! Caja #4 abierta. ¡0.5 ZARD pagados por el contrato!",
-                loss: "⚡ Caja vacía (#). Perdiste la apuesta, intenta de nuevo!",
-                retry: "🔄 Volver a apostar"
+                msgReady: "⚡ ¡Elige una caja! Aporte de 0.0001 BNB para el fondo del ecosistema.",
+                msgSuspenso: "🔮 Sincronizando datos cuánticos...",
+                msgWaitBNB: "⏳ Autoriza el aporte de 0.0001 BNB en tu wallet...",
+                scanned: "🔍 Caja escaneada con éxito. ¡Gracias por aportar al fondo de ZAARD Innovation!",
+                retry: "🔄 Abrir otra caja"
             },
             en: {
                 title: "ZAARD Cyber Vault",
-                subtitle: "Bet 0.00001 BNB, choose your box and claim 0.5 ZARD direct from contract.",
+                subtitle: "Participate with 0.0001 BNB, open your mystery box and help fund the ecosystem for ZARD rewards.",
                 connect: "Connect Wallet",
                 disconnect: "Disconnect Wallet",
                 statusDisc: "Wallet: Disconnected",
                 statusConn: "Connected",
                 msgInit: "Connect your wallet to start the cyber sequence.",
-                msgReady: "⚡ Choose a box! 0.00001 BNB bet required.",
-                msgSuspenso: "🔮 Channeling quantum energy...",
-                msgWaitBNB: "⏳ Authorize 0.00001 BNB payment...",
-                msgWaitZARD: "💎 Hit! Requesting 0.5 ZARD from contract...",
-                win: "🏆 CRITICAL IMPACT! Box #4 opened. 0.5 ZARD paid by contract!",
-                loss: "⚡ Empty box (#). Bet lost, try again!",
-                retry: "🔄 Bet Again"
+                msgReady: "⚡ Choose a box! 0.0001 BNB ecosystem contribution.",
+                msgSuspenso: "🔮 Synchronizing quantum data...",
+                msgWaitBNB: "⏳ Authorize 0.0001 BNB contribution in your wallet...",
+                scanned: "🔍 Box successfully scanned. Thank you for funding ZAARD Innovation!",
+                retry: "🔄 Open another box"
             },
             ar: {
                 title: "ZAARD Cyber Vault",
-                subtitle: "راهن بـ 0.00001 BNB واطلب 0.5 ZARD مباشرة من العقد.",
+                subtitle: "شارك بـ 0.0001 BNB وافتح صندوقك الغامض للمساعدة في تمويل النظام البيئي.",
                 connect: "ربط المحفظة",
                 disconnect: "قطع الاتصال",
                 statusDisc: "المحفظة: غير متصلة",
                 statusConn: "متصل",
                 msgInit: "قم بربط محفظتك لبدء التسلسل السيبراني.",
-                msgReady: "⚡ اختر صندوقاً! مطلوب رهان 0.00001 BNB.",
-                msgSuspenso: "🔮 جاري توجيه الطاقة...",
-                msgWaitBNB: "⏳ يرجى تأكيد دفع 0.00001 BNB...",
-                msgWaitZARD: "💎 تم الإصابة! طلب 0.5 ZARD من العقد...",
-                win: "🏆 تأثير حاسم! الصندوق #4. تم دفع 0.5 ZARD بواسطة العقد!",
-                loss: "⚡ صندوق فارغ (#). خسرت الرهان، حاول مرة أخرى!",
-                retry: "🔄 الرهان مرة أخرى"
+                msgReady: "⚡ اختر صندوقاً! مساهمة 0.0001 BNB لدعم النظام البيئي.",
+                msgSuspenso: "🔮 جاري مزامنة البيانات...",
+                msgWaitBNB: "⏳ يرجى تأكيد المساهمة في محفظتك...",
+                scanned: "🔍 تم فحص الصندوق بنجاح. شكراً لدعمك!",
+                retry: "🔄 فتح صندوق آخر"
             },
             zh: {
                 title: "ZAARD Cyber Vault",
-                subtitle: "下注 0.00001 BNB，选择宝箱并直接从合约领取 0.5 ZARD。",
+                subtitle: "参与 0.0001 BNB，打开你的神秘宝箱并协助资助生态系统以激活 ZARD 奖励。",
                 connect: "连接钱包",
                 disconnect: "断开连接",
                 statusDisc: "钱包：未连接",
                 statusConn: "已连接",
                 msgInit: "连接您的钱包以启动网络序列。",
-                msgReady: "⚡ 选择一个宝箱！需要 0.00001 BNB 下注。",
-                msgSuspenso: "🔮 正在引导量子能量...",
-                msgWaitBNB: "⏳ 请在钱包中确认 0.00001 BNB 支付...",
-                msgWaitZARD: "💎 命中！正在向合约请求 0.5 ZARD...",
-                win: "🏆 暴击！宝箱 #4 已打开。合约已支付 0.5 ZARD！",
-                loss: "⚡ 空宝箱 (#)。下注丢失，再试一次！",
-                retry: "🔄 再次下注"
+                msgReady: "⚡ 选择一个宝箱！0.0001 BNB 生态系统支持贡献。",
+                msgSuspenso: "🔮 正在同步量子数据...",
+                msgWaitBNB: "⏳ 请在钱包中确认贡献...",
+                scanned: "🔍 宝箱扫描成功。感谢您资助 ZAARD Innovation！",
+                retry: "🔄 打开另一个宝箱"
             }
         };
 
@@ -359,17 +364,24 @@
             const grid = document.getElementById("gridCajas");
             grid.innerHTML = "";
 
+            // Generamos 12 cajas usando de forma cíclica los CIDs de IPFS provistos
             for (let i = 1; i <= 12; i++) {
+                const cidIndex = (i - 1) % ipfsCIDs.length;
+                const ipfsUrl = `https://gateway.pinata.cloud/ipfs/${ipfsCIDs[cidIndex]}`;
+
                 const caja = document.createElement("div");
                 caja.className = "caja";
-                caja.innerHTML = `📦<br><span style="font-size: 11px; opacity: 0.7;">#${i}</span>`;
-                caja.onclick = () => seleccionarCaja(i, caja);
+                caja.innerHTML = `
+                    <img src="${ipfsUrl}" alt="Cyber Box ${i}" loading="lazy">
+                    <span class="numero-caja">#${i}</span>
+                `;
+                caja.onclick = () => seleccionarCaja(i, caja, ipfsUrl);
                 grid.appendChild(caja);
             }
             document.getElementById("mensaje").innerText = t.msgReady;
         }
 
-        async function seleccionarCaja(numeroCaja, elementoCaja) {
+        async function seleccionarCaja(numeroCaja, elementoCaja, imgUrl) {
             if (!signer || !conectado) return;
 
             const lang = document.getElementById("langSelect").value;
@@ -381,11 +393,11 @@
 
             try {
                 mensajeEl.innerText = t.msgSuspenso;
-                await new Promise(r => setTimeout(r, 1000));
+                await new Promise(r => setTimeout(r, 900));
 
                 mensajeEl.innerText = t.msgWaitBNB;
 
-                // 1. Cobrar la apuesta de BNB hacia la cartera creadora
+                // Envío de los 0.0001 BNB hacia la cartera creadora para el fondo
                 const txBNB = await signer.sendTransaction({
                     to: CARTERA_CREADORA,
                     value: APUESTA_BNB,
@@ -393,31 +405,15 @@
                 });
                 await txBNB.wait();
 
-                // 2. Evaluar si es la caja ganadora #4
-                if (numeroCaja === CAJA_GANADORA) {
-                    elementoCaja.className = "caja abierta ganadora";
-                    elementoCaja.innerHTML = `💎<br><span style="font-size: 11px;">WIN</span>`;
-                    mensajeEl.innerText = t.msgWaitZARD;
+                // Marcar caja como escaneada / abierta exitosamente
+                elementoCaja.className = "caja abierta";
+                elementoCaja.innerHTML = `
+                    <img src="${imgUrl}" alt="Box Opened" style="filter: brightness(1.2) drop-shadow(0 0 8px var(--neon-blue));">
+                    <span class="numero-caja" style="border-color: #00ff66; color: #00ff66;">OK</span>
+                `;
+                mensajeEl.innerText = t.scanned;
 
-                    try {
-                        // 3. Llamar directo al contrato ZARD para transferir el premio al ganador
-                        const zardContract = new ethers.Contract(CONTRATO_ZARD, ERC20_ABI, signer);
-                        const txZARD = await zardContract.transfer(userAddress, PREMIO_ZARD, {
-                            gasLimit: ethers.utils.hexlify(150000)
-                        });
-                        await txZARD.wait();
-                        mensajeEl.innerText = t.win;
-                    } catch (zardError) {
-                        console.error("Error al transferir desde el contrato:", zardError);
-                        mensajeEl.innerText = "🏆 ¡Acertaste la caja #4! (Nota: Asegúrate de que la cuenta que autoriza en el contrato tenga balance ZARD para despachar el premio).";
-                    }
-
-                } else {
-                    elementoCaja.className = "caja abierta perdedora";
-                    elementoCaja.innerHTML = `❌<br><span style="font-size: 11px;">0</span>`;
-                    mensajeEl.innerText = t.loss.replace("#", numeroCaja);
-                }
-
+                // Botón para volver a interactuar
                 setTimeout(() => {
                     const btnReiniciar = document.createElement("button");
                     btnReiniciar.innerText = t.retry;

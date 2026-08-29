@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZAARD Innovation - Caja Misteriosa Web3</title>
-    <!-- Incluimos ethers.js para la conexión con la Web3 -->
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <style>
         :root {
@@ -49,6 +48,9 @@
             margin-bottom: 25px;
             text-align: center;
             border: 1px solid #333;
+            max-width: 500px;
+            width: 100%;
+            word-break: break-all;
         }
         .grid-cajas {
             display: grid;
@@ -110,12 +112,11 @@
 
     <div class="info-panel">
         <p id="walletStatus">Wallet: Desconectada</p>
-        <p>Contrato ZARD: <small>0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65</small></p>
+        <p>Contrato: <small>0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65</small></p>
     </div>
 
     <div class="grid-cajas" id="gridCajas">
-        <!-- Se generan dinámicamente las 12 cajas -->
-    </div>
+        </div>
 
     <div id="mensaje"></div>
 
@@ -123,19 +124,33 @@
         let provider, signer, userAddress;
         const ZARD_CONTRACT_ADDRESS = "0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65";
         const APUESTA_BNB = ethers.utils.parseEther("0.00001");
-        const CAJA_GANADORA = 4; // La caja número 4 es la ganadora predeterminada
+        const CAJA_GANADORA = 4; // Caja #4 ganadora
 
-        // ABI estándar mínimo para recibir BNB (función receive/fallback) y transferencias de tokens si fuera necesario
-        const ZARD_ABI = [
-            "function balanceOf(address account) view returns (uint256)",
-            "function transfer(to, amount) returns (bool)"
-        ];
+        async function asegurarRedBSC(targetProvider) {
+            try {
+                // Solicitar cambio a BNB Smart Chain Mainnet (Chain ID: 56 -> 0x38)
+                await targetProvider.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: '0x38' }],
+                });
+            } catch (switchError) {
+                console.error("Error al cambiar de red:", switchError);
+                alert("Por favor, cambia manualmente tu red a BNB Smart Chain (BSC) en tu billetera.");
+            }
+        }
 
         async function conectarWallet() {
-            if (window.ethereum) {
+            // Detección compatible con Binance Wallet, BinanceChain y MetaMask/TrustWallet
+            const rawProvider = window.BinanceChain || window.ethereum;
+
+            if (rawProvider) {
                 try {
-                    provider = new ethers.providers.Web3Provider(window.ethereum);
+                    provider = new ethers.providers.Web3Provider(rawProvider);
                     await provider.send("eth_requestAccounts", []);
+                    
+                    // Forzar el cambio a la red BNB Smart Chain
+                    await asegurarRedBSC(rawProvider);
+
                     signer = provider.getSigner();
                     userAddress = await signer.getAddress();
                     
@@ -146,10 +161,10 @@
                     inicializarJuego();
                 } catch (error) {
                     console.error(error);
-                    alert("Error al conectar la wallet.");
+                    alert("No se pudo completar la conexión con la Web3.");
                 }
             } else {
-                alert("Por favor, instala MetaMask o usa un navegador Web3 móvil (como Trust Wallet / BitKeep).");
+                alert("No se detectó ninguna billetera Web3. Si usas la App de Binance, abre este enlace desde su navegador DApp integrado.");
             }
         }
 
@@ -178,31 +193,31 @@
             try {
                 mensajeEl.innerText = "Enviando apuesta de 0.00001 BNB...";
                 
-                // Transacción para enviar los 0.00001 BNB al contrato del juego / creador
+                // Transacción para enviar 0.00001 BNB a la dirección de destino
                 const tx = await signer.sendTransaction({
                     to: ZARD_CONTRACT_ADDRESS,
                     value: APUESTA_BNB
                 });
 
-                mensajeEl.innerText = "Esperando confirmación de la red...";
+                mensajeEl.innerText = "Esperando confirmación de la red BSC...";
                 await tx.wait();
 
-                // Revelar resultado
+                // Lógica de resultado
                 if (numeroCaja === CAJA_GANADORA) {
                     elementoCaja.className = "caja abierta ganadora";
                     elementoCaja.innerHTML = `🎉<br><span style="font-size: 12px;">¡Ganaste!</span>`;
-                    mensajeEl.innerText = "¡Felicidades! Has encontrado la caja ganadora #4. (Reclama tus 0.5 ZARD con el administrador).";
+                    mensajeEl.innerText = "¡Felicidades! Encontraste la caja ganadora #4 (Reclama tus 0.5 ZARD).";
                 } else {
                     elementoCaja.className = "caja abierta perdedora";
                     elementoCaja.innerHTML = `❌<br><span style="font-size: 12px;">Vacía</span>`;
                     mensajeEl.innerText = `Lo siento, era la caja #${numeroCaja}. ¡Inténtalo de nuevo!`;
                 }
 
-                // Deshabilitar todas las cajas tras la jugada
+                // Deshabilitar las cajas restantes en la partida actual
                 const cajas = document.querySelectorAll(".caja");
                 cajas.forEach(c => c.onclick = null);
 
-                // Botón para reiniciar partida
+                // Botón para reiniciar
                 setTimeout(() => {
                     const btnReiniciar = document.createElement("button");
                     btnReiniciar.innerText = "Jugar de nuevo";
@@ -216,7 +231,7 @@
 
             } catch (error) {
                 console.error(error);
-                mensajeEl.innerText = "Transacción cancelada o fallida.";
+                mensajeEl.innerText = "Transacción cancelada o fallida por fondos insuficientes.";
             }
         }
     </script>

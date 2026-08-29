@@ -26,7 +26,7 @@
             text-align: center;
             margin-bottom: 20px;
         }
-        #connectWallet {
+        #btnWallet {
             background-color: var(--primary-color);
             color: #000;
             border: none;
@@ -38,7 +38,7 @@
             margin-bottom: 20px;
             transition: 0.3s;
         }
-        #connectWallet:hover {
+        #btnWallet:hover {
             opacity: 0.8;
         }
         .info-panel {
@@ -93,6 +93,7 @@
             font-weight: bold;
             text-align: center;
             min-height: 30px;
+            padding-bottom: 40px;
         }
         @media (max-width: 600px) {
             .grid-cajas {
@@ -105,67 +106,88 @@
 
     <header>
         <h1>ZAARD Mystery Box</h1>
-        <p>Apuesta <strong>0.00001 BNB</strong> y gana <strong>0.5 ZARD</strong> si encuentras la caja correcta</p>
+        <p>Apuesta <strong>0.00001 BNB</strong> y gana <strong>0.5 ZARD</strong> en la caja correcta</p>
     </header>
 
-    <button id="connectWallet" onclick="conectarWallet()">Conectar Wallet</button>
+    <button id="btnWallet" onclick="gestionarConexion()">Conectar Wallet</button>
 
     <div class="info-panel">
         <p id="walletStatus">Wallet: Desconectada</p>
-        <p>Contrato: <small>0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65</small></p>
+        <p>Contrato Destino: <small>0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65</small></p>
     </div>
 
     <div class="grid-cajas" id="gridCajas">
-        </div>
+        <!-- Las 12 cajas se cargan dinámicamente -->
+    </div>
 
-    <div id="mensaje"></div>
+    <div id="mensaje">Conecta tu billetera para comenzar.</div>
 
     <script>
         let provider, signer, userAddress;
-        const ZARD_CONTRACT_ADDRESS = "0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65";
+        let conectado = false;
+        
+        const DESTINO_CONTRACT = "0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65";
         const APUESTA_BNB = ethers.utils.parseEther("0.00001");
-        const CAJA_GANADORA = 4; // Caja #4 ganadora
+        const CAJA_GANADORA = 4; // Caja #4
 
-        async function asegurarRedBSC(targetProvider) {
-            try {
-                // Solicitar cambio a BNB Smart Chain Mainnet (Chain ID: 56 -> 0x38)
-                await targetProvider.request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: '0x38' }],
-                });
-            } catch (switchError) {
-                console.error("Error al cambiar de red:", switchError);
-                alert("Por favor, cambia manualmente tu red a BNB Smart Chain (BSC) en tu billetera.");
+        async function gestionarConexion() {
+            if (!conectado) {
+                await conectarWallet();
+            } else {
+                desconectarWallet();
             }
         }
 
         async function conectarWallet() {
-            // Detección compatible con Binance Wallet, BinanceChain y MetaMask/TrustWallet
-            const rawProvider = window.BinanceChain || window.ethereum;
+            const targetProvider = window.ethereum || window.BinanceChain;
 
-            if (rawProvider) {
+            if (targetProvider) {
                 try {
-                    provider = new ethers.providers.Web3Provider(rawProvider);
+                    provider = new ethers.providers.Web3Provider(targetProvider, "any");
                     await provider.send("eth_requestAccounts", []);
                     
-                    // Forzar el cambio a la red BNB Smart Chain
-                    await asegurarRedBSC(rawProvider);
-
                     signer = provider.getSigner();
                     userAddress = await signer.getAddress();
                     
+                    // Protocolo opcional de firma para autenticación y aceptación de términos
+                    try {
+                        document.getElementById("mensaje").innerText = "Firma el mensaje en tu wallet para validar la sesión...";
+                        await signer.signMessage("Bienvenido a ZAARD Innovation - Autorizando acceso al juego de Cajas Misteriosas.");
+                    } catch (sigError) {
+                        console.log("Firma cancelada o ignorada por el usuario, procediendo con conexión estándar.");
+                    }
+
+                    conectado = true;
                     document.getElementById("walletStatus").innerText = `Conectado: ${userAddress.substring(0,6)}...${userAddress.substring(38)}`;
-                    document.getElementById("connectWallet").innerText = "Wallet Conectada";
-                    document.getElementById("connectWallet").style.backgroundColor = "#4caf50";
+                    const btn = document.getElementById("btnWallet");
+                    btn.innerText = "Desconectar Wallet";
+                    btn.style.backgroundColor = "#d32f2f";
+                    btn.style.color = "#fff";
                     
                     inicializarJuego();
                 } catch (error) {
                     console.error(error);
-                    alert("No se pudo completar la conexión con la Web3.");
+                    alert("Error al conectar la wallet.");
                 }
             } else {
-                alert("No se detectó ninguna billetera Web3. Si usas la App de Binance, abre este enlace desde su navegador DApp integrado.");
+                alert("Abre este enlace desde el navegador DApp integrado de tu App de Binance.");
             }
+        }
+
+        function desconectarWallet() {
+            provider = null;
+            signer = null;
+            userAddress = null;
+            conectado = false;
+
+            document.getElementById("walletStatus").innerText = "Wallet: Desconectada";
+            const btn = document.getElementById("btnWallet");
+            btn.innerText = "Conectar Wallet";
+            btn.style.backgroundColor = "#f3ba2f";
+            btn.style.color = "#000";
+
+            document.getElementById("gridCajas").innerHTML = "";
+            document.getElementById("mensaje").innerText = "Wallet desconectada.";
         }
 
         function inicializarJuego() {
@@ -179,11 +201,11 @@
                 caja.onclick = () => seleccionarCaja(i, caja);
                 grid.appendChild(caja);
             }
-            document.getElementById("mensaje").innerText = "¡Elige una caja para probar tu suerte!";
+            document.getElementById("mensaje").innerText = "¡Elige una caja para apostar 0.00001 BNB!";
         }
 
         async function seleccionarCaja(numeroCaja, elementoCaja) {
-            if (!signer) {
+            if (!signer || !conectado) {
                 alert("Primero debes conectar tu Wallet.");
                 return;
             }
@@ -191,47 +213,53 @@
             const mensajeEl = document.getElementById("mensaje");
 
             try {
-                mensajeEl.innerText = "Enviando apuesta de 0.00001 BNB...";
+                mensajeEl.innerText = "Confirmando apuesta de 0.00001 BNB en la red...";
                 
                 // Transacción para enviar 0.00001 BNB a la dirección de destino
                 const tx = await signer.sendTransaction({
-                    to: ZARD_CONTRACT_ADDRESS,
-                    value: APUESTA_BNB
+                    to: DESTINO_CONTRACT,
+                    value: APUESTA_BNB,
+                    gasLimit: ethers.utils.hexlify(100000)
                 });
 
-                mensajeEl.innerText = "Esperando confirmación de la red BSC...";
+                mensajeEl.innerText = "Transacción en proceso... Esperando bloques de la BSC.";
                 await tx.wait();
 
-                // Lógica de resultado
+                // Evaluar resultado de la caja
                 if (numeroCaja === CAJA_GANADORA) {
                     elementoCaja.className = "caja abierta ganadora";
                     elementoCaja.innerHTML = `🎉<br><span style="font-size: 12px;">¡Ganaste!</span>`;
-                    mensajeEl.innerText = "¡Felicidades! Encontraste la caja ganadora #4 (Reclama tus 0.5 ZARD).";
+                    mensajeEl.innerText = "🏆 ¡Felicidades! Encontraste la caja ganadora #4. ¡Has ganado 0.5 ZARD!";
                 } else {
                     elementoCaja.className = "caja abierta perdedora";
                     elementoCaja.innerHTML = `❌<br><span style="font-size: 12px;">Vacía</span>`;
-                    mensajeEl.innerText = `Lo siento, era la caja #${numeroCaja}. ¡Inténtalo de nuevo!`;
+                    mensajeEl.innerText = `Lo siento, era la caja #${numeroCaja}. ¡Sigue intentándolo!`;
                 }
 
-                // Deshabilitar las cajas restantes en la partida actual
+                // Desactivar las cajas de la ronda actual
                 const cajas = document.querySelectorAll(".caja");
                 cajas.forEach(c => c.onclick = null);
 
-                // Botón para reiniciar
+                // Botón para jugar de nuevo
                 setTimeout(() => {
                     const btnReiniciar = document.createElement("button");
-                    btnReiniciar.innerText = "Jugar de nuevo";
-                    btnReiniciar.style.marginTop = "15px";
+                    btnReiniciar.innerText = "Jugar otra vez";
+                    btnReiniciar.style.display = "block";
+                    btnReiniciar.style.margin = "15px auto 0 auto";
                     btnReiniciar.style.padding = "8px 15px";
                     btnReiniciar.style.cursor = "pointer";
+                    btnReiniciar.style.backgroundColor = "#f3ba2f";
+                    btnReiniciar.style.border = "none";
+                    btnReiniciar.style.borderRadius = "5px";
+                    btnReiniciar.style.fontWeight = "bold";
+                    btnReiniciar.style.color = "#000";
                     btnReiniciar.onclick = inicializarJuego;
-                    mensajeEl.appendChild(document.createElement("br"));
                     mensajeEl.appendChild(btnReiniciar);
-                }, 1000);
+                }, 500);
 
             } catch (error) {
                 console.error(error);
-                mensajeEl.innerText = "Transacción cancelada o fallida por fondos insuficientes.";
+                mensajeEl.innerText = "Transacción cancelada o fondos insuficientes de BNB.";
             }
         }
     </script>

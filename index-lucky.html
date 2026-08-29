@@ -2,364 +2,221 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZAARD LUKY - Protocolo Panga</title>
-    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZAARD Innovation - Caja Misteriosa Web3</title>
+    <!-- Incluimos ethers.js para la conexión con la Web3 -->
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@700&display=swap');
-        
-        body { 
-            margin: 0; 
-            padding: 0;
-            background-color: #070112;
-            font-family: 'Rajdhani', sans-serif; 
-            color: #fff;
-            touch-action: none;
+        :root {
+            --primary-color: #f3ba2f;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #ffffff;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #connectWallet {
+            background-color: var(--primary-color);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+        #connectWallet:hover {
+            opacity: 0.8;
+        }
+        .info-panel {
+            background: var(--card-bg);
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+        .grid-cajas {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            max-width: 600px;
+            width: 100%;
+        }
+        .caja {
+            background-color: var(--card-bg);
+            border: 2px solid #444;
+            border-radius: 12px;
+            aspect-ratio: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            overflow: hidden;
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.3s ease;
         }
-
-        #loading-screen {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #070112; z-index: 2000;
-            display: flex; justify-content: center; align-items: center; color: #00ffff; font-weight: bold; font-size: 20px;
+        .caja:hover:not(.abierta) {
+            border-color: var(--primary-color);
+            transform: scale(1.05);
         }
-
-        #modal-bienvenida {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: radial-gradient(circle at 50% 30%, #3a0ca3 0%, #10002b 60%, #050014 100%);
-            z-index: 1500;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            padding: 20px; box-sizing: border-box; text-align: center;
+        .caja.abierta {
+            cursor: default;
         }
-        .modal-card {
-            background: rgba(15, 5, 45, 0.95);
-            border: 2px solid #00ffff; border-radius: 22px;
-            padding: 25px; width: 100%; max-width: 380px;
-            box-shadow: 0 0 35px rgba(0, 255, 255, 0.5), inset 0 0 20px rgba(123, 44, 191, 0.4);
-            backdrop-filter: blur(8px);
+        .caja.ganadora {
+            background-color: #1b5e20;
+            border-color: #4caf50;
         }
-        .btn-accion {
-            width: 100%; padding: 14px; margin: 10px 0; border: none; border-radius: 12px;
-            font-weight: bold; font-size: 17px; cursor: pointer; text-transform: uppercase;
-            font-family: 'Rajdhani', sans-serif; transition: 0.2s;
+        .caja.perdedora {
+            background-color: #b71c1c;
+            border-color: #f44336;
         }
-        .btn-accion:hover { transform: scale(1.03); }
-        .btn-invitado { background: linear-gradient(90deg, #10b981, #059669); color: #fff; box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
-        .btn-web3 { background: linear-gradient(90deg, #00ffff, #0088cc); color: #000; box-shadow: 0 0 15px rgba(0, 255, 255, 0.5); }
-
-        .user-panel {
-            position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
-            width: 94%; max-width: 440px; height: 64px;
-            background: rgba(24, 5, 54, 0.95);
-            border: 2px solid rgba(0, 255, 255, 0.8); border-radius: 16px;
-            display: flex; align-items: center; padding: 0 12px; box-sizing: border-box;
-            box-shadow: 0 0 15px rgba(0,255,255,0.3); z-index: 10;
+        #mensaje {
+            margin-top: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            min-height: 30px;
         }
-        .user-avatar {
-            width: 44px; height: 44px; border-radius: 50%; border: 2px solid #d946ef;
-            object-fit: cover; margin-right: 10px; box-shadow: 0 0 8px #d946ef;
+        @media (max-width: 600px) {
+            .grid-cajas {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
-        .user-info { flex-grow: 1; text-align: left; }
-        .user-name { font-size: 16px; color: #00ffff; font-weight: bold; line-height: 1.1; text-shadow: 0 0 4px #00ffff; }
-        .user-sub { font-size: 12px; color: #e879f9; font-weight: bold; }
-        .btn-salir {
-            background: none; border: none; color: #ff6b6b; font-size: 15px; font-weight: bold;
-            cursor: pointer; font-family: 'Rajdhani', sans-serif; text-transform: uppercase; transition: 0.2s;
-        }
-        .btn-salir:hover { color: #ff4444; }
-
-        .game-container {
-            margin-top: 75px; width: 100%; max-width: 440px; display: flex; flex-direction: column; align-items: center; padding: 0 15px; box-sizing: border-box;
-        }
-        h1 { font-size: 1.6rem; color: #c77dff; text-shadow: 0 0 15px #7b2cbf; margin: 5px 0; text-transform: uppercase; text-align: center; }
-
-        .stats-bar {
-            display: flex; justify-content: space-between; width: 100%; background: rgba(50, 10, 90, 0.4);
-            border: 1px solid #7b2cbf; border-radius: 10px; padding: 8px 15px; box-sizing: border-box; margin-bottom: 10px;
-            font-size: 1.1rem; color: #00ffff;
-        }
-
-        .slot-machine {
-            width: 100%; background: rgba(20, 5, 45, 0.85); border: 2px solid #c77dff; border-radius: 18px;
-            padding: 15px; box-sizing: border-box; box-shadow: 0 0 20px rgba(199,125,255,0.4);
-            display: flex; flex-direction: column; align-items: center;
-        }
-
-        .reels-window {
-            display: flex; justify-content: space-around; width: 100%; gap: 10px; margin-bottom: 15px;
-        }
-
-        .reel {
-            flex: 1; height: 110px; background: #070112; border: 2px solid #00ffff; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;
-            box-shadow: inset 0 0 15px rgba(0,255,255,0.3);
-        }
-
-        .reel img {
-            width: 70px; height: 70px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(255,255,255,0.5));
-        }
-
-        .power-bar-container {
-            width: 100%; height: 24px; background: #070112; border: 2px solid #7b2cbf; border-radius: 12px;
-            position: relative; overflow: hidden; margin-bottom: 15px;
-        }
-
-        .power-target {
-            position: absolute; top: 0; width: 25%; height: 100%; background: rgba(0, 255, 255, 0.4);
-            border-left: 2px dashed #00ffff; border-right: 2px dashed #00ffff; left: 37%;
-            transition: 0.2s;
-        }
-
-        .power-indicator {
-            position: absolute; top: 0; left: 0%; width: 6px; height: 100%; background: #ff007f;
-            box-shadow: 0 0 10px #ff007f;
-        }
-
-        #status-msg { 
-            font-size: 1rem; margin: 10px 0; color: #e0aaff; font-weight: bold; min-height: 45px; 
-            display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 5px;
-        }
-
-        .btn-game {
-            width: 100%; padding: 14px; background: linear-gradient(45deg, #7b2cbf, #00ffff); cursor: pointer; 
-            border: none; border-radius: 12px; color: #000; font-weight: bold; font-size: 1.2rem; 
-            text-transform: uppercase; box-shadow: 0 0 15px rgba(0,255,255,0.5); font-family: 'Rajdhani', sans-serif;
-            transition: 0.2s;
-        }
-        .btn-game:hover { transform: scale(1.02); }
-        .btn-game:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        @keyframes popIn {
-            0% { transform: scale(0.4); opacity: 0; }
-            80% { transform: scale(1.15); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .mensaje-ganaste { color: #10b981 !important; text-shadow: 0 0 10px #10b981 !important; animation: popIn 0.3s ease-out; font-size: 1.05rem !important; }
-        .mensaje-perdiste { color: #ff4d6d !important; text-shadow: 0 0 10px #ff4d6d !important; animation: popIn 0.3s ease-out; }
     </style>
 </head>
 <body>
 
-    <div id="loading-screen">CARGANDO MÁQUINA LUKY...</div>
+    <header>
+        <h1>ZAARD Mystery Box</h1>
+        <p>Apuesta <strong>0.00001 BNB</strong> y gana <strong>0.5 ZARD</strong> si encuentras la caja correcta</p>
+    </header>
 
-    <!-- MODAL DE BIENVENIDA -->
-    <div id="modal-bienvenida">
-        <div class="modal-card">
-            <h2 style="color: #00ffff; margin-top: 0; font-size: 1.5rem;">⚡ ZAARD LUKY ARCADE ⚡</h2>
-            <p style="font-size: 14px; color: #ccc; margin-bottom: 15px; line-height: 1.3;">
-                Supera los 7 intentos de potencia extrema. ¡Demuestra tu precisión en la máquina!
-            </p>
-            <button class="btn-accion btn-invitado" onclick="elegirModo()">MODO INVITADO 🚀</button>
-            <button class="btn-accion btn-web3" onclick="conectarWallet()">CONECTAR BILLETERA</button>
-        </div>
+    <button id="connectWallet" onclick="conectarWallet()">Conectar Wallet</button>
+
+    <div class="info-panel">
+        <p id="walletStatus">Wallet: Desconectada</p>
+        <p>Contrato ZARD: <small>0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65</small></p>
     </div>
 
-    <!-- AUDIO DE FONDO -->
-    <audio id="zaard-audio" loop>
-        <source src="El%20Chupulún%20de%20Zaard.mp3" type="audio/mpeg">
-    </audio>
-
-    <!-- PANEL SUPERIOR -->
-    <div class="user-panel">
-        <img id="img-avatar-usr" class="user-avatar" src="" alt="Avatar">
-        <div class="user-info">
-            <div id="txt-nombre-usr" class="user-name">Jugador</div>
-            <div class="user-sub">LUKY POWER SLOT</div>
-        </div>
-        <button class="btn-salir" onclick="irAlMenuPrincipal()">SALIR</button>
+    <div class="grid-cajas" id="gridCajas">
+        <!-- Se generan dinámicamente las 12 cajas -->
     </div>
 
-    <!-- ÁREA DE JUEGO -->
-    <div class="game-container">
-        <h1>⚡ LUKY POWER MACHINE ⚡</h1>
-        
-        <div class="stats-bar">
-            <span id="txt-nivel">INTENTO: 1 / 7</span>
-            <span id="txt-intentos">RESTANTES: 7</span>
-        </div>
-
-        <div class="slot-machine">
-            <div class="reels-window">
-                <div class="reel" id="reel-1"><img id="img-r1" src="" alt="R1"></div>
-                <div class="reel" id="reel-2"><img id="img-r2" src="" alt="R2"></div>
-                <div class="reel" id="reel-3"><img id="img-r3" src="" alt="R3"></div>
-            </div>
-
-            <div class="power-bar-container">
-                <div class="power-target" id="power-target"></div>
-                <div class="power-indicator" id="power-indicator"></div>
-            </div>
-
-            <div id="status-msg">Presiona GIRAR para iniciar el motor de potencia</div>
-            
-            <button class="btn-game" id="btn-accion-juego" onclick="accionarBoton()">GIRAR / DETENER</button>
-        </div>
-    </div>
+    <div id="mensaje"></div>
 
     <script>
-        const LS_NOMBRE = localStorage.getItem('zaard_nombre') || "Jugador Zaard";
-        const LS_AVATAR_URL = localStorage.getItem('zaard_avatar') || 'https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_lhyyv2lhyyv2lhyy_1.png';
+        let provider, signer, userAddress;
+        const ZARD_CONTRACT_ADDRESS = "0x3468ea4e6ce13ec4c7f8651f7efc6aa6046f4d65";
+        const APUESTA_BNB = ethers.utils.parseEther("0.00001");
+        const CAJA_GANADORA = 4; // La caja número 4 es la ganadora predeterminada
 
-        const simbolos = [
-            "https://ipfs.io/ipfs/bafybeicsg3uv7e3gcl7h7ibq5io5frmrpcbvkg24igufpyek26pzqmrrr4",
-            "https://ipfs.io/ipfs/bafybeihqftstfjm3i32e3xm54xo52h6tpldlmfkwc2z6tx5qthbonyboue",
-            "https://ipfs.io/ipfs/bafybeid4eh5si4tdy3kpqgtnd4l2z6ehac3rkd4vjmsgdb5gqbs2vcox34",
-            "https://ipfs.io/ipfs/bafybeiefhnawny7nlgixveiia7aaougqxsird6or4nws52vp36ndbfvixa",
-            "https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m"
+        // ABI estándar mínimo para recibir BNB (función receive/fallback) y transferencias de tokens si fuera necesario
+        const ZARD_ABI = [
+            "function balanceOf(address account) view returns (uint256)",
+            "function transfer(to, amount) returns (bool)"
         ];
-
-        let intentoActual = 1;
-        const maxIntentos = 7;
-        let estadoJuego = "ESPERANDO"; // ESPERANDO, GIRANDO, DETENIDO
-        let animacionInterval;
-        let barraInterval;
-        let posBarra = 0;
-        let direccionBarra = 1;
-        let velocidadBarra = 4;
-
-        let musicaHabilitada = localStorage.getItem('zaard_musica') !== 'OFF';
-
-        window.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('txt-nombre-usr').innerText = LS_NOMBRE;
-            document.getElementById('img-avatar-usr').src = LS_AVATAR_URL;
-            actualizarUI();
-            randomizarReelsEsteticos();
-
-            const audio = document.getElementById('zaard-audio');
-            audio.volume = 0.3;
-            if (musicaHabilitada) {
-                audio.play().catch(e => console.log("Audio pendiente"));
-            }
-            document.getElementById('loading-screen').style.display = 'none';
-        });
-
-        function elegirModo() {
-            document.getElementById('modal-bienvenida').style.display = 'none';
-        }
 
         async function conectarWallet() {
             if (window.ethereum) {
                 try {
-                    await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    alert("¡Billetera conectada con éxito!");
-                    document.getElementById('modal-bienvenida').style.display = 'none';
-                } catch (e) { alert("Conexión cancelada."); }
-            } else { alert("MetaMask no detectado."); }
-        }
-
-        function irAlMenuPrincipal() {
-            window.location.href = "index.html";
-        }
-
-        function actualizarUI() {
-            document.getElementById('txt-nivel').innerText = `INTENTO: ${intentoActual} / ${maxIntentos}`;
-            document.getElementById('txt-intentos').innerText = `RESTANTES: ${maxIntentos - intentoActual + 1}`;
-            
-            const target = document.getElementById('power-target');
-            
-            if (intentoActual === 7) {
-                // INTENTO 7 IMPOSIBLE: Objetivo microscópico de apenas 2% de ancho y velocidad extrema
-                target.style.width = `2%`;
-                target.style.left = `49%`;
+                    provider = new ethers.providers.Web3Provider(window.ethereum);
+                    await provider.send("eth_requestAccounts", []);
+                    signer = provider.getSigner();
+                    userAddress = await signer.getAddress();
+                    
+                    document.getElementById("walletStatus").innerText = `Conectado: ${userAddress.substring(0,6)}...${userAddress.substring(38)}`;
+                    document.getElementById("connectWallet").innerText = "Wallet Conectada";
+                    document.getElementById("connectWallet").style.backgroundColor = "#4caf50";
+                    
+                    inicializarJuego();
+                } catch (error) {
+                    console.error(error);
+                    alert("Error al conectar la wallet.");
+                }
             } else {
-                // Dificultad progresiva del 1 al 6
-                let anchoTarget = 28 - (intentoActual * 3); 
-                target.style.width = `${anchoTarget}%`;
-                target.style.left = `${30 + (intentoActual * 2)}%`;
+                alert("Por favor, instala MetaMask o usa un navegador Web3 móvil (como Trust Wallet / BitKeep).");
             }
         }
 
-        function randomizarReelsEsteticos() {
-            document.getElementById('img-r1').src = simbolos[Math.floor(Math.random() * simbolos.length)];
-            document.getElementById('img-r2').src = simbolos[Math.floor(Math.random() * simbolos.length)];
-            document.getElementById('img-r3').src = simbolos[Math.floor(Math.random() * simbolos.length)];
+        function inicializarJuego() {
+            const grid = document.getElementById("gridCajas");
+            grid.innerHTML = "";
+
+            for (let i = 1; i <= 12; i++) {
+                const caja = document.createElement("div");
+                caja.className = "caja";
+                caja.innerHTML = `📦<br><span style="font-size: 12px;">#${i}</span>`;
+                caja.onclick = () => seleccionarCaja(i, caja);
+                grid.appendChild(caja);
+            }
+            document.getElementById("mensaje").innerText = "¡Elige una caja para probar tu suerte!";
         }
 
-        function accionarBoton() {
-            const msg = document.getElementById('status-msg');
-            const btn = document.getElementById('btn-accion-juego');
+        async function seleccionarCaja(numeroCaja, elementoCaja) {
+            if (!signer) {
+                alert("Primero debes conectar tu Wallet.");
+                return;
+            }
 
-            if (estadoJuego === "ESPERANDO") {
-                estadoJuego = "GIRANDO";
-                msg.className = "";
-                msg.innerText = intentoActual === 7 ? "🔥 ¡FASE IMPOSIBLE! Detén en el micro-objetivo..." : "⚡ ¡MANTÉN EL RITMO Y DETÉN EN LA ZONA VERDE!";
-                btn.innerText = "¡DETENER POTENCIA!";
+            const mensajeEl = document.getElementById("mensaje");
 
-                // Velocidad extrema en el intento 7
-                velocidadBarra = intentoActual === 7 ? 14 : (3 + (intentoActual * 1.5));
+            try {
+                mensajeEl.innerText = "Enviando apuesta de 0.00001 BNB...";
+                
+                // Transacción para enviar los 0.00001 BNB al contrato del juego / creador
+                const tx = await signer.sendTransaction({
+                    to: ZARD_CONTRACT_ADDRESS,
+                    value: APUESTA_BNB
+                });
 
-                animacionInterval = setInterval(() => {
-                    randomizarReelsEsteticos();
-                }, 70);
+                mensajeEl.innerText = "Esperando confirmación de la red...";
+                await tx.wait();
 
-                barraInterval = setInterval(() => {
-                    posBarra += velocidadBarra * direccionBarra;
-                    if (posBarra >= 96 || posBarra <= 0) {
-                        direccionBarra *= -1;
-                    }
-                    document.getElementById('power-indicator').style.left = `${posBarra}%`;
-                }, 15);
-
-            } else if (estadoJuego === "GIRANDO") {
-                estadoJuego = "DETENIDO";
-                clearInterval(animacionInterval);
-                clearInterval(barraInterval);
-                btn.innerText = "GIRAR / DETENER";
-
-                const targetElem = document.getElementById('power-target');
-                const leftTarget = parseFloat(targetElem.style.left);
-                const widthTarget = parseFloat(targetElem.style.width);
-
-                let aciertoPrecision = (posBarra >= leftTarget && posBarra <= (leftTarget + widthTarget));
-
-                if (aciertoPrecision && intentoActual < 7) {
-                    let simboloGanador = simbolos[Math.floor(Math.random() * simbolos.length)];
-                    document.getElementById('img-r1').src = simboloGanador;
-                    document.getElementById('img-r2').src = simboloGanador;
-                    document.getElementById('img-r3').src = simboloGanador;
-
-                    intentoActual++;
-                    msg.className = "mensaje-ganaste";
-                    msg.innerText = `🌟 ¡Precisión correcta! Siguiente nivel de potencia...`;
-                    estadoJuego = "ESPERANDO";
-                    setTimeout(() => { 
-                        if (intentoActual <= maxIntentos) {
-                            actualizarUI(); 
-                            msg.innerText = "Presiona GIRAR para continuar"; 
-                        }
-                    }, 1800);
-
-                } else if (aciertoPrecision && intentoActual === 7) {
-                    // Si milagrosamente pasa el 7
-                    estadoJuego = "FIN";
-                    msg.className = "mensaje-ganaste";
-                    msg.innerHTML = `🎉 ¡IMPOSIBLE! ¡VICTORIA LEGENDARIA ${LS_NOMBRE}!<br>De 24 a 48 horas se acreditarán tus ZARD. 🚀`;
-                    btn.disabled = true;
-                    setTimeout(() => { window.location.href = "index.html"; }, 5000);
-
+                // Revelar resultado
+                if (numeroCaja === CAJA_GANADORA) {
+                    elementoCaja.className = "caja abierta ganadora";
+                    elementoCaja.innerHTML = `🎉<br><span style="font-size: 12px;">¡Ganaste!</span>`;
+                    mensajeEl.innerText = "¡Felicidades! Has encontrado la caja ganadora #4. (Reclama tus 0.5 ZARD con el administrador).";
                 } else {
-                    // Fallo o llegada al intento 7 fallido
-                    if (intentoActual >= maxIntentos) {
-                        estadoJuego = "FIN";
-                        msg.className = "mensaje-perdiste";
-                        msg.innerHTML = `❌ ¡Sigue intentándolo! La máquina se bloqueó.<br><span style="color:#00ffff; font-size:0.9rem;">Redirigiendo al menú principal...</span>`;
-                        btn.disabled = true;
-                        setTimeout(() => {
-                            window.location.href = "index.html";
-                        }, 3500);
-                    } else {
-                        intentoActual++;
-                        actualizarUI();
-                        msg.className = "mensaje-perdiste";
-                        msg.innerText = `❌ Fuera del objetivo. Intento ${intentoActual} de ${maxIntentos}. ¡Sigue intentando!`;
-                        estadoJuego = "ESPERANDO";
-                    }
+                    elementoCaja.className = "caja abierta perdedora";
+                    elementoCaja.innerHTML = `❌<br><span style="font-size: 12px;">Vacía</span>`;
+                    mensajeEl.innerText = `Lo siento, era la caja #${numeroCaja}. ¡Inténtalo de nuevo!`;
                 }
+
+                // Deshabilitar todas las cajas tras la jugada
+                const cajas = document.querySelectorAll(".caja");
+                cajas.forEach(c => c.onclick = null);
+
+                // Botón para reiniciar partida
+                setTimeout(() => {
+                    const btnReiniciar = document.createElement("button");
+                    btnReiniciar.innerText = "Jugar de nuevo";
+                    btnReiniciar.style.marginTop = "15px";
+                    btnReiniciar.style.padding = "8px 15px";
+                    btnReiniciar.style.cursor = "pointer";
+                    btnReiniciar.onclick = inicializarJuego;
+                    mensajeEl.appendChild(document.createElement("br"));
+                    mensajeEl.appendChild(btnReiniciar);
+                }, 1000);
+
+            } catch (error) {
+                console.error(error);
+                mensajeEl.innerText = "Transacción cancelada o fallida.";
             }
         }
     </script>

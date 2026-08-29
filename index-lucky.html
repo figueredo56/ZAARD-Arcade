@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZAARD Innovation - Ciber Mystery Boxes</title>
+    <title>ZAARD Innovation - Cyber Mystery Boxes</title>
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <style>
         :root {
             --neon-blue: #00f3ff;
             --neon-purple: #b000ff;
             --bg-color: #05050a;
-            --card-bg: rgba(18, 18, 35, 0.7);
+            --card-bg: rgba(18, 18, 35, 0.85);
             --text-color: #ffffff;
         }
 
@@ -64,12 +64,6 @@
             justify-content: center;
             background: #111;
             overflow: hidden;
-        }
-
-        .logo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
 
         h1 {
@@ -159,7 +153,7 @@
             overflow: hidden;
         }
 
-        .caja:hover:not(.abierta) {
+        .caja:hover:not(.abierta):not(.bloqueada) {
             border-color: var(--neon-purple);
             transform: translateY(-5px) scale(1.03);
             box-shadow: 0 0 20px var(--neon-purple);
@@ -170,14 +164,14 @@
         }
 
         .caja.ganadora {
-            background: rgba(0, 255, 100, 0.15);
+            background: rgba(0, 255, 100, 0.2);
             border-color: #00ff66;
             box-shadow: 0 0 30px #00ff66;
             animation: winPulse 1s infinite alternate;
         }
 
         .caja.perdedora {
-            background: rgba(255, 0, 60, 0.15);
+            background: rgba(255, 0, 60, 0.2);
             border-color: #ff003c;
             box-shadow: 0 0 20px #ff003c;
         }
@@ -192,7 +186,7 @@
             font-size: 17px;
             font-weight: 500;
             text-align: center;
-            min-height: 40px;
+            min-height: 50px;
             max-width: 500px;
             padding-bottom: 40px;
             color: var(--neon-blue);
@@ -217,18 +211,18 @@
     </select>
 
     <header>
-        <div class="logo-container" id="logoContainer">
+        <div class="logo-container">
             <span>💎</span>
         </div>
         <h1 id="txtTitle">ZAARD Cyber Vault</h1>
-        <p id="txtSubtitle">Despliega tu energía cuántica, compra tu cupo por <strong>0.00001 BNB</strong> y desbloquea <strong>0.5 ZARD</strong> en la caja maestra.</p>
+        <p id="txtSubtitle">Apuesta <strong>0.00001 BNB</strong>, elige tu caja con suspenso y desbloquea <strong>0.5 ZARD</strong> en la caja maestra.</p>
     </header>
 
     <button id="btnWallet" onclick="gestionarConexion()">Conectar Wallet</button>
 
     <div class="info-panel">
         <p id="walletStatus">Wallet: Desconectada</p>
-        <p><span id="txtContractLabel">Cartera Creadora (Cupo)</span>: <small>0x84f529525fae84b1f1d7ea66939592094426cdc8</small></p>
+        <p><span id="txtContractLabel">Cartera Creadora (Apuesta)</span>: <small>0x84f529525fae84b1f1d7ea66939592094426cdc8</small></p>
     </div>
 
     <div class="grid-cajas" id="gridCajas"></div>
@@ -239,7 +233,6 @@
         let provider, signer, userAddress;
         let conectado = false;
         
-        // Cartera Creadora para recibir el pago del cupo (0.00001 BNB)
         const CARTERA_CREADORA = "0x84f529525fae84b1f1d7ea66939592094426cdc8";
         const APUESTA_BNB = ethers.utils.parseEther("0.00001");
         const CAJA_GANADORA = 4; // Caja #4
@@ -247,67 +240,67 @@
         const traducciones = {
             es: {
                 title: "ZAARD Cyber Vault",
-                subtitle: "Despliega tu energía cuántica, compra tu cupo por 0.00001 BNB y desbloquea 0.5 ZARD en la caja maestra.",
+                subtitle: "Apuesta 0.00001 BNB, elige tu caja con suspenso y desbloquea 0.5 ZARD en la caja maestra.",
                 connect: "Conectar Wallet",
                 disconnect: "Desconectar Wallet",
                 statusDisc: "Wallet: Desconectada",
                 statusConn: "Conectado",
-                contractLabel: "Cartera Creadora (Cupo)",
+                contractLabel: "Cartera Creadora (Apuesta)",
                 msgInit: "Conecta tu billetera para iniciar la secuencia cibernética.",
-                msgReady: "¡Elige una caja cibernética para comprar tu cupo de 0.00001 BNB!",
-                msgSending: "Enviando pago de 0.00001 BNB a la cartera creadora...",
-                msgWait: "Procesando bloque en la red BSC...",
-                win: "🏆 ¡IMPACTO CRÍTICO! Encontraste la caja maestra #4. ¡Has ganado 0.5 ZARD!",
-                loss: "⚡ Caja vacía (#). ¡La energía se dispersó, inténtalo de nuevo!",
-                retry: "Nueva Secuencia"
+                msgReady: "⚡ ¡Elige una caja con atención... Se requiere apuesta de 0.00001 BNB!",
+                msgSuspenso: "🔮 Canalizando energía cuántica y preparando apuesta de 0.00001 BNB...",
+                msgWait: "⏳ Autoriza la transacción en tu wallet para abrir la caja...",
+                win: "🏆 ¡IMPACTO CRÍTICO! Descubriste la caja maestra #4. ¡Has ganado 0.5 ZARD!",
+                loss: "⚡ Caja vacía (#). ¡La energía falló, perdiste tu apuesta!",
+                retry: "🔄 Volver a apostar"
             },
             en: {
                 title: "ZAARD Cyber Vault",
-                subtitle: "Deploy your quantum energy, buy your slot for 0.00001 BNB and unlock 0.5 ZARD in the master box.",
+                subtitle: "Bet 0.00001 BNB, choose your suspense box and unlock 0.5 ZARD in the master box.",
                 connect: "Connect Wallet",
                 disconnect: "Disconnect Wallet",
                 statusDisc: "Wallet: Disconnected",
                 statusConn: "Connected",
-                contractLabel: "Creator Wallet (Slot)",
+                contractLabel: "Creator Wallet (Bet)",
                 msgInit: "Connect your wallet to start the cyber sequence.",
-                msgReady: "Choose a cyber box to buy your 0.00001 BNB slot!",
-                msgSending: "Sending 0.00001 BNB payment to creator wallet...",
-                msgWait: "Processing block on BSC network...",
+                msgReady: "⚡ Choose a box carefully... 0.00001 BNB bet required!",
+                msgSuspenso: "🔮 Channeling quantum energy and preparing 0.00001 BNB bet...",
+                msgWait: "⏳ Authorize transaction in your wallet to open the box...",
                 win: "🏆 CRITICAL IMPACT! You found master box #4. You won 0.5 ZARD!",
-                loss: "⚡ Empty box (#). Energy dispersed, try again!",
-                retry: "New Sequence"
+                loss: "⚡ Empty box (#). Energy failed, you lost your bet!",
+                retry: "🔄 Bet Again"
             },
             ar: {
                 title: "ZAARD Cyber Vault",
-                subtitle: "انشر طاقتك الكمومية، واشترِ حصتك بـ 0.00001 BNB وافتح 0.5 ZARD في الصندوق الرئيسي.",
+                subtitle: "راهن بـ 0.00001 BNB، واختتر صندوق التشويق الخاص بك وافتح 0.5 ZARD.",
                 connect: "ربط المحفظة",
                 disconnect: "قطع الاتصال",
                 statusDisc: "المحفظة: غير متصلة",
                 statusConn: "متصل",
                 contractLabel: "محفظة المنشئ",
                 msgInit: "قم بربط محفظتك لبدء التسلسل السيبراني.",
-                msgReady: "اختر صندوقاً سيبرانياً لشراء حصتك بقيمة 0.00001 BNB!",
-                msgSending: "جاري إرسال دفعة 0.00001 BNB إلى محفظة المنشئ...",
-                msgWait: "جاري معالجة الكتلة على شبكة BSC...",
+                msgReady: "⚡ اختر صندوقاً بعناية... مطلوب رهان 0.00001 BNB!",
+                msgSuspenso: "🔮 جاري توجيه الطاقة الكمومية وتحضير الرهان...",
+                msgWait: "⏳ يرجى تأكيد المعاملة في محفظتك لفتح الصندوق...",
                 win: "🏆 تأثير حاسم! لقد وجدت الصندوق الرئيسي #4. لقد ربحت 0.5 ZARD!",
-                loss: "⚡ صندوق فارغ (#). تشتت الطاقة، حاول مرة أخرى!",
-                retry: "تسلسل جديد"
+                loss: "⚡ صندوق فارغ (#). فشلت الطاقة، لقد خسرت رهانتك!",
+                retry: "🔄 الرهان مرة أخرى"
             },
             zh: {
                 title: "ZAARD Cyber Vault",
-                subtitle: "部署您的量子能量，以 0.00001 BNB 购买名额并在主宝箱中解锁 0.5 ZARD。",
+                subtitle: "下注 0.00001 BNB，选择你的悬疑宝箱并在主宝箱中解锁 0.5 ZARD。",
                 connect: "连接钱包",
                 disconnect: "断开连接",
                 statusDisc: "钱包：未连接",
                 statusConn: "已连接",
                 contractLabel: "创建者钱包",
                 msgInit: "连接您的钱包以启动网络序列。",
-                msgReady: "选择一个网络宝箱购买 0.00001 BNB 的名额！",
-                msgSending: "正在向创建者钱包发送 0.00001 BNB 支付...",
-                msgWait: "正在 BSC 网络上处理区块...",
+                msgReady: "⚡ 仔细选择一个宝箱... 需要下注 0.00001 BNB！",
+                msgSuspenso: "🔮 正在引导量子能量并准备 0.00001 BNB 下注...",
+                msgWait: "⏳ 请在您的钱包中确认交易以打开宝箱...",
                 win: "🏆 暴击！你找到了主宝箱 #4。你赢得了 0.5 ZARD！",
-                loss: "⚡ 空宝箱 (#)。能量消散，再试一次！",
-                retry: "新序列"
+                loss: "⚡ 空宝箱 (#)。能量耗尽，你输掉了下注！",
+                retry: "🔄 再次下注"
             }
         };
 
@@ -412,19 +405,28 @@
             const t = traducciones[lang];
             const mensajeEl = document.getElementById("mensaje");
 
+            // Bloquear clics mientras se procesa
+            const todasLasCajas = document.querySelectorAll(".caja");
+            todasLasCajas.forEach(c => c.style.pointerEvents = "none");
+
             try {
-                mensajeEl.innerText = t.msgSending;
-                
-                // Envío directo del BNB de compra de cupo a la cartera creadora indicada
+                // Preámbulo de suspenso
+                mensajeEl.innerText = t.msgSuspenso;
+                await new Promise(r => setTimeout(r, 1200));
+
+                mensajeEl.innerText = t.msgWait;
+
+                // Envío de la apuesta de 0.00001 BNB a la cartera creadora
                 const tx = await signer.sendTransaction({
                     to: CARTERA_CREADORA,
                     value: APUESTA_BNB,
                     gasLimit: ethers.utils.hexlify(100000)
                 });
 
-                mensajeEl.innerText = t.msgWait;
+                mensajeEl.innerText = "⚡ Transacción enviada... Abriendo caja en la red...";
                 await tx.wait();
 
+                // Resultado
                 if (numeroCaja === CAJA_GANADORA) {
                     elementoCaja.className = "caja abierta ganadora";
                     elementoCaja.innerHTML = `💎<br><span style="font-size: 11px;">WIN</span>`;
@@ -435,9 +437,7 @@
                     mensajeEl.innerText = t.loss.replace("#", numeroCaja);
                 }
 
-                const cajas = document.querySelectorAll(".caja");
-                cajas.forEach(c => c.onclick = null);
-
+                // Botón de Volver a apostar
                 setTimeout(() => {
                     const btnReiniciar = document.createElement("button");
                     btnReiniciar.innerText = t.retry;
@@ -457,7 +457,9 @@
 
             } catch (error) {
                 console.error(error);
-                mensajeEl.innerText = "Transacción cancelada o saldo BNB insuficiente.";
+                mensajeEl.innerText = "❌ Transacción cancelada o saldo BNB insuficiente.";
+                // Reactivar cajas si cancela
+                todasLasCajas.forEach(c => c.style.pointerEvents = "auto");
             }
         }
     </script>

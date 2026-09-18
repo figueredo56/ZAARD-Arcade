@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZAARD INNOVATION - Fénix Motion Studio</title>
+    <title>ZAARD INNOVATION - Pinterest & Motion Studio</title>
     <!-- Fuentes de Google -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Inter:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <!-- Ethers.js para Web3 y pagos -->
@@ -24,7 +24,7 @@
             overflow-x: hidden;
         }
 
-        /* Pantalla de Bienvenida Épica (Landing / Intro) */
+        /* 1. PANTALLA DE BIENVENIDA ÉPICA */
         #welcomeScreen {
             display: flex;
             flex-direction: column;
@@ -49,7 +49,7 @@
         }
         .welcome-title {
             font-family: 'Cinzel', serif;
-            font-size: 2.4rem;
+            font-size: 2.3rem;
             font-weight: 900;
             background: linear-gradient(135deg, #ffffff 20%, var(--neon-blue) 60%, var(--neon-purple) 100%);
             -webkit-background-clip: text;
@@ -99,12 +99,9 @@
             box-shadow: 0 0 40px rgba(0, 240, 255, 0.9);
         }
 
-        /* Aplicación Principal (Oculta hasta entrar) */
-        #appContainer {
-            display: none;
-        }
+        /* 2. APLICACIÓN PRINCIPAL (ESTUDIO PINTEREST STYLE) */
+        #appContainer { display: none; }
 
-        /* Navbar Superior */
         header {
             display: flex;
             justify-content: space-between;
@@ -117,15 +114,9 @@
             z-index: 1000;
             backdrop-filter: blur(12px);
         }
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+        .logo-container { display: flex; align-items: center; gap: 12px; }
         .logo-img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            width: 40px; height: 40px; border-radius: 50%;
             border: 2px solid var(--neon-blue);
             box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
             object-fit: cover;
@@ -137,11 +128,7 @@
             color: var(--neon-blue);
             letter-spacing: 2px;
         }
-        .nav-links {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
+        .nav-links { display: flex; gap: 12px; align-items: center; }
         .btn-nav {
             background: transparent;
             border: 1px solid var(--neon-blue);
@@ -154,18 +141,14 @@
             text-decoration: none;
             transition: all 0.3s ease;
         }
-        .btn-nav:hover {
-            background: var(--neon-blue);
-            color: #000;
-        }
+        .btn-nav:hover { background: var(--neon-blue); color: #000; }
 
-        /* Contenedor del Estudio */
         .studio-container {
-            max-width: 1150px;
+            max-width: 1200px;
             margin: 30px auto 70px auto;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 35px;
+            gap: 30px;
             padding: 0 20px;
         }
         @media (max-width: 900px) {
@@ -176,46 +159,91 @@
             background: var(--card-bg);
             border: 2px solid var(--border-glow);
             border-radius: 18px;
-            padding: 30px;
+            padding: 25px;
             box-shadow: 0 15px 40px rgba(189, 0, 255, 0.12);
         }
         .panel h2 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: var(--neon-purple);
-            margin-bottom: 22px;
+            margin-bottom: 18px;
             border-bottom: 1px solid rgba(189, 0, 255, 0.2);
-            padding-bottom: 12px;
+            padding-bottom: 10px;
             text-shadow: 0 0 8px rgba(189, 0, 255, 0.4);
         }
 
-        /* Controles */
-        .control-group {
-            margin-bottom: 18px;
-        }
+        /* Controles y Banco de Imágenes Pinterest */
+        .control-group { margin-bottom: 16px; }
         .control-group label {
-            display: block;
-            font-size: 0.85rem;
-            color: #c4b6de;
-            margin-bottom: 6px;
-            font-weight: 600;
+            display: block; font-size: 0.82rem; color: #c4b6de; margin-bottom: 6px; font-weight: 600;
         }
-        .control-group input, .control-group select {
-            width: 100%;
-            padding: 12px 15px;
-            background: #130a26;
-            border: 1px solid #36225e;
-            color: #fff;
-            border-radius: 9px;
-            font-size: 0.95rem;
+        .control-group input {
+            width: 100%; padding: 10px 14px;
+            background: #130a26; border: 1px solid #36225e; color: #fff;
+            border-radius: 8px; font-size: 0.9rem;
         }
-        .control-group input:focus, .control-group select:focus {
-            border-color: var(--neon-blue);
-            outline: none;
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        .control-group input:focus {
+            border-color: var(--neon-blue); outline: none; box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
         }
 
-        /* Lienzo interactivo (Canvas) */
+        /* Galería Pinterest de Imágenes de la Red */
+        .pinterest-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-height: 180px;
+            overflow-y: auto;
+            padding: 5px;
+            background: #06030d;
+            border-radius: 10px;
+            border: 1px solid #2a194f;
+            margin-bottom: 15px;
+        }
+        .pinterest-item {
+            width: 100%;
+            height: 65px;
+            object-fit: cover;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .pinterest-item:hover {
+            transform: scale(1.05);
+            border-color: var(--neon-blue);
+        }
+
+        /* Lista de capas añadidas */
+        .layers-box {
+            background: #06030d;
+            border: 1px solid #2a194f;
+            border-radius: 10px;
+            padding: 10px;
+            max-height: 120px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+        .layer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #120a26;
+            padding: 6px 10px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 0.8rem;
+        }
+        .btn-delete-layer {
+            background: #ff3333;
+            color: #fff;
+            border: none;
+            padding: 3px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Canvas interactivo */
         .canvas-wrapper {
             position: relative;
             width: 100%;
@@ -230,40 +258,23 @@
             align-items: center;
             margin-bottom: 15px;
         }
-        canvas {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
+        canvas { width: 100%; height: 100%; display: block; }
 
-        /* Botón de Pago Accesible (0.0007 BNB) */
+        /* Botón de Pago Justo (0.0007 BNB) */
         .btn-action {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
+            width: 100%; padding: 14px; border: none; border-radius: 10px;
+            font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 0.9rem;
+            cursor: pointer; transition: all 0.3s ease; text-transform: uppercase;
         }
         .btn-pay {
             background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
-            color: #fff;
-            box-shadow: 0 0 20px rgba(189, 0, 255, 0.4);
+            color: #fff; box-shadow: 0 0 20px rgba(189, 0, 255, 0.4);
         }
         .btn-pay:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.8);
+            transform: translateY(-2px); box-shadow: 0 0 30px rgba(0, 240, 255, 0.8);
         }
         .status-msg {
-            margin-top: 12px;
-            font-size: 0.85rem;
-            text-align: center;
-            color: var(--neon-blue);
-            min-height: 22px;
+            margin-top: 12px; font-size: 0.85rem; text-align: center; color: var(--neon-blue); min-height: 22px;
         }
     </style>
 </head>
@@ -281,9 +292,9 @@
         </div>
 
         <h1 class="welcome-title" id="introTitle">Con tus ZARD puedes llegar a donde nadie ha llegado. Deja que el poder de PANGA sea parte de ti: conviértete en Fénix</h1>
-        <p class="welcome-desc" id="introDesc">Bienvenido al santuario oficial de innovación. Diseña tu propia insignia estelar con energía de renacimiento y tecnología Web3 avanzada.</p>
+        <p class="welcome-desc" id="introDesc">Bienvenido al santuario de creación visual estilo Pinterest. Monta imágenes de la red, edítalas, agrega efectos y diseña tu insignia definitiva.</p>
         
-        <button class="btn-enter" onclick="enterStudio()" id="btnEnterText">🚀 Entrar al Motion Studio</button>
+        <button class="btn-enter" onclick="enterStudio()" id="btnEnterText">🚀 Entrar al Pinterest Studio</button>
     </div>
 
     <!-- 2. APLICACIÓN PRINCIPAL (ESTUDIO) -->
@@ -300,53 +311,57 @@
             </div>
         </header>
 
-        <!-- Estudio con Opciones Épicas -->
+        <!-- Estudio con Selector Estilo Pinterest -->
         <div class="studio-container">
-            <!-- Panel de Creación y Opciones -->
+            <!-- Panel de Control y Banco de Imágenes -->
             <div class="panel">
-                <h2 id="panelConfigTitle">⚙️ Panel de Creación Fénix</h2>
+                <h2 id="panelConfigTitle">📌 Galería Pinterest & Elementos</h2>
                 
                 <div class="control-group">
-                    <label id="lblText1">Título Épico Principal</label>
+                    <label id="lblPinterestGrid">Selecciona una imagen de la paleta web:</label>
+                    <div class="pinterest-grid" id="pinterestPalette">
+                        <!-- Imágenes prediseñadas de la red para montar con 1 clic -->
+                        <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1789698579711-7b67968ed9538e215f1948583ee37c7c.png" class="pinterest-item" onclick="addImageLayer(this.src)" title="Logo ZAARD">
+                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400" class="pinterest-item" onclick="addImageLayer(this.src)" title="Fondo Neón Abstracto">
+                        <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=400" class="pinterest-item" onclick="addImageLayer(this.src)" title="Cristal Web3">
+                        <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=400" class="pinterest-item" onclick="addImageLayer(this.src)" title="Cubo Holográfico">
+                        <img src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=400" class="pinterest-item" onclick="addImageLayer(this.src)" title="Arte Digital Fénix">
+                        <img src="https://images.unsplash.com/photo-1642104704074-907c0698cbd9?w=400" class="pinterest-item" onclick="addImageLayer(this.src)" title="Token Cripto Estelar">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label id="lblCustomUrl">O pega la URL de cualquier imagen de internet:</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="customImgUrl" placeholder="https://ejemplo.com/imagen.png">
+                        <button onclick="addCustomImage()" style="background:var(--neon-purple); color:#fff; border:none; padding:0 15px; border-radius:8px; font-weight:bold; cursor:pointer;">+</button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label id="lblLayersTitle">Capas Activas en el Lienzo (Borrar o Gestionar):</label>
+                    <div class="layers-box" id="layersList">
+                        <!-- Las capas añadidas aparecerán aquí para borrar -->
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label id="lblText1">Título Principal Personalizado</label>
                     <input type="text" id="userInput1" value="ZAARD & PANGA FENIX" oninput="drawCanvas()">
-                </div>
-
-                <div class="control-group">
-                    <label id="lblText2">Mantra o Legado Secundario</label>
-                    <input type="text" id="userInput2" value="ASCENSIÓN INFINITA" oninput="drawCanvas()">
-                </div>
-
-                <div class="control-group">
-                    <label id="lblElement">Seleccionar Elemento Místico</label>
-                    <select id="elementSelect" onchange="drawCanvas()">
-                        <option value="phoenix">🔥 Llamas del Fénix Eterno</option>
-                        <option value="cosmos">🌌 Portal Estelar & Cósmico</option>
-                        <option value="matrix">⚡ Núcleo Cibernético Puro</option>
-                        <option value="diamond">💎 Geometría Diamante Deflacionaria</option>
-                    </select>
-                </div>
-
-                <div class="control-group">
-                    <label id="lblTheme">Paleta Neón & Estilo</label>
-                    <select id="themeSelect" onchange="drawCanvas()">
-                        <option value="purple-blue">Azul Eléctrico & Morado Místico</option>
-                        <option value="gold-fire">Resplandor Fénix (Fuego & Oro)</option>
-                        <option value="deep-cyan">Cian Abisal Cósmico</option>
-                    </select>
                 </div>
             </div>
 
-            <!-- Panel de Vista Previa y Descarga con Aporte Justo -->
+            <!-- Panel de Vista Previa y Descarga (Con Aporte Accesible 0.0007 BNB) -->
             <div class="panel">
-                <h2 id="panelPreviewTitle">🎨 Tu Imagen en Vivo</h2>
+                <h2 id="panelPreviewTitle">🎨 Tu Composición en Vivo</h2>
                 
                 <div class="canvas-wrapper">
                     <canvas id="artCanvas" width="500" height="500"></canvas>
                 </div>
 
-                <!-- Botón de Descarga con Aporte Accesible (0.0007 BNB) -->
+                <!-- Botón de Descarga y Aporte Justo (0.0007 BNB) -->
                 <button class="btn-action btn-pay" onclick="payAndDownload()" id="btnPayText">
-                    💎 Pagar 0.0007 BNB y Descargar HD
+                    💎 Pagar 0.0007 BNB y Descargar en HD
                 </button>
                 <div class="status-msg" id="statusMessage"></div>
             </div>
@@ -358,17 +373,17 @@
         const translations = {
             es: {
                 introTitle: "Con tus ZARD puedes llegar a donde nadie ha llegado. Deja que el poder de PANGA sea parte de ti: conviértete en Fénix",
-                introDesc: "Bienvenido al santuario oficial de innovación. Diseña tu propia insignia estelar con energía de renacimiento y tecnología Web3 avanzada.",
-                btnEnter: "🚀 Entrar al Motion Studio",
+                introDesc: "Bienvenido al santuario de creación visual estilo Pinterest. Monta imágenes de la red, edítalas, agrega efectos y diseña tu insignia definitiva.",
+                btnEnter: "🚀 Entrar al Pinterest Studio",
                 navBuy: "Comprar ZARD",
                 navContract: "Contrato BSC",
-                panelConfigTitle: "⚙️ Panel de Creación Fénix",
-                lblText1: "Título Épico Principal",
-                lblText2: "Mantra o Legado Secundario",
-                lblElement: "Seleccionar Elemento Místico",
-                lblTheme: "Paleta Neón & Estilo",
-                panelPreviewTitle: "🎨 Tu Imagen en Vivo",
-                btnPay: "💎 Pagar 0.0007 BNB y Descargar HD",
+                panelConfigTitle: "📌 Galería Pinterest & Elementos",
+                lblPinterestGrid: "Selecciona una imagen de la paleta web:",
+                lblCustomUrl: "O pega la URL de cualquier imagen de internet:",
+                lblLayersTitle: "Capas Activas en el Lienzo (Borrar o Gestionar):",
+                lblText1: "Título Principal Personalizado",
+                panelPreviewTitle: "🎨 Tu Composición en Vivo",
+                btnPay: "💎 Pagar 0.0007 BNB y Descargar en HD",
                 walletNeeded: "Por favor, abre esta página desde tu billetera Web3 (MetaMask / Binance Wallet).",
                 wrongNetwork: "Por favor, cambia tu red a BNB Smart Chain (BSC).",
                 paying: "Conectando con tu billetera para procesar aporte...",
@@ -377,16 +392,16 @@
             },
             en: {
                 introTitle: "With your ZARD you can reach where no one has gone before. Let PANGA's power become part of you: become the Phoenix",
-                introDesc: "Welcome to the official innovation sanctuary. Craft your own stellar badge with rebirth energy and advanced Web3 tech.",
-                btnEnter: "🚀 Enter Motion Studio",
+                introDesc: "Welcome to the Pinterest-style visual creation sanctuary. Mount images from the web, edit them, add effects, and design your ultimate badge.",
+                btnEnter: "🚀 Enter Pinterest Studio",
                 navBuy: "Buy ZARD",
                 navContract: "BSC Contract",
-                panelConfigTitle: "⚙️ Phoenix Creation Panel",
-                lblText1: "Main Epic Title",
-                lblText2: "Secondary Legacy Mantra",
-                lblElement: "Select Mystic Element",
-                lblTheme: "Neon Palette & Style",
-                panelPreviewTitle: "🎨 Your Live Image",
+                panelConfigTitle: "📌 Pinterest Gallery & Elements",
+                lblPinterestGrid: "Select an image from the web palette:",
+                lblCustomUrl: "Or paste the URL of any image from the internet:",
+                lblLayersTitle: "Active Layers on Canvas (Delete or Manage):",
+                lblText1: "Custom Main Title",
+                panelPreviewTitle: "🎨 Your Live Composition",
                 btnPay: "💎 Pay 0.0007 BNB & Download HD",
                 walletNeeded: "Please open this page from a Web3 wallet (MetaMask / Binance Wallet).",
                 wrongNetwork: "Please switch your network to BNB Smart Chain (BSC).",
@@ -405,10 +420,10 @@
             document.getElementById("navBuy").innerText = t.navBuy;
             document.getElementById("navContract").innerText = t.navContract;
             document.getElementById("panelConfigTitle").innerText = t.panelConfigTitle;
+            document.getElementById("lblPinterestGrid").innerText = t.lblPinterestGrid;
+            document.getElementById("lblCustomUrl").innerText = t.lblCustomUrl;
+            document.getElementById("lblLayersTitle").innerText = t.lblLayersTitle;
             document.getElementById("lblText1").innerText = t.lblText1;
-            document.getElementById("lblText2").innerText = t.lblText2;
-            document.getElementById("lblElement").innerText = t.lblElement;
-            document.getElementById("lblTheme").innerText = t.lblTheme;
             document.getElementById("panelPreviewTitle").innerText = t.panelPreviewTitle;
             document.getElementById("btnPayText").innerText = t.btnPay;
         }
@@ -422,176 +437,14 @@
             }, 500);
         }
 
-        // Lógica del Canvas Animado
+        // Sistema de Capas e Imágenes Estilo Pinterest
+        let activeLayers = [];
         const canvas = document.getElementById("artCanvas");
         const ctx = canvas.getContext("2d");
 
-        let particles = [];
-        for (let i = 0; i < 75; i++) {
-            particles.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                radius: Math.random() * 2.5 + 1,
-                speedY: (Math.random() * 2 - 1),
-                speedX: (Math.random() * 2 - 1)
-            });
-        }
+        // Añadir imagen por defecto al iniciar
+        window.addEventListener('DOMContentLoaded', () => {
+            addImageLayer("https://photos.pinksale.finance/file/pinksale-logo-upload/1789698579711-7b67968ed9538e215f1948583ee37c7c.png");
+        });
 
-        function drawCanvas() {
-            const text1 = document.getElementById("userInput1").value || "ZAARD FENIX";
-            const text2 = document.getElementById("userInput2").value || "PANGA POWER";
-            const element = document.getElementById("elementSelect").value;
-            const theme = document.getElementById("themeSelect").value;
-
-            let color1 = "#00f0ff";
-            let color2 = "#bd00ff";
-            let bg1 = "#030108";
-            let bg2 = "#0d051f";
-
-            if (theme === "gold-fire") {
-                color1 = "#ffaa00";
-                color2 = "#ff3300";
-                bg1 = "#0a0300";
-                bg2 = "#1f0900";
-            } else if (theme === "deep-cyan") {
-                color1 = "#00ffff";
-                color2 = "#0055ff";
-                bg1 = "#01080f";
-                bg2 = "#02172e";
-            }
-
-            // Fondo
-            let bgGrad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-            bgGrad.addColorStop(0, bg1);
-            bgGrad.addColorStop(1, bg2);
-            ctx.fillStyle = bgGrad;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // Elementos visuales dinámicos
-            if (element === "phoenix") {
-                ctx.beginPath();
-                ctx.arc(canvas.width / 2, canvas.height / 2, 140, 0, Math.PI * 2);
-                ctx.strokeStyle = color1;
-                ctx.lineWidth = 3;
-                ctx.shadowColor = color2;
-                ctx.shadowBlur = 25;
-                ctx.stroke();
-            } else if (element === "cosmos") {
-                ctx.beginPath();
-                ctx.rect(100, 100, 300, 300);
-                ctx.strokeStyle = color1;
-                ctx.lineWidth = 2;
-                ctx.shadowColor = color1;
-                ctx.shadowBlur = 20;
-                ctx.stroke();
-            } else if (element === "matrix") {
-                ctx.beginPath();
-                ctx.arc(canvas.width / 2, canvas.height / 2, 110, 0, Math.PI * 2);
-                ctx.strokeStyle = color2;
-                ctx.lineWidth = 4;
-                ctx.shadowColor = color1;
-                ctx.shadowBlur = 20;
-                ctx.stroke();
-            } else if (element === "diamond") {
-                ctx.beginPath();
-                ctx.moveTo(canvas.width / 2, 60);
-                ctx.lineTo(440, canvas.height / 2);
-                ctx.lineTo(canvas.width / 2, 440);
-                ctx.lineTo(60, canvas.height / 2);
-                ctx.closePath();
-                ctx.strokeStyle = color1;
-                ctx.lineWidth = 2;
-                ctx.shadowColor = color2;
-                ctx.shadowBlur = 20;
-                ctx.stroke();
-            }
-
-            // Partículas
-            ctx.fillStyle = color1;
-            particles.forEach(p => {
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                ctx.fill();
-
-                p.y += p.speedY;
-                p.x += p.speedX;
-
-                if (p.y < 0) p.y = canvas.height;
-                if (p.y > canvas.height) p.y = 0;
-                if (p.x < 0) p.x = canvas.width;
-                if (p.x > canvas.width) p.x = 0;
-            });
-
-            // Marco decorativo
-            ctx.strokeStyle = color2;
-            ctx.lineWidth = 2;
-            ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
-
-            // Textos
-            ctx.fillStyle = "#ffffff";
-            ctx.shadowColor = color1;
-            ctx.shadowBlur = 20;
-            ctx.font = "900 21px 'Orbitron', sans-serif";
-            ctx.textAlign = "center";
-            ctx.fillText(text1.toUpperCase(), canvas.width / 2, canvas.height / 2 - 15);
-
-            ctx.fillStyle = color1;
-            ctx.shadowColor = color2;
-            ctx.shadowBlur = 12;
-            ctx.font = "600 13px 'Inter', sans-serif";
-            ctx.fillText(text2.toUpperCase(), canvas.width / 2, canvas.height / 2 + 30);
-
-            ctx.shadowBlur = 0;
-        }
-
-        setInterval(drawCanvas, 30);
-
-        // Pasarela de Pago Web3 (0.0007 BNB)
-        const CREATOR_WALLET = "0x84f529525fae84b1f1d7ea66939592094426cdc8";
-
-        async function payAndDownload() {
-            const lang = document.getElementById("introLangSelect").value;
-            const t = translations[lang];
-            const statusDiv = document.getElementById("statusMessage");
-
-            if (typeof window.ethereum === "undefined") {
-                statusDiv.innerText = t.walletNeeded;
-                return;
-            }
-
-            try {
-                statusDiv.innerText = t.paying;
-                await window.ethereum.request({ method: 'eth_requestAccounts' });
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
-                const signer = provider.getSigner();
-
-                const network = await provider.getNetwork();
-                if (network.chainId !== 56) {
-                    statusDiv.innerText = t.wrongNetwork;
-                    return;
-                }
-
-                // Aporte accesible de 0.0007 BNB directo a tu billetera creadora
-                const tx = await signer.sendTransaction({
-                    to: CREATOR_WALLET,
-                    value: ethers.utils.parseEther("0.0007")
-                });
-
-                statusDiv.innerHTML = `${t.success}<br>Tx: <a href="https://bscscan.com/tx/${tx.hash}" target="_blank" style="color:var(--neon-blue);">${tx.hash.substring(0, 15)}...</a>`;
-
-                // Descarga automática en HD de la imagen creada
-                setTimeout(() => {
-                    const link = document.createElement('a');
-                    link.download = 'ZAARD-FENIX-ART.png';
-                    link.href = canvas.toDataURL('image/png');
-                    link.click();
-                }, 800);
-
-            } catch (error) {
-                console.error(error);
-                statusDiv.innerText = t.cancelled;
-            }
-        }
-    </script>
-</body>
-</html>
+        function addImage

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZAARD INNOVATION - Pinterest & Motion Studio Pro</title>
+    <title>ZAARD INNOVATION - Motion Studio Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Inter:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
     <style>
@@ -105,28 +105,40 @@
 
         .control-group { margin-bottom: 16px; }
         .control-group label { display: block; font-size: 0.82rem; color: #c4b6de; margin-bottom: 6px; font-weight: 600; }
-        .control-group input, .control-group select {
+        .control-group input[type="text"], .control-group select {
             width: 100%; padding: 10px 14px; background: #130a26; border: 1px solid #36225e; color: #fff;
             border-radius: 8px; font-size: 0.9rem; outline: none;
+        }
+        .control-group input[type="range"] {
+            width: 100%; accent-color: var(--neon-blue); cursor: pointer;
         }
         .control-group input:focus, .control-group select:focus {
             border-color: var(--neon-blue); box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
         }
 
+        .upload-btn-box {
+            display: flex; gap: 10px; align-items: center; background: #120a26;
+            border: 2px dashed var(--neon-blue); padding: 12px; border-radius: 10px; text-align: center; cursor: pointer;
+            transition: background 0.3s;
+        }
+        .upload-btn-box:hover { background: #1a0f35; }
+        .upload-btn-box input[type="file"] { display: none; }
+        .upload-label { width: 100%; font-size: 0.85rem; color: var(--neon-blue); font-weight: 600; cursor: pointer; }
+
         .pinterest-grid {
             display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-            max-height: 150px; overflow-y: auto; padding: 5px; background: #06030d;
+            max-height: 130px; overflow-y: auto; padding: 5px; background: #06030d;
             border-radius: 10px; border: 1px solid #2a194f; margin-bottom: 15px;
         }
         .pinterest-item {
-            width: 100%; height: 60px; object-fit: cover; border-radius: 6px; cursor: pointer;
+            width: 100%; height: 55px; object-fit: cover; border-radius: 6px; cursor: pointer;
             border: 2px solid transparent; transition: transform 0.2s, border-color 0.2s;
         }
         .pinterest-item:hover { transform: scale(1.05); border-color: var(--neon-blue); }
 
         .layers-box {
             background: #06030d; border: 1px solid #2a194f; border-radius: 10px;
-            padding: 10px; max-height: 110px; overflow-y: auto; margin-bottom: 15px;
+            padding: 10px; max-height: 100px; overflow-y: auto; margin-bottom: 15px;
         }
         .layer-row {
             display: flex; justify-content: space-between; align-items: center;
@@ -171,7 +183,7 @@
             </select>
         </div>
         <h1 class="welcome-title" id="introTitle">Con tus ZARD puedes llegar a donde nadie ha llegado. Deja que el poder de PANGA sea parte de ti: conviértete en Fénix</h1>
-        <p class="welcome-desc" id="introDesc">Bienvenido al estudio Pro. Añade imágenes, arrástralas libremente con el dedo (móvil) o el ratón (PC), aplícales filtros y descarga tu diseño.</p>
+        <p class="welcome-desc" id="introDesc">Estudio Pro interactivo con subida de archivos desde PC/Móvil, ajuste manual de tamaño/opacidad estilo IbisPaint y galería estilo Pinterest.</p>
         <button class="btn-enter" onclick="enterStudio()" id="btnEnterText">🚀 Entrar al Estudio Pro</button>
     </div>
 
@@ -190,10 +202,19 @@
 
         <div class="studio-container">
             <div class="panel">
-                <h2 id="panelConfigTitle">📌 Galería & Edición Interactiva</h2>
+                <h2 id="panelConfigTitle">📌 Galería & Edición Pro</h2>
                 
+                <!-- Subir archivo local (PC / Móvil) -->
                 <div class="control-group">
-                    <label id="lblPinterestGrid">Añadir imagen rápida:</label>
+                    <label id="lblUploadFile">Subir imagen desde tu dispositivo (PC / Móvil):</label>
+                    <div class="upload-btn-box" onclick="document.getElementById('localImageInput').click()">
+                        <span class="upload-label" id="uploadLabelText">📁 Toca aquí para seleccionar archivo</span>
+                        <input type="file" id="localImageInput" accept="image/*" onchange="handleLocalImageUpload(event)">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label id="lblPinterestGrid">Galería rápida estilo Pinterest:</label>
                     <div class="pinterest-grid" id="pinterestPalette">
                         <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1789698579711-7b67968ed9538e215f1948583ee37c7c.png" class="pinterest-item" onclick="addImageLayer(this.src)">
                         <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400" class="pinterest-item" onclick="addImageLayer(this.src)">
@@ -205,16 +226,19 @@
                 </div>
 
                 <div class="control-group">
-                    <label id="lblCustomUrl">O URL de imagen externa:</label>
-                    <div style="display: flex; gap: 8px;">
-                        <input type="text" id="customImgUrl" placeholder="https://...">
-                        <button onclick="addCustomImage()" style="background:var(--neon-purple); color:#fff; border:none; padding:0 15px; border-radius:8px; font-weight:bold; cursor:pointer;">+</button>
-                    </div>
+                    <label id="lblLayersTitle">Capas Activas (Selecciona para editar):</label>
+                    <div class="layers-box" id="layersList"></div>
+                </div>
+
+                <!-- Sliders de Control Manual de Tamaño y Opacidad estilo IbisPaint -->
+                <div class="control-group">
+                    <label id="lblSizeSlider">📐 Tamaño (Escala) de la capa activa:</label>
+                    <input type="range" id="layerSizeRange" min="40" max="400" value="160" oninput="updateLayerSize(this.value)">
                 </div>
 
                 <div class="control-group">
-                    <label id="lblLayersTitle">Capas Activas (Selecciona para mover/borrar):</label>
-                    <div class="layers-box" id="layersList"></div>
+                    <label id="lblOpacitySlider">👁️ Opacidad / Transparencia:</label>
+                    <input type="range" id="layerOpacityRange" min="0.1" max="1" step="0.05" value="1" oninput="updateLayerOpacity(this.value)">
                 </div>
 
                 <div class="control-group">
@@ -234,7 +258,7 @@
             </div>
 
             <div class="panel">
-                <h2 id="panelPreviewTitle">🎨 Tu Composición en Vivo (Ratón & Táctil)</h2>
+                <h2 id="panelPreviewTitle">🎨 Tu Composición (Arrastra con Dedo/Ratón)</h2>
                 
                 <div class="canvas-wrapper">
                     <canvas id="artCanvas" width="500" height="500"></canvas>
@@ -252,17 +276,20 @@
         const translations = {
             es: {
                 introTitle: "Con tus ZARD puedes llegar a donde nadie ha llegado. Deja que el poder de PANGA sea parte de ti: conviértete en Fénix",
-                introDesc: "Bienvenido al estudio Pro. Añade imágenes, arrástralas libremente con el dedo (móvil) o el ratón (PC), aplícales filtros y descarga tu diseño.",
+                introDesc: "Estudio Pro interactivo con subida de archivos desde PC/Móvil, ajuste manual de tamaño/opacidad estilo IbisPaint y galería estilo Pinterest.",
                 btnEnter: "🚀 Entrar al Estudio Pro",
                 navBuy: "Comprar ZARD",
                 navContract: "Contrato BSC",
-                panelConfigTitle: "📌 Galería & Edición Interactiva",
-                lblPinterestGrid: "Añadir imagen rápida:",
-                lblCustomUrl: "O URL de imagen externa:",
-                lblLayersTitle: "Capas Activas (Selecciona para mover/borrar):",
+                panelConfigTitle: "📌 Galería & Edición Pro",
+                lblUploadFile: "Subir imagen desde tu dispositivo (PC / Móvil):",
+                uploadLabelText: "📁 Toca aquí para seleccionar archivo",
+                lblPinterestGrid: "Galería rápida estilo Pinterest:",
+                lblLayersTitle: "Capas Activas (Selecciona para editar):",
+                lblSizeSlider: "📐 Tamaño (Escala) de la capa activa:",
+                lblOpacitySlider: "👁️ Opacidad / Transparencia:",
                 lblFilter: "Efecto / Filtro de la capa seleccionada:",
                 lblText1: "Título Principal Personalizado",
-                panelPreviewTitle: "🎨 Tu Composición en Vivo (Ratón & Táctil)",
+                panelPreviewTitle: "🎨 Tu Composición (Arrastra con Dedo/Ratón)",
                 btnPay: "💎 Pagar 0.0007 BNB y Descargar en HD",
                 walletNeeded: "Por favor, abre esta página desde tu billetera Web3.",
                 wrongNetwork: "Por favor, cambia tu red a BNB Smart Chain (BSC).",
@@ -272,17 +299,20 @@
             },
             en: {
                 introTitle: "With your ZARD you can reach where no one has gone before. Let PANGA's power become part of you: become the Phoenix",
-                introDesc: "Welcome to the Pro Studio. Add images, drag them freely using mouse (PC) or touch (Mobile), apply filters, and download your design.",
+                introDesc: "Interactive Pro Studio with local upload (PC/Mobile), manual size/opacity controls (IbisPaint style), and Pinterest-style gallery.",
                 btnEnter: "🚀 Enter Pro Studio",
                 navBuy: "Buy ZARD",
                 navContract: "BSC Contract",
-                panelConfigTitle: "📌 Gallery & Interactive Editing",
-                lblPinterestGrid: "Add quick image:",
-                lblCustomUrl: "Or external image URL:",
-                lblLayersTitle: "Active Layers (Select to move/delete):",
+                panelConfigTitle: "📌 Gallery & Pro Editing",
+                lblUploadFile: "Upload image from your device (PC / Mobile):",
+                uploadLabelText: "📁 Tap here to select file",
+                lblPinterestGrid: "Quick Pinterest Gallery:",
+                lblLayersTitle: "Active Layers (Select to edit):",
+                lblSizeSlider: "📐 Active Layer Size (Scale):",
+                lblOpacitySlider: "👁️ Opacity / Transparency:",
                 lblFilter: "Effect / Filter for selected layer:",
                 lblText1: "Custom Main Title",
-                panelPreviewTitle: "🎨 Live Composition (Mouse & Touch)",
+                panelPreviewTitle: "🎨 Your Composition (Drag with Finger/Mouse)",
                 btnPay: "💎 Pay 0.0007 BNB & Download HD",
                 walletNeeded: "Please open this page from a Web3 wallet.",
                 wrongNetwork: "Please switch to BNB Smart Chain (BSC).",
@@ -301,9 +331,12 @@
             document.getElementById("navBuy").innerText = t.navBuy;
             document.getElementById("navContract").innerText = t.navContract;
             document.getElementById("panelConfigTitle").innerText = t.panelConfigTitle;
+            document.getElementById("lblUploadFile").innerText = t.lblUploadFile;
+            document.getElementById("uploadLabelText").innerText = t.uploadLabelText;
             document.getElementById("lblPinterestGrid").innerText = t.lblPinterestGrid;
-            document.getElementById("lblCustomUrl").innerText = t.lblCustomUrl;
             document.getElementById("lblLayersTitle").innerText = t.lblLayersTitle;
+            document.getElementById("lblSizeSlider").innerText = t.lblSizeSlider;
+            document.getElementById("lblOpacitySlider").innerText = t.lblOpacitySlider;
             document.getElementById("lblFilter").innerText = t.lblFilter;
             document.getElementById("lblText1").innerText = t.lblText1;
             document.getElementById("panelPreviewTitle").innerText = t.panelPreviewTitle;
@@ -336,24 +369,26 @@
                 const newLayer = {
                     img: img,
                     url: url,
-                    x: 100 + (activeLayers.length * 25),
-                    y: 100 + (activeLayers.length * 25),
+                    x: 100 + (activeLayers.length * 20),
+                    y: 100 + (activeLayers.length * 20),
                     width: 160,
                     height: 160,
+                    opacity: 1.0,
                     filter: "none"
                 };
                 activeLayers.push(newLayer);
-                selectedLayerIndex = activeLayers.length - 1;
-                updateLayersUI();
-                drawCanvas();
+                selectLayer(activeLayers.length - 1);
             };
         }
 
-        function addCustomImage() {
-            const urlInput = document.getElementById("customImgUrl");
-            if (urlInput.value.trim() !== "") {
-                addImageLayer(urlInput.value.trim());
-                urlInput.value = "";
+        function handleLocalImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    addImageLayer(e.target.result);
+                };
+                reader.readAsDataURL(file);
             }
         }
 
@@ -370,9 +405,27 @@
             selectedLayerIndex = index;
             updateLayersUI();
             if(index !== null && activeLayers[index]) {
+                document.getElementById("layerSizeRange").value = activeLayers[index].width;
+                document.getElementById("layerOpacityRange").value = activeLayers[index].opacity;
                 document.getElementById("layerFilterSelect").value = activeLayers[index].filter;
             }
             drawCanvas();
+        }
+
+        function updateLayerSize(val) {
+            if (selectedLayerIndex !== null && activeLayers[selectedLayerIndex]) {
+                const size = parseInt(val);
+                activeLayers[selectedLayerIndex].width = size;
+                activeLayers[selectedLayerIndex].height = size;
+                drawCanvas();
+            }
+        }
+
+        function updateLayerOpacity(val) {
+            if (selectedLayerIndex !== null && activeLayers[selectedLayerIndex]) {
+                activeLayers[selectedLayerIndex].opacity = parseFloat(val);
+                drawCanvas();
+            }
         }
 
         function updateSelectedFilter() {
@@ -386,7 +439,7 @@
             const list = document.getElementById("layersList");
             list.innerHTML = "";
             if (activeLayers.length === 0) {
-                list.innerHTML = `<div style="text-align:center; color:#776a94; font-size:0.8rem; padding:10px;">Sin capas activas</div>`;
+                list.innerHTML = `<div style="text-align:center; color:#776a94; font-size:0.8rem; padding:8px;">Sin capas activas</div>`;
                 return;
             }
             activeLayers.forEach((layer, idx) => {
@@ -425,7 +478,6 @@
             };
         }
 
-        // Control unificado para ratón (PC) y táctil (Móvil)
         canvas.addEventListener('mousedown', startInteraction);
         canvas.addEventListener('touchstart', startInteraction, { passive: false });
 
@@ -440,8 +492,7 @@
             for (let i = activeLayers.length - 1; i >= 0; i--) {
                 const l = activeLayers[i];
                 if (pos.x >= l.x && pos.x <= l.x + l.width && pos.y >= l.y && pos.y <= l.y + l.height) {
-                    selectedLayerIndex = i;
-                    updateLayersUI();
+                    selectLayer(i);
                     isDragging = true;
                     dragOffsetX = pos.x - l.x;
                     dragOffsetY = pos.y - l.y;
@@ -478,10 +529,11 @@
             activeLayers.forEach((layer, idx) => {
                 ctx.save();
                 ctx.filter = 'none';
+                ctx.globalAlpha = layer.opacity !== undefined ? layer.opacity : 1.0;
+
                 if (layer.filter === 'cyber') {
                     ctx.shadowColor = "#00f0ff";
                     ctx.shadowBlur = 15;
-                    ctx.globalAlpha = 0.95;
                 } else if (layer.filter === 'grayscale') {
                     ctx.filter = 'grayscale(100%)';
                 } else if (layer.filter === 'invert') {

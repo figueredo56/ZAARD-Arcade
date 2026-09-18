@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZAARD INNOVATION - Pinterest & Motion Studio</title>
-    <!-- Fuentes de Google -->
+    <title>ZAARD INNOVATION - Pinterest & Motion Studio Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Inter:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
-    <!-- Ethers.js para Web3 y pagos -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
     <style>
         :root {
@@ -24,7 +22,7 @@
             overflow-x: hidden;
         }
 
-        /* 1. PANTALLA DE BIENVENIDA ÉPICA */
+        /* 1. PANTALLA DE BIENVENIDA */
         #welcomeScreen {
             display: flex;
             flex-direction: column;
@@ -39,228 +37,115 @@
             transition: opacity 0.5s ease;
         }
         .welcome-logo {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
+            width: 90px; height: 90px; border-radius: 50%;
             border: 3px solid var(--neon-blue);
             box-shadow: 0 0 25px rgba(0, 240, 255, 0.6);
-            object-fit: cover;
-            margin-bottom: 25px;
+            object-fit: cover; margin-bottom: 25px;
         }
         .welcome-title {
-            font-family: 'Cinzel', serif;
-            font-size: 2.3rem;
-            font-weight: 900;
+            font-family: 'Cinzel', serif; font-size: 2.3rem; font-weight: 900;
             background: linear-gradient(135deg, #ffffff 20%, var(--neon-blue) 60%, var(--neon-purple) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
-            max-width: 800px;
-            line-height: 1.3;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 20px; max-width: 800px; line-height: 1.3;
         }
-        .welcome-desc {
-            font-size: 1.1rem;
-            color: #d8cde6;
-            max-width: 700px;
-            line-height: 1.6;
-            margin-bottom: 35px;
-        }
-        .lang-selector-box {
-            margin-bottom: 25px;
-        }
+        .welcome-desc { font-size: 1.1rem; color: #d8cde6; max-width: 700px; line-height: 1.6; margin-bottom: 35px; }
+        .lang-selector-box { margin-bottom: 25px; }
         .lang-select-big {
-            background: #120a26;
-            color: var(--neon-blue);
-            border: 2px solid var(--neon-blue);
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            outline: none;
+            background: #120a26; color: var(--neon-blue); border: 2px solid var(--neon-blue);
+            padding: 10px 20px; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; outline: none;
             box-shadow: 0 0 15px rgba(0,240,255,0.3);
         }
         .btn-enter {
             background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
-            color: #fff;
-            border: none;
-            padding: 16px 35px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            font-size: 1.1rem;
-            border-radius: 12px;
-            cursor: pointer;
+            color: #fff; border: none; padding: 16px 35px;
+            font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 1.1rem;
+            border-radius: 12px; cursor: pointer;
             box-shadow: 0 0 30px rgba(189, 0, 255, 0.6);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            text-transform: uppercase;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; text-transform: uppercase;
         }
-        .btn-enter:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 40px rgba(0, 240, 255, 0.9);
-        }
+        .btn-enter:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(0, 240, 255, 0.9); }
 
-        /* 2. APLICACIÓN PRINCIPAL (ESTUDIO) */
+        /* 2. APLICACIÓN PRINCIPAL */
         #appContainer { display: none; }
-
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 30px;
-            background: rgba(11, 7, 20, 0.9);
-            border-bottom: 1px solid var(--border-glow);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 30px; background: rgba(11, 7, 20, 0.9);
+            border-bottom: 1px solid var(--border-glow); position: sticky; top: 0; z-index: 1000;
             backdrop-filter: blur(12px);
         }
         .logo-container { display: flex; align-items: center; gap: 12px; }
         .logo-img {
             width: 40px; height: 40px; border-radius: 50%;
-            border: 2px solid var(--neon-blue);
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
-            object-fit: cover;
+            border: 2px solid var(--neon-blue); box-shadow: 0 0 10px rgba(0, 240, 255, 0.5); object-fit: cover;
         }
-        .logo-area {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            font-size: 1.1rem;
-            color: var(--neon-blue);
-            letter-spacing: 2px;
-        }
+        .logo-area { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 1.1rem; color: var(--neon-blue); letter-spacing: 2px; }
         .nav-links { display: flex; gap: 12px; align-items: center; }
         .btn-nav {
-            background: transparent;
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
-            padding: 7px 14px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s ease;
+            background: transparent; border: 1px solid var(--neon-blue); color: var(--neon-blue);
+            padding: 7px 14px; border-radius: 6px; font-size: 0.8rem; font-weight: 600;
+            cursor: pointer; text-decoration: none; transition: all 0.3s ease;
         }
         .btn-nav:hover { background: var(--neon-blue); color: #000; }
 
         .studio-container {
-            max-width: 1200px;
-            margin: 30px auto 70px auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            padding: 0 20px;
+            max-width: 1200px; margin: 30px auto 70px auto;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding: 0 20px;
         }
-        @media (max-width: 900px) {
-            .studio-container { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 900px) { .studio-container { grid-template-columns: 1fr; } }
 
         .panel {
-            background: var(--card-bg);
-            border: 2px solid var(--border-glow);
-            border-radius: 18px;
-            padding: 25px;
-            box-shadow: 0 15px 40px rgba(189, 0, 255, 0.12);
+            background: var(--card-bg); border: 2px solid var(--border-glow);
+            border-radius: 18px; padding: 25px; box-shadow: 0 15px 40px rgba(189, 0, 255, 0.12);
         }
         .panel h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
-            color: var(--neon-purple);
-            margin-bottom: 18px;
-            border-bottom: 1px solid rgba(189, 0, 255, 0.2);
-            padding-bottom: 10px;
-            text-shadow: 0 0 8px rgba(189, 0, 255, 0.4);
+            font-family: 'Orbitron', sans-serif; font-size: 1.1rem; color: var(--neon-purple);
+            margin-bottom: 18px; border-bottom: 1px solid rgba(189, 0, 255, 0.2);
+            padding-bottom: 10px; text-shadow: 0 0 8px rgba(189, 0, 255, 0.4);
         }
 
-        /* Controles y Banco de Imágenes Pinterest */
         .control-group { margin-bottom: 16px; }
-        .control-group label {
-            display: block; font-size: 0.82rem; color: #c4b6de; margin-bottom: 6px; font-weight: 600;
+        .control-group label { display: block; font-size: 0.82rem; color: #c4b6de; margin-bottom: 6px; font-weight: 600; }
+        .control-group input, .control-group select {
+            width: 100%; padding: 10px 14px; background: #130a26; border: 1px solid #36225e; color: #fff;
+            border-radius: 8px; font-size: 0.9rem; outline: none;
         }
-        .control-group input {
-            width: 100%; padding: 10px 14px;
-            background: #130a26; border: 1px solid #36225e; color: #fff;
-            border-radius: 8px; font-size: 0.9rem;
-        }
-        .control-group input:focus {
-            border-color: var(--neon-blue); outline: none; box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+        .control-group input:focus, .control-group select:focus {
+            border-color: var(--neon-blue); box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
         }
 
-        /* Galería Pinterest de Imágenes de la Red */
         .pinterest-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            max-height: 180px;
-            overflow-y: auto;
-            padding: 5px;
-            background: #06030d;
-            border-radius: 10px;
-            border: 1px solid #2a194f;
-            margin-bottom: 15px;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+            max-height: 150px; overflow-y: auto; padding: 5px; background: #06030d;
+            border-radius: 10px; border: 1px solid #2a194f; margin-bottom: 15px;
         }
         .pinterest-item {
-            width: 100%;
-            height: 65px;
-            object-fit: cover;
-            border-radius: 6px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: transform 0.2s, border-color 0.2s;
+            width: 100%; height: 60px; object-fit: cover; border-radius: 6px; cursor: pointer;
+            border: 2px solid transparent; transition: transform 0.2s, border-color 0.2s;
         }
-        .pinterest-item:hover {
-            transform: scale(1.05);
-            border-color: var(--neon-blue);
-        }
+        .pinterest-item:hover { transform: scale(1.05); border-color: var(--neon-blue); }
 
-        /* Lista de capas añadidas */
         .layers-box {
-            background: #06030d;
-            border: 1px solid #2a194f;
-            border-radius: 10px;
-            padding: 10px;
-            max-height: 120px;
-            overflow-y: auto;
-            margin-bottom: 15px;
+            background: #06030d; border: 1px solid #2a194f; border-radius: 10px;
+            padding: 10px; max-height: 110px; overflow-y: auto; margin-bottom: 15px;
         }
         .layer-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #120a26;
-            padding: 6px 10px;
-            border-radius: 6px;
-            margin-bottom: 6px;
-            font-size: 0.8rem;
+            display: flex; justify-content: space-between; align-items: center;
+            background: #120a26; padding: 6px 10px; border-radius: 6px; margin-bottom: 6px; font-size: 0.8rem;
         }
-        .btn-delete-layer {
-            background: #ff3333;
-            color: #fff;
-            border: none;
-            padding: 3px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
+        .btn-layer-action {
+            background: #36225e; color: #fff; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-weight: bold;
         }
+        .btn-layer-action.delete { background: #ff3333; }
 
-        /* Canvas interactivo */
         .canvas-wrapper {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            background: #000;
-            border-radius: 14px;
-            overflow: hidden;
-            border: 2px solid var(--neon-blue);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 15px;
+            position: relative; width: 100%; aspect-ratio: 1 / 1; background: #000;
+            border-radius: 14px; overflow: hidden; border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.25); display: flex; justify-content: center;
+            align-items: center; margin-bottom: 15px; touch-action: none;
         }
-        canvas { width: 100%; height: 100%; display: block; }
+        canvas { width: 100%; height: 100%; display: block; cursor: grab; }
+        canvas:active { cursor: grabbing; }
 
-        /* Botón de Pago Justo (0.0007 BNB) */
         .btn-action {
             width: 100%; padding: 14px; border: none; border-radius: 10px;
             font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 0.9rem;
@@ -270,36 +155,28 @@
             background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
             color: #fff; box-shadow: 0 0 20px rgba(189, 0, 255, 0.4);
         }
-        .btn-pay:hover {
-            transform: translateY(-2px); box-shadow: 0 0 30px rgba(0, 240, 255, 0.8);
-        }
-        .status-msg {
-            margin-top: 12px; font-size: 0.85rem; text-align: center; color: var(--neon-blue); min-height: 22px;
-        }
+        .btn-pay:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(0, 240, 255, 0.8); }
+        .status-msg { margin-top: 12px; font-size: 0.85rem; text-align: center; color: var(--neon-blue); min-height: 22px; }
     </style>
 </head>
 <body>
 
-    <!-- 1. PANTALLA DE BIENVENIDA ÉPICA -->
+    <!-- 1. PANTALLA DE BIENVENIDA -->
     <div id="welcomeScreen">
         <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1789698579711-7b67968ed9538e215f1948583ee37c7c.png" alt="ZAARD Logo" class="welcome-logo">
-        
         <div class="lang-selector-box">
             <select class="lang-select-big" id="introLangSelect" onchange="switchLanguage()">
                 <option value="es">🇪🇸 Español (ES)</option>
                 <option value="en">🇺🇸 English (EN)</option>
             </select>
         </div>
-
-        <h1 class="welcome-title" id="introTitle">Con tus ZARD puedes llegar a donde nadie ha llegado. Deja que el poder de PANGA sea parte de ti: conviértete en Fénix</h1>
-        <p class="welcome-desc" id="introDesc">Bienvenido al santuario de creación visual estilo Pinterest. Monta imágenes de la red, edítalas, agrega efectos y diseña tu insignia definitiva.</p>
-        
-        <button class="btn-enter" onclick="enterStudio()" id="btnEnterText">🚀 Entrar al Pinterest Studio</button>
+        <h1 class="visual-title" id="introTitle" style="font-family:'Cinzel',serif; font-size:2.3rem; font-weight:900; background:linear-gradient(135deg,#ffffff 20%,var(--neon-blue) 60%,var(--neon-purple) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent; margin-bottom:20px; max-width:800px; line-height:1.3;">Con tus ZARD puedes llegar a donde nadie ha llegado. Deja que el poder de PANGA sea parte de ti: conviértete en Fénix</h1>
+        <p class="welcome-desc" id="introDesc">Bienvenido al estudio Pro. Añade imágenes, arrástralas libremente con el dedo o mouse, aplícales filtros interactivos y descarga tu diseño.</p>
+        <button class="btn-enter" onclick="enterStudio()" id="btnEnterText">🚀 Entrar al Estudio Pro</button>
     </div>
 
-    <!-- 2. APLICACIÓN PRINCIPAL (ESTUDIO) -->
+    <!-- 2. APLICACIÓN PRINCIPAL -->
     <div id="appContainer">
-        <!-- Navbar -->
         <header>
             <div class="logo-container">
                 <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1789698579711-7b67968ed9538e215f1948583ee37c7c.png" alt="Logo" class="logo-img">
@@ -311,38 +188,43 @@
             </div>
         </header>
 
-        <!-- Estudio con Selector Estilo Pinterest -->
         <div class="studio-container">
-            <!-- Panel de Control y Banco de Imágenes -->
             <div class="panel">
-                <h2 id="panelConfigTitle">📌 Galería Pinterest & Elementos</h2>
+                <h2 id="panelConfigTitle">📌 Galería & Edición Interactiva</h2>
                 
                 <div class="control-group">
-                    <label id="lblPinterestGrid">Selecciona una imagen de la paleta web:</label>
+                    <label id="lblPinterestGrid">Añadir imagen rápida:</label>
                     <div class="pinterest-grid" id="pinterestPalette">
-                        <!-- Imágenes prediseñadas de la red para montar con 1 clic -->
-                        <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1789698579711-7b67968ed9538e215f1948583ee37c7c.png" class="pinterest-item" onclick="addImageLayer(this.src)" title="Logo ZAARD">
-                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400" class="pinterest-item" onclick="addImageLayer(this.src)" title="Fondo Neón Abstracto">
-                        <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=400" class="pinterest-item" onclick="addImageLayer(this.src)" title="Cristal Web3">
-                        <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=400" class="pinterest-item" onclick="addImageLayer(this.src)" title="Cubo Holográfico">
-                        <img src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=400" class="pinterest-item" onclick="addImageLayer(this.src)" title="Arte Digital Fénix">
-                        <img src="https://images.unsplash.com/photo-1642104704074-907c0698cbd9?w=400" class="pinterest-item" onclick="addImageLayer(this.src)" title="Token Cripto Estelar">
+                        <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1789698579711-7b67968ed9538e215f1948583ee37c7c.png" class="pinterest-item" onclick="addImageLayer(this.src)">
+                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400" class="pinterest-item" onclick="addImageLayer(this.src)">
+                        <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=400" class="pinterest-item" onclick="addImageLayer(this.src)">
+                        <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=400" class="pinterest-item" onclick="addImageLayer(this.src)">
+                        <img src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=400" class="pinterest-item" onclick="addImageLayer(this.src)">
+                        <img src="https://images.unsplash.com/photo-1642104704074-907c0698cbd9?w=400" class="pinterest-item" onclick="addImageLayer(this.src)">
                     </div>
                 </div>
 
                 <div class="control-group">
-                    <label id="lblCustomUrl">O pega la URL de cualquier imagen de internet:</label>
+                    <label id="lblCustomUrl">O URL de imagen externa:</label>
                     <div style="display: flex; gap: 8px;">
-                        <input type="text" id="customImgUrl" placeholder="https://ejemplo.com/imagen.png">
+                        <input type="text" id="customImgUrl" placeholder="https://...">
                         <button onclick="addCustomImage()" style="background:var(--neon-purple); color:#fff; border:none; padding:0 15px; border-radius:8px; font-weight:bold; cursor:pointer;">+</button>
                     </div>
                 </div>
 
                 <div class="control-group">
-                    <label id="lblLayersTitle">Capas Activas en el Lienzo (Borrar o Gestionar):</label>
-                    <div class="layers-box" id="layersList">
-                        <!-- Las capas añadidas aparecerán aquí para borrar -->
-                    </div>
+                    <label id="lblLayersTitle">Capas Activas (Selecciona para mover/borrar):</label>
+                    <div class="layers-box" id="layersList"></div>
+                </div>
+
+                <div class="control-group">
+                    <label id="lblFilter">Efecto / Filtro de la capa seleccionada:</label>
+                    <select id="layerFilterSelect" onchange="updateSelectedFilter()">
+                        <option value="none">Normal (Sin Filtro)</option>
+                        <option value="cyber">Filtro Neón Cyberpunk</option>
+                        <option value="grayscale">Escala de Grises</option>
+                        <option value="invert">Invertir Colores</option>
+                    </select>
                 </div>
 
                 <div class="control-group">
@@ -351,15 +233,13 @@
                 </div>
             </div>
 
-            <!-- Panel de Vista Previa y Descarga (Con Aporte Accesible 0.0007 BNB) -->
             <div class="panel">
-                <h2 id="panelPreviewTitle">🎨 Tu Composición en Vivo</h2>
+                <h2 id="panelPreviewTitle">🎨 Tu Composición en Vivo (Toca y Arrastra)</h2>
                 
                 <div class="canvas-wrapper">
                     <canvas id="artCanvas" width="500" height="500"></canvas>
                 </div>
 
-                <!-- Botón de Descarga y Aporte Justo (0.0007 BNB) -->
                 <button class="btn-action btn-pay" onclick="payAndDownload()" id="btnPayText">
                     💎 Pagar 0.0007 BNB y Descargar en HD
                 </button>
@@ -369,45 +249,46 @@
     </div>
 
     <script>
-        // Textos Multilenguaje
         const translations = {
             es: {
                 introTitle: "Con tus ZARD puedes llegar a donde nadie ha llegado. Deja que el poder de PANGA sea parte de ti: conviértete en Fénix",
-                introDesc: "Bienvenido al santuario de creación visual estilo Pinterest. Monta imágenes de la red, edítalas, agrega efectos y diseña tu insignia definitiva.",
-                btnEnter: "🚀 Entrar al Pinterest Studio",
+                introDesc: "Bienvenido al estudio Pro. Añade imágenes, arrástralas libremente con el dedo o mouse, aplícales filtros interactivos y descarga tu diseño.",
+                btnEnter: "🚀 Entrar al Estudio Pro",
                 navBuy: "Comprar ZARD",
                 navContract: "Contrato BSC",
-                panelConfigTitle: "📌 Galería Pinterest & Elementos",
-                lblPinterestGrid: "Selecciona una imagen de la paleta web:",
-                lblCustomUrl: "O pega la URL de cualquier imagen de internet:",
-                lblLayersTitle: "Capas Activas en el Lienzo (Borrar o Gestionar):",
+                panelConfigTitle: "📌 Galería & Edición Interactiva",
+                lblPinterestGrid: "Añadir imagen rápida:",
+                lblCustomUrl: "O URL de imagen externa:",
+                lblLayersTitle: "Capas Activas (Selecciona para mover/borrar):",
+                lblFilter: "Efecto / Filtro de la capa seleccionada:",
                 lblText1: "Título Principal Personalizado",
-                panelPreviewTitle: "🎨 Tu Composición en Vivo",
+                panelPreviewTitle: "🎨 Tu Composición en Vivo (Toca y Arrastra)",
                 btnPay: "💎 Pagar 0.0007 BNB y Descargar en HD",
-                walletNeeded: "Por favor, abre esta página desde tu billetera Web3 (MetaMask / Binance Wallet).",
+                walletNeeded: "Por favor, abre esta página desde tu billetera Web3.",
                 wrongNetwork: "Por favor, cambia tu red a BNB Smart Chain (BSC).",
-                paying: "Conectando con tu billetera para procesar aporte...",
-                success: "¡Aporte confirmado con éxito! Descargando tu diseño en HD...",
-                cancelled: "Operación cancelada o rechazada por el usuario."
+                paying: "Procesando aporte...",
+                success: "¡Aporte confirmado! Descargando tu diseño HD...",
+                cancelled: "Operación cancelada."
             },
             en: {
                 introTitle: "With your ZARD you can reach where no one has gone before. Let PANGA's power become part of you: become the Phoenix",
-                introDesc: "Welcome to the Pinterest-style visual creation sanctuary. Mount images from the web, edit them, add effects, and design your ultimate badge.",
-                btnEnter: "🚀 Enter Pinterest Studio",
+                introDesc: "Welcome to the Pro Studio. Add images, drag them freely, apply interactive filters, and download your design.",
+                btnEnter: "🚀 Enter Pro Studio",
                 navBuy: "Buy ZARD",
                 navContract: "BSC Contract",
-                panelConfigTitle: "📌 Pinterest Gallery & Elements",
-                lblPinterestGrid: "Select an image from the web palette:",
-                lblCustomUrl: "Or paste the URL of any image from the internet:",
-                lblLayersTitle: "Active Layers on Canvas (Delete or Manage):",
+                panelConfigTitle: "📌 Gallery & Interactive Editing",
+                lblPinterestGrid: "Add quick image:",
+                lblCustomUrl: "Or external image URL:",
+                lblLayersTitle: "Active Layers (Select to move/delete):",
+                lblFilter: "Effect / Filter for selected layer:",
                 lblText1: "Custom Main Title",
-                panelPreviewTitle: "🎨 Your Live Composition",
+                panelPreviewTitle: "🎨 Live Composition (Touch & Drag)",
                 btnPay: "💎 Pay 0.0007 BNB & Download HD",
-                walletNeeded: "Please open this page from a Web3 wallet (MetaMask / Binance Wallet).",
-                wrongNetwork: "Please switch your network to BNB Smart Chain (BSC).",
-                paying: "Connecting to wallet to process contribution...",
-                success: "Contribution confirmed! Downloading your HD design...",
-                cancelled: "Operation cancelled or rejected by user."
+                walletNeeded: "Please open this page from a Web3 wallet.",
+                wrongNetwork: "Please switch to BNB Smart Chain (BSC).",
+                paying: "Processing contribution...",
+                success: "Contribution confirmed! Downloading HD design...",
+                cancelled: "Operation cancelled."
             }
         };
 
@@ -423,6 +304,7 @@
             document.getElementById("lblPinterestGrid").innerText = t.lblPinterestGrid;
             document.getElementById("lblCustomUrl").innerText = t.lblCustomUrl;
             document.getElementById("lblLayersTitle").innerText = t.lblLayersTitle;
+            document.getElementById("lblFilter").innerText = t.lblFilter;
             document.getElementById("lblText1").innerText = t.lblText1;
             document.getElementById("panelPreviewTitle").innerText = t.panelPreviewTitle;
             document.getElementById("btnPayText").innerText = t.btnPay;
@@ -437,12 +319,11 @@
             }, 500);
         }
 
-        // Sistema de Capas e Imágenes Estilo Pinterest
         let activeLayers = [];
+        let selectedLayerIndex = null;
         const canvas = document.getElementById("artCanvas");
         const ctx = canvas.getContext("2d");
 
-        // Añadir imagen por defecto al iniciar
         window.addEventListener('DOMContentLoaded', () => {
             addImageLayer("https://photos.pinksale.finance/file/pinksale-logo-upload/1789698579711-7b67968ed9538e215f1948583ee37c7c.png");
         });
@@ -452,14 +333,17 @@
             img.crossOrigin = "anonymous";
             img.src = url;
             img.onload = () => {
-                activeLayers.push({
+                const newLayer = {
                     img: img,
                     url: url,
-                    x: 100 + (activeLayers.length * 20),
-                    y: 100 + (activeLayers.length * 20),
-                    width: 150,
-                    height: 150
-                });
+                    x: 100 + (activeLayers.length * 25),
+                    y: 100 + (activeLayers.length * 25),
+                    width: 160,
+                    height: 160,
+                    filter: "none"
+                };
+                activeLayers.push(newLayer);
+                selectedLayerIndex = activeLayers.length - 1;
                 updateLayersUI();
                 drawCanvas();
             };
@@ -475,8 +359,27 @@
 
         function removeLayer(index) {
             activeLayers.splice(index, 1);
+            if (selectedLayerIndex >= activeLayers.length) {
+                selectedLayerIndex = activeLayers.length > 0 ? activeLayers.length - 1 : null;
+            }
             updateLayersUI();
             drawCanvas();
+        }
+
+        function selectLayer(index) {
+            selectedLayerIndex = index;
+            updateLayersUI();
+            if(index !== null && activeLayers[index]) {
+                document.getElementById("layerFilterSelect").value = activeLayers[index].filter;
+            }
+            drawCanvas();
+        }
+
+        function updateSelectedFilter() {
+            if (selectedLayerIndex !== null && activeLayers[selectedLayerIndex]) {
+                activeLayers[selectedLayerIndex].filter = document.getElementById("layerFilterSelect").value;
+                drawCanvas();
+            }
         }
 
         function updateLayersUI() {
@@ -487,36 +390,110 @@
                 return;
             }
             activeLayers.forEach((layer, idx) => {
+                const isSelected = idx === selectedLayerIndex;
                 list.innerHTML += `
-                    <div class="layer-row">
-                        <span>Capa #${idx + 1}</span>
-                        <button class="btn-delete-layer" onclick="removeLayer(${idx})">Borrar</button>
+                    <div class="layer-row" style="border: 1px solid ${isSelected ? 'var(--neon-blue)' : 'transparent'};" onclick="selectLayer(${idx})">
+                        <span>Capa #${idx + 1} ${isSelected ? '✨' : ''}</span>
+                        <div>
+                            <button class="btn-layer-action delete" onclick="event.stopPropagation(); removeLayer(${idx})">Borrar</button>
+                        </div>
                     </div>
                 `;
             });
         }
 
+        // Sistema de arrastre táctil y mouse en tiempo real
+        let isDragging = false;
+        let dragOffsetX = 0;
+        let dragOffsetY = 0;
+
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+            return {
+                x: (clientX - rect.left) * (canvas.width / rect.width),
+                y: (clientY - rect.top) * (canvas.height / rect.height)
+            };
+        }
+
+        canvas.addEventListener('mousedown', startDrag);
+        canvas.addEventListener('touchstart', startDrag);
+
+        canvas.addEventListener('mousemove', onDrag);
+        canvas.addEventListener('touchmove', onDrag);
+
+        canvas.addEventListener('mouseup', endDrag);
+        canvas.addEventListener('touchend', endDrag);
+
+        function startDrag(e) {
+            const pos = getMousePos(e);
+            // Buscar si se hace clic en alguna capa (de arriba hacia abajo)
+            for (let i = activeLayers.length - 1; i >= 0; i--) {
+                const l = activeLayers[i];
+                if (pos.x >= l.x && pos.x <= l.x + l.width && pos.y >= l.y && pos.y <= l.y + l.height) {
+                    selectedLayerIndex = i;
+                    updateLayersUI();
+                    isDragging = true;
+                    dragOffsetX = pos.x - l.x;
+                    dragOffsetY = pos.y - l.y;
+                    e.preventDefault();
+                    break;
+                }
+            }
+        }
+
+        function onDrag(e) {
+            if (!isDragging || selectedLayerIndex === null) return;
+            const pos = getMousePos(e);
+            activeLayers[selectedLayerIndex].x = pos.x - dragOffsetX;
+            activeLayers[selectedLayerIndex].y = pos.y - dragOffsetY;
+            drawCanvas();
+            e.preventDefault();
+        }
+
+        function endDrag() {
+            isDragging = false;
+        }
+
         function drawCanvas() {
-            // Fondo oscuro estelar
             let bgGrad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
             bgGrad.addColorStop(0, "#030108");
             bgGrad.addColorStop(1, "#0d051f");
             ctx.fillStyle = bgGrad;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Marco decorativo neón
             ctx.strokeStyle = "#bd00ff";
             ctx.lineWidth = 2;
             ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
 
-            // Dibujar todas las imágenes de las capas Pinterest
-            activeLayers.forEach(layer => {
+            activeLayers.forEach((layer, idx) => {
+                ctx.save();
+                // Aplicar efectos según filtro elegido
+                if (layer.filter === 'cyber') {
+                    ctx.shadowColor = "#00f0ff";
+                    ctx.shadowBlur = 15;
+                    ctx.globalAlpha = 0.95;
+                } else if (layer.filter === 'grayscale') {
+                    ctx.filter = 'grayscale(100%)';
+                } else if (layer.filter === 'invert') {
+                    ctx.filter = 'invert(100%)';
+                }
+
                 try {
                     ctx.drawImage(layer.img, layer.x, layer.y, layer.width, layer.height);
                 } catch(e) {}
+
+                // Si la capa está seleccionada, dibujar un borde indicador
+                if (idx === selectedLayerIndex) {
+                    ctx.strokeStyle = "#00f0ff";
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(layer.x - 4, layer.y - 4, layer.width + 8, layer.height + 8);
+                }
+                ctx.restore();
             });
 
-            // Texto Principal
+            // Título Principal
             const text1 = document.getElementById("userInput1").value || "ZAARD FENIX";
             ctx.fillStyle = "#ffffff";
             ctx.shadowColor = "#00f0ff";
@@ -527,9 +504,6 @@
             ctx.shadowBlur = 0;
         }
 
-        setInterval(drawCanvas, 50);
-
-        // Pasarela Web3 (0.0007 BNB)
         const CREATOR_WALLET = "0x84f529525fae84b1f1d7ea66939592094426cdc8";
 
         async function payAndDownload() {
@@ -554,7 +528,6 @@
                     return;
                 }
 
-                // Aporte justo de 0.0007 BNB directo a tu billetera
                 const tx = await signer.sendTransaction({
                     to: CREATOR_WALLET,
                     value: ethers.utils.parseEther("0.0007")
@@ -562,10 +535,9 @@
 
                 statusDiv.innerHTML = `${t.success}<br>Tx: <a href="https://bscscan.com/tx/${tx.hash}" target="_blank" style="color:var(--neon-blue);">${tx.hash.substring(0, 15)}...</a>`;
 
-                // Descarga automática en HD de la obra creada
                 setTimeout(() => {
                     const link = document.createElement('a');
-                    link.download = 'ZAARD-PINTEREST-ART.png';
+                    link.download = 'ZAARD-STUDIO-PRO.png';
                     link.href = canvas.toDataURL('image/png');
                     link.click();
                 }, 800);

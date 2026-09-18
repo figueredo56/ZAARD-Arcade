@@ -3,438 +3,488 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZAARD Innovation - Cyber Mystery Boxes</title>
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <title>ZAARD INNOVATION - Motion Studio & Web3 Hub</title>
+    <!-- Fuentes de Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <!-- Ethers.js para Web3 y pagos -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
     <style>
         :root {
-            --neon-blue: #00f3ff;
-            --neon-purple: #b000ff;
-            --bg-color: #05050a;
-            --card-bg: rgba(18, 18, 35, 0.85);
-            --text-color: #ffffff;
+            --gold: #ffd700;
+            --gold-dark: #c5a059;
+            --dark-bg: #070707;
+            --card-bg: #121212;
+            --border-gold: rgba(255, 215, 0, 0.3);
         }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(0, 243, 255, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, rgba(176, 0, 255, 0.08) 0%, transparent 40%);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            background-color: var(--dark-bg);
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
         }
-
-        .language-selector {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--neon-blue);
-            padding: 5px 10px;
-            border-radius: 8px;
-            color: var(--text-color);
-            font-size: 14px;
-            outline: none;
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
-        }
-
+        /* Navbar Superior */
         header {
-            text-align: center;
-            margin-top: 30px;
-            margin-bottom: 20px;
-            max-width: 700px;
-        }
-
-        .logo-container {
-            width: 90px;
-            height: 90px;
-            margin: 0 auto 15px auto;
-            border-radius: 50%;
-            border: 2px solid var(--neon-purple);
-            box-shadow: 0 0 20px var(--neon-purple);
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            background: #111;
-            overflow: hidden;
-        }
-
-        h1 {
-            font-size: 28px;
-            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(0, 243, 255, 0.4);
-            margin-bottom: 10px;
-        }
-
-        p {
-            color: #b8b8d0;
-            font-size: 15px;
-        }
-
-        @keyframes pulseGlow {
-            0% { border-color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue), inset 0 0 10px rgba(0, 243, 255, 0.2); }
-            50% { border-color: var(--neon-purple); box-shadow: 0 0 25px var(--neon-purple), inset 0 0 20px rgba(176, 0, 255, 0.4); }
-            100% { border-color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue), inset 0 0 10px rgba(0, 243, 255, 0.2); }
-        }
-
-        #btnWallet {
-            background: linear-gradient(135deg, rgba(0,243,255,0.1), rgba(176,0,255,0.1));
-            color: var(--text-color);
-            border: 2px solid var(--neon-blue);
-            padding: 12px 28px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 12px;
-            cursor: pointer;
-            margin-bottom: 25px;
-            animation: pulseGlow 3s infinite ease-in-out;
-            transition: transform 0.2s ease;
-        }
-
-        #btnWallet:hover { transform: scale(1.05); }
-
-        .info-panel {
-            background: var(--card-bg);
+            padding: 15px 30px;
+            background: rgba(18, 18, 18, 0.9);
+            border-bottom: 1px solid var(--border-gold);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
             backdrop-filter: blur(10px);
-            padding: 15px 25px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            text-align: center;
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            max-width: 500px;
-            width: 100%;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            word-break: break-all;
-            font-size: 13px;
         }
-
-        .grid-cajas {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            max-width: 600px;
-            width: 100%;
+        .logo-area {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 1.3rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
         }
-
-        .caja {
-            background-color: var(--card-bg);
-            backdrop-filter: blur(5px);
-            border: 2px solid var(--neon-blue);
-            border-radius: 15px;
-            aspect-ratio: 1;
+        .nav-links {
             display: flex;
-            flex-direction: column;
+            gap: 15px;
             align-items: center;
-            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-nav {
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
-            position: relative;
-            overflow: hidden;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .btn-nav:hover {
+            background: var(--gold);
+            color: #000;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+        .lang-select {
+            background: #1c1c1c;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            padding: 7px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
         }
 
-        .caja img {
+        /* Hero / Bienvenida */
+        .hero {
+            text-align: center;
+            padding: 50px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+        .hero p {
+            font-size: 1.15rem;
+            color: #cccccc;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        /* Contenedor Principal del Estudio */
+        .studio-container {
+            max-width: 1100px;
+            margin: 0 auto 60px auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 0 20px;
+        }
+        @media (max-width: 850px) {
+            .studio-container { grid-template-columns: 1fr; }
+        }
+
+        .panel {
+            background: var(--card-bg);
+            border: 2px solid var(--border-gold);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+        }
+        .panel h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255,215,0,0.2);
+            padding-bottom: 10px;
+        }
+
+        /* Controles */
+        .control-group {
+            margin-bottom: 15px;
+        }
+        .control-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: #bbb;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        .control-group input, .control-group select {
+            width: 100%;
+            padding: 10px 14px;
+            background: #1c1c1c;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+        .control-group input:focus, .control-group select:focus {
+            border-color: var(--gold);
+            outline: none;
+        }
+
+        /* Lienzo interactivo (Canvas) */
+        .canvas-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid var(--gold);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        canvas {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            border-radius: 13px;
-            transition: transform 0.3s ease;
+            display: block;
         }
-
-        .caja:hover:not(.abierta) {
-            border-color: var(--neon-purple);
-            transform: translateY(-5px) scale(1.03);
-            box-shadow: 0 0 20px var(--neon-purple);
-        }
-
-        .caja:hover img {
-            transform: scale(1.1);
-        }
-
-        .caja.abierta { 
-            cursor: default; 
-            border-color: var(--neon-blue);
-            background: rgba(0, 243, 255, 0.1);
-        }
-
-        .caja span.numero-caja {
+        /* Marca de agua bloqueada si no pagan */
+        .watermark-overlay {
             position: absolute;
-            bottom: 5px;
-            right: 8px;
+            bottom: 10px;
+            right: 10px;
             background: rgba(0, 0, 0, 0.7);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 10px;
-            color: var(--neon-blue);
-            border: 1px solid var(--neon-blue);
+            border: 1px dashed var(--gold);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            color: var(--gold);
+            pointer-events: none;
+            letter-spacing: 1px;
+            font-family: 'Orbitron', sans-serif;
         }
 
-        #mensaje {
-            margin-top: 25px;
-            font-size: 17px;
-            font-weight: 500;
+        /* Botones de Acción */
+        .btn-action {
+            width: 100%;
+            padding: 14px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        .btn-pay {
+            background: linear-gradient(135deg, #ffd700, #c5a059);
+            color: #000;
+            box-shadow: 0 0 20px rgba(255,215,0,0.4);
+        }
+        .btn-pay:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(255,215,0,0.7);
+        }
+        .status-msg {
+            margin-top: 12px;
+            font-size: 0.85rem;
             text-align: center;
-            min-height: 50px;
-            max-width: 500px;
-            padding-bottom: 40px;
-            color: var(--neon-blue);
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
-        }
-
-        @media (max-width: 600px) {
-            .grid-cajas { grid-template-columns: repeat(3, 1fr); }
+            color: #00ffcc;
+            min-height: 20px;
         }
     </style>
 </head>
 <body>
 
-    <select class="language-selector" id="langSelect" onchange="cambiarIdioma()">
-        <option value="es">🇪🇸 Español</option>
-        <option value="en">🇬🇧 English</option>
-        <option value="ar">🇸🇦 العربية</option>
-        <option value="zh">🇨🇳 中文</option>
-    </select>
-
+    <!-- Menú Superior -->
     <header>
-        <div class="logo-container"><span>💎</span></div>
-        <h1 id="txtTitle">ZAARD Cyber Vault</h1>
-        <p id="txtSubtitle">Participa con <strong>0.0001 BNB</strong>, abre tu caja misteriosa y ayuda a fondear el ecosistema para activar los premios ZARD.</p>
+        <div class="logo-area">ZAARD INNOVATION</div>
+        <div class="nav-links">
+            <select class="lang-select" id="langSelect" onchange="switchLanguage()">
+                <option value="es">🇪🇸 ES</option>
+                <option value="en">🇺🇸 EN</option>
+            </select>
+            <a href="https://pancakeswap.finance/swap?outputCurrency=0x973ba2c1dccd0820f1e026d6b1f01c55c4085d38" target="_blank" class="btn-nav" id="navBuy">Comprar ZARD</a>
+            <a href="https://bscscan.com/token/0x973ba2c1dccd0820f1e026d6b1f01c55c4085d38" target="_blank" class="btn-nav" id="navContract">Contrato BSC</a>
+        </div>
     </header>
 
-    <button id="btnWallet" onclick="gestionarConexion()">Conectar Wallet</button>
+    <!-- Sección de Bienvenida / Hero -->
+    <section class="hero">
+        <h1 id="heroTitle">Con tus ZARD puedes llegar a donde nadie ha llegado</h1>
+        <p id="heroDesc">Diseña y genera piezas de arte dinámicas con efectos deflacionarios y visuales de alta categoría. Apoya el desarrollo oficial del ecosistema y descarga tu contenido exclusivo en HD.</p>
+    </section>
 
-    <div class="info-panel">
-        <p id="walletStatus">Wallet: Desconectada</p>
-        <p><strong>Cartera Creadora (Fondo):</strong> <small>0x84f529525fae84b1f1d7ea66939592094426cdc8</small></p>
+    <!-- Estudio de Animación y Pagos -->
+    <div class="studio-container">
+        <!-- Panel de Configuración -->
+        <div class="panel">
+            <h2 id="panelConfigTitle">⚙️ Personalizador Visual</h2>
+            
+            <div class="control-group">
+                <label id="lblText1">Texto Principal</label>
+                <input type="text" id="userInput1" value="ZAARD TO THE MOON" oninput="drawCanvas()">
+            </div>
+
+            <div class="control-group">
+                <label id="lblText2">Subtítulo / Eslogan</label>
+                <input type="text" id="userInput2" value="INFINITE DEFLATIONARY POWER" oninput="drawCanvas()">
+            </div>
+
+            <div class="control-group">
+                <label id="lblTheme">Tema de Color</label>
+                <select id="themeSelect" onchange="drawCanvas()">
+                    <option value="gold">Oro Puro (Gold Lux)</option>
+                    <option value="cyan">Ciber Cripto (Neon Cyan)</option>
+                    <option value="fire">Fuego Deflacionario (Flame)</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label id="lblSpeed">Velocidad de Partículas</label>
+                <select id="speedSelect">
+                    <option value="1">Normal</option>
+                    <option value="2">Rápido / Intenso</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Panel de Vista Previa y Descarga -->
+        <div class="panel">
+            <h2 id="panelPreviewTitle">🎨 Vista Previa en Vivo</h2>
+            
+            <div class="canvas-wrapper">
+                <canvas id="artCanvas" width="500" height="500"></canvas>
+                <div class="watermark-overlay" id="watermarkText">ZAARD STUDIO PREVIEW</div>
+            </div>
+
+            <!-- Botón de Pago y Descarga HD -->
+            <button class="btn-action btn-pay" onclick="payAndDownload()" id="btnPayText">
+                💎 Pagar 0.005 BNB y Descargar HD
+            </button>
+            <div class="status-msg" id="statusMessage"></div>
+        </div>
     </div>
 
-    <div class="grid-cajas" id="gridCajas"></div>
-
-    <div id="mensaje">Conecta tu billetera para iniciar la secuencia cibernética.</div>
-
     <script>
-        let provider, signer, userAddress;
-        let conectado = false;
-        
-        const CARTERA_CREADORA = "0x84f529525fae84b1f1d7ea66939592094426cdc8";
-        const APUESTA_BNB = ethers.utils.parseEther("0.0001"); // Actualizado a 0.0001 BNB
-
-        // Array con los CIDs de IPFS provistos para las cajas
-        const ipfsCIDs = [
-            "bafybeifzkdoitiowwicqwnkfx6dnahydk5mm33h7r3j3wyv7c4rjp75ws4",
-            "bafybeiakl2nuugolggppxfttwcxfsv56zsjms4ityd5vjyyd54ctirzaeq",
-            "bafybeicugqjr3uy2mvk32536qi3gf3astpwj53nlbeogx3vmzsmk2ia3wa",
-            "bafybeickwp5h3ew6bm4aim6r5v5sc5xha6h3hdsbrhja2zeruosphac5ba",
-            "bafybeigxro3eht2lctrk4akglifsxuvwolwqfzgqzvnstabnpjjiungza4",
-            "bafybeidwy5yeihhglhcuztl32loatlk3wccecimodl6m4ocuotuuru7gvi",
-            "bafybeiheko4izm53qfmhejmvz5elek4hb2lp3weaduwndvrvpxdamwklue",
-            "bafybeiggz26x26hncisti5s5y74ciuk4yuymtczhsbwdufoql2gidl57mu",
-            "bafybeiginlvb63afmlicnvsx4fwfekanoipydzgzv3ay7njpvq6nm4zzym"
-        ];
-
-        const traducciones = {
+        // Configuración y Textos Multilenguaje
+        const translations = {
             es: {
-                title: "ZAARD Cyber Vault",
-                subtitle: "Participa con 0.0001 BNB, abre tu caja misteriosa y ayuda a fondear el ecosistema para activar los premios ZARD.",
-                connect: "Conectar Wallet",
-                disconnect: "Desconectar Wallet",
-                statusDisc: "Wallet: Desconectada",
-                statusConn: "Conectado",
-                msgInit: "Conecta tu billetera para iniciar la secuencia cibernética.",
-                msgReady: "⚡ ¡Elige una caja! Aporte de 0.0001 BNB para el fondo del ecosistema.",
-                msgSuspenso: "🔮 Sincronizando datos cuánticos...",
-                msgWaitBNB: "⏳ Autoriza el aporte de 0.0001 BNB en tu wallet...",
-                scanned: "🔍 Caja escaneada con éxito. ¡Gracias por aportar al fondo de ZAARD Innovation!",
-                retry: "🔄 Abrir otra caja"
+                navBuy: "Comprar ZARD",
+                navContract: "Contrato BSC",
+                heroTitle: "Con tus ZARD puedes llegar a donde nadie ha llegado",
+                heroDesc: "Diseña y genera piezas de arte dinámicas con efectos deflacionarios y visuales de alta categoría. Apoya el desarrollo oficial del ecosistema y descarga tu contenido exclusivo en HD.",
+                panelConfigTitle: "⚙️ Personalizador Visual",
+                lblText1: "Texto Principal",
+                lblText2: "Subtítulo / Eslogan",
+                lblTheme: "Tema de Color",
+                lblSpeed: "Velocidad de Partículas",
+                panelPreviewTitle: "🎨 Vista Previa en Vivo",
+                btnPay: "💎 Pagar 0.005 BNB y Descargar HD",
+                walletNeeded: "Por favor, abre esta página desde tu billetera Web3 (MetaMask / Binance Wallet).",
+                wrongNetwork: "Por favor, cambia tu red a BNB Smart Chain (BSC).",
+                paying: "Procesando pago hacia la billetera creadora...",
+                success: "¡Pago confirmado con éxito! Descargando imagen en HD...",
+                cancelled: "Operación cancelada o rechazada."
             },
             en: {
-                title: "ZAARD Cyber Vault",
-                subtitle: "Participate with 0.0001 BNB, open your mystery box and help fund the ecosystem for ZARD rewards.",
-                connect: "Connect Wallet",
-                disconnect: "Disconnect Wallet",
-                statusDisc: "Wallet: Disconnected",
-                statusConn: "Connected",
-                msgInit: "Connect your wallet to start the cyber sequence.",
-                msgReady: "⚡ Choose a box! 0.0001 BNB ecosystem contribution.",
-                msgSuspenso: "🔮 Synchronizing quantum data...",
-                msgWaitBNB: "⏳ Authorize 0.0001 BNB contribution in your wallet...",
-                scanned: "🔍 Box successfully scanned. Thank you for funding ZAARD Innovation!",
-                retry: "🔄 Open another box"
-            },
-            ar: {
-                title: "ZAARD Cyber Vault",
-                subtitle: "شارك بـ 0.0001 BNB وافتح صندوقك الغامض للمساعدة في تمويل النظام البيئي.",
-                connect: "ربط المحفظة",
-                disconnect: "قطع الاتصال",
-                statusDisc: "المحفظة: غير متصلة",
-                statusConn: "متصل",
-                msgInit: "قم بربط محفظتك لبدء التسلسل السيبراني.",
-                msgReady: "⚡ اختر صندوقاً! مساهمة 0.0001 BNB لدعم النظام البيئي.",
-                msgSuspenso: "🔮 جاري مزامنة البيانات...",
-                msgWaitBNB: "⏳ يرجى تأكيد المساهمة في محفظتك...",
-                scanned: "🔍 تم فحص الصندوق بنجاح. شكراً لدعمك!",
-                retry: "🔄 فتح صندوق آخر"
-            },
-            zh: {
-                title: "ZAARD Cyber Vault",
-                subtitle: "参与 0.0001 BNB，打开你的神秘宝箱并协助资助生态系统以激活 ZARD 奖励。",
-                connect: "连接钱包",
-                disconnect: "断开连接",
-                statusDisc: "钱包：未连接",
-                statusConn: "已连接",
-                msgInit: "连接您的钱包以启动网络序列。",
-                msgReady: "⚡ 选择一个宝箱！0.0001 BNB 生态系统支持贡献。",
-                msgSuspenso: "🔮 正在同步量子数据...",
-                msgWaitBNB: "⏳ 请在钱包中确认贡献...",
-                scanned: "🔍 宝箱扫描成功。感谢您资助 ZAARD Innovation！",
-                retry: "🔄 打开另一个宝箱"
+                navBuy: "Buy ZARD",
+                navContract: "BSC Contract",
+                heroTitle: "With your ZARD you can reach where no one has gone before",
+                heroDesc: "Design and generate dynamic art pieces with deflationary effects and high-class visuals. Support official ecosystem development and download your exclusive HD content.",
+                panelConfigTitle: "⚙️ Visual Customizer",
+                lblText1: "Main Text",
+                lblText2: "Subtitle / Slogan",
+                lblTheme: "Color Theme",
+                lblSpeed: "Particle Speed",
+                panelPreviewTitle: "🎨 Live Preview",
+                btnPay: "💎 Pay 0.005 BNB & Download HD",
+                walletNeeded: "Please open this page from a Web3 wallet (MetaMask / Binance Wallet).",
+                wrongNetwork: "Please switch your network to BNB Smart Chain (BSC).",
+                paying: "Processing payment to creator wallet...",
+                success: "Payment confirmed! Downloading HD image...",
+                cancelled: "Operation cancelled or rejected."
             }
         };
 
-        function cambiarIdioma() {
+        function switchLanguage() {
             const lang = document.getElementById("langSelect").value;
-            const t = traducciones[lang];
-            document.getElementById("txtTitle").innerText = t.title;
-            document.getElementById("txtSubtitle").innerHTML = t.subtitle;
-            const btn = document.getElementById("btnWallet");
-            if (!conectado) {
-                btn.innerText = t.connect;
-                document.getElementById("walletStatus").innerText = t.statusDisc;
-                document.getElementById("mensaje").innerText = t.msgInit;
-            } else {
-                btn.innerText = t.disconnect;
+            const t = translations[lang];
+            document.getElementById("navBuy").innerText = t.navBuy;
+            document.getElementById("navContract").innerText = t.navContract;
+            document.getElementById("heroTitle").innerText = t.heroTitle;
+            document.getElementById("heroDesc").innerText = t.heroDesc;
+            document.getElementById("panelConfigTitle").innerText = t.panelConfigTitle;
+            document.getElementById("lblText1").innerText = t.lblText1;
+            document.getElementById("lblText2").innerText = t.lblText2;
+            document.getElementById("lblTheme").innerText = t.lblTheme;
+            document.getElementById("lblSpeed").innerText = t.lblSpeed;
+            document.getElementById("panelPreviewTitle").innerText = t.panelPreviewTitle;
+            document.getElementById("btnPayText").innerText = t.btnPay;
+        }
+
+        // Lógica del Canvas Animado
+        const canvas = document.getElementById("artCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let particles = [];
+        for (let i = 0; i < 60; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 3 + 1,
+                speedY: (Math.random() * 2 - 1),
+                speedX: (Math.random() * 2 - 1)
+            });
+        }
+
+        function drawCanvas() {
+            const text1 = document.getElementById("userInput1").value || "ZAARD INNOVATION";
+            const text2 = document.getElementById("userInput2").value || "ECOSYSTEM";
+            const theme = document.getElementById("themeSelect").value;
+            const speedMultiplier = parseInt(document.getElementById("speedSelect").value);
+
+            // Colores según tema
+            let primaryColor = "#ffd700";
+            let secondaryColor = "#ffdf00";
+            let bgGradient1 = "#0c0c0c";
+            let bgGradient2 = "#1a1600";
+
+            if (theme === "cyan") {
+                primaryColor = "#00ffcc";
+                secondaryColor = "#00bfff";
+                bgGradient1 = "#000a0f";
+                bgGradient2 = "#001f29";
+            } else if (theme === "fire") {
+                primaryColor = "#ff4500";
+                secondaryColor = "#ffd700";
+                bgGradient1 = "#140500";
+                bgGradient2 = "#260a00";
             }
+
+            // Fondo con degradado
+            let bgGrad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            bgGrad.addColorStop(0, bgGradient1);
+            bgGrad.addColorStop(1, bgGradient2);
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Dibujar y actualizar partículas
+            ctx.fillStyle = primaryColor;
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                p.y += p.speedY * speedMultiplier;
+                p.x += p.speedX * speedMultiplier;
+
+                if (p.y < 0) p.y = canvas.height;
+                if (p.y > canvas.height) p.y = 0;
+                if (p.x < 0) p.x = canvas.width;
+                if (p.x > canvas.width) p.x = 0;
+            });
+
+            // Marco decorativo interior
+            ctx.strokeStyle = primaryColor;
+            ctx.lineWidth = 3;
+            ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
+
+            // Texto Principal
+            ctx.fillStyle = "#ffffff";
+            ctx.shadowColor = primaryColor;
+            ctx.shadowBlur = 15;
+            ctx.font = "900 24px 'Orbitron', sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText(text1.toUpperCase(), canvas.width / 2, canvas.height / 2 - 20);
+
+            // Subtítulo
+            ctx.fillStyle = secondaryColor;
+            ctx.shadowBlur = 8;
+            ctx.font = "600 13px 'Inter', sans-serif";
+            ctx.fillText(text2.toUpperCase(), canvas.width / 2, canvas.height / 2 + 25);
+
+            ctx.shadowBlur = 0; // Reset sombra
         }
 
-        async function gestionarConexion() {
-            if (!conectado) { await conectarWallet(); } else { desconectarWallet(); }
-        }
+        // Bucle de animación continuo
+        setInterval(drawCanvas, 30);
 
-        async function conectarWallet() {
-            const targetProvider = window.ethereum || window.BinanceChain;
+        // Pasarela de Pago Web3 con Ethers.js
+        const CREATOR_WALLET = "0x84f529525fae84b1f1d7ea66939592094426cdc8";
+
+        async function payAndDownload() {
             const lang = document.getElementById("langSelect").value;
-            const t = traducciones[lang];
+            const t = translations[lang];
+            const statusDiv = document.getElementById("statusMessage");
 
-            if (targetProvider) {
-                try {
-                    provider = new ethers.providers.Web3Provider(targetProvider, "any");
-                    await provider.send("eth_requestAccounts", []);
-                    signer = provider.getSigner();
-                    userAddress = await signer.getAddress();
-                    
-                    try {
-                        document.getElementById("mensaje").innerText = "Firma el protocolo de seguridad...";
-                        await signer.signMessage("ZAARD Cyber Protocol - Autenticación Web3.");
-                    } catch (e) {}
-
-                    conectado = true;
-                    document.getElementById("walletStatus").innerText = `${t.statusConn}: ${userAddress.substring(0,6)}...${userAddress.substring(38)}`;
-                    document.getElementById("btnWallet").innerText = t.disconnect;
-                    inicializarJuego();
-                } catch (error) {
-                    console.error(error);
-                    alert("Error al conectar la wallet.");
-                }
-            } else {
-                alert("Abre este enlace desde el navegador DApp de Binance App.");
+            if (typeof window.ethereum === "undefined") {
+                statusDiv.innerText = t.walletNeeded;
+                return;
             }
-        }
-
-        function desconectarWallet() {
-            provider = null; signer = null; userAddress = null; conectado = false;
-            const lang = document.getElementById("langSelect").value;
-            const t = traducciones[lang];
-            document.getElementById("walletStatus").innerText = t.statusDisc;
-            document.getElementById("btnWallet").innerText = t.connect;
-            document.getElementById("gridCajas").innerHTML = "";
-            document.getElementById("mensaje").innerText = t.msgInit;
-        }
-
-        function inicializarJuego() {
-            const lang = document.getElementById("langSelect").value;
-            const t = traducciones[lang];
-            const grid = document.getElementById("gridCajas");
-            grid.innerHTML = "";
-
-            // Generamos 12 cajas usando de forma cíclica los CIDs de IPFS provistos
-            for (let i = 1; i <= 12; i++) {
-                const cidIndex = (i - 1) % ipfsCIDs.length;
-                const ipfsUrl = `https://gateway.pinata.cloud/ipfs/${ipfsCIDs[cidIndex]}`;
-
-                const caja = document.createElement("div");
-                caja.className = "caja";
-                caja.innerHTML = `
-                    <img src="${ipfsUrl}" alt="Cyber Box ${i}" loading="lazy">
-                    <span class="numero-caja">#${i}</span>
-                `;
-                caja.onclick = () => seleccionarCaja(i, caja, ipfsUrl);
-                grid.appendChild(caja);
-            }
-            document.getElementById("mensaje").innerText = t.msgReady;
-        }
-
-        async function seleccionarCaja(numeroCaja, elementoCaja, imgUrl) {
-            if (!signer || !conectado) return;
-
-            const lang = document.getElementById("langSelect").value;
-            const t = traducciones[lang];
-            const mensajeEl = document.getElementById("mensaje");
-
-            const todasLasCajas = document.querySelectorAll(".caja");
-            todasLasCajas.forEach(c => c.style.pointerEvents = "none");
 
             try {
-                mensajeEl.innerText = t.msgSuspenso;
-                await new Promise(r => setTimeout(r, 900));
+                statusDiv.innerText = t.paying;
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const signer = provider.getSigner();
 
-                mensajeEl.innerText = t.msgWaitBNB;
+                const network = await provider.getNetwork();
+                if (network.chainId !== 56) {
+                    statusDiv.innerText = t.wrongNetwork;
+                    return;
+                }
 
-                // Envío de los 0.0001 BNB hacia la cartera creadora para el fondo
-                const txBNB = await signer.sendTransaction({
-                    to: CARTERA_CREADORA,
-                    value: APUESTA_BNB,
-                    gasLimit: ethers.utils.hexlify(100000)
+                // Envío de 0.005 BNB directos a tu billetera creadora
+                const tx = await signer.sendTransaction({
+                    to: CREATOR_WALLET,
+                    value: ethers.utils.parseEther("0.005")
                 });
-                await txBNB.wait();
 
-                // Marcar caja como escaneada / abierta exitosamente
-                elementoCaja.className = "caja abierta";
-                elementoCaja.innerHTML = `
-                    <img src="${imgUrl}" alt="Box Opened" style="filter: brightness(1.2) drop-shadow(0 0 8px var(--neon-blue));">
-                    <span class="numero-caja" style="border-color: #00ff66; color: #00ff66;">OK</span>
-                `;
-                mensajeEl.innerText = t.scanned;
+                statusDiv.innerHTML = `${t.success}<br>Tx: <a href="https://bscscan.com/tx/${tx.hash}" target="_blank" style="color:var(--gold);">${tx.hash.substring(0, 15)}...</a>`;
 
-                // Botón para volver a interactuar
+                // Remover marca de agua temporalmente para la descarga limpia en HD
+                document.getElementById("watermarkText").style.display = "none";
+                drawCanvas();
+
+                // Generar descarga automática de la imagen
                 setTimeout(() => {
-                    const btnReiniciar = document.createElement("button");
-                    btnReiniciar.innerText = t.retry;
-                    btnReiniciar.style.display = "block";
-                    btnReiniciar.style.margin = "15px auto 0 auto";
-                    btnReiniciar.style.padding = "10px 20px";
-                    btnReiniciar.style.cursor = "pointer";
-                    btnReiniciar.style.background = "linear-gradient(135deg, var(--neon-blue), var(--neon-purple))";
-                    btnReiniciar.style.border = "none";
-                    btnReiniciar.style.borderRadius = "8px";
-                    btnReiniciar.style.fontWeight = "bold";
-                    btnReiniciar.style.color = "#000";
-                    btnReiniciar.style.boxShadow = "0 0 15px var(--neon-blue)";
-                    btnReiniciar.onclick = inicializarJuego;
-                    mensajeEl.appendChild(btnReiniciar);
-                }, 500);
+                    const link = document.createElement('a');
+                    link.download = 'ZAARD-INNOVATION-ART.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    
+                    // Restaurar marca de agua
+                    document.getElementById("watermarkText").style.display = "block";
+                }, 1000);
 
             } catch (error) {
                 console.error(error);
-                mensajeEl.innerText = "❌ Transacción cancelada o saldo BNB insuficiente.";
-                todasLasCajas.forEach(c => c.style.pointerEvents = "auto");
+                statusDiv.innerText = t.cancelled;
             }
         }
     </script>

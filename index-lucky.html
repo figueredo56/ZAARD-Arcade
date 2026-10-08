@@ -87,22 +87,24 @@
             min-height: calc(100vh - 70px);
         }
 
-        /* Fondo espacial silver brillante y llamativo */
-        .silver-space-bg {
+        /* Fondo espacial personalizado para la tarjeta de bienvenida */
+        .welcome-space-bg {
             position: relative;
             background: linear-gradient(rgba(18, 10, 35, 0.82), rgba(10, 5, 22, 0.90)), url('https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png') !important;
             background-size: cover !important;
             background-position: center !important;
-            border: 1px solid #a855f7;
+            border: 2px solid #a855f7;
             border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 0 35px rgba(168, 85, 247, 0.4), inset 0 0 20px rgba(216, 180, 254, 0.15);
+            padding: 25px 30px;
+            max-width: 720px;
+            width: 100%;
+            box-shadow: 0 0 35px rgba(168, 85, 247, 0.5), inset 0 0 20px rgba(216, 180, 254, 0.15);
         }
 
-        /* Banner central rectangular ancho, grande y llamativo */
+        /* Banner central rectangular más ancho, grande e imponente con la nueva imagen */
         .middle-banner-deco {
             width: 100%;
-            min-height: 220px;
+            min-height: 260px;
             background: linear-gradient(135deg, rgba(28, 12, 52, 0.95), rgba(12, 5, 25, 0.98));
             border: 2px solid #a855f7;
             border-radius: 16px;
@@ -110,37 +112,37 @@
             flex-direction: row;
             align-items: center;
             justify-content: space-around;
-            gap: 20px;
-            box-shadow: 0 0 40px rgba(168, 85, 247, 0.5), inset 0 0 25px rgba(168, 85, 247, 0.2);
+            gap: 25px;
+            box-shadow: 0 0 45px rgba(168, 85, 247, 0.6), inset 0 0 25px rgba(168, 85, 247, 0.2);
             position: relative;
             overflow: hidden;
-            padding: 20px 30px;
+            padding: 25px 35px;
         }
         .middle-banner-deco img {
-            width: 160px;
-            height: 160px;
+            width: 210px;
+            height: 210px;
             object-fit: contain;
-            filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.9));
+            filter: drop-shadow(0 0 25px rgba(168, 85, 247, 0.95));
             animation: floatGlow 3s ease-in-out infinite;
         }
         .middle-banner-content {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            gap: 10px;
+            gap: 12px;
             flex: 1;
         }
         .middle-banner-title {
             color: #f3e8ff;
-            font-size: 1.25rem;
+            font-size: 1.35rem;
             font-weight: bold;
             letter-spacing: 1px;
             text-shadow: 0 0 12px #a855f7;
         }
         .middle-banner-text {
             color: #d8b4fe;
-            font-size: 0.9rem;
-            line-height: 1.4;
+            font-size: 0.95rem;
+            line-height: 1.45;
         }
 
         .floating-logo-container {
@@ -148,8 +150,8 @@
             margin-bottom: 12px;
         }
         .floating-logo {
-            width: 70px;
-            height: 70px;
+            width: 75px;
+            height: 75px;
             border-radius: 50%;
             border: 3px solid #a855f7;
             object-fit: cover;
@@ -161,15 +163,6 @@
             100% { transform: translateY(0px); box-shadow: 0 0 15px #34d399; }
         }
 
-        .welcome-card {
-            background: rgba(22, 12, 40, 0.92);
-            border: 2px solid #a855f7;
-            border-radius: 16px;
-            padding: 25px 30px;
-            max-width: 720px;
-            width: 100%;
-            box-shadow: 0 0 30px rgba(147, 51, 234, 0.5);
-        }
         .welcome-card h1 {
             font-size: 1.55rem;
             color: #f3e8ff;
@@ -233,7 +226,11 @@
             width: 100%;
         }
         .card-panel {
+            background: rgba(22, 12, 40, 0.9);
+            border: 1px solid #a855f7;
             border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.3);
         }
 
         .market-chart-box {
@@ -368,7 +365,7 @@
 
     <!-- Pantalla 1: Bienvenida Centrada -->
     <div id="screenWelcome" class="screen">
-        <div class="welcome-card silver-space-bg">
+        <div class="welcome-space-bg">
             <div class="floating-logo-container">
                 <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791432184680-906fd2a3d85625f79d066e5b033f6011.png" alt="Logo Flotante" class="floating-logo">
             </div>
@@ -397,7 +394,7 @@
         </div>
     </div>
 
-    <!-- Pantalla 3: Arena de Apuestas Estructurada Verticalmente con Fondo Silver -->
+    <!-- Pantalla 3: Arena de Apuestas Estructurada Verticalmente -->
     <div id="screenArena" class="screen hidden">
         <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; background: rgba(20,10,35,0.85); padding: 10px 15px; border-radius: 10px; border: 1px solid #7c3aed;">
             <div>
@@ -410,8 +407,8 @@
         </div>
 
         <div class="arena-container">
-            <!-- Arriba: Panel de Apuestas BNB/USD con Fondo Silver -->
-            <div class="card-panel silver-space-bg">
+            <!-- Arriba: Panel de Apuestas BNB/USD -->
+            <div class="card-panel">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                     <span style="font-size: 0.95rem; font-weight: bold; color: #e9d5ff;">📈 BNB/USD Live Chart & Zona de Apuestas</span>
                     <span class="price-big" id="priceDisplayBnb">614.25 $</span>
@@ -429,17 +426,17 @@
                 </div>
             </div>
 
-            <!-- Banner central rectangular ancho y grande con la imagen destacada -->
+            <!-- Banner central con la nueva imagen y tamaño grande -->
             <div class="middle-banner-deco">
-                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790287451706-4593a246bbbf27b508770c328ab883c0.png" alt="ZAARD Decorativo">
+                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791494105996-e3366dcac4d9846d38bbb175e71b1538.png" alt="ZAARD Decorativo">
                 <div class="middle-banner-content">
                     <div class="middle-banner-title">⚡ ZAARD ECOSYSTEM MULTI-ASSET ARENA ⚡</div>
                     <div class="middle-banner-text">Conectando alta liquidez, precisión analítica y recompensas instantáneas en el ecosistema descentralizado.</div>
                 </div>
             </div>
 
-            <!-- Abajo: Panel Analítico ZARD Token (0x973ba2...d38) con Fondo Silver -->
-            <div class="card-panel silver-space-bg">
+            <!-- Abajo: Panel Analítico ZARD Token (0x973ba2...d38) -->
+            <div class="card-panel">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                     <span style="font-size: 0.95rem; font-weight: bold; color: #e9d5ff;">💎 ZARD Token Analytics (0x973b...d38)</span>
                     <span class="price-big" style="color: #c084fc;" id="priceDisplayZard">0.000060 $</span>

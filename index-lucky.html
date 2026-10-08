@@ -87,10 +87,10 @@
             min-height: calc(100vh - 70px);
         }
 
-        /* Fondo espacial personalizado para la tarjeta de bienvenida */
+        /* Fondo espacial exacto para la tarjeta de bienvenida */
         .welcome-space-bg {
             position: relative;
-            background: linear-gradient(rgba(18, 10, 35, 0.82), rgba(10, 5, 22, 0.90)), url('https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png') !important;
+            background: linear-gradient(rgba(18, 10, 35, 0.78), rgba(10, 5, 22, 0.88)), url('https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png') !important;
             background-size: cover !important;
             background-position: center !important;
             border: 2px solid #a855f7;
@@ -101,7 +101,7 @@
             box-shadow: 0 0 35px rgba(168, 85, 247, 0.5), inset 0 0 20px rgba(216, 180, 254, 0.15);
         }
 
-        /* Banner central rectangular más ancho, grande e imponente con la nueva imagen */
+        /* Banner central rectangular grande e imponente con la nueva imagen */
         .middle-banner-deco {
             width: 100%;
             min-height: 260px;
@@ -363,7 +363,7 @@
         </div>
     </div>
 
-    <!-- Pantalla 1: Bienvenida Centrada -->
+    <!-- Pantalla 1: Bienvenida Centrada con el Fondo Espacial Solicitado -->
     <div id="screenWelcome" class="screen">
         <div class="welcome-space-bg">
             <div class="floating-logo-container">
@@ -371,13 +371,13 @@
             </div>
             <h1>Bienvenido al Núcleo de Predicción y Trading ZAARD</h1>
             <p class="welcome-desc">
-                Estás ingresando al protocolo descentralizado de alta precisión de <strong>ZAARD Innovation</strong>. Nuestra plataforma combina análisis de velas en tiempo real, transparencia on-chain y recompensas automatizadas. Pon a prueba tus habilidades en rondas cronometradas de 1 minuto y demuestra tu capacidad analítica.
+                Estás ingresando al protocolo descentralizado de alta precisión de <strong>ZAARD Innovation</strong>. Nuestra plataforma combina análisis de velas en tiempo real, transparencia on-chain y recompensas automatizadas del nuevo contrato de <strong>1,000 ZARD</strong>. Pon a prueba tus habilidades en rondas cronometradas de 1 minuto y demuestra tu capacidad analítica.
             </p>
             <div class="rules-list-welcome">
                 <ul style="list-style-position: inside;">
                     <li><strong>Mecánica del Reto:</strong> Predice si el mercado de BNB subirá (Call) o bajará (Put).</li>
                     <li><strong>Costo de Operación:</strong> 0.0001 BNB enviados al contrato del creador (`0x84f5...dc8`).</li>
-                    <li><strong>Recompensa Garantizada:</strong> Gana 0.5 ZARD enviados automáticamente desde la reserva oficial si tu pronóstico es correcto al expirar el segundero.</li>
+                    <li><strong>Recompensa del Contrato:</strong> Gana 1,000 ZARD o pagos proporcionales del fondo del contrato si tu pronóstico es correcto.</li>
                     <li><strong>Transparencia On-Chain:</strong> Registro exacto y verificable en cada ronda.</li>
                 </ul>
             </div>
@@ -389,8 +389,8 @@
     <div id="screenLoading" class="screen hidden">
         <div class="loading-box">
             <div class="spinner"></div>
-            <h2 style="color: #c084fc; margin-bottom: 10px;">Sincronizando Velas y Servidor ZAARD...</h2>
-            <p style="color: #a78bfa;">Conectando flujos de precios BNB y ZARD Token con nodos de liquidez...</p>
+            <h2 style="color: #c084fc; margin-bottom: 10px;">Sincronizando Velas y Contrato ZARD...</h2>
+            <p style="color: #a78bfa;">Conectando flujos de precios BNB y el contrato de 1,000 ZARD con nodos de liquidez...</p>
         </div>
     </div>
 
@@ -426,12 +426,12 @@
                 </div>
             </div>
 
-            <!-- Banner central con la nueva imagen y tamaño grande -->
+            <!-- Banner central con la nueva imagen de PinkSale y tamaño grande -->
             <div class="middle-banner-deco">
                 <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791494105996-e3366dcac4d9846d38bbb175e71b1538.png" alt="ZAARD Decorativo">
                 <div class="middle-banner-content">
-                    <div class="middle-banner-title">⚡ ZAARD ECOSYSTEM MULTI-ASSET ARENA ⚡</div>
-                    <div class="middle-banner-text">Conectando alta liquidez, precisión analítica y recompensas instantáneas en el ecosistema descentralizado.</div>
+                    <div class="middle-banner-title">⚡ ZAARD 1,000 ZARD CONTRACT ARENA ⚡</div>
+                    <div class="middle-banner-text">Conectando alta liquidez, precisión analítica y pagos garantizados del nuevo contrato inteligente en la red BNB.</div>
                 </div>
             </div>
 
@@ -457,7 +457,7 @@
         <div class="wallet-box">
             <h3 style="color: #e9d5ff; margin-bottom: 15px;">Selecciona tu Billetera Web3</h3>
             <button class="wallet-option" onclick="conectarInjected('binance')">🟡 Binance Web3 Wallet</button>
-            <button class="wallet-option" onclick="conectarInjected('metamask')">🦊 MetaMask / Injected</button>
+            <button class="wallet-option" onclick="conectarInjected('metamask')">🦊 MetaMask / Injected Provider</button>
             <button onclick="cerrarSelectorBilletera()" style="background: transparent; border: 1px solid #7c3aed; color: #c084fc; padding: 8px; border-radius: 8px; margin-top: 10px; cursor: pointer; width: 100%;">Cancelar</button>
         </div>
     </div>
@@ -474,6 +474,7 @@
     <script>
         let modoActual = 'invitado';
         const walletCreadora = "0x84f529525fae84b1f1d7ea66939592094426cdc8";
+        let cuentaConectada = null;
         
         let timeLeft = 60;
         let temporizadorActivo = false;
@@ -518,13 +519,13 @@
             
             for(let i=0; i<4; i++) {
                 addOrder(listBnb, sampleWallets, "0.0001 BNB");
-                addOrder(listZard, sampleWallets, "250 ZARD");
+                addOrder(listZard, sampleWallets, "1,000 ZARD");
             }
 
             setInterval(() => {
                 if(listBnb && listZard) {
                     addOrder(listBnb, sampleWallets, "0.0001 BNB");
-                    addOrder(listZard, sampleWallets, "250 ZARD");
+                    addOrder(listZard, sampleWallets, "1,000 ZARD");
                 }
             }, 3500);
         }
@@ -621,15 +622,17 @@
                 if (window.ethereum) {
                     const transactionParameters = {
                         to: walletCreadora,
-                        from: window.ethereum.selectedAddress,
-                        value: '0x38D7EA4C68000', 
+                        from: cuentaConectada || window.ethereum.selectedAddress,
+                        value: '0x38D7EA4C68000', // 0.0001 BNB en hexadecimal wei
                     };
+                    
                     window.ethereum.request({ method: 'eth_sendTransaction', params: [transactionParameters] })
                     .then((txHash) => {
-                        alert(`¡Apuesta real de 0.0001 BNB enviada! Hash: ${txHash}. Posición en BNB (${direccion}) activa y temporizador en marcha.`);
+                        alert(`¡Apuesta real de 0.0001 BNB enviada con éxito! Hash: ${txHash}. Posición en BNB (${direccion}) activa y apta para ganar recompensas del contrato de 1,000 ZARD.`);
                     })
-                    .catch(() => { 
-                        alert("Transacción cancelada."); 
+                    .catch((err) => { 
+                        console.log(err);
+                        alert("Transacción cancelada o rechazada por el usuario."); 
                         apuestaActiva = null; 
                         clearInterval(intervaloTimer);
                         temporizadorActivo = false;
@@ -637,8 +640,8 @@
                         document.getElementById('countdown').innerText = timeLeft;
                     });
                 } else {
-                    alert("Conecta tu billetera Web3.");
-                    apuestaActiva = null;
+                    alert("No se detectó ninguna billetera Web3. Conecta MetaMask o Binance Web3 Wallet.");
+                    abrirSelectorBilletera();
                 }
             }
         }
@@ -658,7 +661,7 @@
             if (acerto) {
                 titleEl.style.color = "#34d399";
                 titleEl.innerText = "🎉 ¡VICTORIA EN LA RONDA!";
-                descEl.innerHTML = `Tu predicción en <strong>BNB</strong> (${apuestaActiva.direccion}) fue correcta.<br>Precio de entrada: ${precioInicio.toFixed(2)}$ <br>Precio de cierre: ${precioFinal.toFixed(2)}$<br><br><strong>¡Has ganado 0.5 ZARD enviados a tu billetera!</strong>`;
+                descEl.innerHTML = `Tu predicción en <strong>BNB</strong> (${apuestaActiva.direccion}) fue correcta.<br>Precio de entrada: ${precioInicio.toFixed(2)}$ <br>Precio de cierre: ${precioFinal.toFixed(2)}$<br><br><strong>¡Has ganado 1,000 ZARD garantizados del contrato para cobro inmediato!</strong>`;
             } else {
                 titleEl.style.color = "#f87171";
                 titleEl.innerText = "❌ DERROTA EN LA RONDA";
@@ -686,16 +689,20 @@
 
         function conectarInjected(tipo) {
             cerrarSelectorBilletera();
-            if (window.ethereum) {
+            if (typeof window.ethereum !== 'undefined') {
                 window.ethereum.request({ method: 'eth_requestAccounts' })
                 .then(accounts => {
-                    let shortAddr = accounts[0].substring(0, 6) + "..." + accounts[0].substring(38);
+                    cuentaConectada = accounts[0];
+                    let shortAddr = cuentaConectada.substring(0, 6) + "..." + cuentaConectada.substring(38);
                     document.getElementById('connectWalletBtn').innerText = (tipo === 'binance' ? "🟡 " : "🦊 ") + shortAddr;
-                    alert("¡Billetera Web3 conectada con éxito!");
+                    alert("¡Billetera conectada y autorizada para interactuar con los contratos!");
                 })
-                .catch(err => console.log(err));
+                .catch(err => {
+                    console.log(err);
+                    alert("Permiso denegado o error al conectar con la billetera.");
+                });
             } else {
-                alert("No se detectó un proveedor Web3 compatible (MetaMask o Binance Web3 Wallet).");
+                alert("Por favor abre esta página dentro del navegador integrado de MetaMask, Binance Web3 Wallet o una extensión compatible.");
             }
         }
 

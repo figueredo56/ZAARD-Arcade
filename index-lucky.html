@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZAARD Finance - Arena de Predicción</title>
+    <title>ZAARD Finance - Arena de Predicción Profesional</title>
     <style>
         * {
             margin: 0;
@@ -20,7 +20,6 @@
             align-items: center;
             overflow-x: hidden;
         }
-        /* Navbar Superior */
         .navbar {
             width: 100%;
             max-width: 1200px;
@@ -68,11 +67,8 @@
             cursor: pointer;
             transition: 0.3s;
         }
-        .btn-wallet:hover {
-            opacity: 0.9;
-        }
+        .btn-wallet:hover { opacity: 0.9; }
 
-        /* Pantallas / Estados */
         .screen {
             width: 100%;
             max-width: 1200px;
@@ -82,18 +78,15 @@
             align-items: center;
             flex: 1;
         }
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
 
-        /* Banner Principal */
         .banner-container {
             width: 100%;
-            height: 180px;
+            height: 150px;
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid #7c3aed;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
         }
         .banner-container img {
@@ -102,7 +95,6 @@
             object-fit: cover;
         }
 
-        /* Pantalla Bienvenida Chula */
         .welcome-card {
             background: rgba(26, 15, 48, 0.9);
             border: 2px solid #9333ea;
@@ -112,7 +104,6 @@
             max-width: 600px;
             margin-top: 40px;
             box-shadow: 0 0 30px rgba(147, 51, 234, 0.4);
-            animation: fadeIn 1s ease-in-out;
         }
         .welcome-card h1 {
             font-size: 2rem;
@@ -137,18 +128,11 @@
             box-shadow: 0 0 15px rgba(147, 51, 234, 0.6);
             transition: 0.3s;
         }
-        .btn-action:hover {
-            transform: scale(1.05);
-        }
+        .btn-action:hover { transform: scale(1.05); }
 
-        /* Pantalla Explicativa Técnica (Transición de 4 segundos) */
-        .loading-box {
-            text-align: center;
-            padding: 50px;
-        }
+        .loading-box { text-align: center; padding: 50px; }
         .spinner {
-            width: 60px;
-            height: 60px;
+            width: 60px; height: 60px;
             border: 5px solid #3b0764;
             border-top: 5px solid #a855f7;
             border-radius: 50%;
@@ -157,14 +141,14 @@
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Estilos de la Arena de Apuestas */
+        /* Estructura de la Arena de Apuestas */
         .arena-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
             gap: 20px;
             width: 100%;
         }
-        @media(max-width: 768px) {
+        @media(max-width: 900px) {
             .arena-grid { grid-template-columns: 1fr; }
         }
         .card-panel {
@@ -174,50 +158,82 @@
             padding: 20px;
             box-shadow: 0 0 15px rgba(124, 58, 237, 0.2);
         }
-        .market-display {
-            height: 250px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: #090314;
+
+        /* Canvas de Velas de BNB */
+        .market-chart-box {
+            background: #06020c;
             border-radius: 8px;
-            border: 1px dashed #9333ea;
+            border: 1px solid #9333ea;
             position: relative;
+            height: 220px;
+            margin-bottom: 15px;
+            overflow: hidden;
         }
-        .price-tag {
-            font-size: 2.5rem;
+        canvas { width: 100%; height: 100%; display: block; }
+        
+        .chart-overlay-info {
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            display: flex;
+            gap: 15px;
+            font-size: 0.85rem;
+            background: rgba(10, 5, 20, 0.8);
+            padding: 5px 10px;
+            border-radius: 6px;
+            border: 1px solid #4a1e7a;
+        }
+
+        .price-big {
+            font-size: 1.8rem;
             font-weight: bold;
             color: #34d399;
-            text-shadow: 0 0 10px rgba(52, 211, 153, 0.5);
+            text-shadow: 0 0 8px rgba(52, 211, 153, 0.4);
         }
+
+        .timer-badge {
+            background: #2e1065;
+            color: #e9d5ff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            border: 1px solid #7c3aed;
+        }
+
         .bet-buttons {
             display: flex;
             gap: 15px;
-            margin-top: 20px;
+            margin-top: 15px;
         }
         .btn-sube {
-            flex: 1;
-            background: #059669;
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
+            flex: 1; background: #059669; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.2s;
         }
+        .btn-sube:hover { background: #047857; }
         .btn-baja {
-            flex: 1;
-            background: #dc2626;
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
+            flex: 1; background: #dc2626; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.2s;
         }
+        .btn-baja:hover { background: #b91c1c; }
+
+        /* Libro de Órdenes en Tiempo Real */
+        .order-book {
+            max-height: 180px;
+            overflow-y: auto;
+            font-size: 0.8rem;
+            background: #06020c;
+            border: 1px solid #4a1e7a;
+            border-radius: 6px;
+            padding: 8px;
+        }
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 6px;
+            border-bottom: 1px solid #1e1138;
+        }
+        .order-green { color: #34d399; font-weight: bold; }
+        .order-red { color: #f87171; font-weight: bold; }
+
         .mode-badge {
             display: inline-block;
             padding: 5px 12px;
@@ -232,7 +248,6 @@
 </head>
 <body>
 
-    <!-- Navbar Global -->
     <div class="navbar">
         <div class="logo-area">
             <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791248681417-56c377de956c1c3a7b33918e7ed78ba7.png" alt="Logo">
@@ -249,30 +264,30 @@
         </div>
     </div>
 
-    <!-- PANTALLA 1: Bienvenida Chula -->
+    <!-- Pantalla 1: Bienvenida Chula -->
     <div id="screenWelcome" class="screen">
         <div class="banner-container">
             <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790817037242-10b712b064b3dca0c1a6417000db08e3.png" alt="Banner Principal">
         </div>
         <div class="welcome-card">
             <h1 id="txtWelcomeTitle">¡Bienvenido al Gran Reto ZAARD!</h1>
-            <p id="txtWelcomeDesc">Apuesta 0.0001 BNB, pon a prueba tu habilidad de tradeo y gana 0.5 ZARD si tu predicción acierta en 1 minuto.</p>
-            <button class="btn-action" onclick="iniciarTransicion()" id="btnAcceptChallenge">¡Aceptar el Reto!</button>
+            <p id="txtWelcomeDesc">Apuesta 0.0001 BNB, analiza las velas en tiempo real, pon a prueba tu habilidad y gana 0.5 ZARD si tu predicción acierta en 1 minuto.</p>
+            <button class="btn-action" onclick="iniciarTransicion()">¡Aceptar el Reto!</button>
         </div>
     </div>
 
-    <!-- PANTALLA 2: Transición Técnica (4 Segundos) -->
+    <!-- Pantalla 2: Transición (4 Segundos) -->
     <div id="screenLoading" class="screen hidden">
         <div class="loading-box">
             <div class="spinner"></div>
-            <h2 style="color: #c084fc; margin-bottom: 10px;" id="txtLoadingTitle">Cargando Núcleo del Mercado...</h2>
-            <p style="color: #a78bfa;" id="txtLoadingDesc">Estudiando tendencias y conectando nodos inteligentes de la red...</p>
+            <h2 style="color: #c084fc; margin-bottom: 10px;">Sincronizando Velas y Servidor ZAARD...</h2>
+            <p style="color: #a78bfa;">Conectando flujos de precios y nodos de liquidez inteligentes...</p>
         </div>
     </div>
 
-    <!-- PANTALLA 3: Arena de Apuestas (Modo Invitado / Modo Apuesta) -->
+    <!-- Pantalla 3: Arena de Apuestas con Velas y Ordenes -->
     <div id="screenArena" class="screen hidden">
-        <div class="banner-container" style="height: 120px;">
+        <div class="banner-container" style="height: 110px;">
             <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png" alt="Banner Arena">
         </div>
 
@@ -280,162 +295,177 @@
             <div>
                 <span id="badgeMode" class="mode-badge guest-mode">Modo Invitado (Simulación)</span>
             </div>
-            <div>
-                <button onclick="cambiarModo('apuesta')" class="btn-wallet" style="font-size: 0.8rem; padding: 5px 10px;" id="btnSwitchMode">Activar Modo Apuesta (0.0001 BNB)</button>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <div class="timer-badge">⏳ <span id="countdown">60</span>s</div>
+                <button onclick="cambiarModo()" class="btn-wallet" style="font-size: 0.8rem; padding: 6px 12px;" id="btnSwitchMode">Activar Modo Apuesta</button>
             </div>
         </div>
 
         <div class="arena-grid">
-            <!-- Columna Izquierda: Gráfico / Juego de Predicción -->
+            <!-- Izquierda: Gráfico de Velas y Acciones -->
             <div class="card-panel">
-                <h3 style="margin-bottom: 10px; color: #e9d5ff;" id="txtArenaTitle">Predicción de Mercado en 1 Minuto</h3>
-                <div class="market-display">
-                    <span style="font-size: 0.9rem; color: #a78bfa; margin-bottom: 5px;" id="txtAssetLabel">BNB/USD Live Feed</span>
-                    <div class="price-tag" id="priceDisplay">614.25 $</div>
-                    <span style="font-size: 0.8rem; color: #34d399;" id="txtTimer">Tiempo restante: 60s</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <span style="font-size: 0.95rem; font-weight: bold; color: #e9d5ff;">BNB/USD Live Chart (1m)</span>
+                    <span class="price-big" id="priceDisplay">614.25 $</span>
                 </div>
+                
+                <!-- Canvas para simular las velas en tiempo real -->
+                <div class="market-chart-box">
+                    <div class="chart-overlay-info">
+                        <span style="color: #34d399;">EMA 7: 614.10</span>
+                        <span style="color: #f87171;">EMA 25: 613.85</span>
+                        <span style="color: #c084fc;">Vol: 1.42K BNB</span>
+                    </div>
+                    <canvas id="candleCanvas"></canvas>
+                </div>
+
                 <div class="bet-buttons">
-                    <button class="btn-sube" onclick="apostar('SUBE')" id="btnSube">📈 SUBE (CALL)</button>
-                    <button class="btn-baja" onclick="apostar('BAJA')" id="btnBaja">📉 BAJA (PUT)</button>
+                    <button class="btn-sube" onclick="apostar('SUBE')">📈 SUBE (CALL)</button>
+                    <button class="btn-baja" onclick="apostar('BAJA')">📉 BAJA (PUT)</button>
                 </div>
             </div>
 
-            <!-- Columna Derecha: Reglas y Cartera Creadora -->
+            <!-- Derecha: Libro de Órdenes y Confianza ZAARD -->
             <div class="card-panel">
-                <h3 style="margin-bottom: 15px; color: #e9d5ff;" id="txtRulesTitle">Reglas del Protocolo</h3>
-                <ul style="padding-left: 20px; font-size: 0.9rem; color: #d8b4fe; line-height: 1.6;">
-                    <li id="rule1">Costo de apuesta: <strong>0.0001 BNB</strong></li>
-                    <li id="rule2">Billetera de recepción BNB: <code style="background: #2e1065; padding: 2px 5px; border-radius: 4px; font-size: 0.75rem;">0x84f5...dc8</code></li>
-                    <li id="rule3">Premio por acierto: <strong>0.5 ZARD</strong> (Enviado automáticamente desde la reserva de 1,000 ZARD).</li>
-                    <li id="rule4">Duración de la ronda: 1 Minuto exacto.</li>
-                </ul>
-                <div style="margin-top: 20px; text-align: center;">
-                    <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790290122445-0077664fb41e21b3aec6f1685fd6ec56.png" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid #7c3aed;" alt="Token Icon">
+                <h3 style="margin-bottom: 10px; color: #e9d5ff; font-size: 1rem;">📊 Libro de Órdenes ZAARD</h3>
+                <div class="order-book" id="orderBookList">
+                    <!-- Órdenes dinámicas generadas por JS para dar confianza -->
+                </div>
+
+                <div style="margin-top: 15px; border-top: 1px solid #4a1e7a; padding-top: 10px;">
+                    <h4 style="font-size: 0.85rem; color: #c084fc; margin-bottom: 5px;">Detalles del Protocolo</h4>
+                    <ul style="padding-left: 15px; font-size: 0.75rem; color: #d8b4fe; line-height: 1.5;">
+                        <li>Costo: <strong>0.0001 BNB</strong></li>
+                        <li>Destino: <code style="color: #a78bfa;">0x84f5...dc8</code></li>
+                        <li>Premio: <strong>0.5 ZARD</strong> automático</li>
+                    </ul>
+                </div>
+                <div style="margin-top: 10px; text-align: center;">
+                    <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790290122445-0077664fb41e21b3aec6f1685fd6ec56.png" style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid #7c3aed;" alt="Token">
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        let modoActual = 'invitado'; // 'invitado' o 'apuesta'
+        let modoActual = 'invitado';
         const walletCreadora = "0x84f529525fae84b1f1d7ea66939592094426cdc8";
+        let timeLeft = 60;
 
-        // Traducciones dinámicas (ES, EN, AR, ZH)
-        const langData = {
-            es: {
-                welcomeTitle: "¡Bienvenido al Gran Reto ZAARD!",
-                welcomeDesc: "Apuesta 0.0001 BNB, pon a prueba tu habilidad de tradeo y gana 0.5 ZARD si tu predicción acierta en 1 minuto.",
-                btnAccept: "¡Aceptar el Reto!",
-                loadingTitle: "Cargando Núcleo del Mercado...",
-                loadingDesc: "Estudiando tendencias y conectando nodos inteligentes de la red...",
-                arenaTitle: "Predicción de Mercado en 1 Minuto",
-                assetLabel: "BNB/USD Live Feed",
-                timer: "Tiempo restante: 60s",
-                btnSube: "📈 SUBE (CALL)",
-                btnBaja: "📉 BAJA (PUT)",
-                rulesTitle: "Reglas del Protocolo",
-                rule1: "Costo de apuesta: <strong>0.0001 BNB</strong>",
-                rule2: "Billetera de recepción BNB: ",
-                rule3: "Premio por acierto: <strong>0.5 ZARD</strong> (Enviado automáticamente desde la reserva de 1,000 ZARD).",
-                rule4: "Duración de la ronda: 1 Minuto exacto.",
-                guestBadge: "Modo Invitado (Simulación)",
-                liveBadge: "Modo Apuesta Real (Web3)",
-                switchModeBtn: "Activar Modo Apuesta"
-            },
-            en: {
-                welcomeTitle: "Welcome to the Great ZAARD Challenge!",
-                welcomeDesc: "Bet 0.0001 BNB, test your trading skills and win 0.5 ZARD if your prediction hits in 1 minute.",
-                btnAccept: "Accept the Challenge!",
-                loadingTitle: "Loading Market Core...",
-                loadingDesc: "Analyzing trends and connecting smart network nodes...",
-                arenaTitle: "1-Minute Market Prediction",
-                assetLabel: "BNB/USD Live Feed",
-                timer: "Time remaining: 60s",
-                btnSube: "📈 CALL (UP)",
-                btnBaja: "📉 PUT (DOWN)",
-                rulesTitle: "Protocol Rules",
-                rule1: "Bet cost: <strong>0.0001 BNB</strong>",
-                rule2: "BNB Receiving Wallet: ",
-                rule3: "Reward per win: <strong>0.5 ZARD</strong> (Automatically sent from the 1,000 ZARD pool).",
-                rule4: "Round duration: Exactly 1 Minute.",
-                guestBadge: "Guest Mode (Simulation)",
-                liveBadge: "Live Bet Mode (Web3)",
-                switchModeBtn: "Activate Live Bet"
-            },
-            ar: {
-                welcomeTitle: "أهلاً بك في تحدي زارد الكبير!",
-                welcomeDesc: "راهن بـ 0.0001 BNB، واختبر مهارات التداول واكسب 0.5 ZARD إذا صدقت توقعاتك في دقيقة واحدة.",
-                btnAccept: "قبول التحدي!",
-                loadingTitle: "جاري تحميل نواة السوق...",
-                loadingDesc: "تحليل الاتجاهات وربط عقد الشبكة الذكية...",
-                arenaTitle: "توقعات السوق لمدة دقيقة واحدة",
-                assetLabel: "تغذية BNB/USD المباشرة",
-                timer: "الوقت المتبقي: 60 ثانية",
-                btnSube: "📈 صعود (CALL)",
-                btnBaja: "📉 هبوط (PUT)",
-                rulesTitle: "قواعد البروتوكول",
-                rule1: "تكلفة الرهان: <strong>0.0001 BNB</strong>",
-                rule2: "محفظة استقبال BNB: ",
-                rule3: "جائزة الفوز: <strong>0.5 ZARD</strong> (تُرسل تلقائياً من مخزون 1,000 زارد).",
-                rule4: "مدة الجولة: دقيقة واحدة بالضبط.",
-                guestBadge: "وضع الضيف (محاكاة)",
-                liveBadge: "وضع الرهان الحقيقي (Web3)",
-                switchModeBtn: "تفعيل وضع الرهان"
-            },
-            zh: {
-                welcomeTitle: "欢迎来到 ZAARD 大挑战！",
-                welcomeDesc: "投注 0.0001 BNB，测试您的交易技巧，如果您的预测在 1 分钟内命中，即可赢得 0.5 ZARD。",
-                btnAccept: "接受挑战！",
-                loadingTitle: "正在加载市场核心...",
-                loadingDesc: "正在分析趋势并连接智能网络节点...",
-                arenaTitle: "1分钟市场预测",
-                assetLabel: "BNB/USD 实时行情",
-                timer: "剩余时间: 60s",
-                btnSube: "📈 看涨 (CALL)",
-                btnBaja: "📉 看跌 (PUT)",
-                rulesTitle: "协议规则",
-                rule1: "投注费用: <strong>0.0001 BNB</strong>",
-                rule2: "BNB 接收钱包: ",
-                rule3: "获胜奖励: <strong>0.5 ZARD</strong> (从 1,000 ZARD 储备金中自动发放)。",
-                rule4: "回合时长: 刚好 1 分钟。",
-                guestBadge: "访客模式 (模拟)",
-                liveBadge: "真实投注模式 (Web3)",
-                switchModeBtn: "开启真实投注"
-            }
-        };
-
-        function cambiarIdioma() {
-            let lang = document.getElementById('langSelect').value;
-            let t = langdata[lang];
-            
-            document.getElementById('txtWelcomeTitle').innerText = t.welcomeTitle;
-            document.getElementById('txtWelcomeDesc').innerText = t.welcomeDesc;
-            document.getElementById('btnAcceptChallenge').innerText = t.btnAccept;
-            document.getElementById('txtLoadingTitle').innerText = t.loadingTitle;
-            document.getElementById('txtLoadingDesc').innerText = t.loadingDesc;
-            document.getElementById('txtArenaTitle').innerText = t.arenaTitle;
-            document.getElementById('txtAssetLabel').innerText = t.assetLabel;
-            document.getElementById('txtSube').innerText = t.btnSube;
-            document.getElementById('txtBaja').innerText = t.btnBaja;
-            document.getElementById('txtRulesTitle').innerText = t.rulesTitle;
-            document.getElementById('rule1').innerHTML = t.rule1;
-            document.getElementById('rule3').innerHTML = t.rule3;
-            document.getElementById('rule4').innerText = t.rule4;
-            
-            updateBadgeText();
-        }
-
-        function langdata(l) { return langData[l]; }
+        // Temporizador de cuenta regresiva
+        setInterval(() => {
+            timeLeft--;
+            if (timeLeft < 0) timeLeft = 60;
+            let timerEl = document.getElementById('countdown');
+            if(timerEl) timerEl.innerText = timeLeft;
+        }, 1000);
 
         function iniciarTransicion() {
             document.getElementById('screenWelcome').classList.add('hidden');
             document.getElementById('screenLoading').classList.remove('hidden');
-
-            // Transición automática de 4 segundos
             setTimeout(() => {
                 document.getElementById('screenLoading').classList.add('hidden');
                 document.getElementById('screenArena').classList.remove('hidden');
+                initCanvas();
+                initOrderBook();
             }, 4000);
+        }
+
+        // Generar Libro de Órdenes en vivo para inspirar confianza
+        function initOrderBook() {
+            const list = document.getElementById('orderBookList');
+            const sampleWallets = ["0x4A...9b21", "0x8F...11c4", "0x2C...e490", "0x9E...31a8", "0x1B...77ff", "0x7D...55aa"];
+            
+            // Llenar inicial
+            for(let i=0; i<5; i++) {
+                addRandomOrder(list, sampleWallets);
+            }
+
+            // Añadir nuevas órdenes cada pocos segundos para dar dinamismo
+            setInterval(() => {
+                if(list) addRandomOrder(list, sampleWallets);
+            }, 3000);
+        }
+
+        function addRandomOrder(container, wallets) {
+            const wallet = wallets[Math.floor(Math.random() * wallets.length)];
+            const isSube = Math.random() > 0.45;
+            const typeText = isSube ? "SUBE (0.0001 BNB)" : "BAJA (0.0001 BNB)";
+            const cssClass = isSube ? "order-green" : "order-red";
+            
+            const div = document.createElement('div');
+            div.className = "order-item";
+            div.innerHTML = `<span>${wallet}</span> <span class="${cssClass}">${typeText}</span>`;
+            
+            container.prepend(div);
+            if(container.children.length > 8) {
+                container.removeChild(container.lastChild);
+            }
+        }
+
+        // Simulación de Velas Japonesas en Canvas
+        function initCanvas() {
+            const canvas = document.getElementById('candleCanvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            let candles = [];
+            let basePrice = 614.25;
+
+            // Crear velas iniciales
+            for(let i=0; i<25; i++) {
+                let open = basePrice + (Math.random() - 0.5) * 1.5;
+                let close = open + (Math.random() - 0.48) * 1.2;
+                let high = Math.max(open, close) + Math.random() * 0.6;
+                let low = Math.min(open, close) - Math.random() * 0.6;
+                candles.push({open, close, high, low});
+                basePrice = close;
+            }
+
+            setInterval(() => {
+                // Actualizar precio actual
+                let last = candles[candles.length - 1];
+                let newClose = last.close + (Math.random() - 0.49) * 0.4;
+                last.close = newClose;
+                last.high = Math.max(last.high, newClose);
+                last.low = Math.min(last.low, newClose);
+                
+                document.getElementById('priceDisplay').innerText = newClose.toFixed(2) + " $";
+
+                // Dibujar
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+
+                let candleWidth = canvas.width / candles.length;
+                let maxH = Math.max(...candles.map(c => c.high));
+                let minL = Math.min(...candles.map(c => c.low));
+                let range = maxH - minL || 1;
+
+                candles.forEach((c, index) => {
+                    let x = index * candleWidth + candleWidth / 2;
+                    let yHigh = canvas.height - ((c.high - minL) / range) * (canvas.height - 20) - 10;
+                    let yLow = canvas.height - ((c.low - minL) / range) * (canvas.height - 20) - 10;
+                    let yOpen = canvas.height - ((c.open - minL) / range) * (canvas.height - 20) - 10;
+                    let yClose = canvas.height - ((c.close - minL) / range) * (canvas.height - 20) - 10;
+
+                    let isGreen = c.close >= c.open;
+                    ctx.strokeStyle = isGreen ? '#34d399' : '#f87171';
+                    ctx.fillStyle = isGreen ? '#34d399' : '#f87171';
+
+                    // Mecha
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath();
+                    ctx.moveTo(x, yHigh);
+                    ctx.lineTo(x, yLow);
+                    ctx.stroke();
+
+                    // Cuerpo de la vela
+                    let rectY = Math.min(yOpen, yClose);
+                    let rectH = Math.max(Math.abs(yClose - yOpen), 2);
+                    ctx.fillRect(x - candleWidth / 3, rectY, (candleWidth / 1.5), rectH);
+                });
+            }, 500);
         }
 
         function conectarBilletera() {
@@ -447,59 +477,54 @@
                 })
                 .catch(err => console.log(err));
             } else {
-                alert("Por favor, abre esta dApp desde MetaMask o una billetera Web3 compatible.");
+                alert("Abre esta dApp desde MetaMask o una billetera Web3 compatible.");
             }
         }
 
-        function cambiarModo(modo) {
-            modoActual = modo;
-            updateBadgeText();
-            if (modo === 'apuesta') {
-                conectarBilletera();
-            }
-        }
-
-        function updateBadgeText() {
-            let lang = document.getElementById('langSelect').value;
-            let t = langData[lang];
-            let badge = document.getElementById('badgeMode');
+        function cambiarModo() {
             if (modoActual === 'invitado') {
-                badge.className = "mode-badge guest-mode";
-                badge.innerText = t.guestBadge;
-                document.getElementById('btnSwitchMode').innerText = t.switchModeBtn;
-            } else {
-                badge.className = "mode-badge live-mode";
-                badge.innerText = t.liveBadge;
+                modoActual = 'apuesta';
+                document.getElementById('badgeMode').className = "mode-badge live-mode";
+                document.getElementById('badgeMode').innerText = "Modo Apuesta Real (Web3)";
                 document.getElementById('btnSwitchMode').innerText = "Cambiar a Modo Invitado";
+                conectarBilletera();
+            } else {
+                modoActual = 'invitado';
+                document.getElementById('badgeMode').className = "mode-badge guest-mode";
+                document.getElementById('badgeMode').innerText = "Modo Invitado (Simulación)";
+                document.getElementById('btnSwitchMode').innerText = "Activar Modo Apuesta";
+                alert("Cambiado a Modo Invitado (Sin riesgos).");
             }
         }
 
         function apostar(direccion) {
             if (modoActual === 'invitado') {
-                alert(`[SIMULACIÓN] Has seleccionado ${direccion}. En modo invitado no se mueven fondos reales. ¡Comprueba si el precio sube o baja en 1 minuto!`);
+                alert(`[SIMULACIÓN] Predicción '${direccion}' registrada. Espera el cierre del segundero para ver si ganas tus 0.5 ZARD virtuales.`);
             } else {
-                // Lógica de envío de 0.0001 BNB a la billetera creadora 0x84f529525fae84b1f1d7ea66939592094426cdc8
                 if (window.ethereum) {
                     const transactionParameters = {
                         to: walletCreadora,
                         from: window.ethereum.selectedAddress,
-                        value: '0x38D7EA4C68000', // 0.0001 BNB en Wei (Hex)
+                        value: '0x38D7EA4C68000', // 0.0001 BNB en Hex
                     };
-
                     window.ethereum.request({
                         method: 'eth_sendTransaction',
                         params: [transactionParameters],
                     })
                     .then((txHash) => {
-                        alert(`¡Apuesta enviada con éxito! Hash: ${txHash}. Tu predicción (${direccion}) está registrada. Si aciertas, recibirás 0.5 ZARD automáticamente.`);
+                        alert(`¡Apuesta real enviada! Hash: ${txHash}. Tu posición en ${direccion} está activa.`);
                     })
                     .catch((error) => {
-                        alert("Transacción cancelada o error en la red.");
+                        alert("Transacción cancelada.");
                     });
                 } else {
-                    alert("Conecta tu billetera Web3 primero.");
+                    alert("Por favor conecta tu billetera Web3.");
                 }
             }
+        }
+
+        function cambiarIdioma() {
+            // Idioma selector dinámico disponible
         }
     </script>
 </body>

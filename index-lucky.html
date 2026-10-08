@@ -12,7 +12,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background: radial-gradient(circle at 50% 20%, #1e1038 0%, #0c051a 50%, #05020a 100%);
+            background: radial-gradient(circle at 50% 20%, #241147 0%, #0c051a 50%, #05020a 100%);
             color: #ffffff;
             min-height: 100vh;
             display: flex;
@@ -99,37 +99,40 @@
             box-shadow: 0 0 35px rgba(168, 85, 247, 0.4), inset 0 0 20px rgba(216, 180, 254, 0.15);
         }
 
-        /* Banner central con la imagen solicitada corregida y visible */
+        /* Banner central con la imagen grandota, visible y hermosa */
         .middle-banner-deco {
             width: 100%;
-            height: 110px;
-            background: linear-gradient(rgba(15, 7, 28, 0.85), rgba(10, 4, 20, 0.95));
-            border: 1px solid #7c3aed;
-            border-radius: 12px;
+            min-height: 150px;
+            background: linear-gradient(rgba(22, 10, 42, 0.9), rgba(10, 4, 20, 0.95));
+            border: 2px solid #a855f7;
+            border-radius: 14px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 15px;
-            box-shadow: 0 0 25px rgba(124, 58, 237, 0.3);
+            gap: 10px;
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
             position: relative;
             overflow: hidden;
-            padding: 10px 20px;
+            padding: 15px;
         }
         .middle-banner-deco img {
-            max-height: 80px;
+            width: 100px;
+            height: 100px;
             object-fit: contain;
-            filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.6));
+            filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.8));
+            animation: floatGlow 3s ease-in-out infinite;
         }
         .middle-banner-text {
-            color: #e9d5ff;
-            font-size: 0.9rem;
+            color: #f3e8ff;
+            font-size: 0.95rem;
             font-weight: bold;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             text-shadow: 0 0 10px #a855f7;
-            background: rgba(20, 10, 40, 0.8);
-            padding: 8px 15px;
+            background: rgba(20, 10, 40, 0.9);
+            padding: 6px 16px;
             border-radius: 8px;
-            border: 1px solid rgba(168, 85, 247, 0.4);
+            border: 1px solid rgba(168, 85, 247, 0.5);
             text-align: center;
         }
 
@@ -419,7 +422,7 @@
                 </div>
             </div>
 
-            <!-- Banner decorativo central con la imagen visible mediante etiqueta img -->
+            <!-- Banner central con la imagen grande y destacada -->
             <div class="middle-banner-deco">
                 <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790287451706-4593a246bbbf27b508770c328ab883c0.png" alt="ZAARD Decorativo">
                 <div class="middle-banner-text">⚡ ZAARD ECOSYSTEM MULTI-ASSET ARENA ⚡</div>
@@ -648,7 +651,7 @@
             if (acerto) {
                 titleEl.style.color = "#34d399";
                 titleEl.innerText = "🎉 ¡VICTORIA EN LA RONDA!";
-                descEl.innerHTML = `Tu predicción en <strong>BNB</strong> (${apuestaActiva.direccion}) was correcta.<br>Precio de entrada: ${precioInicio.toFixed(2)}$ <br>Precio de cierre: ${precioFinal.toFixed(2)}$<br><br><strong>¡Has ganado 0.5 ZARD enviados a tu billetera!</strong>`;
+                descEl.innerHTML = `Tu predicción en <strong>BNB</strong> (${apuestaActiva.direccion}) fue correcta.<br>Precio de entrada: ${precioInicio.toFixed(2)}$ <br>Precio de cierre: ${precioFinal.toFixed(2)}$<br><br><strong>¡Has ganado 0.5 ZARD enviados a tu billetera!</strong>`;
             } else {
                 titleEl.style.color = "#f87171";
                 titleEl.innerText = "❌ DERROTA EN LA RONDA";

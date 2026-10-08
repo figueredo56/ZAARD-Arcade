@@ -1,309 +1,505 @@
 <!DOCTYPE html>
-<html lang="es" class="dark">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZAARD ODYSSEY - Portal de Utilidad Web3</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        zaardDark: '#0b0714',
-                        zaardCard: '#150f24',
-                        zaardPurple: '#8b5cf6',
-                        zaardNeon: '#a855f7',
-                        zaardCyan: '#06b6d4',
-                    }
-                }
-            }
-        }
-    </script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>ZAARD Finance - Arena de Predicción</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0b0714;
-            color: #f3f4f6;
+            background-color: #0b0614;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             overflow-x: hidden;
         }
-        h1, h2, h3, .font-orbitron {
-            font-family: 'Orbitron', sans-serif;
+        /* Navbar Superior */
+        .navbar {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(20, 10, 35, 0.8);
+            border-bottom: 1px solid #4a1e7a;
         }
-        .glow-box {
-            box-shadow: 0 0 25px rgba(139, 92, 246, 0.25);
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #d8b4fe;
         }
-        .glow-text {
-            text-shadow: 0 0 12px rgba(168, 85, 247, 0.7);
+        .logo-area img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 1px solid #a855f7;
         }
-        .cyber-border {
-            border: 1px solid rgba(168, 85, 247, 0.3);
-            background: linear-gradient(135deg, rgba(21, 15, 36, 0.9) window, rgba(11, 7, 20, 0.95) 100%);
-            backdrop-filter: blur(12px);
+        .nav-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
         }
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
+        select.lang-selector {
+            background: #1e1138;
+            color: #fff;
+            border: 1px solid #7c3aed;
+            padding: 5px 10px;
+            border-radius: 8px;
+            cursor: pointer;
         }
-        ::-webkit-scrollbar-track {
-            background: #0b0714;
+        .btn-wallet {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #8b5cf6;
-            border-radius: 3px;
+        .btn-wallet:hover {
+            opacity: 0.9;
         }
+
+        /* Pantallas / Estados */
+        .screen {
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+        .hidden {
+            display: none !important;
+        }
+
+        /* Banner Principal */
+        .banner-container {
+            width: 100%;
+            height: 180px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #7c3aed;
+            margin-bottom: 25px;
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
+        }
+        .banner-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Pantalla Bienvenida Chula */
+        .welcome-card {
+            background: rgba(26, 15, 48, 0.9);
+            border: 2px solid #9333ea;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            max-width: 600px;
+            margin-top: 40px;
+            box-shadow: 0 0 30px rgba(147, 51, 234, 0.4);
+            animation: fadeIn 1s ease-in-out;
+        }
+        .welcome-card h1 {
+            font-size: 2rem;
+            color: #e9d5ff;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px #a855f7;
+        }
+        .welcome-card p {
+            color: #c084fc;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+        .btn-action {
+            background: linear-gradient(135deg, #9333ea, #6b21a8);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(147, 51, 234, 0.6);
+            transition: 0.3s;
+        }
+        .btn-action:hover {
+            transform: scale(1.05);
+        }
+
+        /* Pantalla Explicativa Técnica (Transición de 4 segundos) */
+        .loading-box {
+            text-align: center;
+            padding: 50px;
+        }
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #3b0764;
+            border-top: 5px solid #a855f7;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Estilos de la Arena de Apuestas */
+        .arena-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            width: 100%;
+        }
+        @media(max-width: 768px) {
+            .arena-grid { grid-template-columns: 1fr; }
+        }
+        .card-panel {
+            background: rgba(20, 10, 35, 0.9);
+            border: 1px solid #7c3aed;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(124, 58, 237, 0.2);
+        }
+        .market-display {
+            height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #090314;
+            border-radius: 8px;
+            border: 1px dashed #9333ea;
+            position: relative;
+        }
+        .price-tag {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #34d399;
+            text-shadow: 0 0 10px rgba(52, 211, 153, 0.5);
+        }
+        .bet-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .btn-sube {
+            flex: 1;
+            background: #059669;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-baja {
+            flex: 1;
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .mode-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .guest-mode { background: #d97706; color: #fff; }
+        .live-mode { background: #7c3aed; color: #fff; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-purple-500 selection:text-white">
+<body>
 
-    <!-- HEADER / NAVBAR -->
-    <header class="w-full cyber-border sticky top-0 z-50 px-4 py-3 flex justify-between items-center shadow-lg">
-        <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-cyan-400 flex items-center justify-center glow-box">
-                <i class="fa-solid fa-bolt text-white text-lg"></i>
+    <!-- Navbar Global -->
+    <div class="navbar">
+        <div class="logo-area">
+            <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791248681417-56c377de956c1c3a7b33918e7ed78ba7.png" alt="Logo">
+            <span>ZAARD FINANCE</span>
+        </div>
+        <div class="nav-controls">
+            <select class="lang-selector" id="langSelect" onchange="cambiarIdioma()">
+                <option value="es">🇪🇸 ES</option>
+                <option value="en">🇬🇧 EN</option>
+                <option value="ar">🇸🇦 AR</option>
+                <option value="zh">🇨🇳 ZH</option>
+            </select>
+            <button class="btn-wallet" id="connectWalletBtn" onclick="conectarBilletera()">Conectar Billetera</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA 1: Bienvenida Chula -->
+    <div id="screenWelcome" class="screen">
+        <div class="banner-container">
+            <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790817037242-10b712b064b3dca0c1a6417000db08e3.png" alt="Banner Principal">
+        </div>
+        <div class="welcome-card">
+            <h1 id="txtWelcomeTitle">¡Bienvenido al Gran Reto ZAARD!</h1>
+            <p id="txtWelcomeDesc">Apuesta 0.0001 BNB, pon a prueba tu habilidad de tradeo y gana 0.5 ZARD si tu predicción acierta en 1 minuto.</p>
+            <button class="btn-action" onclick="iniciarTransicion()" id="btnAcceptChallenge">¡Aceptar el Reto!</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA 2: Transición Técnica (4 Segundos) -->
+    <div id="screenLoading" class="screen hidden">
+        <div class="loading-box">
+            <div class="spinner"></div>
+            <h2 style="color: #c084fc; margin-bottom: 10px;" id="txtLoadingTitle">Cargando Núcleo del Mercado...</h2>
+            <p style="color: #a78bfa;" id="txtLoadingDesc">Estudiando tendencias y conectando nodos inteligentes de la red...</p>
+        </div>
+    </div>
+
+    <!-- PANTALLA 3: Arena de Apuestas (Modo Invitado / Modo Apuesta) -->
+    <div id="screenArena" class="screen hidden">
+        <div class="banner-container" style="height: 120px;">
+            <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png" alt="Banner Arena">
+        </div>
+
+        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <div>
+                <span id="badgeMode" class="mode-badge guest-mode">Modo Invitado (Simulación)</span>
             </div>
             <div>
-                <h1 class="font-orbitron text-lg font-bold tracking-wider text-white glow-text">ZAARD <span class="text-cyan-400">ODYSSEY</span></h1>
-                <p class="text-xs text-purple-300 font-mono">Ecosistema Web3 v2.6</p>
-            </div>
-        </div>
-        
-        <!-- Live Balance Widget -->
-        <div class="flex items-center space-x-2 bg-purple-950/60 border border-purple-500/40 px-3 py-1.5 rounded-full">
-            <i class="fa-solid fa-coins text-yellow-400 text-sm"></i>
-            <span class="font-orbitron text-sm font-semibold text-white" id="user-balance">1,250</span>
-            <span class="text-xs text-purple-300 font-bold">ZAARD</span>
-        </div>
-    </header>
-
-    <!-- MAIN CONTENT CONTAINER -->
-    <main class="flex-1 max-w-md w-full mx-auto px-4 py-6 flex flex-col items-center space-y-6">
-
-        <!-- NOTIFICATION BANNER -->
-        <div id="notification-banner" class="w-full bg-gradient-to-r from-purple-900/80 to-indigo-900/80 border border-purple-400/40 rounded-xl p-3 flex items-center justify-between shadow-md transition-all duration-300">
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
-                    <i class="fa-solid fa-shield-halved text-xs"></i>
-                </div>
-                <div>
-                    <p class="text-xs font-bold text-white font-orbitron">Portal Activo y Estable</p>
-                    <p class="text-[11px] text-purple-200">Interactúa para estabilizar energía y ganar tokens.</p>
-                </div>
-            </div>
-            <span class="text-[10px] bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded font-mono border border-cyan-500/30">GRATIS</span>
-        </div>
-
-        <!-- PORTAL INTERACTIVE VIEW (CANVAS) -->
-        <div class="w-full cyber-border rounded-2xl p-4 flex flex-col items-center relative overflow-hidden glow-box">
-            <div class="absolute top-3 left-3 z-10 flex items-center space-x-1 text-xs text-purple-300 font-mono">
-                <span class="w-2 h-2 rounded-full bg-green-400 animate-ping"></span>
-                <span>Portal Neural v1.0</span>
-            </div>
-            
-            <div class="absolute top-3 right-3 z-10 text-xs font-mono text-cyan-400 bg-cyan-950/50 px-2 py-0.5 rounded border border-cyan-500/30">
-                Energía: <span id="portal-energy">85</span>%
-            </div>
-
-            <!-- Canvas Portal -->
-            <div class="my-4 relative cursor-pointer group" onclick="stabilizePortal()">
-                <canvas id="portalCanvas" width="260" height="260" class="rounded-full transition-transform duration-300 group-hover:scale-105"></canvas>
-                <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <i class="fa-solid fa-atom text-4xl text-purple-300 animate-pulse glow-text"></i>
-                    <span class="text-[10px] font-orbitron text-cyan-300 mt-1 tracking-widest uppercase">Toca para estabilizar</span>
-                </div>
-            </div>
-
-            <!-- Action Button -->
-            <button onclick="stabilizePortal()" class="w-full mt-2 bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 text-white font-orbitron text-sm font-bold py-3 px-6 rounded-xl shadow-lg hover:opacity-95 active:scale-95 transition-all duration-200 flex items-center justify-center space-x-2 border border-purple-400/40">
-                <i class="fa-solid fa-wand-magic-sparkles text-yellow-300"></i>
-                <span>¡ESTABILIZAR PORTAL!</span>
-            </button>
-        </div>
-
-        <!-- LIVE DEFLATIONARY BURN STATS -->
-        <div class="w-full cyber-border rounded-xl p-4 space-y-3">
-            <div class="flex justify-between items-center">
-                <span class="text-xs font-orbitron text-purple-300 flex items-center space-x-1.5">
-                    <i class="fa-solid fa-fire text-orange-500"></i>
-                    <span>MÉTRICA DE QUEMA GLOBAL</span>
-                </span>
-                <span class="text-[10px] text-green-400 font-mono bg-green-950/50 px-2 py-0.5 rounded border border-green-500/30">Deflacionario</span>
-            </div>
-            <div class="grid grid-cols-2 gap-3 text-center">
-                <div class="bg-black/30 p-2.5 rounded-lg border border-purple-500/25">
-                    <p class="text-[10px] text-purple-400 uppercase font-mono">Recompensados Hoy</p>
-                    <p class="text-sm font-bold font-orbitron text-white mt-0.5">18,500 <span class="text-xs text-purple-300">ZAARD</span></p>
-                </div>
-                <div class="bg-black/30 p-2.5 rounded-lg border border-purple-500/25">
-                    <p class="text-[10px] text-purple-400 uppercase font-mono">Quema Acumulada</p>
-                    <p class="text-sm font-bold font-orbitron text-cyan-400 mt-0.5">2,100 <span class="text-xs text-cyan-300">ZAARD</span></p>
-                </div>
+                <button onclick="cambiarModo('apuesta')" class="btn-wallet" style="font-size: 0.8rem; padding: 5px 10px;" id="btnSwitchMode">Activar Modo Apuesta (0.0001 BNB)</button>
             </div>
         </div>
 
-        <!-- DAILY MISSIONS MODULE -->
-        <div class="w-full space-y-3">
-            <h2 class="text-xs font-orbitron text-purple-300 uppercase tracking-wider flex items-center space-x-2">
-                <i class="fa-solid fa-bullseye text-cyan-400"></i>
-                <span>Misiones de Utilidad Diaria</span>
-            </h2>
-
-            <div class="space-y-2">
-                <!-- Mission 1 -->
-                <div class="cyber-border rounded-xl p-3 flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-9 h-9 rounded-lg bg-purple-900/40 text-purple-400 flex items-center justify-center border border-purple-500/30">
-                            <i class="fa-solid fa-rotate text-sm"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold text-white font-orbitron">Estabilización Cósmica</p>
-                            <p class="text-[11px] text-purple-300">Estabiliza el portal 3 veces</p>
-                        </div>
-                    </div>
-                    <button onclick="claimMission(this, 50)" class="bg-purple-600 hover:bg-purple-500 text-white font-orbitron text-xs px-3 py-1.5 rounded-lg transition-all shadow-md">
-                        +50 ZAARD
-                    </button>
+        <div class="arena-grid">
+            <!-- Columna Izquierda: Gráfico / Juego de Predicción -->
+            <div class="card-panel">
+                <h3 style="margin-bottom: 10px; color: #e9d5ff;" id="txtArenaTitle">Predicción de Mercado en 1 Minuto</h3>
+                <div class="market-display">
+                    <span style="font-size: 0.9rem; color: #a78bfa; margin-bottom: 5px;" id="txtAssetLabel">BNB/USD Live Feed</span>
+                    <div class="price-tag" id="priceDisplay">614.25 $</div>
+                    <span style="font-size: 0.8rem; color: #34d399;" id="txtTimer">Tiempo restante: 60s</span>
                 </div>
+                <div class="bet-buttons">
+                    <button class="btn-sube" onclick="apostar('SUBE')" id="btnSube">📈 SUBE (CALL)</button>
+                    <button class="btn-baja" onclick="apostar('BAJA')" id="btnBaja">📉 BAJA (PUT)</button>
+                </div>
+            </div>
 
-                <!-- Mission 2 -->
-                <div class="cyber-border rounded-xl p-3 flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-9 h-9 rounded-lg bg-cyan-900/40 text-cyan-400 flex items-center justify-center border border-cyan-500/30">
-                            <i class="fa-solid fa-share-nodes text-sm"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold text-white font-orbitron">Conexión de Nodo</p>
-                            <p class="text-[11px] text-purple-300">Comparte el ecosistema</p>
-                        </div>
-                    </div>
-                    <button onclick="claimMission(this, 100)" class="bg-purple-600 hover:bg-purple-500 text-white font-orbitron text-xs px-3 py-1.5 rounded-lg transition-all shadow-md">
-                        +100 ZAARD
-                    </button>
+            <!-- Columna Derecha: Reglas y Cartera Creadora -->
+            <div class="card-panel">
+                <h3 style="margin-bottom: 15px; color: #e9d5ff;" id="txtRulesTitle">Reglas del Protocolo</h3>
+                <ul style="padding-left: 20px; font-size: 0.9rem; color: #d8b4fe; line-height: 1.6;">
+                    <li id="rule1">Costo de apuesta: <strong>0.0001 BNB</strong></li>
+                    <li id="rule2">Billetera de recepción BNB: <code style="background: #2e1065; padding: 2px 5px; border-radius: 4px; font-size: 0.75rem;">0x84f5...dc8</code></li>
+                    <li id="rule3">Premio por acierto: <strong>0.5 ZARD</strong> (Enviado automáticamente desde la reserva de 1,000 ZARD).</li>
+                    <li id="rule4">Duración de la ronda: 1 Minuto exacto.</li>
+                </ul>
+                <div style="margin-top: 20px; text-align: center;">
+                    <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790290122445-0077664fb41e21b3aec6f1685fd6ec56.png" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid #7c3aed;" alt="Token Icon">
                 </div>
             </div>
         </div>
+    </div>
 
-    </main>
-
-    <!-- BOTTOM NAVIGATION BAR -->
-    <nav class="w-full cyber-border py-2 px-6 flex justify-around items-center sticky bottom-0 z-50 bg-[#0b0714]/95 backdrop-blur-md">
-        <a href="#" class="flex flex-col items-center text-cyan-400 space-y-1">
-            <i class="fa-solid fa-house text-base"></i>
-            <span class="text-[10px] font-orbitron">Portal</span>
-        </a>
-        <a href="#" class="flex flex-col items-center text-purple-400/70 hover:text-purple-300 space-y-1 transition-colors">
-            <i class="fa-solid fa-box-archive text-base"></i>
-            <span class="text-[10px] font-orbitron">Inventario</span>
-        </a>
-        <a href="#" class="flex flex-col items-center text-purple-400/70 hover:text-purple-300 space-y-1 transition-colors">
-            <i class="fa-solid fa-trophy text-base"></i>
-            <span class="text-[10px] font-orbitron">Clasificación</span>
-        </a>
-        <a href="#" class="flex flex-col items-center text-purple-400/70 hover:text-purple-300 space-y-1 transition-colors">
-            <i class="fa-solid fa-store text-base"></i>
-            <span class="text-[10px] font-orbitron">Tienda</span>
-        </a>
-    </nav>
-
-    <!-- JAVASCRIPT LOGIC -->
     <script>
-        let userBalance = 1250;
-        let portalEnergy = 85;
+        let modoActual = 'invitado'; // 'invitado' o 'apuesta'
+        const walletCreadora = "0x84f529525fae84b1f1d7ea66939592094426cdc8";
 
-        // Interactive Canvas Portal Animation
-        const canvas = document.getElementById('portalCanvas');
-        const ctx = canvas.getContext('2d');
-        let angle = 0;
-
-        function drawPortal() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-            const radius = 90;
-
-            // Outer ring glow
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = '#a855f7';
-
-            // Draw rotating orbital rings
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-            ctx.strokeStyle = 'rgba(139, 92, 246, 0.3)';
-            ctx.lineWidth = 4;
-            ctx.stroke();
-
-            // Inner energetic ring
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius - 15, angle, angle + Math.PI * 1.2);
-            ctx.strokeStyle = '#06b6d4';
-            ctx.lineWidth = 6;
-            ctx.stroke();
-
-            // Core vortex particles
-            for (let i = 0; i < 6; i++) {
-                let particleAngle = angle * 2 + (i * Math.PI / 3);
-                let x = centerX + Math.cos(particleAngle) * (40 + i * 5);
-                let y = centerY + Math.sin(particleAngle) * (40 + i * 5);
-                ctx.beginPath();
-                ctx.arc(x, y, 3, 0, Math.PI * 2);
-                ctx.fillStyle = i % 2 === 0 ? '#a855f7' : '#06b6d4';
-                ctx.fill();
+        // Traducciones dinámicas (ES, EN, AR, ZH)
+        const langData = {
+            es: {
+                welcomeTitle: "¡Bienvenido al Gran Reto ZAARD!",
+                welcomeDesc: "Apuesta 0.0001 BNB, pon a prueba tu habilidad de tradeo y gana 0.5 ZARD si tu predicción acierta en 1 minuto.",
+                btnAccept: "¡Aceptar el Reto!",
+                loadingTitle: "Cargando Núcleo del Mercado...",
+                loadingDesc: "Estudiando tendencias y conectando nodos inteligentes de la red...",
+                arenaTitle: "Predicción de Mercado en 1 Minuto",
+                assetLabel: "BNB/USD Live Feed",
+                timer: "Tiempo restante: 60s",
+                btnSube: "📈 SUBE (CALL)",
+                btnBaja: "📉 BAJA (PUT)",
+                rulesTitle: "Reglas del Protocolo",
+                rule1: "Costo de apuesta: <strong>0.0001 BNB</strong>",
+                rule2: "Billetera de recepción BNB: ",
+                rule3: "Premio por acierto: <strong>0.5 ZARD</strong> (Enviado automáticamente desde la reserva de 1,000 ZARD).",
+                rule4: "Duración de la ronda: 1 Minuto exacto.",
+                guestBadge: "Modo Invitado (Simulación)",
+                liveBadge: "Modo Apuesta Real (Web3)",
+                switchModeBtn: "Activar Modo Apuesta"
+            },
+            en: {
+                welcomeTitle: "Welcome to the Great ZAARD Challenge!",
+                welcomeDesc: "Bet 0.0001 BNB, test your trading skills and win 0.5 ZARD if your prediction hits in 1 minute.",
+                btnAccept: "Accept the Challenge!",
+                loadingTitle: "Loading Market Core...",
+                loadingDesc: "Analyzing trends and connecting smart network nodes...",
+                arenaTitle: "1-Minute Market Prediction",
+                assetLabel: "BNB/USD Live Feed",
+                timer: "Time remaining: 60s",
+                btnSube: "📈 CALL (UP)",
+                btnBaja: "📉 PUT (DOWN)",
+                rulesTitle: "Protocol Rules",
+                rule1: "Bet cost: <strong>0.0001 BNB</strong>",
+                rule2: "BNB Receiving Wallet: ",
+                rule3: "Reward per win: <strong>0.5 ZARD</strong> (Automatically sent from the 1,000 ZARD pool).",
+                rule4: "Round duration: Exactly 1 Minute.",
+                guestBadge: "Guest Mode (Simulation)",
+                liveBadge: "Live Bet Mode (Web3)",
+                switchModeBtn: "Activate Live Bet"
+            },
+            ar: {
+                welcomeTitle: "أهلاً بك في تحدي زارد الكبير!",
+                welcomeDesc: "راهن بـ 0.0001 BNB، واختبر مهارات التداول واكسب 0.5 ZARD إذا صدقت توقعاتك في دقيقة واحدة.",
+                btnAccept: "قبول التحدي!",
+                loadingTitle: "جاري تحميل نواة السوق...",
+                loadingDesc: "تحليل الاتجاهات وربط عقد الشبكة الذكية...",
+                arenaTitle: "توقعات السوق لمدة دقيقة واحدة",
+                assetLabel: "تغذية BNB/USD المباشرة",
+                timer: "الوقت المتبقي: 60 ثانية",
+                btnSube: "📈 صعود (CALL)",
+                btnBaja: "📉 هبوط (PUT)",
+                rulesTitle: "قواعد البروتوكول",
+                rule1: "تكلفة الرهان: <strong>0.0001 BNB</strong>",
+                rule2: "محفظة استقبال BNB: ",
+                rule3: "جائزة الفوز: <strong>0.5 ZARD</strong> (تُرسل تلقائياً من مخزون 1,000 زارد).",
+                rule4: "مدة الجولة: دقيقة واحدة بالضبط.",
+                guestBadge: "وضع الضيف (محاكاة)",
+                liveBadge: "وضع الرهان الحقيقي (Web3)",
+                switchModeBtn: "تفعيل وضع الرهان"
+            },
+            zh: {
+                welcomeTitle: "欢迎来到 ZAARD 大挑战！",
+                welcomeDesc: "投注 0.0001 BNB，测试您的交易技巧，如果您的预测在 1 分钟内命中，即可赢得 0.5 ZARD。",
+                btnAccept: "接受挑战！",
+                loadingTitle: "正在加载市场核心...",
+                loadingDesc: "正在分析趋势并连接智能网络节点...",
+                arenaTitle: "1分钟市场预测",
+                assetLabel: "BNB/USD 实时行情",
+                timer: "剩余时间: 60s",
+                btnSube: "📈 看涨 (CALL)",
+                btnBaja: "📉 看跌 (PUT)",
+                rulesTitle: "协议规则",
+                rule1: "投注费用: <strong>0.0001 BNB</strong>",
+                rule2: "BNB 接收钱包: ",
+                rule3: "获胜奖励: <strong>0.5 ZARD</strong> (从 1,000 ZARD 储备金中自动发放)。",
+                rule4: "回合时长: 刚好 1 分钟。",
+                guestBadge: "访客模式 (模拟)",
+                liveBadge: "真实投注模式 (Web3)",
+                switchModeBtn: "开启真实投注"
             }
+        };
 
-            angle += 0.03;
-            requestAnimationFrame(drawPortal);
-        }
-        drawPortal();
-
-        // Stabilize Portal Action
-        function stabilizePortal() {
-            userBalance += 25;
-            portalEnergy = Math.min(100, portalEnergy + 5);
+        function cambiarIdioma() {
+            let lang = document.getElementById('langSelect').value;
+            let t = langdata[lang];
             
-            document.getElementById('user-balance').innerText = userBalance.toLocaleString();
-            document.getElementById('portal-energy').innerText = portalEnergy;
-
-            // Visual feedback floating notification effect
-            showNotification("+25 ZAARD Reclamados por Estabilización");
-        }
-
-        // Claim Mission Reward
-        function claimMission(button, rewardAmount) {
-            userBalance += rewardAmount;
-            document.getElementById('user-balance').innerText = userBalance.toLocaleString();
+            document.getElementById('txtWelcomeTitle').innerText = t.welcomeTitle;
+            document.getElementById('txtWelcomeDesc').innerText = t.welcomeDesc;
+            document.getElementById('btnAcceptChallenge').innerText = t.btnAccept;
+            document.getElementById('txtLoadingTitle').innerText = t.loadingTitle;
+            document.getElementById('txtLoadingDesc').innerText = t.loadingDesc;
+            document.getElementById('txtArenaTitle').innerText = t.arenaTitle;
+            document.getElementById('txtAssetLabel').innerText = t.assetLabel;
+            document.getElementById('txtSube').innerText = t.btnSube;
+            document.getElementById('txtBaja').innerText = t.btnBaja;
+            document.getElementById('txtRulesTitle').innerText = t.rulesTitle;
+            document.getElementById('rule1').innerHTML = t.rule1;
+            document.getElementById('rule3').innerHTML = t.rule3;
+            document.getElementById('rule4').innerText = t.rule4;
             
-            button.innerText = "¡COMPLETADO!";
-            button.disabled = true;
-            button.classList.remove('bg-purple-600', 'hover:bg-purple-500');
-            button.classList.add('bg-zinc-700', 'text-zinc-400', 'cursor-not-allowed');
-
-            showNotification(`¡Misión completada! +${rewardAmount} ZAARD añadidos`);
+            updateBadgeText();
         }
 
-        // Temporary Banner Notification Helper
-        function showNotification(text) {
-            const banner = document.getElementById('notification-banner');
-            const titleEl = banner.querySelector('p.font-orbitron');
-            const descEl = banner.querySelector('p:nth-child(2)');
-            
-            const originalTitle = titleEl.innerText;
-            const originalDesc = descEl.innerText;
+        function langdata(l) { return langData[l]; }
 
-            titleEl.innerText = "¡ÉXITO EN EL NODO!";
-            descEl.innerText = text;
-            banner.classList.add('border-cyan-400', 'bg-purple-800');
+        function iniciarTransicion() {
+            document.getElementById('screenWelcome').classList.add('hidden');
+            document.getElementById('screenLoading').classList.remove('hidden');
 
+            // Transición automática de 4 segundos
             setTimeout(() => {
-                titleEl.innerText = originalTitle;
-                descEl.innerText = originalDesc;
-                banner.classList.remove('border-cyan-400', 'bg-purple-800');
-            }, 2500);
+                document.getElementById('screenLoading').classList.add('hidden');
+                document.getElementById('screenArena').classList.remove('hidden');
+            }, 4000);
+        }
+
+        function conectarBilletera() {
+            if (window.ethereum) {
+                window.ethereum.request({ method: 'eth_requestAccounts' })
+                .then(accounts => {
+                    document.getElementById('connectWalletBtn').innerText = accounts[0].substring(0, 6) + "..." + accounts[0].substring(38);
+                    alert("¡Billetera conectada con éxito!");
+                })
+                .catch(err => console.log(err));
+            } else {
+                alert("Por favor, abre esta dApp desde MetaMask o una billetera Web3 compatible.");
+            }
+        }
+
+        function cambiarModo(modo) {
+            modoActual = modo;
+            updateBadgeText();
+            if (modo === 'apuesta') {
+                conectarBilletera();
+            }
+        }
+
+        function updateBadgeText() {
+            let lang = document.getElementById('langSelect').value;
+            let t = langData[lang];
+            let badge = document.getElementById('badgeMode');
+            if (modoActual === 'invitado') {
+                badge.className = "mode-badge guest-mode";
+                badge.innerText = t.guestBadge;
+                document.getElementById('btnSwitchMode').innerText = t.switchModeBtn;
+            } else {
+                badge.className = "mode-badge live-mode";
+                badge.innerText = t.liveBadge;
+                document.getElementById('btnSwitchMode').innerText = "Cambiar a Modo Invitado";
+            }
+        }
+
+        function apostar(direccion) {
+            if (modoActual === 'invitado') {
+                alert(`[SIMULACIÓN] Has seleccionado ${direccion}. En modo invitado no se mueven fondos reales. ¡Comprueba si el precio sube o baja en 1 minuto!`);
+            } else {
+                // Lógica de envío de 0.0001 BNB a la billetera creadora 0x84f529525fae84b1f1d7ea66939592094426cdc8
+                if (window.ethereum) {
+                    const transactionParameters = {
+                        to: walletCreadora,
+                        from: window.ethereum.selectedAddress,
+                        value: '0x38D7EA4C68000', // 0.0001 BNB en Wei (Hex)
+                    };
+
+                    window.ethereum.request({
+                        method: 'eth_sendTransaction',
+                        params: [transactionParameters],
+                    })
+                    .then((txHash) => {
+                        alert(`¡Apuesta enviada con éxito! Hash: ${txHash}. Tu predicción (${direccion}) está registrada. Si aciertas, recibirás 0.5 ZARD automáticamente.`);
+                    })
+                    .catch((error) => {
+                        alert("Transacción cancelada o error en la red.");
+                    });
+                } else {
+                    alert("Conecta tu billetera Web3 primero.");
+                }
+            }
         }
     </script>
 </body>

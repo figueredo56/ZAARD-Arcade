@@ -96,8 +96,37 @@
             background-position: center !important;
             border: 1px solid #a855f7;
             border-radius: 16px;
-            padding: 30px;
+            padding: 25px;
             box-shadow: 0 0 35px rgba(168, 85, 247, 0.4), inset 0 0 20px rgba(216, 180, 254, 0.15);
+        }
+
+        /* Elemento decorativo central solicitado con la nueva imagen */
+        .middle-banner-deco {
+            width: 100%;
+            height: 90px;
+            background: linear-gradient(rgba(12, 6, 25, 0.85), rgba(8, 4, 18, 0.92)), url('https://photos.pinksale.finance/file/pinksale-logo-upload/1790287451706-4593a246bbbf27b508770c328ab883c0.png');
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #7c3aed;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 25px rgba(124, 58, 237, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .middle-banner-deco::after {
+            content: "⚡ ZAARD ECOSYSTEM MULTI-ASSET ARENA ⚡";
+            color: #e9d5ff;
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px #a855f7;
+            background: rgba(15, 7, 28, 0.75);
+            padding: 6px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(168, 85, 247, 0.4);
         }
 
         .floating-logo-container {
@@ -186,7 +215,7 @@
         .arena-container {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
             width: 100%;
         }
         .card-panel {
@@ -198,8 +227,8 @@
             border-radius: 8px;
             border: 1px solid #9333ea;
             position: relative;
-            height: 190px;
-            margin-bottom: 12px;
+            height: 170px;
+            margin-bottom: 10px;
             overflow: hidden;
         }
         canvas { width: 100%; height: 100%; display: block; }
@@ -224,19 +253,19 @@
         .bet-buttons {
             display: flex;
             gap: 12px;
-            margin-top: 12px;
+            margin-top: 10px;
         }
         .btn-sube {
-            flex: 1; background: #059669; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.2s;
+            flex: 1; background: #059669; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: 0.2s;
         }
         .btn-sube:hover { background: #047857; }
         .btn-baja {
-            flex: 1; background: #dc2626; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.2s;
+            flex: 1; background: #dc2626; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: 0.2s;
         }
         .btn-baja:hover { background: #b91c1c; }
 
         .order-book {
-            max-height: 120px;
+            max-height: 100px;
             overflow-y: auto;
             font-size: 0.75rem;
             background: rgba(6, 2, 12, 0.75);
@@ -356,7 +385,7 @@
 
     <!-- Pantalla 3: Arena de Apuestas Estructurada Verticalmente con Fondo Silver -->
     <div id="screenArena" class="screen hidden">
-        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: rgba(20,10,35,0.85); padding: 10px 15px; border-radius: 10px; border: 1px solid #7c3aed;">
+        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; background: rgba(20,10,35,0.85); padding: 10px 15px; border-radius: 10px; border: 1px solid #7c3aed;">
             <div>
                 <span id="badgeMode" class="mode-badge guest-mode">Modo Invitado (Simulación Segura)</span>
             </div>
@@ -369,15 +398,15 @@
         <div class="arena-container">
             <!-- Arriba: Panel de Apuestas BNB/USD con Fondo Silver -->
             <div class="card-panel silver-space-bg">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <span style="font-size: 1rem; font-weight: bold; color: #e9d5ff;">📈 BNB/USD Live Chart & Zona de Apuestas</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <span style="font-size: 0.95rem; font-weight: bold; color: #e9d5ff;">📈 BNB/USD Live Chart & Zona de Apuestas</span>
                     <span class="price-big" id="priceDisplayBnb">614.25 $</span>
                 </div>
                 <div class="market-chart-box">
                     <canvas id="candleCanvasBnb"></canvas>
                 </div>
-                <div style="margin-bottom: 10px;">
-                    <span style="font-size: 0.8rem; color: #c084fc; font-weight: bold;">Libro de Órdenes BNB:</span>
+                <div style="margin-bottom: 8px;">
+                    <span style="font-size: 0.78rem; color: #c084fc; font-weight: bold;">Libro de Órdenes BNB:</span>
                     <div class="order-book" id="orderBookBnb"></div>
                 </div>
                 <div class="bet-buttons">
@@ -386,17 +415,20 @@
                 </div>
             </div>
 
+            <!-- Imagen / Banner decorativo central solicitado -->
+            <div class="middle-banner-deco"></div>
+
             <!-- Abajo: Panel Analítico ZARD Token (0x973ba2...d38) con Fondo Silver -->
             <div class="card-panel silver-space-bg">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <span style="font-size: 1rem; font-weight: bold; color: #e9d5ff;">💎 ZARD Token Analytics (0x973b...d38)</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <span style="font-size: 0.95rem; font-weight: bold; color: #e9d5ff;">💎 ZARD Token Analytics (0x973b...d38)</span>
                     <span class="price-big" style="color: #c084fc;" id="priceDisplayZard">0.000060 $</span>
                 </div>
                 <div class="market-chart-box">
                     <canvas id="candleCanvasZard"></canvas>
                 </div>
-                <div style="margin-bottom: 5px;">
-                    <span style="font-size: 0.8rem; color: #c084fc; font-weight: bold;">Libro de Órdenes ZARD Token:</span>
+                <div style="margin-bottom: 4px;">
+                    <span style="font-size: 0.78rem; color: #c084fc; font-weight: bold;">Libro de Órdenes ZARD Token:</span>
                     <div class="order-book" id="orderBookZard"></div>
                 </div>
             </div>
@@ -432,7 +464,7 @@
         let apuestaActiva = null; 
 
         function iniciarTemporizadorRonda() {
-            if (temporizadorActivo) return; // Si ya está corriendo, no duplicar
+            if (temporizadorActivo) return; 
             temporizadorActivo = true;
             timeLeft = 60;
             
@@ -547,7 +579,6 @@
                     ctx.strokeStyle = isGreen ? '#34d399' : '#f87171';
                     ctx.fillStyle = isGreen ? '#34d399' : '#f87171';
 
-                    // Velas estilizadas y delgadas
                     ctx.lineWidth = 1;
                     ctx.beginPath();
                     ctx.moveTo(x, yHigh);
@@ -565,7 +596,6 @@
             let precioActual = preciosActuales.BNB;
             apuestaActiva = { activo: 'BNB', direccion, precioInicio: precioActual };
             
-            // ¡Disparar el temporizador justo en este momento!
             iniciarTemporizadorRonda();
 
             if (modoActual === 'invitado') {
@@ -584,7 +614,6 @@
                     .catch(() => { 
                         alert("Transacción cancelada."); 
                         apuestaActiva = null; 
-                        // Detener reloj si cancela
                         clearInterval(intervaloTimer);
                         temporizadorActivo = false;
                         timeLeft = 60;
@@ -622,7 +651,6 @@
             modal.classList.remove('hidden');
             apuestaActiva = null; 
             
-            // Reiniciar display del reloj para la próxima apuesta
             timeLeft = 60;
             document.getElementById('countdown').innerText = timeLeft;
         }

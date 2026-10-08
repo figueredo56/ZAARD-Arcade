@@ -99,41 +99,48 @@
             box-shadow: 0 0 35px rgba(168, 85, 247, 0.4), inset 0 0 20px rgba(216, 180, 254, 0.15);
         }
 
-        /* Banner central con la imagen grandota, visible y hermosa */
+        /* Banner central rectangular ancho, grande y llamativo */
         .middle-banner-deco {
             width: 100%;
-            min-height: 150px;
-            background: linear-gradient(rgba(22, 10, 42, 0.9), rgba(10, 4, 20, 0.95));
+            min-height: 220px;
+            background: linear-gradient(135deg, rgba(28, 12, 52, 0.95), rgba(12, 5, 25, 0.98));
             border: 2px solid #a855f7;
-            border-radius: 14px;
+            border-radius: 16px;
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
-            box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
+            justify-content: space-around;
+            gap: 20px;
+            box-shadow: 0 0 40px rgba(168, 85, 247, 0.5), inset 0 0 25px rgba(168, 85, 247, 0.2);
             position: relative;
             overflow: hidden;
-            padding: 15px;
+            padding: 20px 30px;
         }
         .middle-banner-deco img {
-            width: 100px;
-            height: 100px;
+            width: 160px;
+            height: 160px;
             object-fit: contain;
-            filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.8));
+            filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.9));
             animation: floatGlow 3s ease-in-out infinite;
         }
-        .middle-banner-text {
+        .middle-banner-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            flex: 1;
+        }
+        .middle-banner-title {
             color: #f3e8ff;
-            font-size: 0.95rem;
+            font-size: 1.25rem;
             font-weight: bold;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px #a855f7;
-            background: rgba(20, 10, 40, 0.9);
-            padding: 6px 16px;
-            border-radius: 8px;
-            border: 1px solid rgba(168, 85, 247, 0.5);
-            text-align: center;
+            letter-spacing: 1px;
+            text-shadow: 0 0 12px #a855f7;
+        }
+        .middle-banner-text {
+            color: #d8b4fe;
+            font-size: 0.9rem;
+            line-height: 1.4;
         }
 
         .floating-logo-container {
@@ -149,9 +156,9 @@
             animation: floatGlow 3s ease-in-out infinite;
         }
         @keyframes floatGlow {
-            0% { transform: translateY(0px); box-shadow: 0 0 10px #34d399; }
-            50% { transform: translateY(-6px); box-shadow: 0 0 20px #f87171; }
-            100% { transform: translateY(0px); box-shadow: 0 0 10px #34d399; }
+            0% { transform: translateY(0px); box-shadow: 0 0 15px #34d399; }
+            50% { transform: translateY(-8px); box-shadow: 0 0 25px #f87171; }
+            100% { transform: translateY(0px); box-shadow: 0 0 15px #34d399; }
         }
 
         .welcome-card {
@@ -422,10 +429,13 @@
                 </div>
             </div>
 
-            <!-- Banner central con la imagen grande y destacada -->
+            <!-- Banner central rectangular ancho y grande con la imagen destacada -->
             <div class="middle-banner-deco">
                 <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790287451706-4593a246bbbf27b508770c328ab883c0.png" alt="ZAARD Decorativo">
-                <div class="middle-banner-text">⚡ ZAARD ECOSYSTEM MULTI-ASSET ARENA ⚡</div>
+                <div class="middle-banner-content">
+                    <div class="middle-banner-title">⚡ ZAARD ECOSYSTEM MULTI-ASSET ARENA ⚡</div>
+                    <div class="middle-banner-text">Conectando alta liquidez, precisión analítica y recompensas instantáneas en el ecosistema descentralizado.</div>
+                </div>
             </div>
 
             <!-- Abajo: Panel Analítico ZARD Token (0x973ba2...d38) con Fondo Silver -->

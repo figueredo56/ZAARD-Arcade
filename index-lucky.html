@@ -87,10 +87,10 @@
             min-height: calc(100vh - 70px);
         }
 
-        /* Fondo espacial exacto para la tarjeta de bienvenida */
+        /* Fondo de bienvenida exacto solicitado con la imagen de PinkSale */
         .welcome-space-bg {
             position: relative;
-            background: linear-gradient(rgba(18, 10, 35, 0.78), rgba(10, 5, 22, 0.88)), url('https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png') !important;
+            background: linear-gradient(rgba(15, 8, 30, 0.82), rgba(10, 4, 20, 0.90)), url('https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png') !important;
             background-size: cover !important;
             background-position: center !important;
             border: 2px solid #a855f7;
@@ -101,10 +101,10 @@
             box-shadow: 0 0 35px rgba(168, 85, 247, 0.5), inset 0 0 20px rgba(216, 180, 254, 0.15);
         }
 
-        /* Banner central rectangular grande e imponente con la nueva imagen */
+        /* Banner central rectangular grande */
         .middle-banner-deco {
             width: 100%;
-            min-height: 260px;
+            min-height: 240px;
             background: linear-gradient(135deg, rgba(28, 12, 52, 0.95), rgba(12, 5, 25, 0.98));
             border: 2px solid #a855f7;
             border-radius: 16px;
@@ -119,8 +119,8 @@
             padding: 25px 35px;
         }
         .middle-banner-deco img {
-            width: 210px;
-            height: 210px;
+            width: 200px;
+            height: 200px;
             object-fit: contain;
             filter: drop-shadow(0 0 25px rgba(168, 85, 247, 0.95));
             animation: floatGlow 3s ease-in-out infinite;
@@ -143,6 +143,62 @@
             color: #d8b4fe;
             font-size: 0.95rem;
             line-height: 1.45;
+        }
+
+        /* Nuevo banner inferior rectangular de punta a punta con efecto de chispas */
+        .bottom-full-banner {
+            width: 100%;
+            background: linear-gradient(135deg, rgba(20, 8, 40, 0.95), rgba(8, 3, 18, 0.98));
+            border: 2px solid #c084fc;
+            border-radius: 12px;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            box-shadow: 0 0 35px rgba(192, 132, 252, 0.4), inset 0 0 20px rgba(168, 85, 247, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        /* Efecto de chispas en las esquinas */
+        .bottom-full-banner::before, .bottom-full-banner::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 15px 5px #f43f5e, 0 0 30px 10px #fbbf24;
+            animation: sparkGlow 1.5s infinite alternate;
+        }
+        .bottom-full-banner::before { top: 8px; left: 10px; }
+        .bottom-full-banner::after { bottom: 8px; right: 10px; }
+
+        @keyframes sparkGlow {
+            0% { transform: scale(0.8); opacity: 0.6; filter: hue-rotate(0deg); }
+            100% { transform: scale(1.3); opacity: 1; filter: hue-rotate(45deg); }
+        }
+
+        .bottom-full-banner img {
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 15px rgba(192, 132, 252, 0.9));
+        }
+        .bottom-full-text-area {
+            flex: 1;
+        }
+        .bottom-full-title {
+            color: #fae8ff;
+            font-size: 1.15rem;
+            font-weight: bold;
+            margin-bottom: 6px;
+            text-shadow: 0 0 10px #a855f7;
+        }
+        .bottom-full-desc {
+            color: #d8b4fe;
+            font-size: 0.88rem;
+            line-height: 1.4;
         }
 
         .floating-logo-container {
@@ -363,7 +419,7 @@
         </div>
     </div>
 
-    <!-- Pantalla 1: Bienvenida Centrada con el Fondo Espacial Solicitado -->
+    <!-- Pantalla 1: Bienvenida Centrada con el Fondo Exacto Solicitado -->
     <div id="screenWelcome" class="screen">
         <div class="welcome-space-bg">
             <div class="floating-logo-container">
@@ -407,8 +463,12 @@
         </div>
 
         <div class="arena-container">
-            <!-- Arriba: Panel de Apuestas BNB/USD -->
+            <!-- Arriba: Panel de Apuestas BNB/USD con imagen personalizada arriba del título -->
             <div class="card-panel">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px; border-bottom: 1px solid rgba(168,85,247,0.3); padding-bottom: 8px;">
+                    <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790286366724-9003585f30626b9963bd86a5cf26c8ca.png" alt="Icono Arena" style="width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 0 8px #a855f7);">
+                    <span style="font-size: 1rem; font-weight: bold; color: #f3e8ff; letter-spacing: 0.5px;">ZAARD ARENA - PREDICCIÓN PROFESIONAL BNB</span>
+                </div>
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                     <span style="font-size: 0.95rem; font-weight: bold; color: #e9d5ff;">📈 BNB/USD Live Chart & Zona de Apuestas</span>
                     <span class="price-big" id="priceDisplayBnb">614.25 $</span>
@@ -426,7 +486,7 @@
                 </div>
             </div>
 
-            <!-- Banner central con la nueva imagen de PinkSale y tamaño grande -->
+            <!-- Banner central con la imagen de PinkSale y tamaño grande -->
             <div class="middle-banner-deco">
                 <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791494105996-e3366dcac4d9846d38bbb175e71b1538.png" alt="ZAARD Decorativo">
                 <div class="middle-banner-content">
@@ -447,6 +507,15 @@
                 <div style="margin-bottom: 4px;">
                     <span style="font-size: 0.78rem; color: #c084fc; font-weight: bold;">Libro de Órdenes ZARD Token:</span>
                     <div class="order-book" id="orderBookZard"></div>
+                </div>
+            </div>
+
+            <!-- NUEVO: Banner rectangular de punta a punta con efecto de chispas y la imagen solicitada -->
+            <div class="bottom-full-banner">
+                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790287451706-4593a246bbbf27b508770c328ab883c0.png" alt="Ecosistema Zard">
+                <div class="bottom-full-text-area">
+                    <div class="bottom-full-title">🚀 ALTA VELOCIDAD Y LIQUIDEZ VERIFICADA EN LA BLOCKCHAIN 🚀</div>
+                    <div class="bottom-full-desc">Cada ronda ejecutada fortalece el pool de recompensas de 1,000 ZARD, garantizando transparencia absoluta, pagos directos a la cartera creadora y máxima emoción en cada operación.</div>
                 </div>
             </div>
         </div>

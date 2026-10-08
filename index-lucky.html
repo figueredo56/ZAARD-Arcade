@@ -12,7 +12,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background: linear-gradient(135deg, #090514 0%, #150b24 50%, #0d0718 100%);
+            background: radial-gradient(circle at 50% 20%, #1e1038 0%, #0c051a 50%, #05020a 100%);
             color: #ffffff;
             min-height: 100vh;
             display: flex;
@@ -82,7 +82,6 @@
         }
         .hidden { display: none !important; }
 
-        /* Pantalla de bienvenida perfectamente centrada */
         #screenWelcome {
             justify-content: center;
             min-height: calc(100vh - 70px);
@@ -91,7 +90,7 @@
         /* Fondo espacial silver brillante y llamativo */
         .silver-space-bg {
             position: relative;
-            background: linear-gradient(rgba(12, 6, 25, 0.78), rgba(8, 4, 18, 0.88)), url('https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png') !important;
+            background: linear-gradient(rgba(18, 10, 35, 0.82), rgba(10, 5, 22, 0.90)), url('https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png') !important;
             background-size: cover !important;
             background-position: center !important;
             border: 1px solid #a855f7;
@@ -100,33 +99,38 @@
             box-shadow: 0 0 35px rgba(168, 85, 247, 0.4), inset 0 0 20px rgba(216, 180, 254, 0.15);
         }
 
-        /* Elemento decorativo central solicitado con la nueva imagen */
+        /* Banner central con la imagen solicitada corregida y visible */
         .middle-banner-deco {
             width: 100%;
-            height: 90px;
-            background: linear-gradient(rgba(12, 6, 25, 0.85), rgba(8, 4, 18, 0.92)), url('https://photos.pinksale.finance/file/pinksale-logo-upload/1790287451706-4593a246bbbf27b508770c328ab883c0.png');
-            background-size: cover;
-            background-position: center;
+            height: 110px;
+            background: linear-gradient(rgba(15, 7, 28, 0.85), rgba(10, 4, 20, 0.95));
             border: 1px solid #7c3aed;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 15px;
             box-shadow: 0 0 25px rgba(124, 58, 237, 0.3);
             position: relative;
             overflow: hidden;
+            padding: 10px 20px;
         }
-        .middle-banner-deco::after {
-            content: "⚡ ZAARD ECOSYSTEM MULTI-ASSET ARENA ⚡";
+        .middle-banner-deco img {
+            max-height: 80px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.6));
+        }
+        .middle-banner-text {
             color: #e9d5ff;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: bold;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             text-shadow: 0 0 10px #a855f7;
-            background: rgba(15, 7, 28, 0.75);
-            padding: 6px 15px;
+            background: rgba(20, 10, 40, 0.8);
+            padding: 8px 15px;
             border-radius: 8px;
             border: 1px solid rgba(168, 85, 247, 0.4);
+            text-align: center;
         }
 
         .floating-logo-container {
@@ -148,7 +152,7 @@
         }
 
         .welcome-card {
-            background: rgba(18, 10, 32, 0.92);
+            background: rgba(22, 12, 40, 0.92);
             border: 2px solid #a855f7;
             border-radius: 16px;
             padding: 25px 30px;
@@ -171,7 +175,7 @@
             text-align: justify;
         }
         .rules-list-welcome {
-            background: rgba(11, 6, 20, 0.85);
+            background: rgba(14, 7, 26, 0.85);
             border: 1px solid #7c3aed;
             border-radius: 10px;
             padding: 10px 16px;
@@ -223,7 +227,7 @@
         }
 
         .market-chart-box {
-            background: rgba(6, 2, 12, 0.75);
+            background: rgba(10, 4, 20, 0.75);
             border-radius: 8px;
             border: 1px solid #9333ea;
             position: relative;
@@ -268,7 +272,7 @@
             max-height: 100px;
             overflow-y: auto;
             font-size: 0.75rem;
-            background: rgba(6, 2, 12, 0.75);
+            background: rgba(10, 4, 20, 0.75);
             border: 1px solid #4a1e7a;
             border-radius: 6px;
             padding: 6px;
@@ -295,7 +299,7 @@
         .result-modal, .wallet-modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(5, 2, 10, 0.85);
+            background: rgba(10, 4, 20, 0.88);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -415,8 +419,11 @@
                 </div>
             </div>
 
-            <!-- Imagen / Banner decorativo central solicitado -->
-            <div class="middle-banner-deco"></div>
+            <!-- Banner decorativo central con la imagen visible mediante etiqueta img -->
+            <div class="middle-banner-deco">
+                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790287451706-4593a246bbbf27b508770c328ab883c0.png" alt="ZAARD Decorativo">
+                <div class="middle-banner-text">⚡ ZAARD ECOSYSTEM MULTI-ASSET ARENA ⚡</div>
+            </div>
 
             <!-- Abajo: Panel Analítico ZARD Token (0x973ba2...d38) con Fondo Silver -->
             <div class="card-panel silver-space-bg">
@@ -641,7 +648,7 @@
             if (acerto) {
                 titleEl.style.color = "#34d399";
                 titleEl.innerText = "🎉 ¡VICTORIA EN LA RONDA!";
-                descEl.innerHTML = `Tu predicción en <strong>BNB</strong> (${apuestaActiva.direccion}) fue correcta.<br>Precio de entrada: ${precioInicio.toFixed(2)}$ <br>Precio de cierre: ${precioFinal.toFixed(2)}$<br><br><strong>¡Has ganado 0.5 ZARD enviados a tu billetera!</strong>`;
+                descEl.innerHTML = `Tu predicción en <strong>BNB</strong> (${apuestaActiva.direccion}) was correcta.<br>Precio de entrada: ${precioInicio.toFixed(2)}$ <br>Precio de cierre: ${precioFinal.toFixed(2)}$<br><br><strong>¡Has ganado 0.5 ZARD enviados a tu billetera!</strong>`;
             } else {
                 titleEl.style.color = "#f87171";
                 titleEl.innerText = "❌ DERROTA EN LA RONDA";

@@ -12,7 +12,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background-color: #0b0614;
+            background: linear-gradient(135deg, #090514 0%, #150b24 50%, #0d0718 100%);
             color: #ffffff;
             min-height: 100vh;
             display: flex;
@@ -27,8 +27,9 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 20px;
-            background: rgba(20, 10, 35, 0.8);
+            background: rgba(20, 10, 35, 0.9);
             border-bottom: 1px solid #4a1e7a;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
         .logo-area {
             display: flex;
@@ -80,55 +81,90 @@
         }
         .hidden { display: none !important; }
 
-        .banner-container {
-            width: 100%;
-            height: 150px;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #7c3aed;
-            margin-bottom: 20px;
-            box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
+        /* Fondo espacial silver para el tracker */
+        .silver-space-bg {
+            position: relative;
+            background-image: linear-gradient(rgba(10, 5, 20, 0.85), rgba(10, 5, 20, 0.92)), url('https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png');
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #9333ea;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 0 40px rgba(147, 51, 234, 0.3), inset 0 0 20px rgba(216, 180, 254, 0.1);
         }
-        .banner-container img {
-            width: 100%;
-            height: 100%;
+
+        /* Logotipo flotante con destello verde/rojo */
+        .floating-logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .floating-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #a855f7;
             object-fit: cover;
+            animation: floatGlow 3s ease-in-out infinite;
+        }
+        @keyframes floatGlow {
+            0% { transform: translateY(0px); box-shadow: 0 0 10px #34d399; }
+            50% { transform: translateY(-8px); box-shadow: 0 0 25px #f87171; }
+            100% { transform: translateY(0px); box-shadow: 0 0 10px #34d399; }
         }
 
         .welcome-card {
-            background: rgba(26, 15, 48, 0.9);
-            border: 2px solid #9333ea;
+            background: rgba(18, 10, 32, 0.92);
+            border: 2px solid #a855f7;
             border-radius: 16px;
-            padding: 40px;
-            text-align: center;
-            max-width: 600px;
-            margin-top: 40px;
-            box-shadow: 0 0 30px rgba(147, 51, 234, 0.4);
+            padding: 35px;
+            max-width: 750px;
+            margin-top: 10px;
+            box-shadow: 0 0 30px rgba(147, 51, 234, 0.5);
         }
         .welcome-card h1 {
-            font-size: 2rem;
-            color: #e9d5ff;
+            font-size: 1.8rem;
+            color: #f3e8ff;
             margin-bottom: 15px;
             text-shadow: 0 0 10px #a855f7;
+            text-align: center;
         }
-        .welcome-card p {
-            color: #c084fc;
-            font-size: 1.1rem;
-            margin-bottom: 30px;
+        .welcome-desc {
+            color: #e9d5ff;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: justify;
         }
+        .rules-list-welcome {
+            background: rgba(11, 6, 20, 0.8);
+            border: 1px solid #7c3aed;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            font-size: 0.85rem;
+            color: #d8b4fe;
+            line-height: 1.5;
+        }
+        .rules-list-welcome li {
+            margin-bottom: 8px;
+        }
+
         .btn-action {
+            display: block;
+            width: 100%;
             background: linear-gradient(135deg, #9333ea, #6b21a8);
             color: white;
             border: none;
-            padding: 12px 30px;
+            padding: 14px;
             font-size: 1.1rem;
             font-weight: bold;
             border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(147, 51, 234, 0.6);
+            box-shadow: 0 0 20px rgba(147, 51, 234, 0.7);
             transition: 0.3s;
+            text-align: center;
         }
-        .btn-action:hover { transform: scale(1.05); }
+        .btn-action:hover { transform: scale(1.02); }
 
         .loading-box { text-align: center; padding: 50px; }
         .spinner {
@@ -141,51 +177,37 @@
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Estructura de la Arena de Apuestas */
+        /* Estructura de la Arena */
         .arena-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: 1fr 1fr;
             gap: 20px;
             width: 100%;
         }
-        @media(max-width: 900px) {
+        @media(max-width: 950px) {
             .arena-grid { grid-template-columns: 1fr; }
         }
         .card-panel {
-            background: rgba(20, 10, 35, 0.9);
+            background: rgba(18, 10, 32, 0.95);
             border: 1px solid #7c3aed;
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 0 15px rgba(124, 58, 237, 0.2);
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
         }
 
-        /* Canvas de Velas de BNB */
         .market-chart-box {
             background: #06020c;
             border-radius: 8px;
             border: 1px solid #9333ea;
             position: relative;
-            height: 220px;
-            margin-bottom: 15px;
+            height: 200px;
+            margin-bottom: 12px;
             overflow: hidden;
         }
         canvas { width: 100%; height: 100%; display: block; }
-        
-        .chart-overlay-info {
-            position: absolute;
-            top: 10px;
-            left: 15px;
-            display: flex;
-            gap: 15px;
-            font-size: 0.85rem;
-            background: rgba(10, 5, 20, 0.8);
-            padding: 5px 10px;
-            border-radius: 6px;
-            border: 1px solid #4a1e7a;
-        }
 
         .price-big {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: bold;
             color: #34d399;
             text-shadow: 0 0 8px rgba(52, 211, 153, 0.4);
@@ -194,41 +216,40 @@
         .timer-badge {
             background: #2e1065;
             color: #e9d5ff;
-            padding: 4px 10px;
-            border-radius: 6px;
+            padding: 6px 14px;
+            border-radius: 8px;
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 1rem;
             border: 1px solid #7c3aed;
         }
 
         .bet-buttons {
             display: flex;
-            gap: 15px;
-            margin-top: 15px;
+            gap: 12px;
+            margin-top: 12px;
         }
         .btn-sube {
-            flex: 1; background: #059669; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.2s;
+            flex: 1; background: #059669; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.2s;
         }
         .btn-sube:hover { background: #047857; }
         .btn-baja {
-            flex: 1; background: #dc2626; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.2s;
+            flex: 1; background: #dc2626; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.2s;
         }
         .btn-baja:hover { background: #b91c1c; }
 
-        /* Libro de Órdenes en Tiempo Real */
         .order-book {
-            max-height: 180px;
+            max-height: 140px;
             overflow-y: auto;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             background: #06020c;
             border: 1px solid #4a1e7a;
             border-radius: 6px;
-            padding: 8px;
+            padding: 6px;
         }
         .order-item {
             display: flex;
             justify-content: space-between;
-            padding: 4px 6px;
+            padding: 3px 6px;
             border-bottom: 1px solid #1e1138;
         }
         .order-green { color: #34d399; font-weight: bold; }
@@ -240,10 +261,29 @@
             border-radius: 20px;
             font-size: 0.85rem;
             font-weight: bold;
-            margin-bottom: 15px;
         }
         .guest-mode { background: #d97706; color: #fff; }
         .live-mode { background: #7c3aed; color: #fff; }
+
+        /* Modal de Resultado Transparente */
+        .result-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 2, 10, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .result-box {
+            background: #1a0f30;
+            border: 2px solid #a855f7;
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 0 40px rgba(168, 85, 247, 0.6);
+        }
     </style>
 </head>
 <body>
@@ -264,15 +304,25 @@
         </div>
     </div>
 
-    <!-- Pantalla 1: Bienvenida Chula -->
+    <!-- Pantalla 1: Bienvenida Chula y Explicativa (Fondo Silver Espacial) -->
     <div id="screenWelcome" class="screen">
-        <div class="banner-container">
-            <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790817037242-10b712b064b3dca0c1a6417000db08e3.png" alt="Banner Principal">
-        </div>
-        <div class="welcome-card">
-            <h1 id="txtWelcomeTitle">¡Bienvenido al Gran Reto ZAARD!</h1>
-            <p id="txtWelcomeDesc">Apuesta 0.0001 BNB, analiza las velas en tiempo real, pon a prueba tu habilidad y gana 0.5 ZARD si tu predicción acierta en 1 minuto.</p>
-            <button class="btn-action" onclick="iniciarTransicion()">¡Aceptar el Reto!</button>
+        <div class="welcome-card silver-space-bg">
+            <div class="floating-logo-container">
+                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791432184680-906fd2a3d85625f79d066e5b033f6011.png" alt="Logo Flotante" class="floating-logo">
+            </div>
+            <h1>Bienvenido al Núcleo de Predicción y Trading ZAARD</h1>
+            <p class="welcome-desc">
+                Estás ingresando al protocolo descentralizado de alta precisión de <strong>ZAARD Innovation</strong>. Nuestra plataforma combina análisis de velas en tiempo real, transparencia on-chain y recompensas automatizadas. Pon a prueba tus habilidades de especulación financiera en rondas cronometradas de 1 minuto y demuestra tu capacidad analítica.
+            </p>
+            <div class="rules-list-welcome">
+                <ul style="list-style-position: inside;">
+                    <li><strong>Mecánica del Reto:</strong> Selecciona si el mercado subirá (Call) o bajará (Put).</li>
+                    <li><strong>Costo de Operación:</strong> 0.0001 BNB enviados al contrato del creador (`0x84f5...dc8`).</li>
+                    <li><strong>Recompensa Garantizada:</strong> Gana 0.5 ZARD enviados automáticamente desde la reserva oficial si tu predicción es correcta al expirar el segundero.</li>
+                    <li><strong>Transparencia Total:</strong> Cada ronda registra precio de entrada y salida con validación exacta y sin excepciones.</li>
+                </ul>
+            </div>
+            <button class="btn-action" onclick="iniciarTransicion()">🚀 Aceptar el Reto y Entrar al Sistema</button>
         </div>
     </div>
 
@@ -281,69 +331,69 @@
         <div class="loading-box">
             <div class="spinner"></div>
             <h2 style="color: #c084fc; margin-bottom: 10px;">Sincronizando Velas y Servidor ZAARD...</h2>
-            <p style="color: #a78bfa;">Conectando flujos de precios y nodos de liquidez inteligentes...</p>
+            <p style="color: #a78bfa;">Conectando flujos de precios BNB y ZARD Token con nodos de liquidez...</p>
         </div>
     </div>
 
-    <!-- Pantalla 3: Arena de Apuestas con Velas y Ordenes -->
+    <!-- Pantalla 3: Arena de Apuestas Dual (BNB + ZARD Token) -->
     <div id="screenArena" class="screen hidden">
-        <div class="banner-container" style="height: 110px;">
-            <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png" alt="Banner Arena">
-        </div>
-
-        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: rgba(20,10,35,0.8); padding: 10px 15px; border-radius: 10px; border: 1px solid #7c3aed;">
             <div>
-                <span id="badgeMode" class="mode-badge guest-mode">Modo Invitado (Simulación)</span>
+                <span id="badgeMode" class="mode-badge guest-mode">Modo Invitado (Simulación Segura)</span>
             </div>
-            <div style="display: flex; gap: 10px; align-items: center;">
-                <div class="timer-badge">⏳ <span id="countdown">60</span>s</div>
-                <button onclick="cambiarModo()" class="btn-wallet" style="font-size: 0.8rem; padding: 6px 12px;" id="btnSwitchMode">Activar Modo Apuesta</button>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <div class="timer-badge">⏳ Ronda: <span id="countdown">60</span>s</div>
+                <button onclick="cambiarModo()" class="btn-wallet" id="btnSwitchMode">Activar Modo Apuesta</button>
             </div>
         </div>
 
         <div class="arena-grid">
-            <!-- Izquierda: Gráfico de Velas y Acciones -->
+            <!-- Panel 1: BNB / USD Live -->
             <div class="card-panel">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <span style="font-size: 0.95rem; font-weight: bold; color: #e9d5ff;">BNB/USD Live Chart (1m)</span>
-                    <span class="price-big" id="priceDisplay">614.25 $</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 0.95rem; font-weight: bold; color: #e9d5ff;">BNB/USD Live Chart</span>
+                    <span class="price-big" id="priceDisplayBnb">614.25 $</span>
                 </div>
-                
-                <!-- Canvas para simular las velas en tiempo real -->
                 <div class="market-chart-box">
-                    <div class="chart-overlay-info">
-                        <span style="color: #34d399;">EMA 7: 614.10</span>
-                        <span style="color: #f87171;">EMA 25: 613.85</span>
-                        <span style="color: #c084fc;">Vol: 1.42K BNB</span>
-                    </div>
-                    <canvas id="candleCanvas"></canvas>
+                    <canvas id="candleCanvasBnb"></canvas>
                 </div>
-
+                <div style="margin-bottom: 10px;">
+                    <span style="font-size: 0.8rem; color: #c084fc; font-weight: bold;">Libro de Órdenes BNB:</span>
+                    <div class="order-book" id="orderBookBnb"></div>
+                </div>
                 <div class="bet-buttons">
-                    <button class="btn-sube" onclick="apostar('SUBE')">📈 SUBE (CALL)</button>
-                    <button class="btn-baja" onclick="apostar('BAJA')">📉 BAJA (PUT)</button>
+                    <button class="btn-sube" onclick="realizarApuesta('BNB', 'SUBE')">📈 SUBE (CALL)</button>
+                    <button class="btn-baja" onclick="realizarApuesta('BNB', 'BAJA')">📉 BAJA (PUT)</button>
                 </div>
             </div>
 
-            <!-- Derecha: Libro de Órdenes y Confianza ZAARD -->
+            <!-- Panel 2: ZARD Token (`0x973ba2...d38`) -->
             <div class="card-panel">
-                <h3 style="margin-bottom: 10px; color: #e9d5ff; font-size: 1rem;">📊 Libro de Órdenes ZAARD</h3>
-                <div class="order-book" id="orderBookList">
-                    <!-- Órdenes dinámicas generadas por JS para dar confianza -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 0.95rem; font-weight: bold; color: #e9d5ff;">ZARD Token Live</span>
+                    <span class="price-big" style="color: #c084fc;" id="priceDisplayZard">1.450 $</span>
                 </div>
-
-                <div style="margin-top: 15px; border-top: 1px solid #4a1e7a; padding-top: 10px;">
-                    <h4 style="font-size: 0.85rem; color: #c084fc; margin-bottom: 5px;">Detalles del Protocolo</h4>
-                    <ul style="padding-left: 15px; font-size: 0.75rem; color: #d8b4fe; line-height: 1.5;">
-                        <li>Costo: <strong>0.0001 BNB</strong></li>
-                        <li>Destino: <code style="color: #a78bfa;">0x84f5...dc8</code></li>
-                        <li>Premio: <strong>0.5 ZARD</strong> automático</li>
-                    </ul>
+                <div class="market-chart-box">
+                    <canvas id="candleCanvasZard"></canvas>
                 </div>
-                <div style="margin-top: 10px; text-align: center;">
-                    <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790290122445-0077664fb41e21b3aec6f1685fd6ec56.png" style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid #7c3aed;" alt="Token">
+                <div style="margin-bottom: 10px;">
+                    <span style="font-size: 0.8rem; color: #c084fc; font-weight: bold;">Órdenes ZARD (0x973b...d38):</span>
+                    <div class="order-book" id="orderBookZard"></div>
+                </div>
+                <div class="bet-buttons">
+                    <button class="btn-sube" onclick="realizarApuesta('ZARD', 'SUBE')">📈 SUBE (CALL)</button>
+                    <button class="btn-baja" onclick="realizarApuesta('ZARD', 'BAJA')">📉 BAJA (PUT)</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal de Resultado de la Ronda -->
+    <div id="resultModal" class="result-modal hidden">
+        <div class="result-box">
+            <h2 id="resultTitle" style="margin-bottom: 15px; color: #34d399;">¡Resultado de la Ronda!</h2>
+            <p id="resultDesc" style="color: #e9d5ff; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5;"></p>
+            <button class="btn-action" onclick="cerrarModalResultado()">Continuar Operando</button>
         </div>
     </div>
 
@@ -351,11 +401,15 @@
         let modoActual = 'invitado';
         const walletCreadora = "0x84f529525fae84b1f1d7ea66939592094426cdc8";
         let timeLeft = 60;
+        let apuestaActiva = null; // { activo: 'BNB', direccion: 'SUBE', precioInicio: 614.25 }
 
-        // Temporizador de cuenta regresiva
+        // Temporizador estricto de 1 minuto con resolución de resultado al llegar a 0
         setInterval(() => {
             timeLeft--;
-            if (timeLeft < 0) timeLeft = 60;
+            if (timeLeft < 0) {
+                verificarResultadoRonda();
+                timeLeft = 60; // Reiniciar ciclo tras evaluar
+            }
             let timerEl = document.getElementById('countdown');
             if(timerEl) timerEl.innerText = timeLeft;
         }, 1000);
@@ -366,31 +420,34 @@
             setTimeout(() => {
                 document.getElementById('screenLoading').classList.add('hidden');
                 document.getElementById('screenArena').classList.remove('hidden');
-                initCanvas();
-                initOrderBook();
+                initCanvas('candleCanvasBnb', 614.25, 'priceDisplayBnb');
+                initCanvas('candleCanvasZard', 1.45, 'priceDisplayZard');
+                initOrderBooks();
             }, 4000);
         }
 
-        // Generar Libro de Órdenes en vivo para inspirar confianza
-        function initOrderBook() {
-            const list = document.getElementById('orderBookList');
-            const sampleWallets = ["0x4A...9b21", "0x8F...11c4", "0x2C...e490", "0x9E...31a8", "0x1B...77ff", "0x7D...55aa"];
+        function initOrderBooks() {
+            const listBnb = document.getElementById('orderBookBnb');
+            const listZard = document.getElementById('orderBookZard');
+            const sampleWallets = ["0x4A...9b21", "0x8F...11c4", "0x2C...e490", "0x9E...31a8", "0x7D...55aa"];
             
-            // Llenar inicial
-            for(let i=0; i<5; i++) {
-                addRandomOrder(list, sampleWallets);
+            for(let i=0; i<4; i++) {
+                addOrder(listBnb, sampleWallets, "0.0001 BNB");
+                addOrder(listZard, sampleWallets, "10 ZARD");
             }
 
-            // Añadir nuevas órdenes cada pocos segundos para dar dinamismo
             setInterval(() => {
-                if(list) addRandomOrder(list, sampleWallets);
-            }, 3000);
+                if(listBnb && listZard) {
+                    addOrder(listBnb, sampleWallets, "0.0001 BNB");
+                    addOrder(listZard, sampleWallets, "10 ZARD");
+                }
+            }, 3500);
         }
 
-        function addRandomOrder(container, wallets) {
+        function addOrder(container, wallets, unit) {
             const wallet = wallets[Math.floor(Math.random() * wallets.length)];
             const isSube = Math.random() > 0.45;
-            const typeText = isSube ? "SUBE (0.0001 BNB)" : "BAJA (0.0001 BNB)";
+            const typeText = isSube ? `SUBE (${unit})` : `BAJA (${unit})`;
             const cssClass = isSube ? "order-green" : "order-red";
             
             const div = document.createElement('div');
@@ -398,41 +455,41 @@
             div.innerHTML = `<span>${wallet}</span> <span class="${cssClass}">${typeText}</span>`;
             
             container.prepend(div);
-            if(container.children.length > 8) {
+            if(container.children.length > 6) {
                 container.removeChild(container.lastChild);
             }
         }
 
-        // Simulación de Velas Japonesas en Canvas
-        function initCanvas() {
-            const canvas = document.getElementById('candleCanvas');
+        let preciosActuales = { BNB: 614.25, ZARD: 1.45 };
+
+        function initCanvas(canvasId, basePrice, priceDisplayId) {
+            const canvas = document.getElementById(canvasId);
             if(!canvas) return;
             const ctx = canvas.getContext('2d');
             
             let candles = [];
-            let basePrice = 614.25;
+            let currentP = basePrice;
 
-            // Crear velas iniciales
-            for(let i=0; i<25; i++) {
-                let open = basePrice + (Math.random() - 0.5) * 1.5;
-                let close = open + (Math.random() - 0.48) * 1.2;
-                let high = Math.max(open, close) + Math.random() * 0.6;
-                let low = Math.min(open, close) - Math.random() * 0.6;
+            for(let i=0; i<20; i++) {
+                let open = currentP + (Math.random() - 0.5) * (basePrice * 0.002);
+                let close = open + (Math.random() - 0.48) * (basePrice * 0.0018);
+                let high = Math.max(open, close) + Math.random() * (basePrice * 0.001);
+                let low = Math.min(open, close) - Math.random() * (basePrice * 0.001);
                 candles.push({open, close, high, low});
-                basePrice = close;
+                currentP = close;
             }
 
             setInterval(() => {
-                // Actualizar precio actual
                 let last = candles[candles.length - 1];
-                let newClose = last.close + (Math.random() - 0.49) * 0.4;
+                let newClose = last.close + (Math.random() - 0.49) * (basePrice * 0.0008);
                 last.close = newClose;
                 last.high = Math.max(last.high, newClose);
                 last.low = Math.min(last.low, newClose);
                 
-                document.getElementById('priceDisplay').innerText = newClose.toFixed(2) + " $";
+                let assetKey = canvasId.includes('Bnb') ? 'BNB' : 'ZARD';
+                preciosActuales[assetKey] = newClose;
+                document.getElementById(priceDisplayId).innerText = newClose.toFixed(2) + " $";
 
-                // Dibujar
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 canvas.width = canvas.offsetWidth;
                 canvas.height = canvas.offsetHeight;
@@ -453,19 +510,73 @@
                     ctx.strokeStyle = isGreen ? '#34d399' : '#f87171';
                     ctx.fillStyle = isGreen ? '#34d399' : '#f87171';
 
-                    // Mecha
                     ctx.lineWidth = 1.5;
                     ctx.beginPath();
                     ctx.moveTo(x, yHigh);
                     ctx.lineTo(x, yLow);
                     ctx.stroke();
 
-                    // Cuerpo de la vela
                     let rectY = Math.min(yOpen, yClose);
                     let rectH = Math.max(Math.abs(yClose - yOpen), 2);
                     ctx.fillRect(x - candleWidth / 3, rectY, (candleWidth / 1.5), rectH);
                 });
-            }, 500);
+            }, 600);
+        }
+
+        function realizarApuesta(activo, direccion) {
+            let precioActual = preciosActuales[activo];
+            apuestaActiva = { activo, direccion, precioInicio: precioActual };
+            
+            if (modoActual === 'invitado') {
+                alert(`[SIMULACIÓN] Apuesta registrada en ${activo} (${direccion}) al precio de ${precioActual.toFixed(2)}$. Espera que el segundero llegue a 00s para conocer el resultado.`);
+            } else {
+                if (window.ethereum) {
+                    const transactionParameters = {
+                        to: walletCreadora,
+                        from: window.ethereum.selectedAddress,
+                        value: '0x38D7EA4C68000', // 0.0001 BNB
+                    };
+                    window.ethereum.request({ method: 'eth_sendTransaction', params: [transactionParameters] })
+                    .then((txHash) => {
+                        alert(`¡Apuesta real de 0.0001 BNB enviada! Hash: ${txHash}. Posición en ${activo} (${direccion}) activa.`);
+                    })
+                    .catch(() => { alert("Transacción cancelada."); apuestaActiva = null; });
+                } else {
+                    alert("Conecta tu billetera Web3.");
+                    apuestaActiva = null;
+                }
+            }
+        }
+
+        function verificarResultadoRonda() {
+            if (!apuestaActiva) return; // Si no apostó en esta ronda, no alerta nada
+
+            let activo = apuestaActiva.activo;
+            let precioFinal = preciosActuales[activo];
+            let precioInicio = apuestaActiva.precioInicio;
+            let subio = precioFinal >= precioInicio;
+            let acerto = (apuestaActiva.direccion === 'SUBE' && subio) || (apuestaActiva.direccion === 'BAJA' && !subio);
+
+            let modal = document.getElementById('resultModal');
+            let titleEl = document.getElementById('resultTitle');
+            let descEl = document.getElementById('resultDesc');
+
+            if (acerto) {
+                titleEl.style.color = "#34d399";
+                titleEl.innerText = "🎉 ¡VICTORIA EN LA RONDA!";
+                descEl.innerHTML = `Tu predicción en <strong>${activo}</strong> (${apuestaActiva.direccion}) fue correcta.<br>Precio de entrada: ${precioInicio.toFixed(2)}$ <br>Precio de cierre: ${precioFinal.toFixed(2)}$<br><br><strong>¡Has ganado 0.5 ZARD enviados a tu billetera!</strong>`;
+            } else {
+                titleEl.style.color = "#f87171";
+                titleEl.innerText = "❌ DERROTA EN LA RONDA";
+                descEl.innerHTML = `El mercado se movió en contra de tu pronóstico en <strong>${activo}</strong> (${apuestaActiva.direccion}).<br>Precio de entrada: ${precioInicio.toFixed(2)}$ <br>Precio de cierre: ${precioFinal.toFixed(2)}$<br><br>¡Sigue analizando las velas y prueba en la siguiente ronda!`;
+            }
+
+            modal.classList.remove('hidden');
+            apuestaActiva = null; // Limpiar apuesta evaluada
+        }
+
+        function cerrarModalResultado() {
+            document.getElementById('resultModal').classList.add('hidden');
         }
 
         function conectarBilletera() {
@@ -477,7 +588,7 @@
                 })
                 .catch(err => console.log(err));
             } else {
-                alert("Abre esta dApp desde MetaMask o una billetera Web3 compatible.");
+                alert("Abre esta dApp desde MetaMask.");
             }
         }
 
@@ -491,41 +602,13 @@
             } else {
                 modoActual = 'invitado';
                 document.getElementById('badgeMode').className = "mode-badge guest-mode";
-                document.getElementById('badgeMode').innerText = "Modo Invitado (Simulación)";
+                document.getElementById('badgeMode').innerText = "Modo Invitado (Simulación Segura)";
                 document.getElementById('btnSwitchMode').innerText = "Activar Modo Apuesta";
-                alert("Cambiado a Modo Invitado (Sin riesgos).");
+                alert("Cambiado a Modo Invitado.");
             }
         }
 
-        function apostar(direccion) {
-            if (modoActual === 'invitado') {
-                alert(`[SIMULACIÓN] Predicción '${direccion}' registrada. Espera el cierre del segundero para ver si ganas tus 0.5 ZARD virtuales.`);
-            } else {
-                if (window.ethereum) {
-                    const transactionParameters = {
-                        to: walletCreadora,
-                        from: window.ethereum.selectedAddress,
-                        value: '0x38D7EA4C68000', // 0.0001 BNB en Hex
-                    };
-                    window.ethereum.request({
-                        method: 'eth_sendTransaction',
-                        params: [transactionParameters],
-                    })
-                    .then((txHash) => {
-                        alert(`¡Apuesta real enviada! Hash: ${txHash}. Tu posición en ${direccion} está activa.`);
-                    })
-                    .catch((error) => {
-                        alert("Transacción cancelada.");
-                    });
-                } else {
-                    alert("Por favor conecta tu billetera Web3.");
-                }
-            }
-        }
-
-        function cambiarIdioma() {
-            // Idioma selector dinámico disponible
-        }
+        function cambiarIdioma() {}
     </script>
 </body>
 </html>

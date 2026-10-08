@@ -82,25 +82,31 @@
         }
         .hidden { display: none !important; }
 
-        /* Fondo espacial silver para contenedores principales */
+        /* Pantalla de bienvenida perfectamente centrada */
+        #screenWelcome {
+            justify-content: center;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Fondo espacial silver brillante y llamativo */
         .silver-space-bg {
             position: relative;
-            background-image: linear-gradient(rgba(10, 5, 20, 0.88), rgba(10, 5, 20, 0.95)), url('https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png');
-            background-size: cover;
-            background-position: center;
-            border: 1px solid #9333ea;
+            background: linear-gradient(rgba(12, 6, 25, 0.78), rgba(8, 4, 18, 0.88)), url('https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png') !important;
+            background-size: cover !important;
+            background-position: center !important;
+            border: 1px solid #a855f7;
             border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 0 30px rgba(147, 51, 234, 0.3);
+            padding: 30px;
+            box-shadow: 0 0 35px rgba(168, 85, 247, 0.4), inset 0 0 20px rgba(216, 180, 254, 0.15);
         }
 
         .floating-logo-container {
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         .floating-logo {
-            width: 75px;
-            height: 75px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             border: 3px solid #a855f7;
             object-fit: cover;
@@ -116,37 +122,37 @@
             background: rgba(18, 10, 32, 0.92);
             border: 2px solid #a855f7;
             border-radius: 16px;
-            padding: 30px;
-            max-width: 750px;
-            margin-top: 10px;
+            padding: 25px 30px;
+            max-width: 720px;
+            width: 100%;
             box-shadow: 0 0 30px rgba(147, 51, 234, 0.5);
         }
         .welcome-card h1 {
-            font-size: 1.7rem;
+            font-size: 1.55rem;
             color: #f3e8ff;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             text-shadow: 0 0 10px #a855f7;
             text-align: center;
         }
         .welcome-desc {
             color: #e9d5ff;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            margin-bottom: 15px;
+            font-size: 0.88rem;
+            line-height: 1.45;
+            margin-bottom: 12px;
             text-align: justify;
         }
         .rules-list-welcome {
             background: rgba(11, 6, 20, 0.85);
             border: 1px solid #7c3aed;
             border-radius: 10px;
-            padding: 12px 18px;
-            margin-bottom: 20px;
-            font-size: 0.8rem;
+            padding: 10px 16px;
+            margin-bottom: 15px;
+            font-size: 0.78rem;
             color: #d8b4fe;
             line-height: 1.4;
         }
         .rules-list-welcome li {
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .btn-action {
@@ -156,7 +162,7 @@
             color: white;
             border: none;
             padding: 12px;
-            font-size: 1.05rem;
+            font-size: 1rem;
             font-weight: bold;
             border-radius: 10px;
             cursor: pointer;
@@ -177,7 +183,6 @@
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Estructura Vertical de las Gráficas (BNB arriba, ZARD abajo) */
         .arena-container {
             display: flex;
             flex-direction: column;
@@ -185,15 +190,11 @@
             width: 100%;
         }
         .card-panel {
-            background: rgba(18, 10, 32, 0.95);
-            border: 1px solid #7c3aed;
             border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
         }
 
         .market-chart-box {
-            background: #06020c;
+            background: rgba(6, 2, 12, 0.75);
             border-radius: 8px;
             border: 1px solid #9333ea;
             position: relative;
@@ -204,7 +205,7 @@
         canvas { width: 100%; height: 100%; display: block; }
 
         .price-big {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: bold;
             color: #34d399;
             text-shadow: 0 0 8px rgba(52, 211, 153, 0.4);
@@ -238,7 +239,7 @@
             max-height: 120px;
             overflow-y: auto;
             font-size: 0.75rem;
-            background: #06020c;
+            background: rgba(6, 2, 12, 0.75);
             border: 1px solid #4a1e7a;
             border-radius: 6px;
             padding: 6px;
@@ -262,8 +263,7 @@
         .guest-mode { background: #d97706; color: #fff; }
         .live-mode { background: #7c3aed; color: #fff; }
 
-        /* Modal de Resultado Transparente */
-        .result-modal {
+        .result-modal, .wallet-modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(5, 2, 10, 0.85);
@@ -280,17 +280,6 @@
             text-align: center;
             max-width: 400px;
             box-shadow: 0 0 40px rgba(168, 85, 247, 0.6);
-        }
-
-        /* Modal de Selección de Billetera (Binance / MetaMask) */
-        .wallet-modal {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(5, 2, 10, 0.85);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1001;
         }
         .wallet-box {
             background: #160c28;
@@ -333,9 +322,8 @@
             <button class="btn-wallet" id="connectWalletBtn" onclick="abrirSelectorBilletera()">Conectar Billetera</button>
         </div>
     </div>
-    
 
-    <!-- Pantalla 1: Bienvenida -->
+    <!-- Pantalla 1: Bienvenida Centrada -->
     <div id="screenWelcome" class="screen">
         <div class="welcome-card silver-space-bg">
             <div class="floating-logo-container">
@@ -366,9 +354,9 @@
         </div>
     </div>
 
-    <!-- Pantalla 3: Arena de Apuestas Estructurada Verticalmente -->
+    <!-- Pantalla 3: Arena de Apuestas Estructurada Verticalmente con Fondo Silver -->
     <div id="screenArena" class="screen hidden">
-        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: rgba(20,10,35,0.8); padding: 10px 15px; border-radius: 10px; border: 1px solid #7c3aed;">
+        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: rgba(20,10,35,0.85); padding: 10px 15px; border-radius: 10px; border: 1px solid #7c3aed;">
             <div>
                 <span id="badgeMode" class="mode-badge guest-mode">Modo Invitado (Simulación Segura)</span>
             </div>
@@ -379,7 +367,7 @@
         </div>
 
         <div class="arena-container">
-            <!-- Arriba: Panel de Apuestas BNB/USD -->
+            <!-- Arriba: Panel de Apuestas BNB/USD con Fondo Silver -->
             <div class="card-panel silver-space-bg">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                     <span style="font-size: 1rem; font-weight: bold; color: #e9d5ff;">📈 BNB/USD Live Chart & Zona de Apuestas</span>
@@ -398,11 +386,11 @@
                 </div>
             </div>
 
-            <!-- Abajo: Panel Analítico ZARD Token (0x973ba2...d38) -->
+            <!-- Abajo: Panel Analítico ZARD Token (0x973ba2...d38) con Fondo Silver -->
             <div class="card-panel silver-space-bg">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                     <span style="font-size: 1rem; font-weight: bold; color: #e9d5ff;">💎 ZARD Token Analytics (0x973b...d38)</span>
-                    <span class="price-big" style="color: #c084fc;" id="priceDisplayZard">0.084 $</span>
+                    <span class="price-big" style="color: #c084fc;" id="priceDisplayZard">0.000060 $</span>
                 </div>
                 <div class="market-chart-box">
                     <canvas id="candleCanvasZard"></canvas>
@@ -415,16 +403,12 @@
         </div>
     </div>
 
-    <!-- Modal de Selección de Billetera (Binance Web3 / MetaMask) -->
+    <!-- Modal de Selección de Billetera -->
     <div id="walletModal" class="wallet-modal hidden">
         <div class="wallet-box">
             <h3 style="color: #e9d5ff; margin-bottom: 15px;">Selecciona tu Billetera Web3</h3>
-            <button class="wallet-option" onclick="conectarInjected('binance')">
-                🟡 Binance Web3 Wallet
-            </button>
-            <button class="wallet-option" onclick="conectarInjected('metamask')">
-                🦊 MetaMask / Injected
-            </button>
+            <button class="wallet-option" onclick="conectarInjected('binance')">🟡 Binance Web3 Wallet</button>
+            <button class="wallet-option" onclick="conectarInjected('metamask')">🦊 MetaMask / Injected</button>
             <button onclick="cerrarSelectorBilletera()" style="background: transparent; border: 1px solid #7c3aed; color: #c084fc; padding: 8px; border-radius: 8px; margin-top: 10px; cursor: pointer; width: 100%;">Cancelar</button>
         </div>
     </div>
@@ -441,19 +425,30 @@
     <script>
         let modoActual = 'invitado';
         const walletCreadora = "0x84f529525fae84b1f1d7ea66939592094426cdc8";
+        
         let timeLeft = 60;
+        let temporizadorActivo = false;
+        let intervaloTimer = null;
         let apuestaActiva = null; 
 
-        // Temporizador de 1 minuto con resolución exacta de resultados
-        setInterval(() => {
-            timeLeft--;
-            if (timeLeft < 0) {
-                verificarResultadoRonda();
-                timeLeft = 60; 
-            }
-            let timerEl = document.getElementById('countdown');
-            if(timerEl) timerEl.innerText = timeLeft;
-        }, 1000);
+        function iniciarTemporizadorRonda() {
+            if (temporizadorActivo) return; // Si ya está corriendo, no duplicar
+            temporizadorActivo = true;
+            timeLeft = 60;
+            
+            document.getElementById('countdown').innerText = timeLeft;
+
+            intervaloTimer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('countdown').innerText = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(intervaloTimer);
+                    temporizadorActivo = false;
+                    verificarResultadoRonda();
+                }
+            }, 1000);
+        }
 
         function iniciarTransicion() {
             document.getElementById('screenWelcome').classList.add('hidden');
@@ -461,8 +456,8 @@
             setTimeout(() => {
                 document.getElementById('screenLoading').classList.add('hidden');
                 document.getElementById('screenArena').classList.remove('hidden');
-                initCanvas('candleCanvasBnb', 614.25, 'priceDisplayBnb', 0.0008);
-                initCanvas('candleCanvasZard', 0.084, 'priceDisplayZard', 0.003);
+                initCanvas('candleCanvasBnb', 614.25, 'priceDisplayBnb', 0.0008, 2);
+                initCanvas('candleCanvasZard', 0.000060, 'priceDisplayZard', 0.002, 6);
                 initOrderBooks();
             }, 4000);
         }
@@ -501,9 +496,9 @@
             }
         }
 
-        let preciosActuales = { BNB: 614.25, ZARD: 0.084 };
+        let preciosActuales = { BNB: 614.25, ZARD: 0.000060 };
 
-        function initCanvas(canvasId, basePrice, priceDisplayId, volatility) {
+        function initCanvas(canvasId, basePrice, priceDisplayId, volatility, decimals) {
             const canvas = document.getElementById(canvasId);
             if(!canvas) return;
             const ctx = canvas.getContext('2d');
@@ -511,18 +506,18 @@
             let candles = [];
             let currentP = basePrice;
 
-            for(let i=0; i<20; i++) {
+            for(let i=0; i<25; i++) {
                 let open = currentP + (Math.random() - 0.5) * (basePrice * volatility);
                 let close = open + (Math.random() - 0.48) * (basePrice * (volatility * 0.9));
-                let high = Math.max(open, close) + Math.random() * (basePrice * (volatility * 0.5));
-                let low = Math.min(open, close) - Math.random() * (basePrice * (volatility * 0.5));
+                let high = Math.max(open, close) + Math.random() * (basePrice * (volatility * 0.4));
+                let low = Math.min(open, close) - Math.random() * (basePrice * (volatility * 0.4));
                 candles.push({open, close, high, low});
                 currentP = close;
             }
 
             setInterval(() => {
                 let last = candles[candles.length - 1];
-                let newClose = last.close + (Math.random() - 0.49) * (basePrice * (volatility * 0.4));
+                let newClose = last.close + (Math.random() - 0.49) * (basePrice * (volatility * 0.35));
                 last.close = newClose;
                 last.high = Math.max(last.high, newClose);
                 last.low = Math.min(last.low, newClose);
@@ -530,7 +525,6 @@
                 let assetKey = canvasId.includes('Bnb') ? 'BNB' : 'ZARD';
                 preciosActuales[assetKey] = newClose;
                 
-                let decimals = assetKey === 'BNB' ? 2 : 4;
                 document.getElementById(priceDisplayId).innerText = newClose.toFixed(decimals) + " $";
 
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -544,24 +538,25 @@
 
                 candles.forEach((c, index) => {
                     let x = index * candleWidth + candleWidth / 2;
-                    let yHigh = canvas.height - ((c.high - minL) / range) * (canvas.height - 20) - 10;
-                    let yLow = canvas.height - ((c.low - minL) / range) * (canvas.height - 20) - 10;
-                    let yOpen = canvas.height - ((c.open - minL) / range) * (canvas.height - 20) - 10;
-                    let yClose = canvas.height - ((c.close - minL) / range) * (canvas.height - 20) - 10;
+                    let yHigh = canvas.height - ((c.high - minL) / range) * (canvas.height - 25) - 12;
+                    let yLow = canvas.height - ((c.low - minL) / range) * (canvas.height - 25) - 12;
+                    let yOpen = canvas.height - ((c.open - minL) / range) * (canvas.height - 25) - 12;
+                    let yClose = canvas.height - ((c.close - minL) / range) * (canvas.height - 25) - 12;
 
                     let isGreen = c.close >= c.open;
                     ctx.strokeStyle = isGreen ? '#34d399' : '#f87171';
                     ctx.fillStyle = isGreen ? '#34d399' : '#f87171';
 
-                    ctx.lineWidth = 1.5;
+                    // Velas estilizadas y delgadas
+                    ctx.lineWidth = 1;
                     ctx.beginPath();
                     ctx.moveTo(x, yHigh);
                     ctx.lineTo(x, yLow);
                     ctx.stroke();
 
                     let rectY = Math.min(yOpen, yClose);
-                    let rectH = Math.max(Math.abs(yClose - yOpen), 2);
-                    ctx.fillRect(x - candleWidth / 3, rectY, (candleWidth / 1.5), rectH);
+                    let rectH = Math.max(Math.abs(yClose - yOpen), 1.5);
+                    ctx.fillRect(x - candleWidth / 4, rectY, (candleWidth / 2), rectH);
                 });
             }, 600);
         }
@@ -570,20 +565,31 @@
             let precioActual = preciosActuales.BNB;
             apuestaActiva = { activo: 'BNB', direccion, precioInicio: precioActual };
             
+            // ¡Disparar el temporizador justo en este momento!
+            iniciarTemporizadorRonda();
+
             if (modoActual === 'invitado') {
-                alert(`[SIMULACIÓN] Apuesta registrada en BNB (${direccion}) al precio de ${precioActual.toFixed(2)}$. Espera que el segundero llegue a 00s para conocer el resultado.`);
+                alert(`[SIMULACIÓN] Apuesta registrada en BNB (${direccion}) al precio de ${precioActual.toFixed(2)}$. ¡El temporizador de 60s ha comenzado a correr!`);
             } else {
                 if (window.ethereum) {
                     const transactionParameters = {
                         to: walletCreadora,
                         from: window.ethereum.selectedAddress,
-                        value: '0x38D7EA4C68000', // 0.0001 BNB
+                        value: '0x38D7EA4C68000', 
                     };
                     window.ethereum.request({ method: 'eth_sendTransaction', params: [transactionParameters] })
                     .then((txHash) => {
-                        alert(`¡Apuesta real de 0.0001 BNB enviada! Hash: ${txHash}. Posición en BNB (${direccion}) activa.`);
+                        alert(`¡Apuesta real de 0.0001 BNB enviada! Hash: ${txHash}. Posición en BNB (${direccion}) activa y temporizador en marcha.`);
                     })
-                    .catch(() => { alert("Transacción cancelada."); apuestaActiva = null; });
+                    .catch(() => { 
+                        alert("Transacción cancelada."); 
+                        apuestaActiva = null; 
+                        // Detener reloj si cancela
+                        clearInterval(intervaloTimer);
+                        temporizadorActivo = false;
+                        timeLeft = 60;
+                        document.getElementById('countdown').innerText = timeLeft;
+                    });
                 } else {
                     alert("Conecta tu billetera Web3.");
                     apuestaActiva = null;
@@ -615,6 +621,10 @@
 
             modal.classList.remove('hidden');
             apuestaActiva = null; 
+            
+            // Reiniciar display del reloj para la próxima apuesta
+            timeLeft = 60;
+            document.getElementById('countdown').innerText = timeLeft;
         }
 
         function cerrarModalResultado() {

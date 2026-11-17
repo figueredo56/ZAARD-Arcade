@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>ZAARD MEMORY ARCADE - Protocolo Panga & Fénix</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
@@ -24,35 +24,32 @@
         }
 
         /* ----------------------------------------------------------------- */
-        /* CORRECCIÓN ABSOLUTA DE TAMAÑO: ESCALADO AUTOMÁTICO EN PANTALLA    */
+        /* CORRECCIÓN DEFINITIVA DE PANTALLA COMPLETA Y ZOOM PERMITIDO       */
         /* ----------------------------------------------------------------- */
         html, body {
             margin: 0;
             padding: 0;
-            width: 100vw;
-            height: 100vh;
-            background: #05020d;
-            overflow: hidden;
+            width: 100%;
+            min-height: 100vh;
+            background: #05020d url('https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png') no-repeat center center fixed;
+            background-size: cover;
             font-family: 'Rajdhani', sans-serif;
             color: #fff;
-            touch-action: none;
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow-x: hidden;
         }
 
-        /* Contenedor principal que se adapta al 100% sin requerir zoom manual */
+        /* Eliminamos el recuadro forzado y adaptamos al 100% real de la pantalla */
         #game-viewport {
             position: relative;
-            width: 100vw;
-            height: 100vh;
-            max-width: 480px;
-            max-height: 850px;
+            width: 100%;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            box-shadow: 0 0 50px rgba(0, 242, 254, 0.25);
         }
 
         #loading-screen {
@@ -84,11 +81,11 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Fondos Cósmicos con Fénix Ciberespacial */
+        /* Fondos Cósmicos con la imagen solicitada para Bienvenida */
         .fondo-cosmico {
-            position: absolute;
+            position: fixed;
             inset: 0;
-            background: linear-gradient(135deg, rgba(20, 5, 45, 0.88) 0%, rgba(5, 2, 15, 0.95) 100%),
+            background: linear-gradient(135deg, rgba(20, 5, 45, 0.82) 0%, rgba(5, 2, 15, 0.92) 100%),
                         url('https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png');
             background-size: cover;
             background-position: center;
@@ -97,17 +94,9 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 16px;
+            padding: 20px;
             overflow-y: auto;
             transition: opacity 0.4s ease;
-        }
-
-        .fondo-cosmico::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at center, rgba(255, 109, 0, 0.2) 0%, rgba(157, 78, 221, 0.15) 50%, rgba(5, 2, 15, 0.9) 100%);
-            pointer-events: none;
         }
 
         .fondo-cosmico.oculto {
@@ -116,21 +105,20 @@
             display: none;
         }
 
-        /* Tarjeta Principal legible y adaptada a cualquier pantalla */
+        /* Tarjeta Principal Totalmente Legible y Adaptada para Móvil y PC */
         .modal-card {
             position: relative;
-            background: linear-gradient(145deg, rgba(22, 10, 48, 0.92) 0%, rgba(10, 5, 24, 0.96) 100%);
+            background: linear-gradient(145deg, rgba(22, 10, 48, 0.94) 0%, rgba(10, 5, 24, 0.98) 100%);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 2.5px solid var(--orange);
             border-radius: 22px;
-            padding: 22px 18px;
+            padding: 24px 20px;
             width: 100%;
-            max-width: 420px;
-            max-height: 92vh;
-            overflow-y: auto;
+            max-width: 480px;
+            margin: auto;
             text-align: center;
-            box-shadow: 0 0 35px rgba(255, 109, 0, 0.4), inset 0 0 20px rgba(0, 242, 254, 0.2);
+            box-shadow: 0 0 40px rgba(255, 109, 0, 0.45), inset 0 0 20px rgba(0, 242, 254, 0.2);
             animation: borderGlowPulse 4s infinite alternate;
             z-index: 2;
         }
@@ -144,9 +132,9 @@
         /* Logo Fénix Flotante en Bienvenida */
         .fenix-flotante-container {
             position: relative;
-            width: 85px;
-            height: 85px;
-            margin: 0 auto 10px auto;
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 12px auto;
         }
 
         .fenix-flotante-container img {
@@ -166,22 +154,22 @@
 
         .badge-top {
             display: inline-block;
-            padding: 3px 12px;
+            padding: 4px 14px;
             border-radius: 20px;
             background: rgba(255, 109, 0, 0.15);
             border: 1px solid rgba(255, 109, 0, 0.5);
             color: var(--orange);
             font-family: 'Orbitron', sans-serif;
-            font-size: 10px;
+            font-size: 11px;
             letter-spacing: 2px;
             margin-bottom: 8px;
         }
 
         .titulo-impacto {
             font-family: 'Orbitron', sans-serif;
-            font-size: 21px;
+            font-size: 23px;
             font-weight: 900;
-            margin: 0 0 4px 0;
+            margin: 0 0 6px 0;
             background: linear-gradient(90deg, #ff6d00, #ff2a6d, #00f2fe);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -190,29 +178,29 @@
 
         .subtitulo-impacto {
             font-family: 'Orbitron', sans-serif;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 700;
             color: #e0aaff;
-            margin: 0 0 12px 0;
+            margin: 0 0 14px 0;
         }
 
         .reglas-box {
             background: rgba(10, 16, 34, 0.85);
             border: 1px solid rgba(255, 109, 0, 0.4);
             border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 14px;
+            padding: 14px;
+            margin-bottom: 16px;
             text-align: left;
-            font-size: 13px;
-            line-height: 1.4;
+            font-size: 14px;
+            line-height: 1.5;
             color: #e2e8f0;
         }
 
         .reglas-box h4 {
             font-family: 'Orbitron', sans-serif;
             color: var(--gold);
-            font-size: 11px;
-            margin: 0 0 6px 0;
+            font-size: 12px;
+            margin: 0 0 8px 0;
             text-align: center;
             letter-spacing: 1px;
         }
@@ -220,16 +208,16 @@
         .reglas-item {
             display: flex;
             align-items: flex-start;
-            gap: 6px;
-            margin-bottom: 5px;
+            gap: 8px;
+            margin-bottom: 6px;
         }
 
         /* Selector de Tokens Grid 2x2 */
         .tokens-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 12px;
+            gap: 10px;
+            margin-bottom: 14px;
         }
 
         .token-card {
@@ -237,13 +225,13 @@
             background: rgba(18, 12, 42, 0.9);
             border: 2px solid rgba(255, 255, 255, 0.12);
             border-radius: 12px;
-            padding: 10px 6px;
+            padding: 12px 8px;
             cursor: pointer;
             transition: all 0.25s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
         }
 
         .token-card:hover {
@@ -265,15 +253,15 @@
             background: var(--orange);
             color: #fff;
             font-family: 'Orbitron', sans-serif;
-            font-size: 8px;
+            font-size: 9px;
             font-weight: 900;
-            padding: 2px 5px;
+            padding: 2px 6px;
             border-radius: 5px;
         }
 
         .token-card img {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--orange);
@@ -282,19 +270,19 @@
 
         .token-card .t-name {
             font-family: 'Orbitron', sans-serif;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 700;
             color: #fff;
         }
 
         .token-card .t-reward {
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
             color: var(--green);
         }
 
         .token-card .t-ca {
-            font-size: 9px;
+            font-size: 10px;
             color: #94a3b8;
             font-family: monospace;
         }
@@ -303,9 +291,9 @@
             background: rgba(255, 109, 0, 0.08);
             border: 1px dashed var(--orange);
             border-radius: 10px;
-            padding: 8px;
-            margin-bottom: 12px;
-            font-size: 12px;
+            padding: 10px;
+            margin-bottom: 14px;
+            font-size: 13px;
             color: #cbd5e1;
         }
 
@@ -315,13 +303,13 @@
 
         .btn-accion {
             width: 100%;
-            padding: 12px 14px;
-            margin: 6px 0;
+            padding: 14px 16px;
+            margin: 7px 0;
             border: none;
             border-radius: 10px;
             font-family: 'Orbitron', sans-serif;
             font-weight: 700;
-            font-size: 12px;
+            font-size: 13px;
             letter-spacing: 0.8px;
             cursor: pointer;
             text-transform: uppercase;
@@ -365,10 +353,10 @@
         }
 
         #status-tx {
-            font-size: 11px;
+            font-size: 12px;
             color: var(--green);
-            margin-top: 6px;
-            min-height: 16px;
+            margin-top: 8px;
+            min-height: 18px;
             font-weight: bold;
         }
     </style>
@@ -384,7 +372,6 @@
     <!-- 1. PANTALLA DE BIENVENIDA -->
     <div id="pantalla-bienvenida" class="fondo-cosmico">
         <div class="modal-card">
-            <!-- Imagen Fénix Flotante Solicitada -->
             <div class="fenix-flotante-container">
                 <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790285851823-4955b8f5511ea8235af22dfb82371c91.png" alt="Fénix Zaard">
             </div>
@@ -471,7 +458,7 @@
     // =========================================================================
     // CONFIGURACIÓN DE TOKENS Y BILLETERA CREADORA
     // =========================================================================
-    const CREATOR_WALLET = "0x0000000000000000000000000000000000000000"; // Reemplazar con tu billetera
+    const CREATOR_WALLET = "0x0000000000000000000000000000000000000000"; 
     const ENTRY_FEE_BNB = "0.0001";
     const REWARD_AMOUNT = "0.001";
 
@@ -492,7 +479,7 @@
     let audioCtx = null;
 
     // =========================================================================
-    // SISTEMA DE AUDIO SINTETIZADO CON EFECTOS "BOOM" Y "TULUM" (FALLO)
+    // SISTEMA DE AUDIO ESTILO MARIO BROS (MONEDA/SALTO) + BOOM Y TULUM
     // =========================================================================
     function initAudioContext() {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -506,17 +493,18 @@
             const now = audioCtx.currentTime;
 
             if (tipo === 'click') {
+                // Sonido clásico tipo salto/moneda de Mario Bros (Biiip ascendente limpio)
                 let osc = audioCtx.createOscillator();
                 let gain = audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(450, now);
-                osc.frequency.exponentialRampToValueAtTime(800, now + 0.06);
-                gain.gain.setValueAtTime(0.1, now);
-                gain.gain.linearRampToValueAtTime(0.01, now + 0.07);
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(987.77, now); // Nota B5
+                osc.frequency.setValueAtTime(1318.51, now + 0.08); // Nota E6
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.15);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
                 osc.start(now);
-                osc.stop(now + 0.07);
+                osc.stop(now + 0.15);
             } else if (tipo === 'boom') {
                 // EFECTO BOOM PODEROSO AL ACERTAR LAS CARTAS
                 let osc = audioCtx.createOscillator();
@@ -531,7 +519,6 @@
                 osc.start(now);
                 osc.stop(now + 0.35);
 
-                // Brillo metálico armónico en el boom
                 [523.25, 659.25, 1046.50].forEach((freq, idx) => {
                     let t = now + idx * 0.05;
                     let o = audioCtx.createOscillator();
@@ -714,7 +701,7 @@
     }
 
     // =========================================================================
-    // MOTOR GRÁFICO PHASER 3 SIN CÍRCULO CENTRAL + FONDO FÉNIX CIBERESPACIAL
+    // MOTOR GRÁFICO PHASER 3 CON LOGO DINÁMICO DEL TOKEN EN EL HUD Y FONDO FÉNIX
     // =========================================================================
     function generarTexturasProcedurales(scene) {
         if (!scene.textures.exists('dorso_holo')) {
@@ -788,9 +775,7 @@
                     Object.keys(ECOSYSTEM_TOKENS).forEach(sym => {
                         this.load.image('logo_' + sym, ECOSYSTEM_TOKENS[sym].logo);
                     });
-                    // Cargamos el fondo de Fénix y el logo flotante para el juego
                     this.load.image('bgFenix', 'https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png');
-                    this.load.image('fenixAvatar', 'https://photos.pinksale.finance/file/pinksale-logo-upload/1790285851823-4955b8f5511ea8235af22dfb82371c91.png');
                 },
                 create: function () {
                     const sceneRef = this;
@@ -800,19 +785,19 @@
                     this.bloqueado = false;
                     this.primeraCarta = null;
 
-                    // Fondo de Fénix Ciberespacial (Sin círculo central, limpio y con llamas dinámicas)
-                    let bg = this.add.image(240, 400, 'bgFenix').setDisplaySize(480, 800).setAlpha(0.45);
+                    // Fondo Fénix Ciberespacial nítido sin círculos extraños
+                    let bg = this.add.image(240, 400, 'bgFenix').setDisplaySize(480, 800).setAlpha(0.5);
                     this.tweens.add({
                         targets: bg,
-                        alpha: 0.6,
-                        scaleX: 1.05,
-                        scaleY: 1.05,
+                        alpha: 0.65,
+                        scaleX: 1.04,
+                        scaleY: 1.04,
                         duration: 4000,
                         yoyo: true,
                         repeat: -1
                     });
 
-                    // Chispas de fuego estelares flotando en el juego
+                    // Chispas de fuego estelares flotantes
                     for (let i = 0; i < 35; i++) {
                         let sx = Phaser.Math.Between(10, 470);
                         let sy = Phaser.Math.Between(10, 790);
@@ -827,7 +812,7 @@
                         });
                     }
 
-                    // Emisor de partículas llameantes (Chispas calidad superior)
+                    // Emisor de partículas llameantes
                     this.emitter = this.add.particles('spark_tex').createEmitter({
                         speed: { min: 80, max: 240 },
                         scale: { start: 0.7, end: 0 },
@@ -837,21 +822,22 @@
                         on: false
                     });
 
-                    // --- MARCADOR SUPERIOR DE OTRO NIVEL (LLAMATIVO Y ÚNICO) ---
+                    // --- MARCADOR SUPERIOR LLAMATIVO Y ÚNICO (CON LOGO DE LA MONEDA ELEGIDA) ---
                     let panelGlow = this.add.graphics();
-                    panelGlow.fillStyle(0xff6d00, 0.2);
+                    panelGlow.fillStyle(0xff6d00, 0.25);
                     panelGlow.fillRoundedRect(14, 12, 452, 96, 18);
 
                     let panelBg = this.add.graphics();
-                    panelBg.fillStyle(0x0a0418, 0.94);
-                    panelBg.lineStyle(2.5, 0xff8500, 0.9);
+                    panelBg.fillStyle(0x0a0418, 0.95);
+                    panelBg.lineStyle(2.5, 0xff8500, 0.95);
                     panelBg.fillRoundedRect(16, 14, 448, 92, 16);
                     panelBg.strokeRoundedRect(16, 14, 448, 92, 16);
 
-                    // Logo Fénix en el HUD Superior con pulso de llamas
-                    let hudFenix = this.add.image(58, 60, 'fenixAvatar').setDisplaySize(54, 54);
+                    // LOGO DINÁMICO DE LA MONEDA ELEGIDA EN LA CABECERA IZQUIERDA
+                    const hudLogoKey = 'logo_' + tokenElegido;
+                    let hudTokenLogo = this.add.image(58, 60, hudLogoKey).setDisplaySize(54, 54);
                     this.tweens.add({
-                        targets: hudFenix,
+                        targets: hudTokenLogo,
                         scaleX: 1.08,
                         scaleY: 1.08,
                         duration: 1200,
@@ -860,13 +846,13 @@
                     });
 
                     let avatarRing = this.add.graphics();
-                    avatarRing.lineStyle(2.5, 0xff8500, 1);
+                    avatarRing.lineStyle(2.5, ECOSYSTEM_TOKENS[tokenElegido].color, 1);
                     avatarRing.strokeCircle(58, 60, 29);
 
-                    // Títulos del HUD
-                    this.add.text(104, 24, "🔥 PROTOCOLO FÉNIX", { fontFamily: 'Orbitron', fontSize: '14px', color: '#ff9e00', fontStyle: 'bold' });
-                    this.add.text(104, 46, `${tokenElegido} • ${esModoApuesta ? 'MODO APUESTA' : 'MODO INVITADO'}`, { fontFamily: 'Rajdhani', fontSize: '13px', color: '#00f2fe', fontStyle: 'bold' });
-                    this.txtNivel = this.add.text(104, 68, `NIVEL ${nivelActual} / 10`, { fontFamily: 'Orbitron', fontSize: '13px', color: '#e0aaff', fontStyle: 'bold' });
+                    // Títulos del HUD optimizados y súper visibles
+                    this.add.text(104, 22, "🔥 PROTOCOLO FÉNIX", { fontFamily: 'Orbitron', fontSize: '14px', color: '#ff9e00', fontStyle: 'bold' });
+                    this.add.text(104, 44, `${tokenElegido} • ${esModoApuesta ? 'MODO APUESTA' : 'MODO INVITADO'}`, { fontFamily: 'Rajdhani', fontSize: '13px', color: '#00f2fe', fontStyle: 'bold' });
+                    this.txtNivel = this.add.text(104, 66, `NIVEL ${nivelActual} / 10`, { fontFamily: 'Orbitron', fontSize: '13px', color: '#e0aaff', fontStyle: 'bold' });
 
                     this.txtVidas = this.add.text(444, 25, `❤️ ${this.vidas}`, { fontFamily: 'Orbitron', fontSize: '16px', color: '#ff2a6d', fontStyle: 'bold' }).setOrigin(1, 0);
 
@@ -922,6 +908,7 @@
 
                             carta.on('pointerdown', () => {
                                 if (sceneRef.bloqueado || carta.revelada || carta.animando || carta === sceneRef.primeraCarta) return;
+                                // Sonido estilo Mario Bros al tocar carta
                                 reproducirSonidoRetro('click');
                                 carta.animando = true;
 

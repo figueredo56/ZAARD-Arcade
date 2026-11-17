@@ -23,9 +23,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* ----------------------------------------------------------------- */
-        /* ADAPTACIÓN TOTAL Y PERFECTA A PANTALLA MÓVIL Y PC                 */
-        /* ----------------------------------------------------------------- */
         html, body {
             margin: 0;
             padding: 0;
@@ -80,7 +77,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Pantallas de Bienvenida y Selección con el Fondo Solicitado y Transparencia Óptima */
         .fondo-cosmico {
             position: fixed;
             inset: 0;
@@ -104,7 +100,6 @@
             display: none;
         }
 
-        /* Tarjeta Principal Más Grande, Espaciosa y Con Transparencia Elegante */
         .modal-card {
             position: relative;
             background: linear-gradient(145deg, rgba(22, 10, 48, 0.78) 0%, rgba(10, 5, 24, 0.85) 100%);
@@ -452,9 +447,6 @@
 </div>
 
 <script>
-    // =========================================================================
-    // CONFIGURACIÓN DE TOKENS Y BILLETERA CREADORA
-    // =========================================================================
     const CREATOR_WALLET = "0x0000000000000000000000000000000000000000"; 
     const ENTRY_FEE_BNB = "0.0001";
     const REWARD_AMOUNT = "0.001";
@@ -475,9 +467,6 @@
     let txHashApuesta = null;
     let audioCtx = null;
 
-    // =========================================================================
-    // SISTEMA DE AUDIO ESTILO MARIO BROS + EFECTOS BOOM Y TULUM
-    // =========================================================================
     function initAudioContext() {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -573,8 +562,9 @@
 
     window.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
-            document.getElementById('loading-screen').style.display = 'none';
-        }, 400);
+            const screen = document.getElementById('loading-screen');
+            if (screen) screen.style.display = 'none';
+        }, 500);
     });
 
     function irASeleccionModo() {
@@ -694,9 +684,6 @@
         volverAlMenuSeleccion();
     }
 
-    // =========================================================================
-    // MOTOR GRÁFICO PHASER 3 (SIN CUADROS MOLESTOS Y CON DESTELLOS DE LUZ)
-    // =========================================================================
     function generarTexturasProcedurales(scene) {
         if (!scene.textures.exists('dorso_holo')) {
             let g = scene.make.graphics({ x: 0, y: 0, add: false });
@@ -770,7 +757,6 @@
                         this.load.image('logo_' + sym, ECOSYSTEM_TOKENS[sym].logo);
                     });
                     this.load.image('bgFenix', 'https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png');
-                    // Cargamos la imagen solicitada para el marcador superior izquierdo (9ffaade2...)
                     this.load.image('logoHeader', 'https://photos.pinksale.finance/file/pinksale-logo-upload/1790286389131-9ffaade2f1b5bc4c51858adc8fdf4bd4.png');
                 },
                 create: function () {
@@ -781,10 +767,8 @@
                     this.bloqueado = false;
                     this.primeraCarta = null;
 
-                    // Fondo de Fénix limpio en el juego
                     let bg = this.add.image(240, 400, 'bgFenix').setDisplaySize(480, 800).setAlpha(0.6);
 
-                    // Destellos de luz y chispas de fuego flotando por el espacio
                     for (let i = 0; i < 45; i++) {
                         let sx = Phaser.Math.Between(10, 470);
                         let sy = Phaser.Math.Between(10, 790);
@@ -800,7 +784,6 @@
                         });
                     }
 
-                    // Emisor de partículas llameantes
                     this.emitter = this.add.particles('spark_tex').createEmitter({
                         speed: { min: 80, max: 240 },
                         scale: { start: 0.7, end: 0 },
@@ -810,14 +793,12 @@
                         on: false
                     });
 
-                    // --- MARCADOR SUPERIOR CON LA IMAGEN SOLICITADA A LA IZQUIERDA ---
                     let panelBg = this.add.graphics();
                     panelBg.fillStyle(0x0a0418, 0.88);
                     panelBg.lineStyle(2.5, 0xff8500, 0.95);
                     panelBg.fillRoundedRect(16, 14, 448, 92, 16);
                     panelBg.strokeRoundedRect(16, 14, 448, 92, 16);
 
-                    // Imagen solicitada en la esquina superior izquierda del marcador (9ffaade2...)
                     let headerLogo = this.add.image(58, 60, 'logoHeader').setDisplaySize(54, 54);
                     this.tweens.add({
                         targets: headerLogo,
@@ -832,7 +813,6 @@
                     avatarRing.lineStyle(2.5, ECOSYSTEM_TOKENS[tokenElegido].color, 1);
                     avatarRing.strokeCircle(58, 60, 29);
 
-                    // Textos del HUD
                     this.add.text(104, 22, "🔥 PROTOCOLO FÉNIX", { fontFamily: 'Orbitron', fontSize: '14px', color: '#ff9e00', fontStyle: 'bold' });
                     this.add.text(104, 44, `${tokenElegido} • ${esModoApuesta ? 'MODO APUESTA' : 'MODO INVITADO'}`, { fontFamily: 'Rajdhani', fontSize: '13px', color: '#00f2fe', fontStyle: 'bold' });
                     this.txtNivel = this.add.text(104, 66, `NIVEL ${nivelActual} / 10`, { fontFamily: 'Orbitron', fontSize: '13px', color: '#e0aaff', fontStyle: 'bold' });
@@ -842,7 +822,6 @@
                     let btnMenu = this.add.text(444, 66, "SALIR", { fontFamily: 'Orbitron', fontSize: '11px', color: '#38bdf8', fontStyle: 'bold' }).setOrigin(1, 0).setInteractive({ useHandCursor: true });
                     btnMenu.on('pointerdown', volverAlMenuSeleccion);
 
-                    // --- CONSTRUCCIÓN DEL TABLERO DE CARTAS ---
                     function obtenerTexturaCarta(val) {
                         const logosKeys = ['logo_ZARD', 'logo_PANGA', 'logo_ZARED', 'logo_ZYM'];
                         if (val < 4 && sceneRef.textures.exists(logosKeys[val]) && sceneRef.textures.get(logosKeys[val]).key !== '__MISSING') {
@@ -976,7 +955,7 @@
                                     [primera, carta].forEach(c => {
                                         sceneRef.tweens.add({
                                             targets: c,
-                               5             scaleX: 0,
+                                            scaleX: 0,
                                             duration: 100,
                                             onComplete: () => {
                                                 c.setTexture('dorso_holo');

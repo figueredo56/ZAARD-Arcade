@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZAARD MEMORY ARCADE - Protocolo Panga</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <title>ZAARD MEMORY ARCADE - Protocolo Panga & Fénix</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
     <style>
@@ -14,7 +14,7 @@
             --purple: #9d4edd;
             --pink: #ff2a6d;
             --green: #00ffcc;
-            --dark-bg: #05020d;
+            --orange: #ff6d00;
         }
 
         * {
@@ -23,10 +23,15 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        body {
+        /* ----------------------------------------------------------------- */
+        /* CORRECCIÓN ABSOLUTA DE TAMAÑO: ESCALADO AUTOMÁTICO EN PANTALLA    */
+        /* ----------------------------------------------------------------- */
+        html, body {
             margin: 0;
             padding: 0;
-            background: var(--dark-bg);
+            width: 100vw;
+            height: 100vh;
+            background: #05020d;
             overflow: hidden;
             font-family: 'Rajdhani', sans-serif;
             color: #fff;
@@ -34,11 +39,22 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            width: 100vw;
         }
 
-        /* Pantalla de Carga */
+        /* Contenedor principal que se adapta al 100% sin requerir zoom manual */
+        #game-viewport {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            max-width: 480px;
+            max-height: 850px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0, 242, 254, 0.25);
+        }
+
         #loading-screen {
             position: fixed;
             inset: 0;
@@ -59,23 +75,23 @@
             height: 64px;
             border-radius: 50%;
             border: 3px dashed var(--cyan);
-            border-top-color: var(--gold);
+            border-top-color: var(--orange);
             animation: spinLoader 1.5s linear infinite;
-            box-shadow: 0 0 25px rgba(0, 242, 254, 0.5);
+            box-shadow: 0 0 25px rgba(255, 109, 0, 0.6);
         }
 
         @keyframes spinLoader {
             100% { transform: rotate(360deg); }
         }
 
-        /* Fondos Cósmicos Animados */
+        /* Fondos Cósmicos con Fénix Ciberespacial */
         .fondo-cosmico {
-            position: fixed;
+            position: absolute;
             inset: 0;
-            background:
-                radial-gradient(circle at 20% 20%, rgba(157, 78, 221, 0.35) 0%, transparent 45%),
-                radial-gradient(circle at 80% 80%, rgba(0, 242, 254, 0.25) 0%, transparent 45%),
-                linear-gradient(135deg, rgba(20, 5, 45, 0.92) 0%, rgba(5, 2, 15, 0.98) 100%);
+            background: linear-gradient(135deg, rgba(20, 5, 45, 0.88) 0%, rgba(5, 2, 15, 0.95) 100%),
+                        url('https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png');
+            background-size: cover;
+            background-position: center;
             z-index: 999;
             display: flex;
             flex-direction: column;
@@ -90,13 +106,7 @@
             content: "";
             position: absolute;
             inset: 0;
-            background-image:
-                radial-gradient(1.5px 1.5px at 25px 35px, #ffffff, transparent),
-                radial-gradient(2px 2px at 110px 140px, #00f2fe, transparent),
-                radial-gradient(1.5px 1.5px at 220px 80px, #f3ba2f, transparent),
-                radial-gradient(2px 2px at 310px 260px, #c77dff, transparent);
-            background-size: 350px 350px;
-            opacity: 0.5;
+            background: radial-gradient(circle at center, rgba(255, 109, 0, 0.2) 0%, rgba(157, 78, 221, 0.15) 50%, rgba(5, 2, 15, 0.9) 100%);
             pointer-events: none;
         }
 
@@ -106,50 +116,73 @@
             display: none;
         }
 
-        /* Tarjeta Principal */
+        /* Tarjeta Principal legible y adaptada a cualquier pantalla */
         .modal-card {
             position: relative;
-            background: linear-gradient(145deg, rgba(22, 10, 48, 0.9) 0%, rgba(10, 5, 24, 0.95) 100%);
+            background: linear-gradient(145deg, rgba(22, 10, 48, 0.92) 0%, rgba(10, 5, 24, 0.96) 100%);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 2px solid var(--cyan);
-            border-radius: 24px;
-            padding: 26px 22px;
+            border: 2.5px solid var(--orange);
+            border-radius: 22px;
+            padding: 22px 18px;
             width: 100%;
-            max-width: 450px;
-            max-height: 94vh;
+            max-width: 420px;
+            max-height: 92vh;
             overflow-y: auto;
             text-align: center;
-            box-shadow: 0 0 40px rgba(0, 242, 254, 0.35), inset 0 0 20px rgba(157, 78, 221, 0.25);
+            box-shadow: 0 0 35px rgba(255, 109, 0, 0.4), inset 0 0 20px rgba(0, 242, 254, 0.2);
             animation: borderGlowPulse 4s infinite alternate;
             z-index: 2;
         }
 
         @keyframes borderGlowPulse {
-            0% { border-color: var(--cyan); box-shadow: 0 0 30px rgba(0, 242, 254, 0.4); }
-            50% { border-color: var(--purple); box-shadow: 0 0 35px rgba(157, 78, 221, 0.55); }
-            100% { border-color: var(--gold); box-shadow: 0 0 30px rgba(243, 186, 47, 0.45); }
+            0% { border-color: var(--orange); box-shadow: 0 0 25px rgba(255, 109, 0, 0.4); }
+            50% { border-color: var(--cyan); box-shadow: 0 0 35px rgba(0, 242, 254, 0.55); }
+            100% { border-color: var(--purple); box-shadow: 0 0 30px rgba(157, 78, 221, 0.45); }
+        }
+
+        /* Logo Fénix Flotante en Bienvenida */
+        .fenix-flotante-container {
+            position: relative;
+            width: 85px;
+            height: 85px;
+            margin: 0 auto 10px auto;
+        }
+
+        .fenix-flotante-container img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2.5px solid var(--orange);
+            box-shadow: 0 0 25px rgba(255, 109, 0, 0.8), 0 0 45px rgba(0, 242, 254, 0.5);
+            animation: fenixFloat 3s infinite ease-in-out;
+        }
+
+        @keyframes fenixFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-7px) scale(1.05); }
         }
 
         .badge-top {
             display: inline-block;
-            padding: 4px 14px;
+            padding: 3px 12px;
             border-radius: 20px;
-            background: rgba(0, 242, 254, 0.12);
-            border: 1px solid rgba(0, 242, 254, 0.4);
-            color: var(--cyan);
+            background: rgba(255, 109, 0, 0.15);
+            border: 1px solid rgba(255, 109, 0, 0.5);
+            color: var(--orange);
             font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
+            font-size: 10px;
             letter-spacing: 2px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .titulo-impacto {
             font-family: 'Orbitron', sans-serif;
-            font-size: 24px;
+            font-size: 21px;
             font-weight: 900;
-            margin: 0 0 6px 0;
-            background: linear-gradient(90deg, #00f2fe, #ffffff, #f3ba2f);
+            margin: 0 0 4px 0;
+            background: linear-gradient(90deg, #ff6d00, #ff2a6d, #00f2fe);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: 1px;
@@ -157,30 +190,29 @@
 
         .subtitulo-impacto {
             font-family: 'Orbitron', sans-serif;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             color: #e0aaff;
-            margin: 0 0 14px 0;
+            margin: 0 0 12px 0;
         }
 
-        /* Caja de Reglas de Apuesta */
         .reglas-box {
             background: rgba(10, 16, 34, 0.85);
-            border: 1px solid rgba(243, 186, 47, 0.4);
-            border-radius: 14px;
-            padding: 14px;
-            margin-bottom: 18px;
+            border: 1px solid rgba(255, 109, 0, 0.4);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 14px;
             text-align: left;
-            font-size: 14px;
-            line-height: 1.45;
+            font-size: 13px;
+            line-height: 1.4;
             color: #e2e8f0;
         }
 
         .reglas-box h4 {
             font-family: 'Orbitron', sans-serif;
             color: var(--gold);
-            font-size: 12px;
-            margin: 0 0 8px 0;
+            font-size: 11px;
+            margin: 0 0 6px 0;
             text-align: center;
             letter-spacing: 1px;
         }
@@ -188,97 +220,92 @@
         .reglas-item {
             display: flex;
             align-items: flex-start;
-            gap: 8px;
-            margin-bottom: 6px;
+            gap: 6px;
+            margin-bottom: 5px;
         }
 
-        .reglas-item span.icon {
-            font-size: 15px;
-        }
-
-        /* Selector de Tokens en Grid 2x2 */
+        /* Selector de Tokens Grid 2x2 */
         .tokens-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 16px;
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
         .token-card {
             position: relative;
             background: rgba(18, 12, 42, 0.9);
             border: 2px solid rgba(255, 255, 255, 0.12);
-            border-radius: 14px;
-            padding: 12px 8px;
+            border-radius: 12px;
+            padding: 10px 6px;
             cursor: pointer;
             transition: all 0.25s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
         }
 
         .token-card:hover {
             transform: translateY(-2px);
-            border-color: rgba(0, 242, 254, 0.5);
+            border-color: rgba(255, 109, 0, 0.6);
         }
 
         .token-card.selected {
-            border-color: var(--gold);
-            background: linear-gradient(145deg, rgba(243, 186, 47, 0.18), rgba(157, 78, 221, 0.25));
-            box-shadow: 0 0 20px rgba(243, 186, 47, 0.45);
+            border-color: var(--orange);
+            background: linear-gradient(145deg, rgba(255, 109, 0, 0.22), rgba(157, 78, 221, 0.25));
+            box-shadow: 0 0 18px rgba(255, 109, 0, 0.5);
         }
 
         .token-card.selected::after {
             content: "✓ ELEGIDO";
             position: absolute;
-            top: -8px;
-            right: 8px;
-            background: var(--gold);
-            color: #000;
+            top: -7px;
+            right: 6px;
+            background: var(--orange);
+            color: #fff;
             font-family: 'Orbitron', sans-serif;
-            font-size: 9px;
+            font-size: 8px;
             font-weight: 900;
-            padding: 2px 6px;
-            border-radius: 6px;
+            padding: 2px 5px;
+            border-radius: 5px;
         }
 
         .token-card img {
-            width: 46px;
-            height: 46px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid var(--cyan);
-            box-shadow: 0 0 12px rgba(0, 242, 254, 0.4);
+            border: 2px solid var(--orange);
+            box-shadow: 0 0 10px rgba(255, 109, 0, 0.5);
         }
 
         .token-card .t-name {
             font-family: 'Orbitron', sans-serif;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             color: #fff;
         }
 
         .token-card .t-reward {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             color: var(--green);
         }
 
         .token-card .t-ca {
-            font-size: 10px;
+            font-size: 9px;
             color: #94a3b8;
             font-family: monospace;
         }
 
-        /* Caja Resumen de Apuesta */
         .resumen-apuesta {
-            background: rgba(0, 242, 254, 0.08);
-            border: 1px dashed var(--cyan);
-            border-radius: 12px;
-            padding: 10px;
-            margin-bottom: 16px;
-            font-size: 13px;
+            background: rgba(255, 109, 0, 0.08);
+            border: 1px dashed var(--orange);
+            border-radius: 10px;
+            padding: 8px;
+            margin-bottom: 12px;
+            font-size: 12px;
             color: #cbd5e1;
         }
 
@@ -286,16 +313,15 @@
             color: var(--gold);
         }
 
-        /* Botones */
         .btn-accion {
             width: 100%;
-            padding: 13px 16px;
-            margin: 7px 0;
+            padding: 12px 14px;
+            margin: 6px 0;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-family: 'Orbitron', sans-serif;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 12px;
             letter-spacing: 0.8px;
             cursor: pointer;
             text-transform: uppercase;
@@ -313,23 +339,23 @@
         }
 
         .btn-aceptar {
-            background: linear-gradient(90deg, #9d4edd, #00f2fe);
+            background: linear-gradient(90deg, #ff6d00, #ff2a6d);
             color: #fff;
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.45);
+            box-shadow: 0 0 20px rgba(255, 109, 0, 0.5);
         }
 
         .btn-invitado {
             background: linear-gradient(90deg, #10b981, #059669);
             color: #fff;
-            box-shadow: 0 0 16px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
         }
 
         .btn-web3 {
             background: linear-gradient(90deg, #f3ba2f, #ff8500);
             color: #05020d;
             font-weight: 900;
-            box-shadow: 0 0 22px rgba(243, 186, 47, 0.55);
+            box-shadow: 0 0 20px rgba(243, 186, 47, 0.55);
         }
 
         .btn-volver {
@@ -339,99 +365,105 @@
         }
 
         #status-tx {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--green);
-            margin-top: 8px;
-            min-height: 18px;
+            margin-top: 6px;
+            min-height: 16px;
             font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-<div id="loading-screen">
-    <div class="loader-ring"></div>
-    <div>INICIANDO PROTOCOLO PANGA...</div>
-</div>
-
-<!-- 1. PANTALLA DE BIENVENIDA CÓSMICA -->
-<div id="pantalla-bienvenida" class="fondo-cosmico">
-    <div class="modal-card">
-        <div class="badge-top">⚡ ECOSISTEMA ZAARD INNOVATION ⚡</div>
-        <h1 class="titulo-impacto">ZAARD MEMORY ARCADE</h1>
-        <h2 class="subtitulo-impacto">PROTOCOLO PANGA • DESAFÍO WEB3</h2>
-
-        <div class="reglas-box">
-            <h4>📜 ESTATUTO OFICIAL DEL DESAFÍO</h4>
-            <div class="reglas-item">
-                <span class="icon">🎮</span>
-                <div><strong>Modo Invitado (Gratis):</strong> Entrena tu memoria a través de los 10 niveles cósmicos sin necesidad de conectar billetera.</div>
-            </div>
-            <div class="reglas-item">
-                <span class="icon">💎</span>
-                <div><strong>Modo Apuesta Web3:</strong> Elige tu token favorito del ecosistema (<strong>ZARD, PANGA, ZARED o ZYM</strong>) y activa tu pase por <strong>0.0001 BNB</strong>.</div>
-            </div>
-            <div class="reglas-item">
-                <span class="icon">🏆</span>
-                <div><strong>Recompensa Legal On-Chain:</strong> Al superar los 10 niveles en Modo Apuesta, ganas <strong>0.001</strong> del token que hayas elegido.</div>
-            </div>
-        </div>
-
-        <button class="btn-accion btn-aceptar" onclick="irASeleccionModo()">🚀 ENTRAR AL ARCADE</button>
-        <button class="btn-accion btn-volver" onclick="irAlMenuArcade()">⬅ VOLVER AL MENÚ ARCADE</button>
+<div id="game-viewport">
+    <div id="loading-screen">
+        <div class="loader-ring"></div>
+        <div>CARGANDO PROTOCOLO FÉNIX...</div>
     </div>
-</div>
 
-<!-- 2. PANTALLA DE SELECCIÓN DE TOKEN Y MODO -->
-<div id="pantalla-seleccion" class="fondo-cosmico oculto">
-    <div class="modal-card">
-        <div class="badge-top">🎯 CONFIGURA TU PARTIDA</div>
-        <h2 class="titulo-impacto">ELIGE TU RECOMPENSA</h2>
-        <p class="subtitulo-impacto">Selecciona qué token quieres ganar al superar los 10 niveles</p>
-
-        <!-- Grid de los 4 Tokens Oficiales -->
-        <div class="tokens-grid" id="tokens-grid">
-            <div class="token-card selected" data-token="ZARD" onclick="seleccionarToken('ZARD', this)">
-                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791940828941-906fd2a3d85625f79d066e5b033f6011.png" alt="ZARD">
-                <div class="t-name">ZARD</div>
-                <div class="t-reward">Premio: 0.001 ZARD</div>
-                <div class="t-ca">0xE287...A3fB</div>
+    <!-- 1. PANTALLA DE BIENVENIDA -->
+    <div id="pantalla-bienvenida" class="fondo-cosmico">
+        <div class="modal-card">
+            <!-- Imagen Fénix Flotante Solicitada -->
+            <div class="fenix-flotante-container">
+                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790285851823-4955b8f5511ea8235af22dfb82371c91.png" alt="Fénix Zaard">
             </div>
 
-            <div class="token-card" data-token="PANGA" onclick="seleccionarToken('PANGA', this)">
-                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790484633328-559fdd3c13098c92f8a665ac39a838c2.png" alt="PANGA">
-                <div class="t-name">PANGA</div>
-                <div class="t-reward">Premio: 0.001 PANGA</div>
-                <div class="t-ca">0x4a6c...366e</div>
+            <div class="badge-top">🔥 FÉNIX CYBER PROTOCOL 🔥</div>
+            <h1 class="titulo-impacto">ZAARD MEMORY ARCADE</h1>
+            <h2 class="subtitulo-impacto">DESAFÍO CÓSMICO WEB3</h2>
+
+            <div class="reglas-box">
+                <h4>📜 ESTATUTO OFICIAL DEL FÉNIX</h4>
+                <div class="reglas-item">
+                    <span>🎮</span>
+                    <div><strong>Modo Invitado (Gratis):</strong> Entrena tu memoria en los 10 niveles sin arriesgar fondos.</div>
+                </div>
+                <div class="reglas-item">
+                    <span>💎</span>
+                    <div><strong>Modo Apuesta Web3:</strong> Elige tu token (<strong>ZARD, PANGA, ZARED, ZYM</strong>) y paga <strong>0.0001 BNB</strong>.</div>
+                </div>
+                <div class="reglas-item">
+                    <span>🏆</span>
+                    <div><strong>Recompensa Épica:</strong> Al ganar los 10 niveles, obtén <strong>0.001</strong> del token elegido en la red.</div>
+                </div>
             </div>
 
-            <div class="token-card" data-token="ZARED" onclick="seleccionarToken('ZARED', this)">
-                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1794605349763-3b36fe22e2048e05bbf50f8bdf231392.png" alt="ZARED">
-                <div class="t-name">ZARED</div>
-                <div class="t-reward">Premio: 0.001 ZARED</div>
-                <div class="t-ca">0xfc2a...690e</div>
-            </div>
-
-            <div class="token-card" data-token="ZYM" onclick="seleccionarToken('ZYM', this)">
-                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1793917735714-d84b28c0d04f3063f454cbc1d8a062fb.png" alt="ZYM">
-                <div class="t-name">ZYM</div>
-                <div class="t-reward">Premio: 0.001 ZYM</div>
-                <div class="t-ca">0x5a1d...c53d</div>
-            </div>
+            <button class="btn-accion btn-aceptar" onclick="irASeleccionModo()">🚀 ENTRAR AL JUEGO</button>
+            <button class="btn-accion btn-volver" onclick="irAlMenuArcade()">⬅ MENÚ PRINCIPAL</button>
         </div>
+    </div>
 
-        <div class="resumen-apuesta" id="resumen-apuesta">
-            Entrada Modo Apuesta: <strong>0.0001 BNB</strong> • Premio al ganar: <strong>0.001 ZARD</strong>
+    <!-- 2. PANTALLA DE SELECCIÓN DE TOKEN Y MODO -->
+    <div id="pantalla-seleccion" class="fondo-cosmico oculto">
+        <div class="modal-card">
+            <div class="badge-top">⚡ SELECCIÓN DE RECOMPENSA</div>
+            <h2 class="titulo-impacto">ELIGE TU TOKEN</h2>
+            <p class="subtitulo-impacto">Selecciona el activo que reclamarás al vencer los 10 niveles</p>
+
+            <div class="tokens-grid" id="tokens-grid">
+                <div class="token-card selected" data-token="ZARD" onclick="seleccionarToken('ZARD', this)">
+                    <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791940828941-906fd2a3d85625f79d066e5b033f6011.png" alt="ZARD">
+                    <div class="t-name">ZARD</div>
+                    <div class="t-reward">Premio: 0.001 ZARD</div>
+                    <div class="t-ca">0xE287...A3fB</div>
+                </div>
+
+                <div class="token-card" data-token="PANGA" onclick="seleccionarToken('PANGA', this)">
+                    <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790484633328-559fdd3c13098c92f8a665ac39a838c2.png" alt="PANGA">
+                    <div class="t-name">PANGA</div>
+                    <div class="t-reward">Premio: 0.001 PANGA</div>
+                    <div class="t-ca">0x4a6c...366e</div>
+                </div>
+
+                <div class="token-card" data-token="ZARED" onclick="seleccionarToken('ZARED', this)">
+                    <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1794605349763-3b36fe22e2048e05bbf50f8bdf231392.png" alt="ZARED">
+                    <div class="t-name">ZARED</div>
+                    <div class="t-reward">Premio: 0.001 ZARED</div>
+                    <div class="t-ca">0xfc2a...690e</div>
+                </div>
+
+                <div class="token-card" data-token="ZYM" onclick="seleccionarToken('ZYM', this)">
+                    <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1793917735714-d84b28c0d04f3063f454cbc1d8a062fb.png" alt="ZYM">
+                    <div class="t-name">ZYM</div>
+                    <div class="t-reward">Premio: 0.001 ZYM</div>
+                    <div class="t-ca">0x5a1d...c53d</div>
+                </div>
+            </div>
+
+            <div class="resumen-apuesta" id="resumen-apuesta">
+                Entrada Apuesta: <strong>0.0001 BNB</strong> • Premio: <strong>0.001 ZARD</strong>
+            </div>
+
+            <button class="btn-accion btn-web3" id="btn-apostar" onclick="iniciarModoApuestaWeb3()">
+                ⚡ APOSTAR 0.0001 BNB Y JUGAR
+            </button>
+            <button class="btn-accion btn-invitado" onclick="elegirModoInvitado()">
+                🎮 MODO INVITADO (GRATIS)
+            </button>
+            <div id="status-tx"></div>
+            <button class="btn-accion btn-volver" onclick="volverABienvenida()">⬅ VOLVER</button>
         </div>
-
-        <button class="btn-accion btn-web3" id="btn-apostar" onclick="iniciarModoApuestaWeb3()">
-            ⚡ APOSTAR 0.0001 BNB Y JUGAR
-        </button>
-        <button class="btn-accion btn-invitado" onclick="elegirModoInvitado()">
-            🎮 JUGAR MODO INVITADO (GRATIS)
-        </button>
-        <div id="status-tx"></div>
-        <button class="btn-accion btn-volver" onclick="volverABienvenida()">⬅ VOLVER</button>
     </div>
 </div>
 
@@ -439,40 +471,18 @@
     // =========================================================================
     // CONFIGURACIÓN DE TOKENS Y BILLETERA CREADORA
     // =========================================================================
-    const CREATOR_WALLET = "0x0000000000000000000000000000000000000000"; // <-- AQUÍ COLOCAREMOS TU BILLETERA CREADORA / CONTRATO
+    const CREATOR_WALLET = "0x0000000000000000000000000000000000000000"; // Reemplazar con tu billetera
     const ENTRY_FEE_BNB = "0.0001";
     const REWARD_AMOUNT = "0.001";
 
     const ECOSYSTEM_TOKENS = {
-        ZARD: {
-            symbol: "ZARD",
-            contract: "0xE2879d1172215E728472D7827586bd2796aFA3fB",
-            logo: "https://photos.pinksale.finance/file/pinksale-logo-upload/1791940828941-906fd2a3d85625f79d066e5b033f6011.png",
-            color: 0x00ffcc
-        },
-        PANGA: {
-            symbol: "PANGA",
-            contract: "0x4a6c3ea9e7132ad217c31f8252119f08c801366e",
-            logo: "https://photos.pinksale.finance/file/pinksale-logo-upload/1790484633328-559fdd3c13098c92f8a665ac39a838c2.png",
-            color: 0xf3ba2f
-        },
-        ZARED: {
-            symbol: "ZARED",
-            contract: "0xfc2aca08fc64e51793c32e9088fc43a57d39690e",
-            logo: "https://photos.pinksale.finance/file/pinksale-logo-upload/1794605349763-3b36fe22e2048e05bbf50f8bdf231392.png",
-            color: 0xff2a6d
-        },
-        ZYM: {
-            symbol: "ZYM",
-            contract: "0x5a1de9974c1279fbe989ce32899a1f4ece3fc53d",
-            logo: "https://photos.pinksale.finance/file/pinksale-logo-upload/1793917735714-d84b28c0d04f3063f454cbc1d8a062fb.png",
-            color: 0x38bdf8
-        }
+        ZARD: { symbol: "ZARD", contract: "0xE2879d1172215E728472D7827586bd2796aFA3fB", logo: "https://photos.pinksale.finance/file/pinksale-logo-upload/1791940828941-906fd2a3d85625f79d066e5b033f6011.png", color: 0x00ffcc },
+        PANGA: { symbol: "PANGA", contract: "0x4a6c3ea9e7132ad217c31f8252119f08c801366e", logo: "https://photos.pinksale.finance/file/pinksale-logo-upload/1790484633328-559fdd3c13098c92f8a665ac39a838c2.png", color: 0xf3ba2f },
+        ZARED: { symbol: "ZARED", contract: "0xfc2aca08fc64e51793c32e9088fc43a57d39690e", logo: "https://photos.pinksale.finance/file/pinksale-logo-upload/1794605349763-3b36fe22e2048e05bbf50f8bdf231392.png", color: 0xff2a6d },
+        ZYM: { symbol: "ZYM", contract: "0x5a1de9974c1279fbe989ce32899a1f4ece3fc53d", logo: "https://photos.pinksale.finance/file/pinksale-logo-upload/1793917735714-d84b28c0d04f3063f454cbc1d8a062fb.png", color: 0x38bdf8 }
     };
 
-    const LS_NOMBRE = localStorage.getItem('zaard_nombre') || "Jugador Zaard";
-    const LS_AVATAR_URL = localStorage.getItem('zaard_avatar') || ECOSYSTEM_TOKENS.ZARD.logo;
-
+    const LS_NOMBRE = localStorage.getItem('zaard_nombre') || "Jugador Fénix";
     let web3 = null;
     let userAccount = null;
     let esModoApuesta = false;
@@ -482,7 +492,7 @@
     let audioCtx = null;
 
     // =========================================================================
-    // SISTEMA DE SONIDO RETRO SINTETIZADO
+    // SISTEMA DE AUDIO SINTETIZADO CON EFECTOS "BOOM" Y "TULUM" (FALLO)
     // =========================================================================
     function initAudioContext() {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -499,40 +509,55 @@
                 let osc = audioCtx.createOscillator();
                 let gain = audioCtx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(420, now);
-                osc.frequency.exponentialRampToValueAtTime(760, now + 0.07);
-                gain.gain.setValueAtTime(0.12, now);
-                gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
+                osc.frequency.setValueAtTime(450, now);
+                osc.frequency.exponentialRampToValueAtTime(800, now + 0.06);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.07);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
                 osc.start(now);
-                osc.stop(now + 0.08);
-            } else if (tipo === 'acierto') {
-                [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
-                    let t = now + idx * 0.06;
+                osc.stop(now + 0.07);
+            } else if (tipo === 'boom') {
+                // EFECTO BOOM PODEROSO AL ACERTAR LAS CARTAS
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.exponentialRampToValueAtTime(40, now + 0.35);
+                gain.gain.setValueAtTime(0.35, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.35);
+
+                // Brillo metálico armónico en el boom
+                [523.25, 659.25, 1046.50].forEach((freq, idx) => {
+                    let t = now + idx * 0.05;
                     let o = audioCtx.createOscillator();
                     let g = audioCtx.createGain();
-                    o.type = 'triangle';
+                    o.type = 'sine';
                     o.frequency.setValueAtTime(freq, t);
-                    g.gain.setValueAtTime(0.16, t);
-                    g.gain.linearRampToValueAtTime(0.01, t + 0.12);
+                    g.gain.setValueAtTime(0.15, t);
+                    g.gain.linearRampToValueAtTime(0.01, t + 0.18);
                     o.connect(g);
                     g.connect(audioCtx.destination);
                     o.start(t);
-                    o.stop(t + 0.12);
+                    o.stop(t + 0.18);
                 });
-            } else if (tipo === 'error') {
+            } else if (tipo === 'tulum') {
+                // EFECTO TULUM PROFUNDO AL FALLAR
                 let osc = audioCtx.createOscillator();
                 let gain = audioCtx.createGain();
                 osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(160, now);
-                osc.frequency.linearRampToValueAtTime(75, now + 0.22);
-                gain.gain.setValueAtTime(0.18, now);
-                gain.gain.linearRampToValueAtTime(0.01, now + 0.22);
+                osc.frequency.setValueAtTime(120, now);
+                osc.frequency.linearRampToValueAtTime(45, now + 0.3);
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
                 osc.start(now);
-                osc.stop(now + 0.22);
+                osc.stop(now + 0.3);
             } else if (tipo === 'nivel') {
                 [440, 554.37, 659.25, 880].forEach((freq, idx) => {
                     let t = now + idx * 0.08;
@@ -565,9 +590,6 @@
         } catch (e) {}
     }
 
-    // =========================================================================
-    // NAVEGACIÓN Y SELECCIÓN DE TOKEN / WEB3
-    // =========================================================================
     window.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             document.getElementById('loading-screen').style.display = 'none';
@@ -597,7 +619,7 @@
         document.querySelectorAll('.token-card').forEach(c => c.classList.remove('selected'));
         cardElement.classList.add('selected');
         document.getElementById('resumen-apuesta').innerHTML =
-            `Entrada Modo Apuesta: <strong>${ENTRY_FEE_BNB} BNB</strong> • Premio al ganar: <strong>${REWARD_AMOUNT} ${tokenElegido}</strong>`;
+            `Entrada Apuesta: <strong>${ENTRY_FEE_BNB} BNB</strong> • Premio: <strong>${REWARD_AMOUNT} ${tokenElegido}</strong>`;
     }
 
     function elegirModoInvitado() {
@@ -614,12 +636,12 @@
         const btnApostar = document.getElementById('btn-apostar');
 
         if (!window.ethereum) {
-            alert("Por favor abre este juego desde MetaMask, Trust Wallet o Binance Web3 Wallet.");
+            alert("Abre este juego desde MetaMask, Trust Wallet o Binance Web3 Wallet.");
             return;
         }
 
         if (CREATOR_WALLET === "0x0000000000000000000000000000000000000000") {
-            alert("⚠️ Aún falta configurar la dirección de la billetera creadora/contrato para recibir los 0.0001 BNB. Configura CREATOR_WALLET cuando tengamos los contratos listos.");
+            alert("⚠️ Falta configurar la dirección CREATOR_WALLET en el código para recibir la apuesta BNB.");
             return;
         }
 
@@ -630,7 +652,6 @@
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             userAccount = accounts[0];
 
-            // Verificar red BNB Smart Chain (Chain ID 56 = 0x38)
             const chainId = await window.ethereum.request({ method: 'eth_chainId' });
             if (chainId !== '0x38') {
                 statusEl.textContent = "Cambiando a BNB Smart Chain...";
@@ -640,7 +661,7 @@
                 });
             }
 
-            statusEl.textContent = `Confirmando apuesta de ${ENTRY_FEE_BNB} BNB para jugar por ${REWARD_AMOUNT} ${tokenElegido}...`;
+            statusEl.textContent = `Confirmando apuesta de ${ENTRY_FEE_BNB} BNB...`;
             const weiValue = web3.utils.toWei(ENTRY_FEE_BNB, 'ether');
 
             const tx = await web3.eth.sendTransaction({
@@ -651,7 +672,7 @@
 
             txHashApuesta = tx.transactionHash;
             esModoApuesta = true;
-            statusEl.textContent = "✅ ¡Apuesta confirmada! Iniciando partida...";
+            statusEl.textContent = "✅ ¡Apuesta confirmada! Iniciando...";
             btnApostar.disabled = false;
 
             setTimeout(() => {
@@ -677,45 +698,33 @@
 
     function manejarVictoriaFinal() {
         reproducirSonidoRetro('victoria');
-        if (esModoApuesta) {
-            alert(
-                `🏆 ¡VICTORIA SUPREMA, ${LS_NOMBRE.toUpperCase()}! 🏆\n\n` +
-                `Has completado los 10 niveles en MODO APUESTA.\n` +
-                `Premio desbloqueado: ${REWARD_AMOUNT} ${tokenElegido}\n` +
-                `Contrato ${tokenElegido}: ${ECOSYSTEM_TOKENS[tokenElegido].contract}\n` +
-                `Billetera ganadora: ${userAccount}\n\n` +
-                `(Listo para conectar con el contrato inteligente de pago)`
-            );
-        } else {
-            alert(
-                `🌟 ¡MAGNÍFICO, ${LS_NOMBRE.toUpperCase()}! 🌟\n\n` +
-                `¡Has superado los 10 niveles en Modo Invitado!\n` +
-                `Conecta tu billetera en el Modo Apuesta para ganar ${REWARD_AMOUNT} ${tokenElegido}.`
-            );
-        }
+        alert(
+            `🏆 ¡VICTORIA SUPREMA DEL FÉNIX, ${LS_NOMBRE.toUpperCase()}! 🏆\n\n` +
+            `Has completado los 10 niveles cósmicos.\n` +
+            `Premio desbloqueado: ${REWARD_AMOUNT} ${tokenElegido}\n` +
+            `Contrato: ${ECOSYSTEM_TOKENS[tokenElegido].contract}`
+        );
         volverAlMenuSeleccion();
     }
 
     function manejarDerrota() {
-        reproducirSonidoRetro('error');
-        alert("💥 ¡Te has quedado sin vidas cósmicas! Inténtalo nuevamente.");
+        reproducirSonidoRetro('tulum');
+        alert("💥 ¡Las llamas del fénix se han apagado! Vuelve a intentarlo.");
         volverAlMenuSeleccion();
     }
 
     // =========================================================================
-    // MOTOR GRÁFICO PHASER 3 CON TEXTURAS PROCEDURALES + EFECTOS VISUALES
+    // MOTOR GRÁFICO PHASER 3 SIN CÍRCULO CENTRAL + FONDO FÉNIX CIBERESPACIAL
     // =========================================================================
     function generarTexturasProcedurales(scene) {
-        // 1. Generar Dorso de Carta Holográfico
         if (!scene.textures.exists('dorso_holo')) {
             let g = scene.make.graphics({ x: 0, y: 0, add: false });
             g.fillStyle(0x13072e, 1);
             g.fillRoundedRect(2, 2, 96, 96, 16);
-            g.lineStyle(3, 0x00f2fe, 1);
+            g.lineStyle(3, 0xff6d00, 1);
             g.strokeRoundedRect(2, 2, 96, 96, 16);
             g.lineStyle(1.5, 0x9d4edd, 0.8);
             g.strokeRoundedRect(10, 10, 80, 80, 12);
-            // Rombo central neón
             g.lineStyle(2, 0xf3ba2f, 0.9);
             g.beginPath();
             g.moveTo(50, 24);
@@ -724,27 +733,21 @@
             g.lineTo(24, 50);
             g.closePath();
             g.strokePath();
-            g.fillStyle(0x00f2fe, 1);
+            g.fillStyle(0xff6d00, 1);
             g.fillCircle(50, 50, 6);
             g.generateTexture('dorso_holo', 100, 100);
             g.destroy();
         }
 
-        // 2. Generar Partícula brillante para explosiones de acierto
         if (!scene.textures.exists('spark_tex')) {
             let gp = scene.make.graphics({ x: 0, y: 0, add: false });
-            gp.fillStyle(0xffffff, 1);
+            gp.fillStyle(0xffa100, 1);
             gp.fillCircle(8, 8, 8);
             gp.generateTexture('spark_tex', 16, 16);
             gp.destroy();
         }
 
-        // 3. Generar 10 símbolos geométricos cósmicos de respaldo (para que NUNCA salga cuadro negro)
-        const palette = [
-            0x00ffcc, 0xf3ba2f, 0xff2a6d, 0x38bdf8, 0xc77dff,
-            0x4ade80, 0xfb923c, 0xf472b6, 0x22d3ee, 0xa78bfa
-        ];
-
+        const palette = [0xff6d00, 0xf3ba2f, 0xff2a6d, 0x00f2fe, 0xc77dff, 0x00ffcc];
         palette.forEach((col, i) => {
             const key = 'card_art_' + i;
             if (!scene.textures.exists(key)) {
@@ -753,41 +756,10 @@
                 gc.fillRoundedRect(2, 2, 96, 96, 16);
                 gc.lineStyle(3, col, 1);
                 gc.strokeRoundedRect(2, 2, 96, 96, 16);
-
-                // Halo interno
-                gc.fillStyle(col, 0.16);
-                gc.fillCircle(50, 50, 32);
-
-                // Figura única por índice
                 gc.lineStyle(3.5, col, 1);
                 gc.fillStyle(col, 0.85);
-                if (i % 5 === 0) {
-                    gc.strokeCircle(50, 50, 24);
-                    gc.fillCircle(50, 50, 10);
-                } else if (i % 5 === 1) {
-                    gc.strokeRect(30, 30, 40, 40);
-                    gc.fillCircle(50, 50, 9);
-                } else if (i % 5 === 2) {
-                    gc.beginPath();
-                    gc.moveTo(50, 22);
-                    gc.lineTo(76, 70);
-                    gc.lineTo(24, 70);
-                    gc.closePath();
-                    gc.strokePath();
-                } else if (i % 5 === 3) {
-                    gc.beginPath();
-                    gc.moveTo(50, 20);
-                    gc.lineTo(78, 50);
-                    gc.lineTo(50, 80);
-                    gc.lineTo(22, 50);
-                    gc.closePath();
-                    gc.strokePath();
-                    gc.fillCircle(50, 50, 7);
-                } else {
-                    gc.strokeCircle(50, 50, 26);
-                    gc.strokeCircle(50, 50, 14);
-                }
-
+                gc.strokeCircle(50, 50, 24);
+                gc.fillCircle(50, 50, 9);
                 gc.generateTexture(key, 100, 100);
                 gc.destroy();
             }
@@ -800,6 +772,7 @@
 
         new Phaser.Game({
             type: Phaser.AUTO,
+            parent: 'game-viewport',
             width: 480,
             height: 800,
             backgroundColor: '#05020d',
@@ -812,11 +785,12 @@
             scene: {
                 preload: function () {
                     this.load.setCORS('anonymous');
-                    // Cargar logos oficiales de los 4 tokens
                     Object.keys(ECOSYSTEM_TOKENS).forEach(sym => {
                         this.load.image('logo_' + sym, ECOSYSTEM_TOKENS[sym].logo);
                     });
-                    this.load.image('avatarUsr', LS_AVATAR_URL);
+                    // Cargamos el fondo de Fénix y el logo flotante para el juego
+                    this.load.image('bgFenix', 'https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png');
+                    this.load.image('fenixAvatar', 'https://photos.pinksale.finance/file/pinksale-logo-upload/1790285851823-4955b8f5511ea8235af22dfb82371c91.png');
                 },
                 create: function () {
                     const sceneRef = this;
@@ -826,83 +800,93 @@
                     this.bloqueado = false;
                     this.primeraCarta = null;
 
-                    // Nebulosa central pulsante
-                    let nebula1 = this.add.circle(240, 420, 290, 0x3d106b, 0.35).setBlendMode(Phaser.BlendModes.ADD);
-                    let nebula2 = this.add.circle(240, 420, 190, 0x0080ff, 0.22).setBlendMode(Phaser.BlendModes.ADD);
+                    // Fondo de Fénix Ciberespacial (Sin círculo central, limpio y con llamas dinámicas)
+                    let bg = this.add.image(240, 400, 'bgFenix').setDisplaySize(480, 800).setAlpha(0.45);
                     this.tweens.add({
-                        targets: [nebula1, nebula2],
-                        scaleX: 1.12,
-                        scaleY: 1.12,
-                        alpha: 0.45,
-                        duration: 3200,
+                        targets: bg,
+                        alpha: 0.6,
+                        scaleX: 1.05,
+                        scaleY: 1.05,
+                        duration: 4000,
                         yoyo: true,
                         repeat: -1
                     });
 
-                    // Estrellas animadas
-                    for (let i = 0; i < 40; i++) {
+                    // Chispas de fuego estelares flotando en el juego
+                    for (let i = 0; i < 35; i++) {
                         let sx = Phaser.Math.Between(10, 470);
                         let sy = Phaser.Math.Between(10, 790);
-                        let star = this.add.circle(sx, sy, Phaser.Math.FloatBetween(1, 2.2), 0xffffff, Phaser.Math.FloatBetween(0.2, 0.85));
+                        let spark = this.add.circle(sx, sy, Phaser.Math.FloatBetween(1, 2.5), 0xff8500, Phaser.Math.FloatBetween(0.3, 0.9));
                         this.tweens.add({
-                            targets: star,
+                            targets: spark,
+                            y: '-=40',
                             alpha: 0.1,
-                            duration: Phaser.Math.Between(1000, 2600),
+                            duration: Phaser.Math.Between(1200, 2500),
                             yoyo: true,
                             repeat: -1
                         });
                     }
 
-                    // Emisor de partículas para aciertos
+                    // Emisor de partículas llameantes (Chispas calidad superior)
                     this.emitter = this.add.particles('spark_tex').createEmitter({
-                        speed: { min: 70, max: 210 },
-                        scale: { start: 0.6, end: 0 },
+                        speed: { min: 80, max: 240 },
+                        scale: { start: 0.7, end: 0 },
                         alpha: { start: 1, end: 0 },
-                        lifespan: 550,
+                        lifespan: 600,
                         blendMode: 'ADD',
                         on: false
                     });
 
-                    // --- HUD SUPERIOR ---
+                    // --- MARCADOR SUPERIOR DE OTRO NIVEL (LLAMATIVO Y ÚNICO) ---
+                    let panelGlow = this.add.graphics();
+                    panelGlow.fillStyle(0xff6d00, 0.2);
+                    panelGlow.fillRoundedRect(14, 12, 452, 96, 18);
+
                     let panelBg = this.add.graphics();
-                    panelBg.fillStyle(0x14062e, 0.92);
-                    panelBg.lineStyle(2, 0x00f2fe, 0.9);
+                    panelBg.fillStyle(0x0a0418, 0.94);
+                    panelBg.lineStyle(2.5, 0xff8500, 0.9);
                     panelBg.fillRoundedRect(16, 14, 448, 92, 16);
                     panelBg.strokeRoundedRect(16, 14, 448, 92, 16);
 
-                    // Avatar o Logo del Token elegido
-                    const hudKey = this.textures.exists('logo_' + tokenElegido) ? 'logo_' + tokenElegido : 'card_art_0';
-                    this.avatarImg = this.add.image(58, 60, hudKey).setDisplaySize(58, 58);
+                    // Logo Fénix en el HUD Superior con pulso de llamas
+                    let hudFenix = this.add.image(58, 60, 'fenixAvatar').setDisplaySize(54, 54);
+                    this.tweens.add({
+                        targets: hudFenix,
+                        scaleX: 1.08,
+                        scaleY: 1.08,
+                        duration: 1200,
+                        yoyo: true,
+                        repeat: -1
+                    });
+
                     let avatarRing = this.add.graphics();
-                    avatarRing.lineStyle(2.5, ECOSYSTEM_TOKENS[tokenElegido].color, 1);
-                    avatarRing.strokeCircle(58, 60, 31);
+                    avatarRing.lineStyle(2.5, 0xff8500, 1);
+                    avatarRing.strokeCircle(58, 60, 29);
 
-                    // Textos de estado
-                    const modoLabel = esModoApuesta ? `💎 APUESTA: ${REWARD_AMOUNT} ${tokenElegido}` : `🎮 MODO INVITADO (${tokenElegido})`;
-                    this.add.text(102, 24, LS_NOMBRE, { fontFamily: 'Orbitron', fontSize: '15px', color: '#00f2fe', fontStyle: 'bold' });
-                    this.add.text(102, 46, modoLabel, { fontFamily: 'Rajdhani', fontSize: '14px', color: '#f3ba2f', fontStyle: 'bold' });
-                    this.txtNivel = this.add.text(102, 68, `NIVEL ${nivelActual} / 10`, { fontFamily: 'Orbitron', fontSize: '14px', color: '#e0aaff', fontStyle: 'bold' });
+                    // Títulos del HUD
+                    this.add.text(104, 24, "🔥 PROTOCOLO FÉNIX", { fontFamily: 'Orbitron', fontSize: '14px', color: '#ff9e00', fontStyle: 'bold' });
+                    this.add.text(104, 46, `${tokenElegido} • ${esModoApuesta ? 'MODO APUESTA' : 'MODO INVITADO'}`, { fontFamily: 'Rajdhani', fontSize: '13px', color: '#00f2fe', fontStyle: 'bold' });
+                    this.txtNivel = this.add.text(104, 68, `NIVEL ${nivelActual} / 10`, { fontFamily: 'Orbitron', fontSize: '13px', color: '#e0aaff', fontStyle: 'bold' });
 
-                    this.txtVidas = this.add.text(448, 25, `❤️ ${this.vidas}`, { fontFamily: 'Orbitron', fontSize: '17px', color: '#ff4d6d', fontStyle: 'bold' }).setOrigin(1, 0);
+                    this.txtVidas = this.add.text(444, 25, `❤️ ${this.vidas}`, { fontFamily: 'Orbitron', fontSize: '16px', color: '#ff2a6d', fontStyle: 'bold' }).setOrigin(1, 0);
 
-                    let btnMenu = this.add.text(448, 66, "SALIR", { fontFamily: 'Orbitron', fontSize: '12px', color: '#38bdf8', fontStyle: 'bold' }).setOrigin(1, 0).setInteractive({ useHandCursor: true });
+                    let btnMenu = this.add.text(444, 66, "SALIR", { fontFamily: 'Orbitron', fontSize: '11px', color: '#38bdf8', fontStyle: 'bold' }).setOrigin(1, 0).setInteractive({ useHandCursor: true });
                     btnMenu.on('pointerdown', volverAlMenuSeleccion);
 
-                    // --- CONSTRUCCIÓN DEL TABLERO CON ANIMACIONES DE VOLTEO ---
+                    // --- CONSTRUCCIÓN DEL TABLERO DE CARTAS ---
                     function obtenerTexturaCarta(val) {
-                        // Los primeros 4 pares usan los logos oficiales si cargaron bien; el resto usa símbolos neón procedurales
                         const logosKeys = ['logo_ZARD', 'logo_PANGA', 'logo_ZARED', 'logo_ZYM'];
                         if (val < 4 && sceneRef.textures.exists(logosKeys[val]) && sceneRef.textures.get(logosKeys[val]).key !== '__MISSING') {
                             return logosKeys[val];
                         }
-                        return 'card_art_' + (val % 10);
+                        return 'card_art_' + (val % 6);
                     }
 
                     function construirTablero() {
                         if (sceneRef.cartasGroup) sceneRef.cartasGroup.destroy(true);
                         sceneRef.cartasGroup = sceneRef.add.group();
 
-                        let totalPares = Math.min(3 + nivelActual, 10); // Nivel 1 = 4 pares (8 cartas), hasta Nivel 7+ = 10 pares (20 cartas)
+                        let totalPares = Math.min(3 + nivelActual, 10);
                         let deck = [];
                         for (let i = 0; i < totalPares; i++) deck.push(i, i);
                         Phaser.Utils.Array.Shuffle(deck);
@@ -927,13 +911,12 @@
                             carta.setScale(0);
                             sceneRef.cartasGroup.add(carta);
 
-                            // Animación de aparición en cascada
                             sceneRef.tweens.add({
                                 targets: carta,
                                 scaleX: cardSize / 100,
                                 scaleY: cardSize / 100,
                                 duration: 280,
-                                delay: idx * 35,
+                                delay: idx * 30,
                                 ease: 'Back.easeOut'
                             });
 
@@ -942,7 +925,6 @@
                                 reproducirSonidoRetro('click');
                                 carta.animando = true;
 
-                                // Efecto 3D Flip al abrir
                                 sceneRef.tweens.add({
                                     targets: carta,
                                     scaleX: 0,
@@ -973,19 +955,19 @@
                             sceneRef.primeraCarta = null;
 
                             if (primera.val === carta.val) {
-                                reproducirSonidoRetro('acierto');
+                                // SONIDO BOOM PODEROSO AL ACERTAR
+                                reproducirSonidoRetro('boom');
                                 primera.revelada = true;
                                 carta.revelada = true;
 
-                                // Explosión de partículas y pulso en ambas cartas
-                                sceneRef.emitter.setTint(ECOSYSTEM_TOKENS[tokenElegido].color);
-                                sceneRef.emitter.explode(18, primera.x, primera.y);
-                                sceneRef.emitter.explode(18, carta.x, carta.y);
+                                sceneRef.emitter.setTint(0xff6d00);
+                                sceneRef.emitter.explode(22, primera.x, primera.y);
+                                sceneRef.emitter.explode(22, carta.x, carta.y);
 
                                 sceneRef.tweens.add({
                                     targets: [primera, carta],
-                                    scaleX: 0.92,
-                                    scaleY: 0.92,
+                                    scaleX: 0.9,
+                                    scaleY: 0.9,
                                     duration: 140,
                                     yoyo: true
                                 });
@@ -1010,11 +992,11 @@
                                     }
                                 }
                             } else {
-                                reproducirSonidoRetro('error');
+                                // SONIDO TULUM AL FALLAR
+                                reproducirSonidoRetro('tulum');
                                 sceneRef.vidas--;
                                 sceneRef.txtVidas.setText(`❤️ ${sceneRef.vidas}`);
 
-                                // Sacudida de error
                                 sceneRef.tweens.add({
                                     targets: [primera, carta],
                                     x: '+=6',

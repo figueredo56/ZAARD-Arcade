@@ -80,7 +80,7 @@
         .fondo-cosmico {
             position: fixed;
             inset: 0;
-            background: linear-gradient(135deg, rgba(20, 5, 45, 0.55) 0%, rgba(5, 2, 15, 0.7) 100%),
+            background: linear-gradient(135deg, rgba(20, 5, 45, 0.45) 0%, rgba(5, 2, 15, 0.6) 100%),
                         url('https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png');
             background-size: cover;
             background-position: center;
@@ -89,7 +89,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 12px;
+            padding: 10px;
             overflow-y: auto;
             transition: opacity 0.4s ease;
         }
@@ -100,35 +100,35 @@
             display: none;
         }
 
-        /* Menú y Bienvenida más grandes, amplios y acoplados a la pantalla */
+        /* Bienvenida y Menú Grandes, Expandidos y Adaptados a Pantalla Completa */
         .modal-card {
             position: relative;
-            background: linear-gradient(145deg, rgba(22, 10, 48, 0.72) 0%, rgba(10, 5, 24, 0.82) 100%);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 2.5px solid var(--orange);
-            border-radius: 26px;
-            padding: 32px 26px;
-            width: 100%;
-            max-width: 580px;
+            background: linear-gradient(145deg, rgba(22, 10, 48, 0.82) 0%, rgba(10, 5, 24, 0.9) 100%);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 3px solid var(--orange);
+            border-radius: 28px;
+            padding: 38px 28px;
+            width: 95%;
+            max-width: 650px;
             margin: auto;
             text-align: center;
-            box-shadow: 0 0 50px rgba(255, 109, 0, 0.5), inset 0 0 25px rgba(0, 242, 254, 0.25);
+            box-shadow: 0 0 60px rgba(255, 109, 0, 0.55), inset 0 0 30px rgba(0, 242, 254, 0.25);
             animation: borderGlowPulse 4s infinite alternate;
             z-index: 2;
         }
 
         @keyframes borderGlowPulse {
-            0% { border-color: var(--orange); box-shadow: 0 0 30px rgba(255, 109, 0, 0.4); }
-            50% { border-color: var(--cyan); box-shadow: 0 0 45px rgba(0, 242, 254, 0.6); }
-            100% { border-color: var(--purple); box-shadow: 0 0 35px rgba(157, 78, 221, 0.5); }
+            0% { border-color: var(--orange); box-shadow: 0 0 35px rgba(255, 109, 0, 0.45); }
+            50% { border-color: var(--cyan); box-shadow: 0 0 50px rgba(0, 242, 254, 0.65); }
+            100% { border-color: var(--purple); box-shadow: 0 0 40px rgba(157, 78, 221, 0.55); }
         }
 
         .fenix-flotante-container {
             position: relative;
-            width: 110px;
-            height: 110px;
-            margin: 0 auto 14px auto;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 16px auto;
         }
 
         .fenix-flotante-container img {
@@ -136,8 +136,8 @@
             height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            border: 2.5px solid var(--orange);
-            box-shadow: 0 0 35px rgba(255, 109, 0, 0.9), 0 0 55px rgba(0, 242, 254, 0.55);
+            border: 3px solid var(--orange);
+            box-shadow: 0 0 40px rgba(255, 109, 0, 0.95), 0 0 60px rgba(0, 242, 254, 0.6);
             animation: fenixFloat 3s infinite ease-in-out;
         }
 
@@ -148,22 +148,22 @@
 
         .badge-top {
             display: inline-block;
-            padding: 6px 18px;
-            border-radius: 22px;
-            background: rgba(255, 109, 0, 0.22);
-            border: 1px solid rgba(255, 109, 0, 0.65);
+            padding: 7px 20px;
+            border-radius: 24px;
+            background: rgba(255, 109, 0, 0.25);
+            border: 1px solid rgba(255, 109, 0, 0.7);
             color: var(--orange);
             font-family: 'Orbitron', sans-serif;
-            font-size: 13px;
+            font-size: 14px;
             letter-spacing: 2px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .titulo-impacto {
             font-family: 'Orbitron', sans-serif;
-            font-size: 28px;
+            font-size: 30px;
             font-weight: 900;
-            margin: 0 0 8px 0;
+            margin: 0 0 10px 0;
             background: linear-gradient(90deg, #ff6d00, #ff2a6d, #00f2fe);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -172,29 +172,29 @@
 
         .subtitulo-impacto {
             font-family: 'Orbitron', sans-serif;
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 700;
             color: #e0aaff;
-            margin: 0 0 18px 0;
+            margin: 0 0 20px 0;
         }
 
         .reglas-box {
-            background: rgba(10, 16, 34, 0.7);
-            border: 1px solid rgba(255, 109, 0, 0.45);
-            border-radius: 16px;
-            padding: 18px;
-            margin-bottom: 20px;
+            background: rgba(10, 16, 34, 0.78);
+            border: 1px solid rgba(255, 109, 0, 0.5);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 22px;
             text-align: left;
-            font-size: 15px;
-            line-height: 1.6;
+            font-size: 16px;
+            line-height: 1.65;
             color: #f8fafc;
         }
 
         .reglas-box h4 {
             font-family: 'Orbitron', sans-serif;
             color: var(--gold);
-            font-size: 14px;
-            margin: 0 0 10px 0;
+            font-size: 15px;
+            margin: 0 0 12px 0;
             text-align: center;
             letter-spacing: 1px;
         }
@@ -202,23 +202,23 @@
         .reglas-item {
             display: flex;
             align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 8px;
+            gap: 12px;
+            margin-bottom: 10px;
         }
 
         .tokens-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin-bottom: 18px;
+            gap: 16px;
+            margin-bottom: 20px;
         }
 
         .token-card {
             position: relative;
-            background: rgba(18, 12, 42, 0.78);
-            border: 2px solid rgba(255, 255, 255, 0.15);
-            border-radius: 16px;
-            padding: 16px 12px;
+            background: rgba(18, 12, 42, 0.85);
+            border: 2px solid rgba(255, 255, 255, 0.18);
+            border-radius: 18px;
+            padding: 18px 14px;
             cursor: pointer;
             transition: all 0.25s ease;
             display: flex;
@@ -229,64 +229,64 @@
 
         .token-card:hover {
             transform: translateY(-2px);
-            border-color: rgba(255, 109, 0, 0.75);
+            border-color: rgba(255, 109, 0, 0.8);
         }
 
         .token-card.selected {
             border-color: var(--orange);
-            background: linear-gradient(145deg, rgba(255, 109, 0, 0.3), rgba(157, 78, 221, 0.32));
-            box-shadow: 0 0 22px rgba(255, 109, 0, 0.65);
+            background: linear-gradient(145deg, rgba(255, 109, 0, 0.32), rgba(157, 78, 221, 0.35));
+            box-shadow: 0 0 25px rgba(255, 109, 0, 0.7);
         }
 
         .token-card.selected::after {
             content: "✓ ELEGIDO";
             position: absolute;
-            top: -9px;
-            right: 8px;
+            top: -10px;
+            right: 10px;
             background: var(--orange);
             color: #fff;
             font-family: 'Orbitron', sans-serif;
             font-size: 10px;
             font-weight: 900;
-            padding: 2px 7px;
+            padding: 3px 8px;
             border-radius: 6px;
         }
 
         .token-card img {
-            width: 52px;
-            height: 52px;
+            width: 58px;
+            height: 58px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--orange);
-            box-shadow: 0 0 14px rgba(255, 109, 0, 0.65);
+            box-shadow: 0 0 16px rgba(255, 109, 0, 0.7);
         }
 
         .token-card .t-name {
             font-family: 'Orbitron', sans-serif;
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 700;
             color: #fff;
         }
 
         .token-card .t-reward {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 700;
             color: var(--green);
         }
 
         .token-card .t-ca {
-            font-size: 10px;
+            font-size: 11px;
             color: #cbd5e1;
             font-family: monospace;
         }
 
         .resumen-apuesta {
-            background: rgba(255, 109, 0, 0.12);
+            background: rgba(255, 109, 0, 0.15);
             border: 1px dashed var(--orange);
-            border-radius: 14px;
-            padding: 14px;
-            margin-bottom: 18px;
-            font-size: 14px;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+            font-size: 15px;
             color: #e2e8f0;
         }
 
@@ -296,13 +296,13 @@
 
         .btn-accion {
             width: 100%;
-            padding: 17px 20px;
-            margin: 9px 0;
+            padding: 18px 22px;
+            margin: 10px 0;
             border: none;
-            border-radius: 14px;
+            border-radius: 16px;
             font-family: 'Orbitron', sans-serif;
             font-weight: 700;
-            font-size: 15px;
+            font-size: 16px;
             letter-spacing: 1px;
             cursor: pointer;
             text-transform: uppercase;
@@ -323,33 +323,33 @@
             background: linear-gradient(90deg, #ff6d00, #ff2a6d);
             color: #fff;
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-            box-shadow: 0 0 24px rgba(255, 109, 0, 0.6);
+            box-shadow: 0 0 28px rgba(255, 109, 0, 0.65);
         }
 
         .btn-invitado {
             background: linear-gradient(90deg, #10b981, #059669);
             color: #fff;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+            box-shadow: 0 0 22px rgba(16, 185, 129, 0.55);
         }
 
         .btn-web3 {
             background: linear-gradient(90deg, #f3ba2f, #ff8500);
             color: #05020d;
             font-weight: 900;
-            box-shadow: 0 0 24px rgba(243, 186, 47, 0.65);
+            box-shadow: 0 0 28px rgba(243, 186, 47, 0.7);
         }
 
         .btn-volver {
-            background: rgba(239, 68, 68, 0.22);
-            border: 1px solid rgba(239, 68, 68, 0.7);
+            background: rgba(239, 68, 68, 0.25);
+            border: 1px solid rgba(239, 68, 68, 0.75);
             color: #fca5a5;
         }
 
         #status-tx {
-            font-size: 13px;
+            font-size: 14px;
             color: var(--green);
-            margin-top: 8px;
-            min-height: 18px;
+            margin-top: 10px;
+            min-height: 20px;
             font-weight: bold;
         }
     </style>
@@ -739,7 +739,6 @@
         const existingCanvas = document.querySelector('canvas');
         if (existingCanvas) existingCanvas.remove();
 
-        // QUITADO EL CUADRO VERDE: Definido backgroundColor transparente y sin debug de Phaser
         new Phaser.Game({
             type: Phaser.AUTO,
             parent: 'game-viewport',
@@ -759,7 +758,7 @@
                         this.load.image('logo_' + sym, ECOSYSTEM_TOKENS[sym].logo);
                     });
                     this.load.image('bgFenix', 'https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png');
-                    // NUEVA IMAGEN SOLICITADA PARA EL MARCADOR SUPERIOR IZQUIERDO
+                    // NUEVA IMAGEN EXACTA SOLICITADA PARA EL MARCADOR SUPERIOR IZQUIERDO
                     this.load.image('logoHeaderNew', 'https://photos.pinksale.finance/file/pinksale-logo-upload/1790290122445-0077664fb41e21b3aec6f1685fd6ec56.png');
                 },
                 create: function () {
@@ -802,7 +801,7 @@
                     panelBg.fillRoundedRect(16, 14, 448, 92, 16);
                     panelBg.strokeRoundedRect(16, 14, 448, 92, 16);
 
-                    // IMAGEN NUEVA COLOCADA ARRIBA A LA IZQUIERDA EN EL MARCADOR (SIN NINGÚN BORDE VERDE)
+                    // IMAGEN NUEVA COLOCADA ARRIBA A LA IZQUIERDA EN EL MARCADOR (SIN NINGÚN CUADRO VERDE)
                     let headerLogo = this.add.image(58, 60, 'logoHeaderNew').setDisplaySize(54, 54);
                     this.tweens.add({
                         targets: headerLogo,

@@ -4,15 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ZAARD MEMORY ARCADE - Protocolo Panga</title>
-    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
     <style>
-        body { 
-            margin: 0; 
+        :root {
+            --cyan: #00f2fe;
+            --gold: #f3ba2f;
+            --purple: #9d4edd;
+            --pink: #ff2a6d;
+            --green: #00ffcc;
+            --dark-bg: #05020d;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
             padding: 0;
-            background: #070112;
-            overflow: hidden; 
-            font-family: 'Arial', sans-serif; 
+            background: var(--dark-bg);
+            overflow: hidden;
+            font-family: 'Rajdhani', sans-serif;
             color: #fff;
             touch-action: none;
             display: flex;
@@ -21,135 +37,456 @@
             height: 100vh;
             width: 100vw;
         }
+
+        /* Pantalla de Carga */
         #loading-screen {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #070112; z-index: 2000;
-            display: flex; justify-content: center; align-items: center; color: #00ffff; font-weight: bold;
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle, #180638 0%, #05020d 100%);
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--cyan);
+            letter-spacing: 2px;
         }
 
-        .fondo-cosmico {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: linear-gradient(135deg, rgba(61,16,107,0.85) 0%, rgba(23,4,47,0.9) 50%, rgba(7,1,18,0.95) 100%),
-                    url('https://ipfs.io/ipfs/bafybeicugqjr3uy2mvk32536qi3gf3astpwj53nlbeogx3vmzsmk2ia3wa');
-            background-size: cover;
-            background-position: center;
-            z-index: 999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            padding: 20px; box-sizing: border-box; text-align: center;
-            transition: opacity 0.5s ease;
+        .loader-ring {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 3px dashed var(--cyan);
+            border-top-color: var(--gold);
+            animation: spinLoader 1.5s linear infinite;
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.5);
         }
+
+        @keyframes spinLoader {
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Fondos Cósmicos Animados */
+        .fondo-cosmico {
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(157, 78, 221, 0.35) 0%, transparent 45%),
+                radial-gradient(circle at 80% 80%, rgba(0, 242, 254, 0.25) 0%, transparent 45%),
+                linear-gradient(135deg, rgba(20, 5, 45, 0.92) 0%, rgba(5, 2, 15, 0.98) 100%);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            overflow-y: auto;
+            transition: opacity 0.4s ease;
+        }
+
+        .fondo-cosmico::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(1.5px 1.5px at 25px 35px, #ffffff, transparent),
+                radial-gradient(2px 2px at 110px 140px, #00f2fe, transparent),
+                radial-gradient(1.5px 1.5px at 220px 80px, #f3ba2f, transparent),
+                radial-gradient(2px 2px at 310px 260px, #c77dff, transparent);
+            background-size: 350px 350px;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
         .fondo-cosmico.oculto {
             opacity: 0;
             pointer-events: none;
             display: none;
         }
 
+        /* Tarjeta Principal */
         .modal-card {
-            background: linear-gradient(135deg, rgba(50, 15, 95, 0.75) 0%, rgba(25, 8, 50, 0.82) 100%);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 3px solid #00ffff; 
-            border-radius: 22px;
-            padding: 30px; width: 100%; max-width: 420px;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
-            animation: borderGlowPulse 3s infinite alternate;
+            position: relative;
+            background: linear-gradient(145deg, rgba(22, 10, 48, 0.9) 0%, rgba(10, 5, 24, 0.95) 100%);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid var(--cyan);
+            border-radius: 24px;
+            padding: 26px 22px;
+            width: 100%;
+            max-width: 450px;
+            max-height: 94vh;
+            overflow-y: auto;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(0, 242, 254, 0.35), inset 0 0 20px rgba(157, 78, 221, 0.25);
+            animation: borderGlowPulse 4s infinite alternate;
+            z-index: 2;
         }
 
         @keyframes borderGlowPulse {
-            0% { border-color: #00ffff; box-shadow: 0 0 20px rgba(0, 255, 255, 0.5), inset 0 0 15px rgba(0, 255, 255, 0.2); }
-            33% { border-color: #d946ef; box-shadow: 0 0 30px rgba(217, 70, 239, 0.7), inset 0 0 20px rgba(217, 70, 239, 0.3); }
-            66% { border-color: #10b981; box-shadow: 0 0 30px rgba(16, 185, 129, 0.7), inset 0 0 20px rgba(16, 185, 129, 0.3); }
-            100% { border-color: #38bdf8; box-shadow: 0 0 25px rgba(56, 189, 248, 0.6), inset 0 0 15px rgba(56, 189, 248, 0.2); }
+            0% { border-color: var(--cyan); box-shadow: 0 0 30px rgba(0, 242, 254, 0.4); }
+            50% { border-color: var(--purple); box-shadow: 0 0 35px rgba(157, 78, 221, 0.55); }
+            100% { border-color: var(--gold); box-shadow: 0 0 30px rgba(243, 186, 47, 0.45); }
+        }
+
+        .badge-top {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+            background: rgba(0, 242, 254, 0.12);
+            border: 1px solid rgba(0, 242, 254, 0.4);
+            color: var(--cyan);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
         }
 
         .titulo-impacto {
-            font-size: 25px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
             font-weight: 900;
-            margin-top: 0;
-            background: linear-gradient(90deg, #c084fc, #38bdf8, #818cf8);
+            margin: 0 0 6px 0;
+            background: linear-gradient(90deg, #00f2fe, #ffffff, #f3ba2f);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 15px rgba(192, 132, 252, 0.5);
             letter-spacing: 1px;
         }
 
         .subtitulo-impacto {
-            font-size: 19px;
-            font-weight: bold;
-            margin: 12px 0;
-            background: linear-gradient(90deg, #e879f9, #22d3ee);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: #e0aaff;
+            margin: 0 0 14px 0;
         }
 
-        .desc-verde {
+        /* Caja de Reglas de Apuesta */
+        .reglas-box {
+            background: rgba(10, 16, 34, 0.85);
+            border: 1px solid rgba(243, 186, 47, 0.4);
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 18px;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.45;
+            color: #e2e8f0;
+        }
+
+        .reglas-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--gold);
+            font-size: 12px;
+            margin: 0 0 8px 0;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .reglas-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .reglas-item span.icon {
             font-size: 15px;
-            font-weight: bold;
-            color: #4ade80;
-            text-shadow: 0 0 8px rgba(74, 222, 128, 0.4);
-            margin-bottom: 25px; 
-            line-height: 1.6;
         }
 
-        .btn-accion {
-            width: 100%; padding: 14px; margin: 12px 0; border: none; border-radius: 12px;
-            font-weight: bold; font-size: 16px; cursor: pointer; text-transform: uppercase;
-            transition: transform 0.2s, box-shadow 0.2s;
+        /* Selector de Tokens en Grid 2x2 */
+        .tokens-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 16px;
         }
-        .btn-accion:hover { transform: scale(1.02); }
-        .btn-aceptar { background: linear-gradient(90deg, #d946ef, #8b5cf6); color: #fff; box-shadow: 0 0 15px rgba(217, 70, 239, 0.5); }
-        .btn-invitado { background: linear-gradient(90deg, #10b981, #059669); color: #fff; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
-        .btn-web3 { background: linear-gradient(90deg, #00ffff, #0088cc); color: #000; box-shadow: 0 0 15px rgba(0, 255, 255, 0.4); }
-        .btn-volver { background: linear-gradient(90deg, #ef4444, #b91c1c); color: #fff; box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
+
+        .token-card {
+            position: relative;
+            background: rgba(18, 12, 42, 0.9);
+            border: 2px solid rgba(255, 255, 255, 0.12);
+            border-radius: 14px;
+            padding: 12px 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .token-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(0, 242, 254, 0.5);
+        }
+
+        .token-card.selected {
+            border-color: var(--gold);
+            background: linear-gradient(145deg, rgba(243, 186, 47, 0.18), rgba(157, 78, 221, 0.25));
+            box-shadow: 0 0 20px rgba(243, 186, 47, 0.45);
+        }
+
+        .token-card.selected::after {
+            content: "✓ ELEGIDO";
+            position: absolute;
+            top: -8px;
+            right: 8px;
+            background: var(--gold);
+            color: #000;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9px;
+            font-weight: 900;
+            padding: 2px 6px;
+            border-radius: 6px;
+        }
+
+        .token-card img {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--cyan);
+            box-shadow: 0 0 12px rgba(0, 242, 254, 0.4);
+        }
+
+        .token-card .t-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .token-card .t-reward {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--green);
+        }
+
+        .token-card .t-ca {
+            font-size: 10px;
+            color: #94a3b8;
+            font-family: monospace;
+        }
+
+        /* Caja Resumen de Apuesta */
+        .resumen-apuesta {
+            background: rgba(0, 242, 254, 0.08);
+            border: 1px dashed var(--cyan);
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 16px;
+            font-size: 13px;
+            color: #cbd5e1;
+        }
+
+        .resumen-apuesta strong {
+            color: var(--gold);
+        }
+
+        /* Botones */
+        .btn-accion {
+            width: 100%;
+            padding: 13px 16px;
+            margin: 7px 0;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 0.8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+        }
+
+        .btn-accion:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+
+        .btn-accion:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-aceptar {
+            background: linear-gradient(90deg, #9d4edd, #00f2fe);
+            color: #fff;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.45);
+        }
+
+        .btn-invitado {
+            background: linear-gradient(90deg, #10b981, #059669);
+            color: #fff;
+            box-shadow: 0 0 16px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-web3 {
+            background: linear-gradient(90deg, #f3ba2f, #ff8500);
+            color: #05020d;
+            font-weight: 900;
+            box-shadow: 0 0 22px rgba(243, 186, 47, 0.55);
+        }
+
+        .btn-volver {
+            background: rgba(239, 68, 68, 0.18);
+            border: 1px solid rgba(239, 68, 68, 0.6);
+            color: #fca5a5;
+        }
+
+        #status-tx {
+            font-size: 12px;
+            color: var(--green);
+            margin-top: 8px;
+            min-height: 18px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
-<div id="loading-screen">CARGANDO PROTOCOLO...</div>
+<div id="loading-screen">
+    <div class="loader-ring"></div>
+    <div>INICIANDO PROTOCOLO PANGA...</div>
+</div>
 
-<!-- 1. PANTALLA DE BIENVENIDA -->
+<!-- 1. PANTALLA DE BIENVENIDA CÓSMICA -->
 <div id="pantalla-bienvenida" class="fondo-cosmico">
     <div class="modal-card">
-        <h1 class="titulo-impacto">⚡ PROTOCOLO PANGA ⚡</h1>
-        <h2 class="subtitulo-impacto">¡PON A PRUEBA TU MEMORIA CÓSMICA!</h2>
-        <p class="desc-verde">
-            Desafía los 10 niveles de habilidad, supera los obstáculos y demuestra tu destreza en el arcade Web3.
-        </p>
-        <button class="btn-accion btn-aceptar" onclick="irASeleccionModo()">¡EMPEZAR A JUGAR! 🚀</button>
-        <button class="btn-accion btn-volver" onclick="irAlMenuArcade()">⬅ MENÚ PRINCIPAL ARCADE</button>
+        <div class="badge-top">⚡ ECOSISTEMA ZAARD INNOVATION ⚡</div>
+        <h1 class="titulo-impacto">ZAARD MEMORY ARCADE</h1>
+        <h2 class="subtitulo-impacto">PROTOCOLO PANGA • DESAFÍO WEB3</h2>
+
+        <div class="reglas-box">
+            <h4>📜 ESTATUTO OFICIAL DEL DESAFÍO</h4>
+            <div class="reglas-item">
+                <span class="icon">🎮</span>
+                <div><strong>Modo Invitado (Gratis):</strong> Entrena tu memoria a través de los 10 niveles cósmicos sin necesidad de conectar billetera.</div>
+            </div>
+            <div class="reglas-item">
+                <span class="icon">💎</span>
+                <div><strong>Modo Apuesta Web3:</strong> Elige tu token favorito del ecosistema (<strong>ZARD, PANGA, ZARED o ZYM</strong>) y activa tu pase por <strong>0.0001 BNB</strong>.</div>
+            </div>
+            <div class="reglas-item">
+                <span class="icon">🏆</span>
+                <div><strong>Recompensa Legal On-Chain:</strong> Al superar los 10 niveles en Modo Apuesta, ganas <strong>0.001</strong> del token que hayas elegido.</div>
+            </div>
+        </div>
+
+        <button class="btn-accion btn-aceptar" onclick="irASeleccionModo()">🚀 ENTRAR AL ARCADE</button>
+        <button class="btn-accion btn-volver" onclick="irAlMenuArcade()">⬅ VOLVER AL MENÚ ARCADE</button>
     </div>
 </div>
 
-<!-- 2. PANTALLA DE SELECCIÓN DE MODO -->
+<!-- 2. PANTALLA DE SELECCIÓN DE TOKEN Y MODO -->
 <div id="pantalla-seleccion" class="fondo-cosmico oculto">
     <div class="modal-card">
-        <h2 id="txt-titulo-sel" class="titulo-impacto">⚡ MODO DE JUEGO ⚡</h2>
-        <p id="txt-desc-sel" class="desc-verde">
-            Modo Arcade de Memoria<br>Demuestra tu destreza sin riesgos en la red.
-        </p>
-        <button class="btn-accion btn-invitado" onclick="elegirModo('invitado')">JUGAR DIRECTO 🚀</button>
-        <button class="btn-accion btn-web3" onclick="conectarBilleteraVisual()">CONECTAR BILLETERA WEB3</button>
+        <div class="badge-top">🎯 CONFIGURA TU PARTIDA</div>
+        <h2 class="titulo-impacto">ELIGE TU RECOMPENSA</h2>
+        <p class="subtitulo-impacto">Selecciona qué token quieres ganar al superar los 10 niveles</p>
+
+        <!-- Grid de los 4 Tokens Oficiales -->
+        <div class="tokens-grid" id="tokens-grid">
+            <div class="token-card selected" data-token="ZARD" onclick="seleccionarToken('ZARD', this)">
+                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791940828941-906fd2a3d85625f79d066e5b033f6011.png" alt="ZARD">
+                <div class="t-name">ZARD</div>
+                <div class="t-reward">Premio: 0.001 ZARD</div>
+                <div class="t-ca">0xE287...A3fB</div>
+            </div>
+
+            <div class="token-card" data-token="PANGA" onclick="seleccionarToken('PANGA', this)">
+                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790484633328-559fdd3c13098c92f8a665ac39a838c2.png" alt="PANGA">
+                <div class="t-name">PANGA</div>
+                <div class="t-reward">Premio: 0.001 PANGA</div>
+                <div class="t-ca">0x4a6c...366e</div>
+            </div>
+
+            <div class="token-card" data-token="ZARED" onclick="seleccionarToken('ZARED', this)">
+                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1794605349763-3b36fe22e2048e05bbf50f8bdf231392.png" alt="ZARED">
+                <div class="t-name">ZARED</div>
+                <div class="t-reward">Premio: 0.001 ZARED</div>
+                <div class="t-ca">0xfc2a...690e</div>
+            </div>
+
+            <div class="token-card" data-token="ZYM" onclick="seleccionarToken('ZYM', this)">
+                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1793917735714-d84b28c0d04f3063f454cbc1d8a062fb.png" alt="ZYM">
+                <div class="t-name">ZYM</div>
+                <div class="t-reward">Premio: 0.001 ZYM</div>
+                <div class="t-ca">0x5a1d...c53d</div>
+            </div>
+        </div>
+
+        <div class="resumen-apuesta" id="resumen-apuesta">
+            Entrada Modo Apuesta: <strong>0.0001 BNB</strong> • Premio al ganar: <strong>0.001 ZARD</strong>
+        </div>
+
+        <button class="btn-accion btn-web3" id="btn-apostar" onclick="iniciarModoApuestaWeb3()">
+            ⚡ APOSTAR 0.0001 BNB Y JUGAR
+        </button>
+        <button class="btn-accion btn-invitado" onclick="elegirModoInvitado()">
+            🎮 JUGAR MODO INVITADO (GRATIS)
+        </button>
+        <div id="status-tx"></div>
         <button class="btn-accion btn-volver" onclick="volverABienvenida()">⬅ VOLVER</button>
     </div>
 </div>
 
 <script>
-    const LS_NOMBRE = localStorage.getItem('zaard_nombre') || "Jugador Zaard";
-    const LS_AVATAR_URL = localStorage.getItem('zaard_avatar') || 'https://raw.githubusercontent.com/figueredo56/ZAARD-Arcade/refs/heads/main/Gemini_Generated_Image_lhyyv2lhyyv2lhyy_1.png';
-    const LS_IDIOMA = localStorage.getItem('zaard_lang') || 'es'; 
+    // =========================================================================
+    // CONFIGURACIÓN DE TOKENS Y BILLETERA CREADORA
+    // =========================================================================
+    const CREATOR_WALLET = "0x0000000000000000000000000000000000000000"; // <-- AQUÍ COLOCAREMOS TU BILLETERA CREADORA / CONTRATO
+    const ENTRY_FEE_BNB = "0.0001";
+    const REWARD_AMOUNT = "0.001";
 
-    let web3, userAccount, esModoWeb3 = false;
+    const ECOSYSTEM_TOKENS = {
+        ZARD: {
+            symbol: "ZARD",
+            contract: "0xE2879d1172215E728472D7827586bd2796aFA3fB",
+            logo: "https://photos.pinksale.finance/file/pinksale-logo-upload/1791940828941-906fd2a3d85625f79d066e5b033f6011.png",
+            color: 0x00ffcc
+        },
+        PANGA: {
+            symbol: "PANGA",
+            contract: "0x4a6c3ea9e7132ad217c31f8252119f08c801366e",
+            logo: "https://photos.pinksale.finance/file/pinksale-logo-upload/1790484633328-559fdd3c13098c92f8a665ac39a838c2.png",
+            color: 0xf3ba2f
+        },
+        ZARED: {
+            symbol: "ZARED",
+            contract: "0xfc2aca08fc64e51793c32e9088fc43a57d39690e",
+            logo: "https://photos.pinksale.finance/file/pinksale-logo-upload/1794605349763-3b36fe22e2048e05bbf50f8bdf231392.png",
+            color: 0xff2a6d
+        },
+        ZYM: {
+            symbol: "ZYM",
+            contract: "0x5a1de9974c1279fbe989ce32899a1f4ece3fc53d",
+            logo: "https://photos.pinksale.finance/file/pinksale-logo-upload/1793917735714-d84b28c0d04f3063f454cbc1d8a062fb.png",
+            color: 0x38bdf8
+        }
+    };
+
+    const LS_NOMBRE = localStorage.getItem('zaard_nombre') || "Jugador Zaard";
+    const LS_AVATAR_URL = localStorage.getItem('zaard_avatar') || ECOSYSTEM_TOKENS.ZARD.logo;
+
+    let web3 = null;
+    let userAccount = null;
+    let esModoApuesta = false;
+    let tokenElegido = "ZARD";
     let nivelActual = 1;
-    const avatarImageKey = 'avatarUsr';
+    let txHashApuesta = null;
     let audioCtx = null;
 
+    // =========================================================================
+    // SISTEMA DE SONIDO RETRO SINTETIZADO
+    // =========================================================================
     function initAudioContext() {
-        if (!audioCtx) {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
-        }
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
     }
 
     function reproducirSonidoRetro(tipo) {
@@ -161,65 +498,80 @@
             if (tipo === 'click') {
                 let osc = audioCtx.createOscillator();
                 let gain = audioCtx.createGain();
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(300, now);
-                osc.frequency.setValueAtTime(600, now + 0.05);
-                gain.gain.setValueAtTime(0.1, now);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(420, now);
+                osc.frequency.exponentialRampToValueAtTime(760, now + 0.07);
+                gain.gain.setValueAtTime(0.12, now);
                 gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
                 osc.start(now);
                 osc.stop(now + 0.08);
             } else if (tipo === 'acierto') {
-                let notes = [523.25, 659.25, 783.99, 1046.50];
-                notes.forEach((freq, idx) => {
-                    let t = now + idx * 0.07;
+                [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+                    let t = now + idx * 0.06;
                     let o = audioCtx.createOscillator();
                     let g = audioCtx.createGain();
                     o.type = 'triangle';
                     o.frequency.setValueAtTime(freq, t);
-                    g.gain.setValueAtTime(0.15, t);
-                    g.gain.linearRampToValueAtTime(0.01, t + 0.1);
+                    g.gain.setValueAtTime(0.16, t);
+                    g.gain.linearRampToValueAtTime(0.01, t + 0.12);
                     o.connect(g);
                     g.connect(audioCtx.destination);
                     o.start(t);
-                    o.stop(t + 0.1);
+                    o.stop(t + 0.12);
                 });
             } else if (tipo === 'error') {
                 let osc = audioCtx.createOscillator();
                 let gain = audioCtx.createGain();
                 osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(150, now);
-                osc.frequency.linearRampToValueAtTime(80, now + 0.2);
-                gain.gain.setValueAtTime(0.2, now);
-                gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
+                osc.frequency.setValueAtTime(160, now);
+                osc.frequency.linearRampToValueAtTime(75, now + 0.22);
+                gain.gain.setValueAtTime(0.18, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.22);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
                 osc.start(now);
-                osc.stop(now + 0.2);
-            } else if (tipo === 'victoria') {
-                let notes = [440, 554.37, 659.25, 880, 1108.73];
-                notes.forEach((freq, idx) => {
-                    let t = now + idx * 0.1;
+                osc.stop(now + 0.22);
+            } else if (tipo === 'nivel') {
+                [440, 554.37, 659.25, 880].forEach((freq, idx) => {
+                    let t = now + idx * 0.08;
                     let o = audioCtx.createOscillator();
                     let g = audioCtx.createGain();
                     o.type = 'square';
                     o.frequency.setValueAtTime(freq, t);
-                    g.gain.setValueAtTime(0.15, t);
+                    g.gain.setValueAtTime(0.12, t);
                     g.gain.linearRampToValueAtTime(0.01, t + 0.15);
                     o.connect(g);
                     g.connect(audioCtx.destination);
                     o.start(t);
                     o.stop(t + 0.15);
                 });
+            } else if (tipo === 'victoria') {
+                [523.25, 659.25, 783.99, 1046.50, 1318.51].forEach((freq, idx) => {
+                    let t = now + idx * 0.1;
+                    let o = audioCtx.createOscillator();
+                    let g = audioCtx.createGain();
+                    o.type = 'triangle';
+                    o.frequency.setValueAtTime(freq, t);
+                    g.gain.setValueAtTime(0.2, t);
+                    g.gain.linearRampToValueAtTime(0.01, t + 0.25);
+                    o.connect(g);
+                    g.connect(audioCtx.destination);
+                    o.start(t);
+                    o.stop(t + 0.25);
+                });
             }
-        } catch(e) {
-            console.log("Audio FX error:", e);
-        }
+        } catch (e) {}
     }
 
+    // =========================================================================
+    // NAVEGACIÓN Y SELECCIÓN DE TOKEN / WEB3
+    // =========================================================================
     window.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('loading-screen').style.display = 'none';
+        setTimeout(() => {
+            document.getElementById('loading-screen').style.display = 'none';
+        }, 400);
     });
 
     function irASeleccionModo() {
@@ -239,29 +591,79 @@
         window.location.href = "https://figueredo56.github.io/ZAARD-Arcade/index-menu.html";
     }
 
-    function elegirModo(modo) {
+    function seleccionarToken(symbol, cardElement) {
         reproducirSonidoRetro('click');
-        esModoWeb3 = false;
+        tokenElegido = symbol;
+        document.querySelectorAll('.token-card').forEach(c => c.classList.remove('selected'));
+        cardElement.classList.add('selected');
+        document.getElementById('resumen-apuesta').innerHTML =
+            `Entrada Modo Apuesta: <strong>${ENTRY_FEE_BNB} BNB</strong> • Premio al ganar: <strong>${REWARD_AMOUNT} ${tokenElegido}</strong>`;
+    }
+
+    function elegirModoInvitado() {
+        reproducirSonidoRetro('click');
+        esModoApuesta = false;
+        txHashApuesta = null;
         document.getElementById('pantalla-seleccion').classList.add('oculto');
         iniciarPhaserGame();
     }
 
-    async function conectarBilleteraVisual() {
+    async function iniciarModoApuestaWeb3() {
         reproducirSonidoRetro('click');
-        if (window.ethereum) {
-            try {
-                web3 = new Web3(window.ethereum);
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                userAccount = accounts[0];
-                esModoWeb3 = true;
-                alert("¡Billetera conectada visualmente con éxito!");
-                document.getElementById('pantalla-seleccion').classList.add('oculto');
-                iniciarPhaserGame();
-            } catch (e) { 
-                alert("Conexión cancelada o fallida."); 
+        const statusEl = document.getElementById('status-tx');
+        const btnApostar = document.getElementById('btn-apostar');
+
+        if (!window.ethereum) {
+            alert("Por favor abre este juego desde MetaMask, Trust Wallet o Binance Web3 Wallet.");
+            return;
+        }
+
+        if (CREATOR_WALLET === "0x0000000000000000000000000000000000000000") {
+            alert("⚠️ Aún falta configurar la dirección de la billetera creadora/contrato para recibir los 0.0001 BNB. Configura CREATOR_WALLET cuando tengamos los contratos listos.");
+            return;
+        }
+
+        try {
+            btnApostar.disabled = true;
+            statusEl.textContent = "Conectando billetera Web3...";
+            web3 = new Web3(window.ethereum);
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            userAccount = accounts[0];
+
+            // Verificar red BNB Smart Chain (Chain ID 56 = 0x38)
+            const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+            if (chainId !== '0x38') {
+                statusEl.textContent = "Cambiando a BNB Smart Chain...";
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: '0x38' }]
+                });
             }
-        } else { 
-            alert("Por favor instala MetaMask o una billetera Web3."); 
+
+            statusEl.textContent = `Confirmando apuesta de ${ENTRY_FEE_BNB} BNB para jugar por ${REWARD_AMOUNT} ${tokenElegido}...`;
+            const weiValue = web3.utils.toWei(ENTRY_FEE_BNB, 'ether');
+
+            const tx = await web3.eth.sendTransaction({
+                from: userAccount,
+                to: CREATOR_WALLET,
+                value: weiValue
+            });
+
+            txHashApuesta = tx.transactionHash;
+            esModoApuesta = true;
+            statusEl.textContent = "✅ ¡Apuesta confirmada! Iniciando partida...";
+            btnApostar.disabled = false;
+
+            setTimeout(() => {
+                document.getElementById('pantalla-seleccion').classList.add('oculto');
+                statusEl.textContent = "";
+                iniciarPhaserGame();
+            }, 900);
+
+        } catch (err) {
+            console.error(err);
+            btnApostar.disabled = false;
+            statusEl.textContent = "❌ Transacción cancelada o fallida.";
         }
     }
 
@@ -273,16 +675,123 @@
         document.getElementById('pantalla-seleccion').classList.remove('oculto');
     }
 
-    function manejarVictoriaFinal(sceneRef) {
+    function manejarVictoriaFinal() {
         reproducirSonidoRetro('victoria');
-        alert(`🌟 ¡MAGNÍFICO, ${LS_NOMBRE.toUpperCase()}! 🌟\n\n¡Has completado con éxito los 10 niveles del Protocolo Panga!`);
+        if (esModoApuesta) {
+            alert(
+                `🏆 ¡VICTORIA SUPREMA, ${LS_NOMBRE.toUpperCase()}! 🏆\n\n` +
+                `Has completado los 10 niveles en MODO APUESTA.\n` +
+                `Premio desbloqueado: ${REWARD_AMOUNT} ${tokenElegido}\n` +
+                `Contrato ${tokenElegido}: ${ECOSYSTEM_TOKENS[tokenElegido].contract}\n` +
+                `Billetera ganadora: ${userAccount}\n\n` +
+                `(Listo para conectar con el contrato inteligente de pago)`
+            );
+        } else {
+            alert(
+                `🌟 ¡MAGNÍFICO, ${LS_NOMBRE.toUpperCase()}! 🌟\n\n` +
+                `¡Has superado los 10 niveles en Modo Invitado!\n` +
+                `Conecta tu billetera en el Modo Apuesta para ganar ${REWARD_AMOUNT} ${tokenElegido}.`
+            );
+        }
         volverAlMenuSeleccion();
     }
 
-    function manejarDerrota(sceneRef) {
+    function manejarDerrota() {
         reproducirSonidoRetro('error');
-        alert("¡Te has quedado sin oportunidades! Vuelve a intentarlo.");
+        alert("💥 ¡Te has quedado sin vidas cósmicas! Inténtalo nuevamente.");
         volverAlMenuSeleccion();
+    }
+
+    // =========================================================================
+    // MOTOR GRÁFICO PHASER 3 CON TEXTURAS PROCEDURALES + EFECTOS VISUALES
+    // =========================================================================
+    function generarTexturasProcedurales(scene) {
+        // 1. Generar Dorso de Carta Holográfico
+        if (!scene.textures.exists('dorso_holo')) {
+            let g = scene.make.graphics({ x: 0, y: 0, add: false });
+            g.fillStyle(0x13072e, 1);
+            g.fillRoundedRect(2, 2, 96, 96, 16);
+            g.lineStyle(3, 0x00f2fe, 1);
+            g.strokeRoundedRect(2, 2, 96, 96, 16);
+            g.lineStyle(1.5, 0x9d4edd, 0.8);
+            g.strokeRoundedRect(10, 10, 80, 80, 12);
+            // Rombo central neón
+            g.lineStyle(2, 0xf3ba2f, 0.9);
+            g.beginPath();
+            g.moveTo(50, 24);
+            g.lineTo(76, 50);
+            g.lineTo(50, 76);
+            g.lineTo(24, 50);
+            g.closePath();
+            g.strokePath();
+            g.fillStyle(0x00f2fe, 1);
+            g.fillCircle(50, 50, 6);
+            g.generateTexture('dorso_holo', 100, 100);
+            g.destroy();
+        }
+
+        // 2. Generar Partícula brillante para explosiones de acierto
+        if (!scene.textures.exists('spark_tex')) {
+            let gp = scene.make.graphics({ x: 0, y: 0, add: false });
+            gp.fillStyle(0xffffff, 1);
+            gp.fillCircle(8, 8, 8);
+            gp.generateTexture('spark_tex', 16, 16);
+            gp.destroy();
+        }
+
+        // 3. Generar 10 símbolos geométricos cósmicos de respaldo (para que NUNCA salga cuadro negro)
+        const palette = [
+            0x00ffcc, 0xf3ba2f, 0xff2a6d, 0x38bdf8, 0xc77dff,
+            0x4ade80, 0xfb923c, 0xf472b6, 0x22d3ee, 0xa78bfa
+        ];
+
+        palette.forEach((col, i) => {
+            const key = 'card_art_' + i;
+            if (!scene.textures.exists(key)) {
+                let gc = scene.make.graphics({ x: 0, y: 0, add: false });
+                gc.fillStyle(0x0b061d, 1);
+                gc.fillRoundedRect(2, 2, 96, 96, 16);
+                gc.lineStyle(3, col, 1);
+                gc.strokeRoundedRect(2, 2, 96, 96, 16);
+
+                // Halo interno
+                gc.fillStyle(col, 0.16);
+                gc.fillCircle(50, 50, 32);
+
+                // Figura única por índice
+                gc.lineStyle(3.5, col, 1);
+                gc.fillStyle(col, 0.85);
+                if (i % 5 === 0) {
+                    gc.strokeCircle(50, 50, 24);
+                    gc.fillCircle(50, 50, 10);
+                } else if (i % 5 === 1) {
+                    gc.strokeRect(30, 30, 40, 40);
+                    gc.fillCircle(50, 50, 9);
+                } else if (i % 5 === 2) {
+                    gc.beginPath();
+                    gc.moveTo(50, 22);
+                    gc.lineTo(76, 70);
+                    gc.lineTo(24, 70);
+                    gc.closePath();
+                    gc.strokePath();
+                } else if (i % 5 === 3) {
+                    gc.beginPath();
+                    gc.moveTo(50, 20);
+                    gc.lineTo(78, 50);
+                    gc.lineTo(50, 80);
+                    gc.lineTo(22, 50);
+                    gc.closePath();
+                    gc.strokePath();
+                    gc.fillCircle(50, 50, 7);
+                } else {
+                    gc.strokeCircle(50, 50, 26);
+                    gc.strokeCircle(50, 50, 14);
+                }
+
+                gc.generateTexture(key, 100, 100);
+                gc.destroy();
+            }
+        });
     }
 
     function iniciarPhaserGame() {
@@ -290,10 +799,10 @@
         if (existingCanvas) existingCanvas.remove();
 
         new Phaser.Game({
-            type: Phaser.AUTO, 
-            width: window.innerWidth, 
-            height: window.innerHeight,
-            backgroundColor: '#070112',
+            type: Phaser.AUTO,
+            width: 480,
+            height: 800,
+            backgroundColor: '#05020d',
             scale: {
                 mode: Phaser.Scale.FIT,
                 autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -301,145 +810,242 @@
                 height: 800
             },
             scene: {
-                preload: function() {
-                    const cids = [
-                        'bafybeifzkdoitiowwicqwnkfx6dnahydk5mm33h7r3j3wyv7c4rjp75ws4', 'bafybeiakl2nuugolggppxfttwcxfsv56zsjms4ityd5vjyyd54ctirzaeq', 
-                        'bafybeicugqjr3uy2mvk32536qi3gf3astpwj53nlbeogx3vmzsmk2ia3wa', 'bafybeickwp5h3ew6bm4aim6r5v5sc5xha6h3hdsbrhja2zeruosphac5ba', 
-                        'bafybeigxro3eht2lctrk4akglifsxuvwolwqfzgqzvnstabnpjjiungza4', 'bafybeidwy5yeihhglhcuztl32loatlk3wccecimodl6m4ocuotuuru7gvi', 
-                        'bafybeiheko4izm53qfmhejmvz5elek4hb2lp3weaduwndvrvpxdamwklue', 'bafybeiggz26x26hncisti5s5y74ciuk4yuymtczhsbwdufoql2gidl57mu', 
-                        'bafybeiginlvb63afmlicnvsx4fwfekanoipydzgzv3ay7njpvq6nm4zzym', 'bafybeie5wqjyuwdezpoe5tqkqlojxv5evtdkv6mxhondx5hvod44txbobq'
-                    ];
-                    cids.forEach((c, i) => this.load.image('c'+i, 'https://ipfs.io/ipfs/'+c));
-                    this.load.image('dorso', 'https://ipfs.io/ipfs/bafybeibmhheisrjxpxpcsh6goj6c4pxraz5xkcizn4aiyl5eamdc5qyc3m');
-                    this.load.image(avatarImageKey, LS_AVATAR_URL);
+                preload: function () {
+                    this.load.setCORS('anonymous');
+                    // Cargar logos oficiales de los 4 tokens
+                    Object.keys(ECOSYSTEM_TOKENS).forEach(sym => {
+                        this.load.image('logo_' + sym, ECOSYSTEM_TOKENS[sym].logo);
+                    });
+                    this.load.image('avatarUsr', LS_AVATAR_URL);
                 },
-                create: function() {
-                    let sceneRef = this;
+                create: function () {
+                    const sceneRef = this;
+                    generarTexturasProcedurales(sceneRef);
+
                     this.vidas = 12;
                     this.bloqueado = false;
                     this.primeraCarta = null;
-                    
-                    let bgGlow = this.add.circle(240, 400, 320, 0x3d106b, 0.35);
-                    bgGlow.setBlendMode(Phaser.BlendModes.ADD);
 
-                    for(let i=0; i<30; i++) {
-                        let sx = Phaser.Math.Between(15, 465);
-                        let sy = Phaser.Math.Between(15, 785);
-                        let star = this.add.circle(sx, sy, Phaser.Math.FloatBetween(1, 2), 0xffffff, Phaser.Math.FloatBetween(0.2, 0.8));
+                    // Nebulosa central pulsante
+                    let nebula1 = this.add.circle(240, 420, 290, 0x3d106b, 0.35).setBlendMode(Phaser.BlendModes.ADD);
+                    let nebula2 = this.add.circle(240, 420, 190, 0x0080ff, 0.22).setBlendMode(Phaser.BlendModes.ADD);
+                    this.tweens.add({
+                        targets: [nebula1, nebula2],
+                        scaleX: 1.12,
+                        scaleY: 1.12,
+                        alpha: 0.45,
+                        duration: 3200,
+                        yoyo: true,
+                        repeat: -1
+                    });
+
+                    // Estrellas animadas
+                    for (let i = 0; i < 40; i++) {
+                        let sx = Phaser.Math.Between(10, 470);
+                        let sy = Phaser.Math.Between(10, 790);
+                        let star = this.add.circle(sx, sy, Phaser.Math.FloatBetween(1, 2.2), 0xffffff, Phaser.Math.FloatBetween(0.2, 0.85));
                         this.tweens.add({
                             targets: star,
                             alpha: 0.1,
-                            duration: Phaser.Math.Between(1200, 2500),
+                            duration: Phaser.Math.Between(1000, 2600),
                             yoyo: true,
                             repeat: -1
                         });
                     }
 
-                    // --- PANEL SUPERIOR ---
+                    // Emisor de partículas para aciertos
+                    this.emitter = this.add.particles('spark_tex').createEmitter({
+                        speed: { min: 70, max: 210 },
+                        scale: { start: 0.6, end: 0 },
+                        alpha: { start: 1, end: 0 },
+                        lifespan: 550,
+                        blendMode: 'ADD',
+                        on: false
+                    });
+
+                    // --- HUD SUPERIOR ---
                     let panelBg = this.add.graphics();
-                    panelBg.fillStyle(0x180536, 0.9);
-                    panelBg.lineStyle(2, 0x00ffff, 0.8);
-                    panelBg.fillRoundedRect(20, 15, 440, 80, 16);
-                    panelBg.strokeRoundedRect(20, 15, 440, 80, 16);
+                    panelBg.fillStyle(0x14062e, 0.92);
+                    panelBg.lineStyle(2, 0x00f2fe, 0.9);
+                    panelBg.fillRoundedRect(16, 14, 448, 92, 16);
+                    panelBg.strokeRoundedRect(16, 14, 448, 92, 16);
 
-                    this.avatarImg = this.add.image(65, 55, avatarImageKey).setDisplaySize(60, 60).setOrigin(0.5);
-                    let avatarBorder = this.add.graphics();
-                    avatarBorder.lineStyle(3, 0xd946ef, 1);
-                    avatarBorder.strokeCircle(65, 55, 32);
+                    // Avatar o Logo del Token elegido
+                    const hudKey = this.textures.exists('logo_' + tokenElegido) ? 'logo_' + tokenElegido : 'card_art_0';
+                    this.avatarImg = this.add.image(58, 60, hudKey).setDisplaySize(58, 58);
+                    let avatarRing = this.add.graphics();
+                    avatarRing.lineStyle(2.5, ECOSYSTEM_TOKENS[tokenElegido].color, 1);
+                    avatarRing.strokeCircle(58, 60, 31);
 
-                    this.txtNombre = this.add.text(115, 30, LS_NOMBRE, { fontSize: '18px', color: '#00ffff', fontStyle: 'bold' });
-                    this.txtNivel = this.add.text(115, 58, "Nivel: " + `${nivelActual} / 10`, { fontSize: '15px', color: '#e879f9', fontStyle: 'bold' });
-                    
-                    this.txtVidas = this.add.text(435, 32, `❤️ ${this.vidas}`, { fontSize: '18px', color: '#f87171', fontStyle: 'bold' }).setOrigin(1, 0);
+                    // Textos de estado
+                    const modoLabel = esModoApuesta ? `💎 APUESTA: ${REWARD_AMOUNT} ${tokenElegido}` : `🎮 MODO INVITADO (${tokenElegido})`;
+                    this.add.text(102, 24, LS_NOMBRE, { fontFamily: 'Orbitron', fontSize: '15px', color: '#00f2fe', fontStyle: 'bold' });
+                    this.add.text(102, 46, modoLabel, { fontFamily: 'Rajdhani', fontSize: '14px', color: '#f3ba2f', fontStyle: 'bold' });
+                    this.txtNivel = this.add.text(102, 68, `NIVEL ${nivelActual} / 10`, { fontFamily: 'Orbitron', fontSize: '14px', color: '#e0aaff', fontStyle: 'bold' });
 
-                    let btnMenu = this.add.text(435, 62, "MENÚ", { fontSize: '13px', color: '#38bdf8', fontStyle: 'bold' }).setOrigin(1, 0).setInteractive();
+                    this.txtVidas = this.add.text(448, 25, `❤️ ${this.vidas}`, { fontFamily: 'Orbitron', fontSize: '17px', color: '#ff4d6d', fontStyle: 'bold' }).setOrigin(1, 0);
+
+                    let btnMenu = this.add.text(448, 66, "SALIR", { fontFamily: 'Orbitron', fontSize: '12px', color: '#38bdf8', fontStyle: 'bold' }).setOrigin(1, 0).setInteractive({ useHandCursor: true });
                     btnMenu.on('pointerdown', volverAlMenuSeleccion);
 
-                    let btnArcade = this.add.text(370, 62, "ARCADE", { fontSize: '13px', color: '#f43f5e', fontStyle: 'bold' }).setOrigin(1, 0).setInteractive();
-                    btnArcade.on('pointerdown', irAlMenuArcade);
+                    // --- CONSTRUCCIÓN DEL TABLERO CON ANIMACIONES DE VOLTEO ---
+                    function obtenerTexturaCarta(val) {
+                        // Los primeros 4 pares usan los logos oficiales si cargaron bien; el resto usa símbolos neón procedurales
+                        const logosKeys = ['logo_ZARD', 'logo_PANGA', 'logo_ZARED', 'logo_ZYM'];
+                        if (val < 4 && sceneRef.textures.exists(logosKeys[val]) && sceneRef.textures.get(logosKeys[val]).key !== '__MISSING') {
+                            return logosKeys[val];
+                        }
+                        return 'card_art_' + (val % 10);
+                    }
 
                     function construirTablero() {
-                        if (sceneRef.cartasGroup) {
-                            sceneRef.cartasGroup.destroy(true);
-                        }
+                        if (sceneRef.cartasGroup) sceneRef.cartasGroup.destroy(true);
                         sceneRef.cartasGroup = sceneRef.add.group();
 
-                        let totalPares = Math.min(4 + nivelActual, 10);
-                        let deck = []; 
-                        for(let i = 0; i < totalPares; i++) { deck.push(i, i); }
+                        let totalPares = Math.min(3 + nivelActual, 10); // Nivel 1 = 4 pares (8 cartas), hasta Nivel 7+ = 10 pares (20 cartas)
+                        let deck = [];
+                        for (let i = 0; i < totalPares; i++) deck.push(i, i);
                         Phaser.Utils.Array.Shuffle(deck);
-                        
+
                         let cols = 4;
-                        let cardSize = 78; 
-                        let spacingX = 90;
-                        let spacingY = 90;
-                        
+                        let cardSize = 82;
+                        let spacingX = 96;
+                        let spacingY = 98;
                         let startX = 240 - (((cols - 1) * spacingX) / 2);
-                        let startY = 210; 
-                        
+                        let startY = 185;
+
                         deck.forEach((val, idx) => {
                             let r = Math.floor(idx / cols);
                             let c = idx % cols;
                             let posX = startX + c * spacingX;
                             let posY = startY + r * spacingY;
-                            
-                            let carta = sceneRef.add.sprite(posX, posY, 'dorso').setDisplaySize(cardSize, cardSize).setInteractive();
+
+                            let carta = sceneRef.add.sprite(posX, posY, 'dorso_holo').setDisplaySize(cardSize, cardSize).setInteractive({ useHandCursor: true });
                             carta.val = val;
                             carta.revelada = false;
+                            carta.animando = false;
+                            carta.setScale(0);
                             sceneRef.cartasGroup.add(carta);
-                            
+
+                            // Animación de aparición en cascada
+                            sceneRef.tweens.add({
+                                targets: carta,
+                                scaleX: cardSize / 100,
+                                scaleY: cardSize / 100,
+                                duration: 280,
+                                delay: idx * 35,
+                                ease: 'Back.easeOut'
+                            });
+
                             carta.on('pointerdown', () => {
-                                if (sceneRef.bloqueado || carta.revelada || carta === sceneRef.primeraCarta) return;
+                                if (sceneRef.bloqueado || carta.revelada || carta.animando || carta === sceneRef.primeraCarta) return;
                                 reproducirSonidoRetro('click');
-                                carta.setTexture('c' + carta.val);
-                                
-                                if (!sceneRef.primeraCarta) {
-                                    sceneRef.primeraCarta = carta;
-                                } else {
-                                    sceneRef.bloqueado = true;
-                                    let primera = sceneRef.primeraCarta;
-                                    sceneRef.primeraCarta = null;
-                                    
-                                    if (primera.val === carta.val) {
-                                        reproducirSonidoRetro('acierto');
-                                        primera.revelada = true;
-                                        carta.revelada = true;
-                                        sceneRef.bloqueado = false;
-                                        
-                                        let todasResueltas = true;
-                                        sceneRef.cartasGroup.children.iterate((item) => {
-                                            if (item && !item.revelada) todasResueltas = false;
-                                        });
-                                        
-                                        if (todasResueltas) {
-                                            if (nivelActual >= 10) {
-                                                manejarVictoriaFinal(sceneRef);
-                                            } else {
-                                                nivelActual++;
-                                                sceneRef.time.delayedCall(800, () => {
-                                                    sceneRef.txtNivel.setText("Nivel: " + `${nivelActual} / 10`);
-                                                    construirTablero();
-                                                });
-                                            }
-                                        }
-                                    } else {
-                                        reproducirSonidoRetro('error');
-                                        sceneRef.vidas--;
-                                        sceneRef.txtVidas.setText(`❤️ ${sceneRef.vidas}`);
-                                        
-                                        sceneRef.time.delayedCall(800, () => {
-                                            primera.setTexture('dorso');
-                                            carta.setTexture('dorso');
-                                            sceneRef.bloqueado = false;
-                                            
-                                            if (sceneRef.vidas <= 0) {
-                                                manejarDerrota(sceneRef);
+                                carta.animando = true;
+
+                                // Efecto 3D Flip al abrir
+                                sceneRef.tweens.add({
+                                    targets: carta,
+                                    scaleX: 0,
+                                    duration: 110,
+                                    onComplete: () => {
+                                        carta.setTexture(obtenerTexturaCarta(carta.val));
+                                        sceneRef.tweens.add({
+                                            targets: carta,
+                                            scaleX: cardSize / 100,
+                                            duration: 110,
+                                            onComplete: () => {
+                                                carta.animando = false;
+                                                evaluarJugada(carta);
                                             }
                                         });
                                     }
-                                }
+                                });
                             });
                         });
+                    }
+
+                    function evaluarJugada(carta) {
+                        if (!sceneRef.primeraCarta) {
+                            sceneRef.primeraCarta = carta;
+                        } else {
+                            sceneRef.bloqueado = true;
+                            let primera = sceneRef.primeraCarta;
+                            sceneRef.primeraCarta = null;
+
+                            if (primera.val === carta.val) {
+                                reproducirSonidoRetro('acierto');
+                                primera.revelada = true;
+                                carta.revelada = true;
+
+                                // Explosión de partículas y pulso en ambas cartas
+                                sceneRef.emitter.setTint(ECOSYSTEM_TOKENS[tokenElegido].color);
+                                sceneRef.emitter.explode(18, primera.x, primera.y);
+                                sceneRef.emitter.explode(18, carta.x, carta.y);
+
+                                sceneRef.tweens.add({
+                                    targets: [primera, carta],
+                                    scaleX: 0.92,
+                                    scaleY: 0.92,
+                                    duration: 140,
+                                    yoyo: true
+                                });
+
+                                sceneRef.bloqueado = false;
+
+                                let todasResueltas = true;
+                                sceneRef.cartasGroup.children.iterate(item => {
+                                    if (item && !item.revelada) todasResueltas = false;
+                                });
+
+                                if (todasResueltas) {
+                                    if (nivelActual >= 10) {
+                                        sceneRef.time.delayedCall(500, manejarVictoriaFinal);
+                                    } else {
+                                        reproducirSonidoRetro('nivel');
+                                        nivelActual++;
+                                        sceneRef.time.delayedCall(750, () => {
+                                            sceneRef.txtNivel.setText(`NIVEL ${nivelActual} / 10`);
+                                            construirTablero();
+                                        });
+                                    }
+                                }
+                            } else {
+                                reproducirSonidoRetro('error');
+                                sceneRef.vidas--;
+                                sceneRef.txtVidas.setText(`❤️ ${sceneRef.vidas}`);
+
+                                // Sacudida de error
+                                sceneRef.tweens.add({
+                                    targets: [primera, carta],
+                                    x: '+=6',
+                                    duration: 50,
+                                    yoyo: true,
+                                    repeat: 3
+                                });
+
+                                sceneRef.time.delayedCall(700, () => {
+                                    [primera, carta].forEach(c => {
+                                        sceneRef.tweens.add({
+                                            targets: c,
+                                            scaleX: 0,
+                                            duration: 100,
+                                            onComplete: () => {
+                                                c.setTexture('dorso_holo');
+                                                sceneRef.tweens.add({
+                                                    targets: c,
+                                                    scaleX: 0.82,
+                                                    duration: 100
+                                                });
+                                            }
+                                        });
+                                    });
+                                    sceneRef.bloqueado = false;
+                                    if (sceneRef.vidas <= 0) {
+                                        manejarDerrota();
+                                    }
+                                });
+                            }
+                        }
                     }
 
                     construirTablero();

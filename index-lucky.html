@@ -1,1086 +1,1539 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZAARD Lucky Arena - Predicción BNB & Recompensas ZARD</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title id="page-title">ZAARD INNOVATION TRACKER OFFICIAL | Ecosistema Multitoken, NFT & Live Trading</title>
+    
+    <!-- Open Graph for Social Sharing -->
+    <meta property="og:url" content="https://figueredo56.github.io/zaard-tracker/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="ZAARD INNOVATION NEXUS & TRACKER">
+    <meta property="og:description" content="Ecosistema oficial ZAARD. Rastreo en vivo de ZARD, PANGA, ZARED y ZYM en BNB Smart Chain.">
+    <meta property="og:image" content="https://photos.pinksale.finance/file/pinksale-logo-upload/1790285851823-4955b8f5511ea8235af22dfb82371c91.png">
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root {
-            --bg-dark: #06030d;
-            --card-bg: rgba(20, 10, 42, 0.92);
-            --neon-purple: #c084fc;
-            --neon-cyan: #22d3ee;
-            --neon-pink: #f472b6;
-            --neon-green: #34d399;
-            --neon-red: #fb7185;
-            --neon-gold: #f59e0b;
+            --neon-blue: #00f2fe;
+            --neon-purple: #b084cc;
+            --text-purple: #d8b4fe;
+            --gold: #d4af37;
+            --neon-green: #00ff66;
+            --neon-pink: #ec4899;
+            --bg-dark: #030308;
+            --panel-bg: rgba(10, 12, 28, 0.94);
+            --border-glow: rgba(0, 242, 254, 0.4);
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Rajdhani', sans-serif;
         }
 
         body {
-            background: radial-gradient(circle at 50% 0%, rgba(147, 51, 234, 0.28), transparent 60%),
-                        linear-gradient(rgba(8, 3, 18, 0.84), rgba(4, 2, 10, 0.95)),
-                        url('https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png');
+            background-color: var(--bg-dark);
+            background-image: linear-gradient(rgba(3, 3, 8, 0.82), rgba(3, 3, 8, 0.96)), url('https://photos.pinksale.finance/file/pinksale-logo-upload/1794687559048-16ebac67278e144f98b264e40bf5690d.png');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            color: #ffffff;
+            color: #eee;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             overflow-x: hidden;
         }
 
-        .navbar {
-            width: 100%;
-            max-width: 1200px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 20px;
-            background: rgba(18, 8, 36, 0.92);
-            border-bottom: 1px solid rgba(192, 132, 252, 0.5);
-            box-shadow: 0 4px 25px rgba(147, 51, 234, 0.35);
-            backdrop-filter: blur(10px);
-            z-index: 10;
+        /* --- SPLASH SCREEN (BIENVENIDA GRANDE PARA PC Y MÓVIL) --- */
+        #splash-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100vh;
+            background-color: #030308;
+            background-image: linear-gradient(rgba(3, 3, 8, 0.86), rgba(3, 3, 8, 0.96)), url('https://photos.pinksale.finance/file/pinksale-logo-upload/1794687559048-16ebac67278e144f98b264e40bf5690d.png');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 9999;
+            padding: 28px;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
         }
 
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 800;
-            font-size: 1.05rem;
-            color: #e9d5ff;
-            letter-spacing: 0.6px;
-        }
-
-        .logo-area img {
-            width: 36px;
-            height: 36px;
+        .splash-logo {
+            width: clamp(160px, 16vw, 230px);
+            height: clamp(160px, 16vw, 230px);
             border-radius: 50%;
-            border: 2px solid var(--neon-cyan);
-            box-shadow: 0 0 12px rgba(34, 211, 238, 0.6);
-        }
-
-        .nav-controls {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .lang-badge {
-            background: rgba(30, 17, 56, 0.95);
-            color: #22d3ee;
-            border: 1px solid rgba(34, 211, 238, 0.5);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: bold;
-        }
-
-        .btn-wallet {
-            background: linear-gradient(135deg, #10b981, #06b6d4);
-            color: #041014;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 0 16px rgba(16, 185, 129, 0.45);
-            transition: 0.25s;
-        }
-
-        .btn-wallet:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 0 24px rgba(34, 211, 238, 0.7);
-        }
-
-        .screen {
-            width: 100%;
-            max-width: 1200px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-        }
-
-        .hidden { display: none !important; }
-
-        #screenWelcome {
-            justify-content: center;
-            min-height: calc(100vh - 70px);
-        }
-
-        .welcome-card-box {
-            background: rgba(18, 8, 38, 0.9);
-            border: 2px solid var(--neon-purple);
-            border-radius: 18px;
-            padding: 30px;
-            max-width: 740px;
-            width: 100%;
-            box-shadow: 0 0 40px rgba(168, 85, 247, 0.5), inset 0 0 24px rgba(34, 211, 238, 0.12);
-            backdrop-filter: blur(8px);
-        }
-
-        .floating-logo-container {
-            text-align: center;
-            margin-bottom: 14px;
-        }
-
-        .floating-logo {
-            width: 82px;
-            height: 82px;
-            border-radius: 50%;
-            border: 3px solid var(--neon-cyan);
             object-fit: cover;
-            animation: floatGlow 3s ease-in-out infinite;
+            border: 3px solid var(--neon-blue);
+            box-shadow: 0 0 40px var(--neon-blue), 0 0 80px var(--neon-purple);
+            animation: splashPulse 2s infinite alternate ease-in-out;
+            margin-bottom: 26px;
         }
 
-        @keyframes floatGlow {
-            0% { transform: translateY(0px); box-shadow: 0 0 18px var(--neon-cyan); }
-            50% { transform: translateY(-8px); box-shadow: 0 0 30px var(--neon-purple); }
-            100% { transform: translateY(0px); box-shadow: 0 0 18px var(--neon-cyan); }
+        @keyframes splashPulse {
+            0% { transform: scale(0.96); box-shadow: 0 0 25px var(--neon-blue), 0 0 50px var(--neon-purple); }
+            100% { transform: scale(1.05); box-shadow: 0 0 55px var(--neon-blue), 0 0 105px var(--neon-green); }
         }
 
-        .welcome-card-box h1 {
-            font-size: 1.55rem;
-            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .welcome-desc {
-            color: #e9d5ff;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            margin-bottom: 14px;
-            text-align: center;
-        }
-
-        .rules-list-welcome {
-            background: rgba(12, 6, 24, 0.9);
-            border: 1px solid rgba(192, 132, 252, 0.5);
-            border-radius: 12px;
-            padding: 14px 18px;
+        .splash-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2.1rem, 4.2vw, 3.8rem);
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: var(--neon-green);
+            text-shadow: 0 0 24px var(--neon-green), 0 0 45px rgba(0, 242, 254, 0.45);
             margin-bottom: 18px;
-            font-size: 0.84rem;
-            color: #e9d5ff;
+            text-align: center;
+            line-height: 1.15;
+        }
+
+        .splash-subtitle {
+            font-size: clamp(1.2rem, 1.8vw, 1.65rem);
+            color: var(--text-purple);
+            text-align: center;
+            max-width: 920px;
+            padding: 0 20px;
+            margin-bottom: 34px;
             line-height: 1.55;
         }
 
-        .rules-list-welcome li {
-            margin-bottom: 5px;
+        .enter-btn {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+            color: #030308;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: clamp(1.05rem, 1.4vw, 1.35rem);
+            padding: 18px 48px;
+            border: none;
+            border-radius: 35px;
+            cursor: pointer;
+            box-shadow: 0 0 35px var(--neon-blue);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
         }
 
-        .btn-action {
+        .enter-btn:hover {
+            transform: scale(1.07);
+            box-shadow: 0 0 55px var(--neon-green), 0 0 30px var(--neon-blue);
+        }
+
+        /* --- HEADER & NAVEGACIÓN --- */
+        header {
+            background: rgba(15, 12, 35, 0.96);
+            border-bottom: 2px solid var(--neon-blue);
+            padding: 15px 25px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 25px rgba(0, 242, 254, 0.25);
+            position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 15px;
+        }
+
+        .brand { display: flex; align-items: center; gap: 15px; }
+        .brand img { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); }
+        .brand-name { font-family: 'Orbitron', sans-serif; font-size: 1.4rem; font-weight: 900; color: var(--neon-green); text-shadow: 0 0 12px var(--neon-green); }
+
+        .nexus-tabs {
+            display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+        }
+
+        .tab-btn {
+            background: rgba(12, 6, 26, 0.85);
+            border: 1px solid var(--border-glow);
+            color: var(--text-purple);
+            padding: 8px 14px; border-radius: 10px;
+            font-family: 'Orbitron', sans-serif; font-size: 0.75rem; font-weight: 700;
+            cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; gap: 5px;
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            background: linear-gradient(135deg, rgba(0,242,254,0.25), rgba(176,132,204,0.25));
+            border-color: var(--neon-blue);
+            color: var(--neon-blue);
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.panga-tab:hover, .tab-btn.panga-tab.active {
+            background: linear-gradient(135deg, rgba(236,72,153,0.25), rgba(0,255,102,0.25));
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+        }
+
+        .tab-btn.zared-tab:hover, .tab-btn.zared-tab.active {
+            background: linear-gradient(135deg, rgba(247,37,133,0.25), rgba(76,201,240,0.25));
+            border-color: #f72585;
+            color: #f72585;
+        }
+
+        .tab-btn.zym-tab:hover, .tab-btn.zym-tab.active {
+            background: linear-gradient(135deg, rgba(6,214,160,0.25), rgba(123,44,191,0.25));
+            border-color: #06d6a0;
+            color: #06d6a0;
+        }
+
+        .nav-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+        .lang-select {
+            background: rgba(176, 132, 204, 0.15); border: 1px solid var(--neon-purple); color: var(--text-purple);
+            padding: 8px 14px; border-radius: 8px; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: 600; cursor: pointer; outline: none;
+        }
+        .lang-select option { background: #030308; color: #fff; }
+
+        .wallet-btn {
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));
+            color: #030308; font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 0.82rem;
+            padding: 9px 16px; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 0 20px rgba(0,255,102,0.5); transition: 0.3s;
+            display: inline-flex; align-items: center; gap: 6px;
+        }
+        .wallet-btn:hover { transform: scale(1.05); box-shadow: 0 0 30px var(--neon-green); }
+
+        .disconnect-btn {
+            background: rgba(239, 68, 68, 0.16);
+            color: #fca5a5;
+            border: 1px solid #ef4444;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 0.78rem;
+            padding: 8px 13px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.25s;
+            display: none;
+            align-items: center;
+            gap: 5px;
+        }
+        .disconnect-btn:hover {
+            background: rgba(239, 68, 68, 0.32);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+        }
+
+        /* --- MODAL DE ACCESO DIRECTO A BILLETERAS --- */
+        .wallet-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 4, 12, 0.86);
+            backdrop-filter: blur(6px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+        }
+        .wallet-modal-backdrop.open { display: flex; }
+
+        .wallet-modal-box {
+            width: 100%;
+            max-width: 470px;
+            background: linear-gradient(160deg, #061324 0%, #0a0c24 100%);
+            border: 2px solid var(--neon-blue);
+            border-radius: 18px;
+            padding: 26px;
+            box-shadow: 0 0 40px rgba(0, 242, 254, 0.35), 0 0 70px rgba(0, 255, 102, 0.18);
+            text-align: center;
+            color: #e6f7ff;
+        }
+
+        .wallet-modal-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.25rem;
+            color: var(--neon-green);
+            margin-bottom: 10px;
+        }
+
+        .wallet-modal-sub {
+            font-size: 1rem;
+            color: #cbd5e1;
+            margin-bottom: 20px;
+            line-height: 1.45;
+        }
+
+        .wallet-launch-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .wallet-launch-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 13px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid rgba(0, 242, 254, 0.45);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: 0.25s;
+        }
+        .wallet-launch-link:hover {
+            border-color: var(--neon-green);
+            background: rgba(0, 255, 102, 0.16);
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.35);
+        }
+
+        .wallet-close-btn {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.25);
+            color: #cbd5e1;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.78rem;
+            cursor: pointer;
+        }
+
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.45s ease-in-out; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- TARJETAS CON EFECTO ELÉCTRICO Y CHISPAS --- */
+        .fin-card {
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.16) 0%, transparent 55%),
+                radial-gradient(circle at 12% 90%, rgba(168, 85, 247, 0.18) 0%, transparent 48%),
+                radial-gradient(circle at 88% 90%, rgba(0, 255, 136, 0.16) 0%, transparent 48%),
+                linear-gradient(160deg, rgba(2, 6, 15, 0.96) 0%, rgba(5, 16, 28, 0.95) 55%, rgba(3, 10, 20, 0.97) 100%);
+            border: 2px solid #00f0ff;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 30px;
+            animation: electricCardPulse 2.6s infinite alternate ease-in-out;
+        }
+
+        .electric-grid-overlay {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 240, 255, 0.07) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.07) 1px, transparent 1px);
+            background-size: 30px 30px;
+            mask-image: radial-gradient(circle at center, black 45%, transparent 92%);
+            -webkit-mask-image: radial-gradient(circle at center, black 45%, transparent 92%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .electric-spark-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .electric-card-body {
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes electricCardPulse {
+            0% {
+                border-color: #00ff88;
+                box-shadow: 0 0 22px rgba(0, 255, 136, 0.4), 0 0 55px rgba(0, 240, 255, 0.18), inset 0 0 22px rgba(0, 255, 136, 0.12);
+            }
+            50% {
+                border-color: #00f0ff;
+                box-shadow: 0 0 38px rgba(0, 240, 255, 0.8), 0 0 75px rgba(168, 85, 247, 0.32), inset 0 0 30px rgba(0, 240, 255, 0.22);
+            }
+            100% {
+                border-color: #c084fc;
+                box-shadow: 0 0 28px rgba(192, 132, 252, 0.65), 0 0 65px rgba(0, 255, 136, 0.22), inset 0 0 24px rgba(192, 132, 252, 0.16);
+            }
+        }
+
+        .gold-glow { border-color: var(--gold); }
+        .green-glow { border-color: var(--neon-green); }
+        .pink-glow { border-color: #f72585; }
+        .cyan-glow { border-color: #06d6a0; }
+
+        h2, h3 { font-family: 'Orbitron', sans-serif; }
+
+        .contract-pill {
+            background: rgba(3, 3, 8, 0.9);
+            border: 1px solid var(--neon-blue);
+            padding: 8px 15px; border-radius: 8px;
+            font-family: monospace; font-size: 0.90rem; color: var(--text-purple);
+            display: inline-block; word-break: break-all; margin: 8px 0;
+            box-shadow: 0 0 14px rgba(0, 240, 255, 0.25);
+        }
+
+        .token-balance-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            background: rgba(4, 18, 32, 0.92);
+            border: 1px solid rgba(0, 255, 136, 0.45);
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 18px rgba(0, 255, 136, 0.15);
+        }
+
+        .token-balance-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--neon-green);
+        }
+
+        .action-btn {
+            position: relative;
+            display: inline-block;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            color: #030308; font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 0.90rem;
+            padding: 12px 24px; border-radius: 10px; text-decoration: none;
+            box-shadow: 0 0 22px rgba(0,242,254,0.55); transition: 0.3s; border: none; cursor: pointer;
+        }
+        .action-btn:hover { background: var(--neon-green); box-shadow: 0 0 35px var(--neon-green), 0 0 18px var(--neon-blue); color: #030308; transform: translateY(-2px); }
+
+        .order-book-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px;
+        }
+
+        .order-box {
+            background: rgba(8, 18, 34, 0.88);
+            border: 1px solid rgba(0, 240, 255, 0.35);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.12);
+        }
+
+        .price-compare-table {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .price-compare-table { grid-template-columns: 1fr; }
+        }
+
+        .price-comp-card {
+            background: rgba(3, 10, 22, 0.88);
+            border: 1px solid rgba(0, 255, 136, 0.38);
+            padding: 16px;
+            border-radius: 10px;
+            box-shadow: 0 0 14px rgba(0, 255, 136, 0.12);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .compare-token-logo {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid rgba(0, 242, 254, 0.6);
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.35);
+        }
+
+        /* Grid cuadrado perfecto de 2x2 para los 4 tokens */
+        .features-grid {
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 20px; 
+            margin-top: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .features-grid { grid-template-columns: 1fr; }
+        }
+
+        .feature-box {
+            background: rgba(4, 12, 24, 0.88);
+            border: 1px solid rgba(0, 242, 254, 0.45);
+            border-radius: 14px;
+            padding: 24px;
+            text-align: left;
+            transition: 0.3s;
+            box-shadow: 0 0 16px rgba(0, 242, 254, 0.15);
+        }
+        .feature-box:hover {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 28px rgba(0,255,136,0.45), 0 0 18px rgba(0,242,254,0.35);
+            transform: translateY(-4px);
+        }
+        .feature-box i { font-size: 2rem; color: var(--neon-blue); margin-bottom: 12px; filter: drop-shadow(0 0 8px rgba(0, 242, 254, 0.5)); }
+        .feature-box h4 { font-family: 'Orbitron', sans-serif; color: #fff; font-size: 1.1rem; margin-bottom: 8px; }
+        .feature-box p { color: #cbd5e1; font-size: 0.92rem; line-height: 1.5; }
+
+        /* Barra WOW de alto voltaje para Lucky Arcade + Modo Invitado */
+        .arcade-banner-bar {
+            position: relative;
             display: block;
             width: 100%;
-            background: linear-gradient(135deg, #9333ea, #06b6d4);
-            color: #fff;
-            border: none;
-            padding: 13px;
+            margin-top: 28px;
+            padding: 20px 22px;
+            background: linear-gradient(90deg, #00ff88, #00f0ff, #c084fc, #ffd700, #00ff88);
+            background-size: 300% 100%;
+            color: #02070d;
+            font-family: 'Orbitron', sans-serif;
             font-size: 1rem;
-            font-weight: 800;
-            border-radius: 12px;
-            cursor: pointer;
-            box-shadow: 0 0 24px rgba(147, 51, 234, 0.65);
-            transition: 0.25s;
+            font-weight: 900;
             text-align: center;
+            text-decoration: none;
+            border-radius: 16px;
+            border: 2px solid #ffffff;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.8), 0 0 55px rgba(0, 255, 136, 0.55);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: arcadeVoltShift 3.5s linear infinite, arcadeVoltPulse 1.8s infinite alternate ease-in-out;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
 
-        .btn-action:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 35px rgba(34, 211, 238, 0.75);
+        .arcade-banner-bar:hover {
+            transform: scale(1.025) translateY(-2px);
+            box-shadow: 0 0 45px #00ff88, 0 0 75px #00f0ff, 0 0 95px #c084fc;
+            color: #010408;
         }
 
-        .loading-box { text-align: center; padding: 60px 20px; }
-
-        .spinner {
-            width: 64px;
-            height: 64px;
-            border: 5px solid rgba(168, 85, 247, 0.25);
-            border-top: 5px solid var(--neon-cyan);
-            border-right: 5px solid var(--neon-purple);
-            border-radius: 50%;
-            animation: spin 0.9s linear infinite;
-            margin: 0 auto 20px auto;
-            box-shadow: 0 0 25px rgba(34, 211, 238, 0.4);
+        .guest-sub-badge {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 4px 12px;
+            border-radius: 999px;
+            background: rgba(2, 7, 13, 0.85);
+            color: #00ff88;
+            font-size: 0.78rem;
+            letter-spacing: 1px;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
+        @keyframes arcadeVoltShift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+
+        @keyframes arcadeVoltPulse {
+            0% { filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.6)); }
+            100% { filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.9)); }
+        }
+
+        /* ========================================================= */
+        /* BLOQUE SHOWCASE ELÉCTRICO POR TOKEN (DEBAJO DE GRÁFICA)   */
+        /* ========================================================= */
+        .token-volt-showcase {
+            max-width: 100%;
+            margin: 35px auto 10px auto;
+            padding: 42px 26px;
+            background:
+                radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.22) 0%, transparent 55%),
+                radial-gradient(circle at 15% 85%, rgba(168, 85, 247, 0.25) 0%, transparent 50%),
+                radial-gradient(circle at 85% 85%, rgba(0, 255, 136, 0.22) 0%, transparent 50%),
+                linear-gradient(160deg, #010409 0%, #04101c 50%, #020812 100%);
+            border-radius: 22px;
+            border: 2px solid #00f0ff;
+            text-align: center;
+            color: #e6f7ff;
+            position: relative;
+            overflow: hidden;
+            animation: electricCardPulse 2.4s infinite alternate ease-in-out;
+        }
+
+        .token-volt-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .token-volt-badge {
+            display: inline-block;
+            padding: 7px 20px;
+            margin-bottom: 16px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 900;
+            letter-spacing: 2.2px;
+            text-transform: uppercase;
+            color: #01060a;
+            background: linear-gradient(90deg, #00ff88, #00f0ff, #00ff88);
+            background-size: 200% auto;
+            border-radius: 50px;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.8);
+            animation: voltBadgeFlow 3s linear infinite;
+        }
+
+        @keyframes voltBadgeFlow {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .token-volt-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.9rem;
+            font-weight: 900;
+            margin: 0 0 14px 0;
+            background: linear-gradient(90deg, #ffffff, #00f0ff, #00ff88, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            filter: drop-shadow(0 0 12px rgba(0, 240, 255, 0.45));
+        }
+
+        .token-volt-img-wrapper {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 20px auto 26px auto;
+            border-radius: 22px;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 0 35px rgba(0, 240, 255, 0.65), 0 0 60px rgba(0, 255, 136, 0.35);
+            transition: transform 0.35s ease;
+        }
+
+        .token-volt-img-wrapper:hover {
+            transform: scale(1.04);
+        }
+
+        .token-volt-img-wrapper::before {
+            content: "";
+            position: absolute;
+            width: 160%;
+            height: 160%;
+            background: conic-gradient(
+                from 0deg,
+                #00ff88 0deg,
+                #00f0ff 90deg,
+                transparent 140deg,
+                #b873ef 220deg,
+                #00f0ff 300deg,
+                #00ff88 360deg
+            );
+            animation: voltSpinArc 3.5s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes voltSpinArc {
             100% { transform: rotate(360deg); }
         }
 
-        .arena-container {
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-            width: 100%;
-        }
-
-        .top-bar-arena {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            background: rgba(18, 8, 38, 0.9);
-            padding: 12px 16px;
-            border-radius: 12px;
-            border: 1px solid rgba(192, 132, 252, 0.5);
-            box-shadow: 0 0 20px rgba(147, 51, 234, 0.25);
-        }
-
-        .card-panel {
-            background: var(--card-bg);
-            border: 1.5px solid rgba(192, 132, 252, 0.55);
-            border-radius: 16px;
-            padding: 22px;
-            box-shadow: 0 0 30px rgba(147, 51, 234, 0.3), inset 0 0 18px rgba(34, 211, 238, 0.06);
-            backdrop-filter: blur(8px);
-        }
-
-        .market-chart-box {
-            background: linear-gradient(180deg, rgba(12, 6, 26, 0.95), rgba(5, 2, 12, 0.98));
-            border-radius: 12px;
-            border: 1px solid rgba(34, 211, 238, 0.45);
-            box-shadow: inset 0 0 20px rgba(34, 211, 238, 0.12);
+        .token-volt-img-wrapper img {
             position: relative;
-            height: 205px;
-            margin-bottom: 12px;
-            overflow: hidden;
-        }
-
-        canvas { width: 100%; height: 100%; display: block; }
-
-        .price-big {
-            font-size: 1.35rem;
-            font-weight: 800;
-            color: var(--neon-green);
-            text-shadow: 0 0 12px rgba(52, 211, 153, 0.55);
-        }
-
-        .payout-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(16, 185, 129, 0.12);
-            border: 1px solid rgba(52, 211, 153, 0.45);
-            color: #a7f3d0;
-            padding: 8px 12px;
-            border-radius: 10px;
-            font-size: 0.82rem;
-            margin-bottom: 10px;
+            z-index: 1;
             width: 100%;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-
-        .timer-badge {
-            background: rgba(46, 16, 101, 0.9);
-            color: #67e8f9;
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-weight: 800;
-            font-size: 0.95rem;
-            border: 1px solid rgba(34, 211, 238, 0.5);
-            box-shadow: 0 0 12px rgba(34, 211, 238, 0.25);
-        }
-
-        .bet-buttons {
-            display: flex;
-            gap: 14px;
-            margin-top: 10px;
-        }
-
-        .btn-sube {
-            flex: 1;
-            background: linear-gradient(135deg, #059669, #34d399);
-            color: #03150e;
-            border: none;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(52, 211, 153, 0.45);
-            transition: 0.2s;
-        }
-
-        .btn-sube:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 28px rgba(52, 211, 153, 0.75);
-        }
-
-        .btn-baja {
-            flex: 1;
-            background: linear-gradient(135deg, #dc2626, #fb7185);
-            color: #fff;
-            border: none;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(251, 113, 133, 0.45);
-            transition: 0.2s;
-        }
-
-        .btn-baja:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 28px rgba(251, 113, 133, 0.75);
-        }
-
-        .order-book {
-            max-height: 105px;
-            overflow-y: auto;
-            font-size: 0.76rem;
-            background: rgba(10, 4, 20, 0.85);
-            border: 1px solid rgba(168, 85, 247, 0.4);
-            border-radius: 8px;
-            padding: 6px;
-        }
-
-        .order-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 4px 8px;
-            border-bottom: 1px solid rgba(124, 58, 237, 0.2);
-        }
-
-        .order-green { color: #34d399; font-weight: bold; }
-        .order-red { color: #fb7185; font-weight: bold; }
-
-        .ecosystem-showcase {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 14px;
-            margin-top: 12px;
-        }
-
-        .token-pill-card {
-            background: rgba(12, 6, 26, 0.92);
-            border-radius: 14px;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            transition: 0.25s;
-        }
-
-        .token-pill-card:hover {
-            transform: translateY(-3px);
-        }
-
-        .token-pill-card img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            height: 100%;
             object-fit: cover;
-        }
-
-        .card-panga {
-            border: 1.5px solid rgba(245, 158, 11, 0.65);
-            box-shadow: 0 0 22px rgba(245, 158, 11, 0.22);
-        }
-        .card-panga img { border: 2px solid var(--neon-gold); box-shadow: 0 0 14px rgba(245, 158, 11, 0.6); }
-
-        .card-zared {
-            border: 1.5px solid rgba(244, 114, 182, 0.65);
-            box-shadow: 0 0 22px rgba(244, 114, 182, 0.22);
-        }
-        .card-zared img { border: 2px solid var(--neon-pink); box-shadow: 0 0 14px rgba(244, 114, 182, 0.6); }
-
-        .card-zym {
-            border: 1.5px solid rgba(192, 132, 252, 0.65);
-            box-shadow: 0 0 22px rgba(192, 132, 252, 0.22);
-        }
-        .card-zym img { border: 2px solid var(--neon-purple); box-shadow: 0 0 14px rgba(192, 132, 252, 0.6); }
-
-        .middle-banner-deco {
-            width: 100%;
-            min-height: 220px;
-            background: linear-gradient(135deg, rgba(28, 12, 56, 0.95), rgba(10, 5, 24, 0.98));
-            border: 2px solid var(--neon-purple);
-            border-radius: 16px;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-around;
-            gap: 24px;
-            flex-wrap: wrap;
-            box-shadow: 0 0 40px rgba(168, 85, 247, 0.5), inset 0 0 24px rgba(34, 211, 238, 0.14);
-            padding: 24px 32px;
-        }
-
-        .middle-banner-deco img {
-            width: 165px;
-            height: 165px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 24px rgba(34, 211, 238, 0.75));
-            animation: floatGlow 3s ease-in-out infinite;
-        }
-
-        .middle-banner-content {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 10px;
-            flex: 1;
-            min-width: 240px;
-        }
-
-        .middle-banner-title {
-            color: #f3e8ff;
-            font-size: 1.25rem;
-            font-weight: 800;
-            letter-spacing: 0.8px;
-            text-shadow: 0 0 14px var(--neon-purple);
-        }
-
-        .middle-banner-text {
-            color: #d8b4fe;
-            font-size: 0.94rem;
-            line-height: 1.5;
-        }
-
-        .bottom-full-banner {
-            width: 100%;
-            background: linear-gradient(135deg, rgba(22, 9, 45, 0.96), rgba(8, 3, 18, 0.99));
-            border: 2px solid var(--neon-purple);
-            border-radius: 16px;
-            padding: 24px 32px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 24px;
-            flex-wrap: wrap;
-            box-shadow: 0 0 40px rgba(192, 132, 252, 0.45), inset 0 0 22px rgba(168, 85, 247, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .bottom-full-banner::before, .bottom-full-banner::after {
-            content: '';
-            position: absolute;
-            width: 14px;
-            height: 14px;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 18px 6px #22d3ee, 0 0 35px 12px #c084fc;
-            animation: sparkGlow 1.5s infinite alternate;
-        }
-
-        .bottom-full-banner::before { top: 10px; left: 12px; }
-        .bottom-full-banner::after { bottom: 10px; right: 12px; }
-
-        @keyframes sparkGlow {
-            0% { transform: scale(0.8); opacity: 0.6; }
-            100% { transform: scale(1.35); opacity: 1; }
-        }
-
-        .bottom-full-banner img {
-            width: 125px;
-            height: 125px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 18px rgba(192, 132, 252, 0.95));
-        }
-
-        .bottom-full-text-area { flex: 1; min-width: 240px; }
-
-        .bottom-full-title {
-            color: #fae8ff;
-            font-size: 1.15rem;
-            font-weight: 800;
-            margin-bottom: 6px;
-            text-shadow: 0 0 10px var(--neon-cyan);
-        }
-
-        .bottom-full-desc {
-            color: #d8b4fe;
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        .footer-nav-links {
-            display: flex;
-            gap: 14px;
-            flex-wrap: wrap;
-            width: 100%;
-            margin-top: 4px;
-        }
-
-        .footer-link-btn {
-            flex: 1;
-            min-width: 220px;
-            background: linear-gradient(135deg, #2e1065, #1e1138);
-            border: 1px solid #9333ea;
-            color: #e9d5ff;
-            text-align: center;
-            padding: 12px 14px;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            text-decoration: none;
-            box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);
-            transition: 0.25s;
-        }
-
-        .footer-link-btn:hover {
-            background: linear-gradient(135deg, #3b1d6e, #2e1065);
-            border-color: var(--neon-cyan);
-            transform: translateY(-2px);
-            box-shadow: 0 0 22px rgba(34, 211, 238, 0.45);
-            color: #fff;
-        }
-
-        .mode-badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.84rem;
-            font-weight: bold;
-        }
-
-        .guest-mode { background: #d97706; color: #fff; }
-        .live-mode { background: #7c3aed; color: #fff; box-shadow: 0 0 14px rgba(124, 58, 237, 0.6); }
-
-        .result-modal, .wallet-modal {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(8, 3, 18, 0.9);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .result-box, .wallet-box {
-            background: #160c28;
-            border: 2px solid var(--neon-purple);
-            padding: 28px;
             border-radius: 18px;
-            text-align: center;
-            width: 90%;
-            max-width: 420px;
-            box-shadow: 0 0 40px rgba(168, 85, 247, 0.6);
+            display: block;
+            background-color: #020810;
         }
 
-        .wallet-option {
-            background: #251242;
-            border: 1px solid #7c3aed;
-            color: #fff;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            transition: 0.2s;
+        .token-volt-desc {
+            max-width: 720px;
+            margin: 0 auto 28px auto;
+            font-size: 1.18rem;
+            line-height: 1.65;
+            color: #d4f1fc;
+            text-shadow: 0 1px 8px rgba(0, 0, 0, 0.85);
         }
 
-        .wallet-option:hover {
-            background: #3b1d6e;
-            border-color: var(--neon-cyan);
+        .token-volt-desc strong {
+            color: #00ff88;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.55);
         }
+
+        .token-volt-desc span {
+            color: #c084fc;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(192, 132, 252, 0.55);
+        }
+
+        .token-volt-cta {
+            display: inline-block;
+            padding: 14px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 900;
+            letter-spacing: 1.2px;
+            color: #01080c;
+            background: linear-gradient(90deg, #00ff88, #00f0ff);
+            box-shadow: 0 0 22px rgba(0, 255, 136, 0.6), 0 0 36px rgba(0, 240, 255, 0.4);
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .token-volt-cta:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 0 35px #00ff88, 0 0 55px #00f0ff;
+        }
+
+        footer {
+            background: rgba(15, 12, 35, 0.96); border-top: 2px solid var(--neon-purple);
+            padding: 30px; text-align: center; color: var(--text-purple); font-size: 0.9rem; margin-top: 60px;
+        }
+        footer p span { color: var(--neon-green); font-weight: 700; font-family: 'Orbitron', sans-serif; }
     </style>
 </head>
 <body>
 
-    <div class="navbar">
-        <div class="logo-area">
-            <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791248681417-56c377de956c1c3a7b33918e7ed78ba7.png" alt="Logo">
-            <span>ZAARD LUCKY ARENA</span>
-        </div>
-        <div class="nav-controls">
-            <div class="lang-badge">BSC • 0.0001 BNB ➔ 0.001 ZARD</div>
-            <button class="btn-wallet" id="connectWalletBtn" onclick="abrirSelectorBilletera()">Conectar Billetera</button>
+    <!-- SPLASH SCREEN -->
+    <div id="splash-screen">
+        <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790285851823-4955b8f5511ea8235af22dfb82371c91.png" alt="ZAARD Logo" class="splash-logo">
+        <div class="splash-title">ZAARD TRACKER OFFICIAL</div>
+        <div class="splash-subtitle">Ecosistema descentralizado de alta gama en BNB Smart Chain (BSC). Rastreo inteligente en tiempo real de ZARD, PANGA, ZARED y ZYM.</div>
+        <button class="enter-btn" onclick="enterDashboard()">Ingresar al Tracker</button>
+    </div>
+
+    <!-- MODAL ACCESO DIRECTO A BILLETERA -->
+    <div class="wallet-modal-backdrop" id="walletModal" onclick="if(event.target === this) closeWalletModal()">
+        <div class="wallet-modal-box">
+            <div class="wallet-modal-title"><i class="fas fa-bolt"></i> Abrir Billetera Web3</div>
+            <p class="wallet-modal-sub">Si estás en el navegador normal sin cartera inyectada, abre directo tu app de billetera con un toque:</p>
+            <div class="wallet-launch-list">
+                <a class="wallet-launch-link" id="openMetaMaskLink" href="https://metamask.app.link/dapp/figueredo56.github.io/zaard-tracker/" target="_blank" rel="noopener noreferrer">
+                    <span>🦊 Abrir en MetaMask</span>
+                    <span>↗</span>
+                </a>
+                <a class="wallet-launch-link" id="openTrustLink" href="https://link.trustwallet.com/open_url?coin_id=20000714&url=https%3A%2F%2Ffigueredo56.github.io%2Fzaard-tracker%2F" target="_blank" rel="noopener noreferrer">
+                    <span>🛡️ Abrir en Trust Wallet</span>
+                    <span>↗</span>
+                </a>
+                <a class="wallet-launch-link" id="openBinanceLink" href="https://app.binance.com/en/download" target="_blank" rel="noopener noreferrer">
+                    <span>🟡 Binance Web3 Wallet</span>
+                    <span>↗</span>
+                </a>
+            </div>
+            <button class="wallet-close-btn" onclick="closeWalletModal()">Cerrar</button>
         </div>
     </div>
 
-    <!-- Pantalla 1: Bienvenida -->
-    <div id="screenWelcome" class="screen">
-        <div class="welcome-card-box">
-            <div class="floating-logo-container">
-                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791432184680-906fd2a3d85625f79d066e5b033f6011.png" alt="Logo Flotante" class="floating-logo">
-            </div>
-            <h1>ZAARD LUCKY — Arena de Predicción BNB / ZARD</h1>
-            <p class="welcome-desc">
-                Predice el movimiento de <strong>BNB</strong> en rondas de 60 segundos. Apuesta <strong>0.0001 BNB</strong> y gana <strong>0.001 ZARD</strong> desde el contrato pagadero <strong>ZAARD_Arcade_Payout</strong>.
-            </p>
-            <div class="rules-list-welcome">
-                <ul style="list-style-position: inside;">
-                    <li><strong>Apuesta:</strong> 0.0001 BNB hacia <code>0x84f5...cdc8</code>.</li>
-                    <li><strong>Contrato Pagadero:</strong> <code>0x327f9B551EbC850891111EE394741709294CC1A8</code>.</li>
-                    <li><strong>Premio:</strong> 0.001 ZARD (Contrato ZARD: <code>0xE287...3fB</code>).</li>
-                    <li><strong>Ecosistema:</strong> Visualiza también los tokens <strong>PANGA</strong>, <strong>ZARED</strong> y <strong>ZYM</strong>.</li>
-                </ul>
-            </div>
-            <button class="btn-action" onclick="iniciarTransicion()">⚡ Entrar a la Arena Lucky</button>
-        </div>
-    </div>
-
-    <!-- Pantalla 2: Transición -->
-    <div id="screenLoading" class="screen hidden">
-        <div class="loading-box">
-            <div class="spinner"></div>
-            <h2 style="color: var(--neon-cyan); margin-bottom: 10px;">Cargando Gráficas BNB & ZARD...</h2>
-            <p style="color: #d8b4fe;">Sincronizando motor de velas y contrato pagadero 0x327f...C1A8...</p>
-        </div>
-    </div>
-
-    <!-- Pantalla 3: Arena Lucky -->
-    <div id="screenArena" class="screen hidden">
-        <div class="top-bar-arena">
-            <div>
-                <span id="badgeMode" class="mode-badge guest-mode">Modo Invitado (Simulación Segura)</span>
-            </div>
-            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-                <div class="timer-badge">⏳ Ronda: <span id="countdown">60</span>s</div>
-                <button onclick="cambiarModo()" class="btn-wallet" id="btnSwitchMode" style="font-size: 0.85rem; padding: 7px 13px;">Activar Modo Apuesta</button>
-            </div>
+    <!-- HEADER & NAVEGACIÓN -->
+    <header>
+        <div class="brand">
+            <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791940828941-906fd2a3d85625f79d066e5b033f6011.png" alt="ZAARD Logo">
+            <div class="brand-name">ZAARD TRACKER</div>
         </div>
 
-        <div class="arena-container">
-            <!-- Panel de Apuestas BNB -->
-            <div class="card-panel">
-                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; border-bottom: 1px solid rgba(192, 132, 252, 0.3); padding-bottom: 10px;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790286366724-9003585f30626b9963bd86a5cf26c8ca.png" alt="Icono Arena" style="width: 34px; height: 34px; object-fit: contain; filter: drop-shadow(0 0 10px var(--neon-cyan));">
-                        <span style="font-size: 1.05rem; font-weight: 800; color: #f3e8ff;">📈 BNB/USD Live Chart — Apuesta 0.0001 BNB</span>
-                    </div>
-                    <span class="price-big" id="priceDisplayBnb">614.25 $</span>
-                </div>
+        <div class="nexus-tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'tab-nexus')">
+                <i class="fas fa-network-wired" style="color:var(--neon-blue);"></i> Ecosistema
+            </button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-zard')">
+                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791940828941-906fd2a3d85625f79d066e5b033f6011.png" alt="ZARD" style="width:16px;height:16px;border-radius:50%;object-fit:cover;"> ZARD
+            </button>
+            <button class="tab-btn panga-tab" onclick="switchTab(event, 'tab-panga')">
+                <i class="fas fa-fire" style="color:var(--neon-green);"></i> PANGA
+            </button>
+            <button class="tab-btn zared-tab" onclick="switchTab(event, 'tab-zared')">
+                <i class="fas fa-shield-alt" style="color:#f72585;"></i> ZARED
+            </button>
+            <button class="tab-btn zym-tab" onclick="switchTab(event, 'tab-zym')">
+                <i class="fas fa-bolt" style="color:#06d6a0;"></i> ZYM
+            </button>
+        </div>
 
-                <div class="payout-pill">
-                    <span>🎯 Apuesta: <strong>0.0001 BNB</strong> ➔ <code>0x84f529525fae84b1f1d7ea66939592094426cdc8</code></span>
-                    <span>🏆 Premio: <strong style="color:#34d399;">0.001 ZARD</strong> • Vault: <code>0x327f...C1A8</code></span>
-                </div>
+        <div class="nav-right">
+            <select class="lang-select" id="langSelector" onchange="changeLanguage(this.value)">
+                <option value="es" selected>🇪🇸 Español</option>
+                <option value="en">🇬🇧 English</option>
+            </select>
+            <button class="wallet-btn" id="connectWalletBtn" onclick="connectWeb3Wallet()">
+                <i class="fas fa-wallet"></i> <span id="walletBtnText">Conectar</span>
+            </button>
+            <button class="disconnect-btn" id="disconnectWalletBtn" onclick="disconnectWeb3Wallet()" title="Desconectar billetera">
+                <i class="fas fa-power-off"></i> Desconectar
+            </button>
+        </div>
+    </header>
 
-                <div class="market-chart-box">
-                    <canvas id="candleCanvasBnb"></canvas>
-                </div>
+    <!-- CONTAINER PRINCIPAL -->
+    <div class="container">
 
-                <div style="margin-bottom: 10px;">
-                    <span style="font-size: 0.78rem; color: var(--neon-cyan); font-weight: bold;">Libro de Órdenes BNB:</span>
-                    <div class="order-book" id="orderBookBnb"></div>
-                </div>
+        <!-- ======================================================= -->
+        <!-- PESTAÑA 1: NEXUS / ECOSISTEMA (MENÚ PRINCIPAL)         -->
+        <!-- ======================================================= -->
+        <div id="tab-nexus" class="tab-content active">
+            <div class="fin-card gold-glow" style="text-align: center; padding: 40px 30px;">
+                <div class="electric-grid-overlay"></div>
+                <canvas class="electric-spark-canvas"></canvas>
 
-                <div class="bet-buttons">
-                    <button class="btn-sube" onclick="realizarApuesta('SUBE')">📈 SUBE (CALL) • 0.0001 BNB</button>
-                    <button class="btn-baja" onclick="realizarApuesta('BAJA')">📉 BAJA (PUT) • 0.0001 BNB</button>
-                </div>
-            </div>
+                <div class="electric-card-body">
+                    <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1794687559048-16ebac67278e144f98b264e40bf5690d.png" alt="Banner Ancho Ecosistema" style="width: 100%; max-height: 380px; object-fit: cover; border-radius: 14px; border: 2px solid var(--gold); margin-bottom: 25px; box-shadow: 0 0 35px rgba(212,175,55,0.45); background: #000;">
+                    
+                    <h2 style="color: var(--neon-green); font-size: clamp(1.6rem, 2.8vw, 2.5rem); margin-bottom: 15px; text-shadow: 0 0 12px rgba(0,255,102,0.6);">
+                        📊 ZAARD TRACKER · RASTREO ACTIVO & SEGURIDAD WEB3
+                    </h2>
+                    <p style="color: var(--text-purple); font-size: 1.18rem; max-width: 950px; margin: 0 auto 30px auto; line-height: 1.6;">
+                        El rastro directo y activo es la base fiel de la seguridad en el ecosistema. En <b>ZAARD INNOVATION</b> nos preocupamos por que cada contrato, aplicación y token operen blindados y bajo un monitoreo impecable en tiempo real. Analítica avanzada de alta gama para nuestros 4 pilares fundamentales.
+                    </p>
 
-            <!-- Banner central -->
-            <div class="middle-banner-deco">
-                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791494105996-e3366dcac4d9846d38bbb175e71b1538.png" alt="ZAARD Decorativo">
-                <div class="middle-banner-content">
-                    <div class="middle-banner-title">⚡ ZAARD_Arcade_Payout (0x327f...C1A8) ⚡</div>
-                    <div class="middle-banner-text">
-                        Contrato pagadero compartido para los juegos del ecosistema. Recompensa por victoria: <strong>0.001 ZARD</strong> (Token ZARD: <code>0xE2879d1172215E728472D7827586bd2796aFA3fB</code>).
-                    </div>
-                </div>
-            </div>
-
-            <!-- Panel Analítico ZARD Token -->
-            <div class="card-panel">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; border-bottom: 1px solid rgba(34, 211, 238, 0.25); padding-bottom: 10px;">
-                    <span style="font-size: 1rem; font-weight: 800; color: #67e8f9;">💎 ZARD Token Live Chart (0xE287...3fB)</span>
-                    <span class="price-big" style="color: var(--neon-purple);" id="priceDisplayZard">0.000060 $</span>
-                </div>
-
-                <div class="market-chart-box">
-                    <canvas id="candleCanvasZard"></canvas>
-                </div>
-
-                <div>
-                    <span style="font-size: 0.78rem; color: var(--neon-purple); font-weight: bold;">Actividad de Premios ZARD (0.001 ZARD):</span>
-                    <div class="order-book" id="orderBookZard"></div>
-                </div>
-            </div>
-
-            <!-- Escaparate Visual: PANGA, ZARED y ZYM -->
-            <div class="card-panel">
-                <h3 style="font-size: 1rem; color: #f3e8ff; margin-bottom: 4px;">✨ Tokens del Ecosistema ZAARD (PANGA • ZARED • ZYM)</h3>
-                <p style="font-size: 0.82rem; color: #cbd5e1; margin-bottom: 10px;">
-                    Tokens destacados del ecosistema (la apuesta del juego se mantiene exclusivamente en BNB ➔ 0.001 ZARD).
-                </p>
-                <div class="ecosystem-showcase">
-                    <div class="token-pill-card card-panga">
-                        <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790484633328-559fdd3c13098c92f8a665ac39a838c2.png" alt="PANGA">
-                        <div>
-                            <div style="font-weight: 800; color: #fbbf24; font-size: 1rem;">PANGA</div>
-                            <div style="font-size: 0.74rem; color: #e2e8f0; word-break: break-all;">0x4a6c3ea9e7132ad217c31f8252119f08c801366e</div>
+                    <div class="features-grid">
+                        <div class="feature-box">
+                            <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791940828941-906fd2a3d85625f79d066e5b033f6011.png" alt="ZARD" style="width:42px;height:42px;border-radius:50%;object-fit:cover;border:1px solid var(--gold);margin-bottom:10px;">
+                            <h4>ZARD Token Core</h4>
+                            <p>El motor, la fuerza y la columna vertebral que da el poder absoluto al ecosistema. Monitoreo integral de liquidez, órdenes de compra/venta y paridades en PancakeSwap con un blindaje inquebrantable.</p>
+                        </div>
+                        <div class="feature-box">
+                            <i class="fas fa-fire" style="color: var(--neon-green);"></i>
+                            <h4>PANGA GameFi Engine</h4>
+                            <p>El poder místico y estratégico del tradeo descentralizado. Seguimiento analítico del token de recompensas conectado al ecosistema Play-to-Earn con total transparencia operativa.</p>
+                        </div>
+                        <div class="feature-box">
+                            <i class="fas fa-shield-alt" style="color: #f72585;"></i>
+                            <h4>ZARED Security Unit</h4>
+                            <p>La infraestructura, el universo y el respaldo normativo. Rastreo y verificación on-chain del contrato optimizado para garantizar estabilidad y confianza absoluta.</p>
+                        </div>
+                        <div class="feature-box">
+                            <i class="fas fa-bolt" style="color: #06d6a0;"></i>
+                            <h4>ZYM Protocol Core</h4>
+                            <p>La fuerza viva y la cohesión inagotable de la comunidad. Analítica de alto rendimiento para la expansión técnica de la red.</p>
                         </div>
                     </div>
 
-                    <div class="token-pill-card card-zared">
-                        <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1794605349763-3b36fe22e2048e05bbf50f8bdf231392.png" alt="ZARED">
+                    <a href="https://figueredo56.github.io/ZAARD-Arcade/index-lucky.html?guest=true" target="_blank" rel="noopener noreferrer" class="arcade-banner-bar" onclick="enableGuestMode()">
+                        ⚡🎲 Pon a prueba tus conocimientos y gana token del ecosistema (ZAARD Arcade Lucky) ↗⚡<br>
+                        <span class="guest-sub-badge">🎮 JUGAR COMO INVITADO ACTIVADO · PRUEBA GRATIS Y ANÍMATE A JUGAR</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="fin-card" style="text-align: center;">
+                <div class="electric-grid-overlay"></div>
+                <canvas class="electric-spark-canvas"></canvas>
+
+                <div class="electric-card-body">
+                    <h3 style="color: var(--neon-blue); margin-bottom: 15px;">🌐 Acceso Rápido al Ecosistema</h3>
+                    <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                        <a href="https://figueredo56.github.io/index.html/?img=zaard" target="_blank" rel="noopener noreferrer" class="action-btn">Portal ZAARD FINANCE</a>
+                        <a href="https://figueredo56.github.io/zaard-wallet/wallet.html" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: linear-gradient(135deg, var(--neon-green), var(--neon-blue)); color:#030107;">ZARD Wallet</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================================= -->
+        <!-- PESTAÑA 2: ZARD TOKEN                                   -->
+        <!-- ======================================================= -->
+        <div id="tab-zard" class="tab-content">
+            <div class="fin-card gold-glow">
+                <div class="electric-grid-overlay"></div>
+                <canvas class="electric-spark-canvas"></canvas>
+
+                <div class="electric-card-body">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 16px;">
+                        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+                            <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791940828941-906fd2a3d85625f79d066e5b033f6011.png" alt="Logo ZARD" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);box-shadow:0 0 18px rgba(212,175,55,0.6);">
+                            <div>
+                                <h2><i class="fas fa-coins" style="color:var(--gold);"></i> ZARD Token Analytics & Liquidity Core</h2>
+                                <div class="contract-pill">CA: 0xE2879d1172215E728472D7827586bd2796aFA3fB</div>
+                            </div>
+                        </div>
                         <div>
-                            <div style="font-weight: 800; color: #f472b6; font-size: 1rem;">ZARED</div>
-                            <div style="font-size: 0.74rem; color: #e2e8f0; word-break: break-all;">0xfc2aca08fc64e51793c32e9088fc43a57d39690e</div>
+                            <a href="https://pancakeswap.finance/swap?outputCurrency=0xE2879d1172215E728472D7827586bd2796aFA3fB" target="_blank" rel="noopener noreferrer" class="action-btn" style="padding: 10px 20px;">Swap BNB ⇄ ZARD</a>
                         </div>
                     </div>
 
-                    <div class="token-pill-card card-zym">
-                        <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1793917735714-d84b28c0d04f3063f454cbc1d8a062fb.png" alt="ZYM">
+                    <!-- Balance ZARD + Enlace directo al Token -->
+                    <div class="token-balance-banner">
                         <div>
-                            <div style="font-weight: 800; color: #c084fc; font-size: 1rem;">ZYM</div>
-                            <div style="font-size: 0.74rem; color: #e2e8f0; word-break: break-all;">0x3984bd80e73777f2e790892435338d032b987bc7</div>
+                            <span style="color:#94a3b8;font-size:0.9rem;display:block;">Tu balance de ZARD en BSC</span>
+                            <span class="token-balance-value" id="balance-zard">Conecta tu billetera para ver balance</span>
+                        </div>
+                        <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0xe2879d1172215e728472d7827586bd2796afa3fb&binanceChainId=56&chain=bsc" target="_blank" rel="noopener noreferrer" class="action-btn" style="padding:10px 18px;font-size:0.8rem;">
+                            Abrir Token ZARD ↗
+                        </a>
+                    </div>
+
+                    <div style="width: 100%; height: 500px; border-radius: 12px; overflow: hidden; border: 1px solid var(--gold); background: #000; margin-bottom: 25px;">
+                        <iframe src="https://dexscreener.com/bsc/0xE2879d1172215E728472D7827586bd2796aFA3fB?embed=1&theme=dark&trades=0&info=0" style="width: 100%; height: 100%; border: none;" title="ZARD DexScreener"></iframe>
+                    </div>
+
+                    <div class="order-book-grid">
+                        <div class="order-box">
+                            <h4 style="color: var(--neon-green); font-family:'Orbitron'; margin-bottom:10px;"><i class="fas fa-arrow-trend-up"></i> Órdenes de Compra (BUY)</h4>
+                            <div style="font-size:0.9rem; color:#cbd5e1; display:flex; justify-content:space-between; margin-bottom:6px;"><span>0.45 BNB</span> <span style="color:var(--neon-green);">+54,200 ZARD</span></div>
+                            <div style="font-size:0.9rem; color:#cbd5e1; display:flex; justify-content:space-between; margin-bottom:6px;"><span>1.20 BNB</span> <span style="color:var(--neon-green);">+145,000 ZARD</span></div>
+                        </div>
+                        <div class="order-box">
+                            <h4 style="color: #ef4444; font-family:'Orbitron'; margin-bottom:10px;"><i class="fas fa-arrow-trend-down"></i> Órdenes de Venta (SELL)</h4>
+                            <div style="font-size:0.9rem; color:#cbd5e1; display:flex; justify-content:space-between; margin-bottom:6px;"><span>32,000 ZARD</span> <span style="color:#ef4444;">0.26 BNB</span></div>
+                            <div style="font-size:0.9rem; color:#cbd5e1; display:flex; justify-content:space-between; margin-bottom:6px;"><span>89,500 ZARD</span> <span style="color:#ef4444;">0.74 BNB</span></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 25px;">
+                        <h4 style="color: var(--text-purple); font-family:'Orbitron'; font-size:0.95rem; margin-bottom: 10px;">📊 Comparación de Valor en Vivo</h4>
+                        <div class="price-compare-table">
+                            <div class="price-comp-card">
+                                <img src="https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png" alt="BNB" class="compare-token-logo">
+                                <span style="font-size:0.8rem; color:#94a3b8; display:block;">vs BNB</span>
+                                <strong style="color:var(--gold); font-size:1.05rem;">0.000013 BNB</strong>
+                            </div>
+                            <div class="price-comp-card">
+                                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791940828941-906fd2a3d85625f79d066e5b033f6011.png" alt="ZARD" class="compare-token-logo">
+                                <span style="font-size:0.8rem; color:#94a3b8; display:block;">ZARD Core</span>
+                                <strong style="color:#f6851b; font-size:1.05rem;">0.00000012 BTC</strong>
+                            </div>
+                            <div class="price-comp-card">
+                                <span style="font-size:0.8rem; color:#94a3b8; display:block;">vs USDT</span>
+                                <strong style="color:var(--neon-green); font-size:1.05rem;">$0.00843 USDT</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 25px;">
+                        <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0xe2879d1172215e728472d7827586bd2796afa3fb&binanceChainId=56&chain=bsc" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: rgba(0,255,204,0.15); border: 1px solid #00ffcc; color:#00ffcc;">Ver en Binance Web3</a>
+                        <a href="https://bscscan.com/token/0xE2879d1172215E728472D7827586bd2796aFA3fB" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: rgba(243,186,47,0.15); border: 1px solid #f3ba2f; color:#f3ba2f;">Auditoría BscScan</a>
+                    </div>
+
+                    <!-- BLOQUE ELÉCTRICO ZARD -->
+                    <div class="token-volt-showcase">
+                        <div class="electric-grid-overlay"></div>
+                        <canvas class="electric-spark-canvas"></canvas>
+
+                        <div class="token-volt-content">
+                            <div class="token-volt-badge">⚡ NÚCLEO DE POTENCIA · ZAARD INNOVATION ⚡</div>
+                            <h3 class="token-volt-title">ZARD ($ZARD)</h3>
+
+                            <div class="token-volt-img-wrapper">
+                                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791940828941-906fd2a3d85625f79d066e5b033f6011.png" alt="ZARD Token - ZAARD INNOVATION">
+                            </div>
+
+                            <p class="token-volt-desc">
+                                La fuerza, el motor, el poder más allá de lo convencional dentro de <strong>ZAARD INNOVATION</strong> y bajo el respaldo técnico de <span>ZAARD XENOCRYPT</span>.
+                            </p>
+
+                            <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0xe2879d1172215e728472d7827586bd2796afa3fb&binanceChainId=56&chain=bsc" target="_blank" rel="noopener noreferrer" class="token-volt-cta">
+                                Explorar ZARD en Binance Web3 ↗
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Banner inferior -->
-            <div class="bottom-full-banner">
-                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790287451706-4593a246bbbf27b508770c328ab883c0.png" alt="Ecosistema Zard">
-                <div class="bottom-full-text-area">
-                    <div class="bottom-full-title">🚀 ARENA LUCKY CON CONTRATO PAGADERO ZARD 🚀</div>
-                    <div class="bottom-full-desc">
-                        Apuestas directas de 0.0001 BNB y recompensas de 0.001 ZARD respaldadas por el contrato <code>0x327f9B551EbC850891111EE394741709294CC1A8</code> en BNB Smart Chain.
+        <!-- ======================================================= -->
+        <!-- PESTAÑA 3: PANGA TOKEN                                  -->
+        <!-- ======================================================= -->
+        <div id="tab-panga" class="tab-content">
+            <div class="fin-card green-glow">
+                <div class="electric-grid-overlay"></div>
+                <canvas class="electric-spark-canvas"></canvas>
+
+                <div class="electric-card-body">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 16px;">
+                        <div>
+                            <h2><i class="fas fa-fire" style="color:var(--neon-green);"></i> PANGA Token & GameFi Analytics</h2>
+                            <div class="contract-pill" style="border-color: var(--neon-green);">CA: 0x4a6c3ea9e7132ad217c31f8252119f08c801366e</div>
+                        </div>
+                        <div>
+                            <a href="https://pancakeswap.finance/swap?outputCurrency=0x4a6c3ea9e7132ad217c31f8252119f08c801366e" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: linear-gradient(135deg, var(--neon-green), var(--neon-blue)); color:#030107; padding: 10px 20px;">Swap BNB ⇄ PANGA</a>
+                        </div>
+                    </div>
+
+                    <!-- Balance PANGA + Enlace directo al Token -->
+                    <div class="token-balance-banner">
+                        <div>
+                            <span style="color:#94a3b8;font-size:0.9rem;display:block;">Tu balance de PANGA en BSC</span>
+                            <span class="token-balance-value" id="balance-panga">Conecta tu billetera para ver balance</span>
+                        </div>
+                        <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0x4a6c3ea9e7132ad217c31f8252119f08c801366e&binanceChainId=56&chain=bsc" target="_blank" rel="noopener noreferrer" class="action-btn" style="padding:10px 18px;font-size:0.8rem;">
+                            Abrir Token PANGA ↗
+                        </a>
+                    </div>
+
+                    <div style="width: 100%; height: 500px; border-radius: 12px; overflow: hidden; border: 1px solid var(--neon-green); background: #000; margin-bottom: 25px;">
+                        <iframe src="https://dexscreener.com/bsc/0x4a6c3ea9e7132ad217c31f8252119f08c801366e?embed=1&theme=dark&trades=0&info=0" style="width: 100%; height: 100%; border: none;" title="PANGA DexScreener"></iframe>
+                    </div>
+
+                    <div class="order-book-grid">
+                        <div class="order-box">
+                            <h4 style="color: var(--neon-green); font-family:'Orbitron'; margin-bottom:10px;"><i class="fas fa-arrow-trend-up"></i> Órdenes de Compra (BUY)</h4>
+                            <div style="font-size:0.9rem; color:#cbd5e1; display:flex; justify-content:space-between; margin-bottom:6px;"><span>0.80 BNB</span> <span style="color:var(--neon-green);">+110,000 PANGA</span></div>
+                        </div>
+                        <div class="order-box">
+                            <h4 style="color: #ef4444; font-family:'Orbitron'; margin-bottom:10px;"><i class="fas fa-arrow-trend-down"></i> Órdenes de Venta (SELL)</h4>
+                            <div style="font-size:0.9rem; color:#cbd5e1; display:flex; justify-content:space-between; margin-bottom:6px;"><span>50,000 PANGA</span> <span style="color:#ef4444;">0.36 BNB</span></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 25px;">
+                        <h4 style="color: var(--text-purple); font-family:'Orbitron'; font-size:0.95rem; margin-bottom: 10px;">📊 Comparación de Valor en Vivo</h4>
+                        <div class="price-compare-table">
+                            <div class="price-comp-card">
+                                <img src="https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png" alt="BNB" class="compare-token-logo">
+                                <span style="font-size:0.8rem; color:#94a3b8; display:block;">vs BNB</span>
+                                <strong style="color:var(--neon-green); font-size:1.05rem;">0.000011 BNB</strong>
+                            </div>
+                            <div class="price-comp-card">
+                                <span style="font-size:0.8rem; color:#94a3b8; display:block;">vs BTC (BTCB)</span>
+                                <strong style="color:#f6851b; font-size:1.05rem;">0.00000010 BTC</strong>
+                            </div>
+                            <div class="price-comp-card">
+                                <span style="font-size:0.8rem; color:#94a3b8; display:block;">vs USDT</span>
+                                <strong style="color:var(--neon-blue); font-size:1.05rem;">$0.00720 USDT</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 25px;">
+                        <a href="https://pancakeswap.finance/swap?inputCurrency=0x4a6c3ea9e7132ad217c31f8252119f08c801366e&outputCurrency=0xE2879d1172215E728472D7827586bd2796aFA3fB" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: linear-gradient(135deg, #a855f7, #ec4899); color:#fff;">Swap PANGA ⇄ ZARD</a>
+                        <a href="https://dexscreener.com/bsc/0x4a6c3ea9e7132ad217c31f8252119f08c801366e" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: rgba(0,255,102,0.2); border: 1px solid var(--neon-green); color:var(--neon-green);">📈 Ver en DexScreener Full ↗</a>
+                    </div>
+
+                    <!-- BLOQUE ELÉCTRICO PANGA -->
+                    <div class="token-volt-showcase">
+                        <div class="electric-grid-overlay"></div>
+                        <canvas class="electric-spark-canvas"></canvas>
+
+                        <div class="token-volt-content">
+                            <div class="token-volt-badge">⚡ FUERZA MÍSTICA & ESTRATEGIA · ZAARD INNOVATION ⚡</div>
+                            <h3 class="token-volt-title">PANGA ($PANGA)</h3>
+
+                            <div class="token-volt-img-wrapper">
+                                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790484633328-559fdd3c13098c92f8a665ac39a838c2.png" alt="PANGA Token - ZAARD INNOVATION">
+                            </div>
+
+                            <p class="token-volt-desc">
+                                La fuerza mística, el razonamiento y la majestad del trade dentro de <strong>ZAARD INNOVATION</strong> y bajo el sello de <span>ZAARD XENOCRYPT</span>.
+                            </p>
+
+                            <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0x4a6c3ea9e7132ad217c31f8252119f08c801366e&binanceChainId=56&chain=bsc" target="_blank" rel="noopener noreferrer" class="token-volt-cta">
+                                Explorar PANGA en Binance Web3 ↗
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Enlaces del ecosistema -->
-            <div class="footer-nav-links">
-                <a href="https://figueredo56.github.io/zaard-innovation-dapp/" target="_blank" class="footer-link-btn">🌐 REGRESAR A ZAARD FINANCE</a>
-                <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0xE2879d1172215E728472D7827586bd2796aFA3fB&binanceChainId=56&chain=bsc" target="_blank" class="footer-link-btn">💎 VER ZARD EN BINANCE WEB3</a>
-                <a href="https://figueredo56.github.io/zaard-tracker/" target="_blank" class="footer-link-btn">📊 ZAARD TRACKER</a>
+        <!-- ======================================================= -->
+        <!-- PESTAÑA 4: ZARED TOKEN                                  -->
+        <!-- ======================================================= -->
+        <div id="tab-zared" class="tab-content">
+            <div class="fin-card pink-glow">
+                <div class="electric-grid-overlay"></div>
+                <canvas class="electric-spark-canvas"></canvas>
+
+                <div class="electric-card-body">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 16px;">
+                        <div>
+                            <h2><i class="fas fa-shield-alt" style="color:#f72585;"></i> ZARED Token Security Analytics</h2>
+                            <div class="contract-pill" style="border-color: #f72585;">CA: 0xfc2aca08fc64e51793c32e9088fc43a57d39690e</div>
+                        </div>
+                        <div>
+                            <a href="https://pancakeswap.finance/swap?outputCurrency=0xfc2aca08fc64e51793c32e9088fc43a57d39690e" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: linear-gradient(135deg, #f72585, #b084cc); color:#fff; padding: 10px 20px;">Swap BNB ⇄ ZARED</a>
+                        </div>
+                    </div>
+
+                    <!-- Balance ZARED + Enlace directo al Token -->
+                    <div class="token-balance-banner">
+                        <div>
+                            <span style="color:#94a3b8;font-size:0.9rem;display:block;">Tu balance de ZARED en BSC</span>
+                            <span class="token-balance-value" id="balance-zared">Conecta tu billetera para ver balance</span>
+                        </div>
+                        <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0xfc2aca08fc64e51793c32e9088fc43a57d39690e&binanceChainId=56&chain=bsc" target="_blank" rel="noopener noreferrer" class="action-btn" style="padding:10px 18px;font-size:0.8rem;">
+                            Abrir Token ZARED ↗
+                        </a>
+                    </div>
+
+                    <div style="width: 100%; height: 500px; border-radius: 12px; overflow: hidden; border: 1px solid #f72585; background: #000; margin-bottom: 25px;">
+                        <iframe src="https://dexscreener.com/bsc/0xfc2aca08fc64e51793c32e9088fc43a57d39690e?embed=1&theme=dark&trades=0&info=0" style="width: 100%; height: 100%; border: none;" title="ZARED DexScreener"></iframe>
+                    </div>
+
+                    <div class="order-book-grid">
+                        <div class="order-box">
+                            <h4 style="color: var(--neon-green); font-family:'Orbitron'; margin-bottom:10px;"><i class="fas fa-arrow-trend-up"></i> Órdenes de Compra (BUY)</h4>
+                            <div style="font-size:0.9rem; color:#cbd5e1; display:flex; justify-content:space-between; margin-bottom:6px;"><span>0.50 BNB</span> <span style="color:var(--neon-green);">+85,000 ZARED</span></div>
+                        </div>
+                        <div class="order-box">
+                            <h4 style="color: #ef4444; font-family:'Orbitron'; margin-bottom:10px;"><i class="fas fa-arrow-trend-down"></i> Órdenes de Venta (SELL)</h4>
+                            <div style="font-size:0.9rem; color:#cbd5e1; display:flex; justify-content:space-between; margin-bottom:6px;"><span>40,000 ZARED</span> <span style="color:#ef4444;">0.28 BNB</span></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 25px;">
+                        <h4 style="color: var(--text-purple); font-family:'Orbitron'; font-size:0.95rem; margin-bottom: 10px;">📊 Comparación de Valor en Vivo</h4>
+                        <div class="price-compare-table">
+                            <div class="price-comp-card">
+                                <img src="https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png" alt="BNB" class="compare-token-logo">
+                                <span style="font-size:0.8rem; color:#94a3b8; display:block;">vs BNB</span>
+                                <strong style="color:#f72585; font-size:1.05rem;">0.000012 BNB</strong>
+                            </div>
+                            <div class="price-comp-card">
+                                <span style="font-size:0.8rem; color:#94a3b8; display:block;">vs BTC (BTCB)</span>
+                                <strong style="color:#f6851b; font-size:1.05rem;">0.00000011 BTC</strong>
+                            </div>
+                            <div class="price-comp-card">
+                                <span style="font-size:0.8rem; color:#94a3b8; display:block;">vs USDT</span>
+                                <strong style="color:var(--neon-blue); font-size:1.05rem;">$0.00790 USDT</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 25px;">
+                        <a href="https://pancakeswap.finance/swap?inputCurrency=0xfc2aca08fc64e51793c32e9088fc43a57d39690e&outputCurrency=0xE2879d1172215E728472D7827586bd2796aFA3fB" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: linear-gradient(135deg, #f72585, #4cc9f0); color:#fff;">Swap ZARED ⇄ ZARD</a>
+                        <a href="https://dexscreener.com/bsc/0xfc2aca08fc64e51793c32e9088fc43a57d39690e" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: rgba(247,37,133,0.2); border: 1px solid #f72585; color:#f72585;">📈 Ver en DexScreener Full ↗</a>
+                    </div>
+
+                    <!-- BLOQUE ELÉCTRICO ZARED -->
+                    <div class="token-volt-showcase" id="zared-volt-block">
+                        <div class="electric-grid-overlay"></div>
+                        <canvas class="electric-spark-canvas"></canvas>
+
+                        <div class="token-volt-content">
+                            <div class="token-volt-badge">⚡ EXTENSIÓN & EMPODERAMIENTO · ZAARD INNOVATION ⚡</div>
+                            <h3 class="token-volt-title">ZARED ($ZARED)</h3>
+
+                            <div class="token-volt-img-wrapper">
+                                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1794605349763-3b36fe22e2048e05bbf50f8bdf231392.png" alt="ZARED Token - ZAARD INNOVATION">
+                            </div>
+
+                            <p class="token-volt-desc">
+                                El universo, el poder fuera de lo normal y la extensión misma del ecosistema <strong>ZAARD</strong>: calma, empoderamiento y la fuerza <strong>PANGA</strong> en su absoluta capacidad bajo la firma de <span>ZAARD XENOCRYPT</span>.
+                            </p>
+
+                            <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0xfc2aca08fc64e51793c32e9088fc43a57d39690e&binanceChainId=56&chain=bsc" target="_blank" rel="noopener noreferrer" class="token-volt-cta">
+                                Explorar ZARED en Binance Web3 ↗
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Modal de Selección de Billetera -->
-    <div id="walletModal" class="wallet-modal hidden">
-        <div class="wallet-box">
-            <h3 style="color: #e9d5ff; margin-bottom: 15px;">Selecciona tu Billetera Web3</h3>
-            <button class="wallet-option" onclick="conectarInjected('binance')">🟡 Binance Web3 Wallet</button>
-            <button class="wallet-option" onclick="conectarInjected('metamask')">🦊 MetaMask / Injected Provider</button>
-            <button onclick="cerrarSelectorBilletera()" style="background: transparent; border: 1px solid #7c3aed; color: #c084fc; padding: 8px; border-radius: 8px; margin-top: 10px; cursor: pointer; width: 100%;">Cancelar</button>
+        <!-- ======================================================= -->
+        <!-- PESTAÑA 5: ZYM TOKEN (CA: 0x3984bd80e73777f2e790892435338d032b987bc7) -->
+        <!-- ======================================================= -->
+        <div id="tab-zym" class="tab-content">
+            <div class="fin-card cyan-glow">
+                <div class="electric-grid-overlay"></div>
+                <canvas class="electric-spark-canvas"></canvas>
+
+                <div class="electric-card-body">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 16px;">
+                        <div>
+                            <h2><i class="fas fa-bolt" style="color:#06d6a0;"></i> ZYM Protocol Analytics</h2>
+                            <div class="contract-pill" style="border-color: #06d6a0;">CA: 0x3984bd80e73777f2e790892435338d032b987bc7</div>
+                        </div>
+                        <div>
+                            <a href="https://pancakeswap.finance/swap?outputCurrency=0x3984bd80e73777f2e790892435338d032b987bc7" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: linear-gradient(135deg, #06d6a0, #00f2fe); color:#030107; padding: 10px 20px;">Swap BNB ⇄ ZYM</a>
+                        </div>
+                    </div>
+
+                    <!-- Balance ZYM + Enlace directo al Token -->
+                    <div class="token-balance-banner">
+                        <div>
+                            <span style="color:#94a3b8;font-size:0.9rem;display:block;">Tu balance de ZYM en BSC</span>
+                            <span class="token-balance-value" id="balance-zym">Conecta tu billetera para ver balance</span>
+                        </div>
+                        <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0x3984bd80e73777f2e790892435338d032b987bc7&binanceChainId=56&chain=bsc" target="_blank" rel="noopener noreferrer" class="action-btn" style="padding:10px 18px;font-size:0.8rem;">
+                            Abrir Token ZYM ↗
+                        </a>
+                    </div>
+
+                    <div style="width: 100%; height: 500px; border-radius: 12px; overflow: hidden; border: 1px solid #06d6a0; background: #000; margin-bottom: 25px;">
+                        <iframe src="https://dexscreener.com/bsc/0x3984bd80e73777f2e790892435338d032b987bc7?embed=1&theme=dark&trades=0&info=0" style="width: 100%; height: 100%; border: none;" title="ZYM DexScreener"></iframe>
+                    </div>
+
+                    <div class="order-book-grid">
+                        <div class="order-box">
+                            <h4 style="color: var(--neon-green); font-family:'Orbitron'; margin-bottom:10px;"><i class="fas fa-arrow-trend-up"></i> Órdenes de Compra (BUY)</h4>
+                            <div style="font-size:0.9rem; color:#cbd5e1; display:flex; justify-content:space-between; margin-bottom:6px;"><span>0.65 BNB</span> <span style="color:var(--neon-green);">+95,000 ZYM</span></div>
+                        </div>
+                        <div class="order-box">
+                            <h4 style="color: #ef4444; font-family:'Orbitron'; margin-bottom:10px;"><i class="fas fa-arrow-trend-down"></i> Órdenes de Venta (SELL)</h4>
+                            <div style="font-size:0.9rem; color:#cbd5e1; display:flex; justify-content:space-between; margin-bottom:6px;"><span>30,000 ZYM</span> <span style="color:#ef4444;">0.21 BNB</span></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 25px;">
+                        <h4 style="color: var(--text-purple); font-family:'Orbitron'; font-size:0.95rem; margin-bottom: 10px;">📊 Comparación de Valor en Vivo</h4>
+                        <div class="price-compare-table">
+                            <div class="price-comp-card">
+                                <img src="https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png" alt="BNB" class="compare-token-logo">
+                                <span style="font-size:0.8rem; color:#94a3b8; display:block;">vs BNB</span>
+                                <strong style="color:#06d6a0; font-size:1.05rem;">0.000010 BNB</strong>
+                            </div>
+                            <div class="price-comp-card">
+                                <span style="font-size:0.8rem; color:#94a3b8; display:block;">vs BTC (BTCB)</span>
+                                <strong style="color:#f6851b; font-size:1.05rem;">0.00000009 BTC</strong>
+                            </div>
+                            <div class="price-comp-card">
+                                <span style="font-size:0.8rem; color:#94a3b8; display:block;">vs USDT</span>
+                                <strong style="color:var(--neon-blue); font-size:1.05rem;">$0.00680 USDT</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 25px;">
+                        <a href="https://pancakeswap.finance/swap?inputCurrency=0x3984bd80e73777f2e790892435338d032b987bc7&outputCurrency=0xE2879d1172215E728472D7827586bd2796aFA3fB" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: linear-gradient(135deg, #06d6a0, #7b2cbf); color:#fff;">Swap ZYM ⇄ ZARD</a>
+                        <a href="https://dexscreener.com/bsc/0x3984bd80e73777f2e790892435338d032b987bc7" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: rgba(6,214,160,0.2); border: 1px solid #06d6a0; color:#06d6a0;">📈 Ver en DexScreener Full ↗</a>
+                    </div>
+
+                    <!-- BLOQUE ELÉCTRICO ZYM -->
+                    <div class="token-volt-showcase" id="zym-volt-block">
+                        <div class="electric-grid-overlay"></div>
+                        <canvas class="electric-spark-canvas"></canvas>
+
+                        <div class="token-volt-content">
+                            <div class="token-volt-badge">⚡ FUERZA ENMUTADA · ZAARD, YEKA & MAR ⚡</div>
+                            <h3 class="token-volt-title">ZYM ($ZYM)</h3>
+
+                            <div class="token-volt-img-wrapper">
+                                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1793917735714-d84b28c0d04f3063f454cbc1d8a062fb.png" alt="ZYM Token - ZAARD INNOVATION">
+                            </div>
+
+                            <p class="token-volt-desc">
+                                La fuerza enmutada, el poder de una comunidad que cree y da el máximo para que cada cosa funcione dentro de <strong>ZAARD INNOVATION</strong> — impulsada por <strong>ZAARD, YEKA &amp; MAR</strong> bajo la custodia de <span>ZAARD XENOCRYPT</span>.
+                            </p>
+
+                            <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0x3984bd80e73777f2e790892435338d032b987bc7&binanceChainId=56&chain=bsc" target="_blank" rel="noopener noreferrer" class="token-volt-cta">
+                                Explorar ZYM en Binance Web3 ↗
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
 
-    <!-- Modal de Resultado de la Ronda -->
-    <div id="resultModal" class="result-modal hidden">
-        <div class="result-box">
-            <h2 id="resultTitle" style="margin-bottom: 14px; color: #34d399;">¡Resultado de la Ronda!</h2>
-            <p id="resultDesc" style="color: #e9d5ff; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.55;"></p>
-            <button class="btn-action" onclick="cerrarModalResultado()">Continuar Operando</button>
-        </div>
-    </div>
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 <span>ZAARD INNOVATION</span>. Todos los derechos reservados. | Ecosistema Multitoken desarrollado bajo <span>ZAARD XENOCRYPT</span>.</p>
+    </footer>
 
+    <!-- SCRIPTS DE CONTROL + WEB3 + BALANCES + MODO INVITADO + MOTOR ELÉCTRICO -->
     <script>
-        // CONFIGURACIÓN DEL JUEGO Y CONTRATOS
-        const WALLET_CREADORA = "0x84f529525fae84b1f1d7ea66939592094426cdc8";
-        const ZARD_TOKEN_CONTRACT = "0xE2879d1172215E728472D7827586bd2796aFA3fB";
-        const ZAARD_VAULT_CONTRACT = "0x327f9B551EbC850891111EE394741709294CC1A8";
-        const BET_WEI_HEX = "0x38D7EA4C68000"; // 0.0001 BNB
-        const PRIZE_ZARD_AMOUNT = "0.001 ZARD";
+        const TOKEN_CONTRACTS = {
+            zard: { address: '0xE2879d1172215E728472D7827586bd2796aFA3fB', symbol: 'ZARD' },
+            panga: { address: '0x4a6c3ea9e7132ad217c31f8252119f08c801366e', symbol: 'PANGA' },
+            zared: { address: '0xfc2aca08fc64e51793c32e9088fc43a57d39690e', symbol: 'ZARED' },
+            zym: { address: '0x3984bd80e73777f2e790892435338d032b987bc7', symbol: 'ZYM' }
+        };
 
-        let modoActual = 'invitado';
-        let cuentaConectada = null;
-        let timeLeft = 60;
-        let temporizadorActivo = false;
-        let intervaloTimer = null;
-        let apuestaActiva = null;
-        let preciosActuales = { BNB: 614.25, ZARD: 0.000060 };
+        let connectedAccount = null;
 
-        function iniciarTemporizadorRonda() {
-            if (temporizadorActivo) return;
-            temporizadorActivo = true;
-            timeLeft = 60;
-            document.getElementById('countdown').innerText = timeLeft;
+        function enterDashboard() {
+            const splash = document.getElementById('splash-screen');
+            splash.style.opacity = '0';
+            setTimeout(() => { splash.style.visibility = 'hidden'; }, 800);
+        }
 
-            intervaloTimer = setInterval(() => {
-                timeLeft--;
-                document.getElementById('countdown').innerText = timeLeft;
+        function switchTab(evt, tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            evt.currentTarget.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
 
-                if (timeLeft <= 0) {
-                    clearInterval(intervaloTimer);
-                    temporizadorActivo = false;
-                    verificarResultadoRonda();
+            if (window.refreshElectricCanvases) {
+                setTimeout(window.refreshElectricCanvases, 50);
+            }
+        }
+
+        function enableGuestMode() {
+            localStorage.setItem('zaard_arcade_guest', 'true');
+        }
+
+        function openWalletModal() {
+            const currentUrl = encodeURIComponent(window.location.href.split('#')[0]);
+            const cleanHostPath = window.location.href.replace(/^https?:\/\//, '');
+            document.getElementById('openMetaMaskLink').href = 'https://metamask.app.link/dapp/' + cleanHostPath;
+            document.getElementById('openTrustLink').href = 'https://link.trustwallet.com/open_url?coin_id=20000714&url=' + currentUrl;
+            document.getElementById('walletModal').classList.add('open');
+        }
+
+        function closeWalletModal() {
+            document.getElementById('walletModal').classList.remove('open');
+        }
+
+        async function ensureBscNetwork(provider) {
+            const bscChainId = '0x38'; // 56 en hex
+            try {
+                const chainId = await provider.request({ method: 'eth_chainId' });
+                if (chainId !== bscChainId) {
+                    try {
+                        await provider.request({
+                            method: 'wallet_switchEthereumChain',
+                            params: [{ chainId: bscChainId }]
+                        });
+                    } catch (switchErr) {
+                        if (switchErr.code === 4902) {
+                            await provider.request({
+                                method: 'wallet_addEthereumChain',
+                                params: [{
+                                    chainId: bscChainId,
+                                    chainName: 'BNB Smart Chain',
+                                    nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+                                    rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                                    blockExplorerUrls: ['https://bscscan.com/']
+                                }]
+                            });
+                        }
+                    }
                 }
-            }, 1000);
+            } catch (_) {}
         }
 
-        function iniciarTransicion() {
-            document.getElementById('screenWelcome').classList.add('hidden');
-            document.getElementById('screenLoading').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('screenLoading').classList.add('hidden');
-                document.getElementById('screenArena').classList.remove('hidden');
-                initCanvas('candleCanvasBnb', 614.25, 'priceDisplayBnb', 0.0009, 2, '#22d3ee');
-                initCanvas('candleCanvasZard', 0.000060, 'priceDisplayZard', 0.0022, 6, '#c084fc');
-                initOrderBooks();
-            }, 2200);
+        function decodeUint256ToFormatted(hexResult, decimals) {
+            if (!hexResult || hexResult === '0x') return '0.00';
+            const raw = BigInt(hexResult);
+            const divisor = 10n ** BigInt(decimals);
+            const whole = raw / divisor;
+            const remainder = raw % divisor;
+            const fracStr = remainder.toString().padStart(decimals, '0').slice(0, 4);
+            return Number(`${whole}.${fracStr}`).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 4
+            });
         }
 
-        function initOrderBooks() {
-            const listBnb = document.getElementById('orderBookBnb');
-            const listZard = document.getElementById('orderBookZard');
-            const sampleWallets = ["0x4A...9b21", "0x8F...11c4", "0x2C...e490", "0x9E...31a8", "0x7D...55aa"];
-
-            for (let i = 0; i < 4; i++) {
-                addOrder(listBnb, sampleWallets, "0.0001 BNB");
-                addRewardOrder(listZard, sampleWallets);
-            }
-
-            setInterval(() => {
-                if (listBnb && listZard) {
-                    addOrder(listBnb, sampleWallets, "0.0001 BNB");
-                    addRewardOrder(listZard, sampleWallets);
+        async function fetchErc20BalanceRpc(tokenAddress, userAddress) {
+            let decimals = 18;
+            try {
+                const decRes = await fetch('https://bsc-dataseed.binance.org/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        jsonrpc: '2.0',
+                        id: 1,
+                        method: 'eth_call',
+                        params: [{ to: tokenAddress, data: '0x313ce567' }, 'latest']
+                    })
+                });
+                const decJson = await decRes.json();
+                if (decJson.result && decJson.result !== '0x') {
+                    decimals = Number(BigInt(decJson.result));
                 }
-            }, 3500);
+            } catch (_) {}
+
+            const paddedAddr = userAddress.toLowerCase().replace(/^0x/, '').padStart(64, '0');
+            const data = '0x70a08231' + paddedAddr;
+
+            const balRes = await fetch('https://bsc-dataseed.binance.org/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    jsonrpc: '2.0',
+                    id: 2,
+                    method: 'eth_call',
+                    params: [{ to: tokenAddress, data }, 'latest']
+                })
+            });
+            const balJson = await balRes.json();
+            return decodeUint256ToFormatted(balJson.result, decimals);
         }
 
-        function addOrder(container, wallets, unit) {
-            const wallet = wallets[Math.floor(Math.random() * wallets.length)];
-            const isSube = Math.random() > 0.45;
-            const typeText = isSube ? `SUBE (${unit})` : `BAJA (${unit})`;
-            const cssClass = isSube ? "order-green" : "order-red";
-
-            const div = document.createElement('div');
-            div.className = "order-item";
-            div.innerHTML = `<span>${wallet}</span> <span class="${cssClass}">${typeText}</span>`;
-
-            container.prepend(div);
-            if (container.children.length > 5) {
-                container.removeChild(container.lastChild);
+        async function updateAllTokenBalances(account) {
+            for (const [key, info] of Object.entries(TOKEN_CONTRACTS)) {
+                const el = document.getElementById('balance-' + key);
+                if (!el) continue;
+                el.textContent = 'Consultando...';
+                try {
+                    const formatted = await fetchErc20BalanceRpc(info.address, account);
+                    el.textContent = `${formatted} ${info.symbol}`;
+                } catch (_) {
+                    el.textContent = `0.00 ${info.symbol}`;
+                }
             }
         }
 
-        function addRewardOrder(container, wallets) {
-            const wallet = wallets[Math.floor(Math.random() * wallets.length)];
-            const div = document.createElement('div');
-            div.className = "order-item";
-            div.innerHTML = `<span>${wallet}</span> <span class="order-green">+${PRIZE_ZARD_AMOUNT} (Vault)</span>`;
-
-            container.prepend(div);
-            if (container.children.length > 5) {
-                container.removeChild(container.lastChild);
+        function setDisconnectedUI() {
+            connectedAccount = null;
+            document.getElementById('walletBtnText').textContent = 'Conectar';
+            document.getElementById('disconnectWalletBtn').style.display = 'none';
+            for (const key of Object.keys(TOKEN_CONTRACTS)) {
+                const el = document.getElementById('balance-' + key);
+                if (el) el.textContent = 'Conecta tu billetera para ver balance';
             }
         }
 
-        function initCanvas(canvasId, basePrice, priceDisplayId, volatility, decimals, accentColor) {
-            const canvas = document.getElementById(canvasId);
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
+        async function connectWeb3Wallet() {
+            const provider = window.ethereum;
+            if (!provider) {
+                openWalletModal();
+                return;
+            }
+            try {
+                const accounts = await provider.request({ method: 'eth_requestAccounts' });
+                if (accounts && accounts.length > 0) {
+                    await ensureBscNetwork(provider);
+                    connectedAccount = accounts[0];
+                    const shortAddr = `${connectedAccount.slice(0, 6)}...${connectedAccount.slice(-4)}`;
+                    document.getElementById('walletBtnText').textContent = shortAddr;
+                    document.getElementById('disconnectWalletBtn').style.display = 'inline-flex';
+                    closeWalletModal();
+                    await updateAllTokenBalances(connectedAccount);
+                }
+            } catch (_) {
+                openWalletModal();
+            }
+        }
 
-            let candles = [];
-            let currentP = basePrice;
+        function disconnectWeb3Wallet() {
+            setDisconnectedUI();
+        }
 
-            for (let i = 0; i < 28; i++) {
-                let open = currentP + (Math.random() - 0.5) * (basePrice * volatility);
-                let close = open + (Math.random() - 0.48) * (basePrice * (volatility * 0.9));
-                let high = Math.max(open, close) + Math.random() * (basePrice * (volatility * 0.45));
-                let low = Math.min(open, close) - Math.random() * (basePrice * (volatility * 0.45));
-                candles.push({ open, close, high, low });
-                currentP = close;
+        if (window.ethereum) {
+            window.ethereum.on('accountsChanged', (accounts) => {
+                if (!accounts || accounts.length === 0) {
+                    setDisconnectedUI();
+                } else {
+                    connectedAccount = accounts[0];
+                    document.getElementById('walletBtnText').textContent = `${connectedAccount.slice(0, 6)}...${connectedAccount.slice(-4)}`;
+                    document.getElementById('disconnectWalletBtn').style.display = 'inline-flex';
+                    updateAllTokenBalances(connectedAccount);
+                }
+            });
+        }
+
+        /* MOTOR DE CHISPAS Y RAYOS ELÉCTRICOS PARA TODAS LAS SECCIONES */
+        (function () {
+            const canvases = Array.from(document.querySelectorAll('.electric-spark-canvas'));
+            const colors = ['#00ff88', '#00f0ff', '#ffffff', '#c084fc'];
+
+            const engines = canvases.map(canvas => {
+                const parent = canvas.parentElement;
+                return {
+                    canvas,
+                    parent,
+                    ctx: canvas.getContext('2d'),
+                    width: 0,
+                    height: 0,
+                    sparks: [],
+                    bolts: []
+                };
+            });
+
+            function createSpark(w, h) {
+                return {
+                    x: Math.random() * (w || 800),
+                    y: Math.random() * (h || 600),
+                    vx: (Math.random() - 0.5) * 3.6,
+                    vy: (Math.random() - 0.5) * 3.6 - 0.5,
+                    size: Math.random() * 2.3 + 0.8,
+                    alpha: Math.random() * 0.9 + 0.15,
+                    decay: Math.random() * 0.02 + 0.008,
+                    color: colors[Math.floor(Math.random() * colors.length)]
+                };
             }
 
-            setInterval(() => {
-                let last = candles[candles.length - 1];
-                let newClose = last.close + (Math.random() - 0.49) * (basePrice * (volatility * 0.35));
-                last.close = newClose;
-                last.high = Math.max(last.high, newClose);
-                last.low = Math.min(last.low, newClose);
+            function resizeAll() {
+                engines.forEach(eng => {
+                    const rect = eng.parent.getBoundingClientRect();
+                    eng.width = eng.canvas.width = Math.max(rect.width, 300);
+                    eng.height = eng.canvas.height = Math.max(rect.height, 200);
+                    if (eng.sparks.length === 0) {
+                        for (let i = 0; i < 36; i++) {
+                            eng.sparks.push(createSpark(eng.width, eng.height));
+                        }
+                    }
+                });
+            }
 
-                let assetKey = canvasId.includes('Bnb') ? 'BNB' : 'ZARD';
-                preciosActuales[assetKey] = newClose;
+            window.refreshElectricCanvases = resizeAll;
+            window.addEventListener('resize', resizeAll);
+            resizeAll();
 
-                document.getElementById(priceDisplayId).innerText = newClose.toFixed(decimals) + " $";
+            function spawnLightning(eng) {
+                if (!eng.width || !eng.height) return;
+                const startX = Math.random() * eng.width;
+                const startY = Math.random() < 0.5 ? 0 : Math.random() * eng.height * 0.35;
+                const segments = [];
+                let cx = startX;
+                let cy = startY;
+                const steps = 5 + Math.floor(Math.random() * 5);
 
-                canvas.width = canvas.offsetWidth;
-                canvas.height = canvas.offsetHeight;
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                ctx.strokeStyle = 'rgba(192, 132, 252, 0.08)';
-                ctx.lineWidth = 1;
-                for (let g = 1; g < 4; g++) {
-                    const yGrid = (canvas.height / 4) * g;
-                    ctx.beginPath();
-                    ctx.moveTo(0, yGrid);
-                    ctx.lineTo(canvas.width, yGrid);
-                    ctx.stroke();
+                for (let i = 0; i < steps; i++) {
+                    cx += (Math.random() - 0.5) * 65;
+                    cy += 20 + Math.random() * 32;
+                    segments.push({ x: cx, y: cy });
                 }
 
-                let candleWidth = canvas.width / candles.length;
-                let maxH = Math.max(...candles.map(c => c.high));
-                let minL = Math.min(...candles.map(c => c.low));
-                let range = maxH - minL || 1;
+                eng.bolts.push({
+                    startX,
+                    startY,
+                    segments,
+                    alpha: 1,
+                    color: Math.random() > 0.35 ? '#00f0ff' : '#00ff88'
+                });
+            }
 
-                candles.forEach((c, index) => {
-                    let x = index * candleWidth + candleWidth / 2;
-                    let yHigh = canvas.height - ((c.high - minL) / range) * (canvas.height - 28) - 14;
-                    let yLow = canvas.height - ((c.low - minL) / range) * (canvas.height - 28) - 14;
-                    let yOpen = canvas.height - ((c.open - minL) / range) * (canvas.height - 28) - 14;
-                    let yClose = canvas.height - ((c.close - minL) / range) * (canvas.height - 28) - 14;
+            function animate() {
+                engines.forEach(eng => {
+                    if (eng.parent.offsetParent === null) return;
+                    if (eng.width === 0 || eng.height === 0) resizeAll();
 
-                    let isGreen = c.close >= c.open;
-                    let color = isGreen ? '#34d399' : '#fb7185';
+                    const { ctx, width, height, sparks, bolts } = eng;
+                    ctx.clearRect(0, 0, width, height);
 
-                    ctx.save();
-                    ctx.shadowColor = isGreen ? 'rgba(52, 211, 153, 0.55)' : 'rgba(251, 113, 133, 0.55)';
-                    ctx.shadowBlur = 8;
-                    ctx.strokeStyle = color;
-                    ctx.fillStyle = color;
+                    for (let i = 0; i < sparks.length; i++) {
+                        const s = sparks[i];
+                        s.x += s.vx;
+                        s.y += s.vy;
+                        s.alpha -= s.decay;
 
-                    ctx.lineWidth = 1.4;
-                    ctx.beginPath();
-                    ctx.moveTo(x, yHigh);
-                    ctx.lineTo(x, yLow);
-                    ctx.stroke();
+                        if (s.alpha <= 0 || s.x < 0 || s.x > width || s.y < 0 || s.y > height) {
+                            sparks[i] = createSpark(width, height);
+                            continue;
+                        }
 
-                    let rectY = Math.min(yOpen, yClose);
-                    let rectH = Math.max(Math.abs(yClose - yOpen), 2);
-                    ctx.fillRect(x - candleWidth / 4, rectY, candleWidth / 2, rectH);
-                    ctx.restore();
+                        ctx.save();
+                        ctx.globalAlpha = s.alpha;
+                        ctx.fillStyle = s.color;
+                        ctx.shadowColor = s.color;
+                        ctx.shadowBlur = 10;
+                        ctx.beginPath();
+                        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.restore();
+                    }
+
+                    if (Math.random() < 0.032) {
+                        spawnLightning(eng);
+                    }
+
+                    for (let i = bolts.length - 1; i >= 0; i--) {
+                        const b = bolts[i];
+                        ctx.save();
+                        ctx.globalAlpha = b.alpha;
+                        ctx.strokeStyle = b.color;
+                        ctx.shadowColor = b.color;
+                        ctx.shadowBlur = 15;
+                        ctx.lineWidth = 1.5;
+                        ctx.beginPath();
+                        ctx.moveTo(b.startX, b.startY);
+                        for (const pt of b.segments) {
+                            ctx.lineTo(pt.x, pt.y);
+                        }
+                        ctx.stroke();
+                        ctx.restore();
+
+                        b.alpha -= 0.08;
+                        if (b.alpha <= 0) bolts.splice(i, 1);
+                    }
                 });
 
-                const lastCandle = candles[candles.length - 1];
-                const yLast = canvas.height - ((lastCandle.close - minL) / range) * (canvas.height - 28) - 14;
-                ctx.strokeStyle = accentColor;
-                ctx.setLineDash([4, 4]);
-                ctx.beginPath();
-                ctx.moveTo(0, yLast);
-                ctx.lineTo(canvas.width, yLast);
-                ctx.stroke();
-                ctx.setLineDash([]);
-            }, 600);
-        }
-
-        function realizarApuesta(direccion) {
-            let precioActual = preciosActuales.BNB;
-            apuestaActiva = {
-                activo: 'BNB',
-                direccion,
-                precioInicio: precioActual,
-                roundId: Date.now()
-            };
-
-            iniciarTemporizadorRonda();
-
-            if (modoActual === 'invitado') {
-                alert(`[SIMULACIÓN] Apuesta en BNB (${direccion}) por 0.0001 BNB a ${precioActual.toFixed(2)}$. Premio potencial: ${PRIZE_ZARD_AMOUNT}.`);
-            } else {
-                if (window.ethereum) {
-                    const transactionParameters = {
-                        to: WALLET_CREADORA,
-                        from: cuentaConectada || window.ethereum.selectedAddress,
-                        value: BET_WEI_HEX
-                    };
-
-                    window.ethereum.request({ method: 'eth_sendTransaction', params: [transactionParameters] })
-                        .then((txHash) => {
-                            alert(`¡Apuesta de 0.0001 BNB enviada! Tx: ${txHash}. Espera el cierre de la ronda para optar por ${PRIZE_ZARD_AMOUNT}.`);
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                            alert("Transacción cancelada o rechazada.");
-                            apuestaActiva = null;
-                            clearInterval(intervaloTimer);
-                            temporizadorActivo = false;
-                            timeLeft = 60;
-                            document.getElementById('countdown').innerText = timeLeft;
-                        });
-                } else {
-                    alert("Conecta MetaMask o Binance Web3 Wallet para apostar en modo real.");
-                    abrirSelectorBilletera();
-                }
-            }
-        }
-
-        function verificarResultadoRonda() {
-            if (!apuestaActiva) return;
-
-            let precioFinal = preciosActuales.BNB;
-            let precioInicio = apuestaActiva.precioInicio;
-            let subio = precioFinal >= precioInicio;
-            let acerto = (apuestaActiva.direccion === 'SUBE' && subio) || (apuestaActiva.direccion === 'BAJA' && !subio);
-
-            let modal = document.getElementById('resultModal');
-            let titleEl = document.getElementById('resultTitle');
-            let descEl = document.getElementById('resultDesc');
-
-            if (acerto) {
-                titleEl.style.color = "#34d399";
-                titleEl.innerText = "🎉 ¡VICTORIA EN LA RONDA!";
-                descEl.innerHTML = `Tu predicción <strong>${apuestaActiva.direccion}</strong> en BNB fue correcta (${precioInicio.toFixed(2)}$ ➔ ${precioFinal.toFixed(2)}$).<br>Recompensa: <strong>${PRIZE_ZARD_AMOUNT}</strong>.<br><small style="color:#67e8f9;">Contrato Pagadero: <code>${ZAARD_VAULT_CONTRACT}</code></small>`;
-            } else {
-                titleEl.style.color = "#fb7185";
-                titleEl.innerText = "❌ RONDA SIN ACIERTO";
-                descEl.innerHTML = `El mercado cerró en <strong>${precioFinal.toFixed(2)}$</strong> frente a tu entrada de <strong>${precioInicio.toFixed(2)}$</strong> (${apuestaActiva.direccion}). ¡Inténtalo en la siguiente ronda!`;
+                requestAnimationFrame(animate);
             }
 
-            modal.classList.remove('hidden');
-            apuestaActiva = null;
-            timeLeft = 60;
-            document.getElementById('countdown').innerText = timeLeft;
-        }
-
-        function cerrarModalResultado() {
-            document.getElementById('resultModal').classList.add('hidden');
-        }
-
-        function abrirSelectorBilletera() {
-            document.getElementById('walletModal').classList.remove('hidden');
-        }
-
-        function cerrarSelectorBilletera() {
-            document.getElementById('walletModal').classList.add('hidden');
-        }
-
-        function conectarInjected(tipo) {
-            cerrarSelectorBilletera();
-            if (typeof window.ethereum !== 'undefined') {
-                window.ethereum.request({ method: 'eth_requestAccounts' })
-                    .then(accounts => {
-                        cuentaConectada = accounts[0];
-                        let shortAddr = cuentaConectada.substring(0, 6) + "..." + cuentaConectada.substring(cuentaConectada.length - 4);
-                        document.getElementById('connectWalletBtn').innerText = (tipo === 'binance' ? "🟡 " : "🦊 ") + shortAddr;
-                        alert("¡Billetera conectada!");
-                    })
-                    .catch(err => {
-                        console.log(err);
-                        alert("Permiso denegado o error al conectar.");
-                    });
-            } else {
-                alert("Abre esta página dentro del navegador de MetaMask, Binance Web3 Wallet o Trust Wallet.");
-            }
-        }
-
-        function cambiarModo() {
-            if (modoActual === 'invitado') {
-                modoActual = 'apuesta';
-                document.getElementById('badgeMode').className = "mode-badge live-mode";
-                document.getElementById('badgeMode').innerText = "Modo Apuesta Real (0.0001 BNB)";
-                document.getElementById('btnSwitchMode').innerText = "Cambiar a Modo Invitado";
-                abrirSelectorBilletera();
-            } else {
-                modoActual = 'invitado';
-                document.getElementById('badgeMode').className = "mode-badge guest-mode";
-                document.getElementById('badgeMode').innerText = "Modo Invitado (Simulación Segura)";
-                document.getElementById('btnSwitchMode').innerText = "Activar Modo Apuesta";
-                alert("Cambiado a Modo Invitado.");
-            }
-        }
+            animate();
+        })();
     </script>
 </body>
 </html>

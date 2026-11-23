@@ -56,11 +56,14 @@
             background-size: cover; background-position: center;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             z-index: 9999;
+            padding: 24px;
             transition: opacity 0.8s ease, visibility 0.8s ease;
         }
 
         .splash-logo {
-            width: 180px; height: 180px; border-radius: 50%; object-fit: cover;
+            width: clamp(160px, 16vw, 220px);
+            height: clamp(160px, 16vw, 220px);
+            border-radius: 50%; object-fit: cover;
             border: 3px solid var(--neon-blue);
             box-shadow: 0 0 40px var(--neon-blue), 0 0 80px var(--neon-purple);
             animation: splashPulse 2s infinite alternate ease-in-out;
@@ -73,18 +76,21 @@
         }
 
         .splash-title {
-            font-family: 'Orbitron', sans-serif; font-size: 2.2rem; font-weight: 900; letter-spacing: 2px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 4vw, 3.6rem);
+            font-weight: 900; letter-spacing: 2px;
             color: var(--neon-green); text-shadow: 0 0 20px var(--neon-green); margin-bottom: 15px; text-align: center;
         }
 
         .splash-subtitle {
-            font-size: 1.15rem; color: var(--text-purple); text-align: center; max-width: 700px; padding: 0 20px; margin-bottom: 30px; line-height: 1.6;
+            font-size: clamp(1.15rem, 1.7vw, 1.55rem);
+            color: var(--text-purple); text-align: center; max-width: 880px; padding: 0 20px; margin-bottom: 30px; line-height: 1.6;
         }
 
         .enter-btn {
             background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
-            color: #030308; font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 1.15rem;
-            padding: 15px 40px; border: none; border-radius: 30px; cursor: pointer;
+            color: #030308; font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: clamp(1rem, 1.3vw, 1.25rem);
+            padding: 16px 44px; border: none; border-radius: 30px; cursor: pointer;
             box-shadow: 0 0 30px var(--neon-blue); transition: all 0.3s ease; text-transform: uppercase;
         }
 
@@ -145,7 +151,7 @@
             color: #06d6a0;
         }
 
-        .nav-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .nav-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
         .lang-select {
             background: rgba(176, 132, 204, 0.15); border: 1px solid var(--neon-purple); color: var(--text-purple);
@@ -157,8 +163,51 @@
             background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));
             color: #030308; font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 0.85rem;
             padding: 9px 18px; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 0 20px rgba(0,255,102,0.5); transition: 0.3s;
+            display: inline-flex; align-items: center; gap: 6px;
         }
         .wallet-btn:hover { transform: scale(1.05); box-shadow: 0 0 30px var(--neon-green); }
+
+        .disconnect-btn {
+            background: rgba(239, 68, 68, 0.16);
+            color: #fca5a5;
+            border: 1px solid #ef4444;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 0.78rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            gap: 5px;
+        }
+        .disconnect-btn:hover { background: rgba(239, 68, 68, 0.32); color: #fff; }
+
+        .wallet-modal-backdrop {
+            position: fixed; inset: 0;
+            background: rgba(2, 4, 12, 0.86);
+            backdrop-filter: blur(6px);
+            display: none; align-items: center; justify-content: center;
+            z-index: 10000; padding: 20px;
+        }
+        .wallet-modal-backdrop.open { display: flex; }
+
+        .wallet-modal-box {
+            width: 100%; max-width: 460px;
+            background: linear-gradient(160deg, #061324 0%, #0a0c24 100%);
+            border: 2px solid var(--neon-blue); border-radius: 18px;
+            padding: 24px; text-align: center; color: #e6f7ff;
+            box-shadow: 0 0 35px rgba(0, 242, 254, 0.35);
+        }
+
+        .wallet-launch-link {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 16px; margin-bottom: 10px; border-radius: 12px;
+            text-decoration: none; background: rgba(0, 242, 254, 0.1);
+            border: 1px solid rgba(0, 242, 254, 0.45); color: #fff;
+            font-family: 'Orbitron', sans-serif; font-size: 0.84rem; font-weight: 700;
+        }
+        .wallet-launch-link:hover { border-color: var(--neon-green); background: rgba(0, 255, 102, 0.16); }
 
         .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
         .tab-content { display: none; }
@@ -243,6 +292,19 @@
             box-shadow: 0 0 14px rgba(0, 240, 255, 0.25);
         }
 
+        .balance-bar {
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 12px;
+            background: rgba(4, 16, 30, 0.92);
+            border: 1px solid rgba(0, 255, 102, 0.45);
+            border-radius: 12px; padding: 12px 16px; margin-bottom: 20px;
+        }
+
+        .balance-amount {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem; font-weight: 800; color: var(--neon-green);
+        }
+
         .action-btn {
             position: relative;
             display: inline-block;
@@ -279,6 +341,12 @@
             padding: 15px;
             border-radius: 10px;
             box-shadow: 0 0 14px rgba(0, 255, 136, 0.12);
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+        }
+
+        .compare-logo {
+            width: 28px; height: 28px; border-radius: 50%; object-fit: cover;
+            border: 1px solid rgba(0, 242, 254, 0.55);
         }
 
         /* Grid cuadrado perfecto de 2x2 para los 4 tokens */
@@ -311,7 +379,7 @@
         .feature-box h4 { font-family: 'Orbitron', sans-serif; color: #fff; font-size: 1.1rem; margin-bottom: 8px; }
         .feature-box p { color: #cbd5e1; font-size: 0.92rem; line-height: 1.5; }
 
-        /* Barra WOW de alto voltaje para Lucky Arcade */
+        /* Barra WOW de alto voltaje para Lucky Arcade + Modo Invitado */
         .arcade-banner-bar {
             position: relative;
             display: block;
@@ -339,6 +407,16 @@
             transform: scale(1.025) translateY(-2px);
             box-shadow: 0 0 45px #00ff88, 0 0 75px #00f0ff, 0 0 95px #c084fc;
             color: #010408;
+        }
+
+        .guest-pill {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 4px 12px;
+            border-radius: 999px;
+            background: rgba(2, 7, 13, 0.86);
+            color: #00ff88;
+            font-size: 0.76rem;
         }
 
         @keyframes arcadeVoltShift {
@@ -522,6 +600,24 @@
         <button class="enter-btn" onclick="enterDashboard()">Ingresar al Tracker</button>
     </div>
 
+    <!-- MODAL ACCESO DIRECTO A BILLETERA -->
+    <div class="wallet-modal-backdrop" id="walletModal" onclick="if(event.target === this) closeWalletModal()">
+        <div class="wallet-modal-box">
+            <h3 style="color:var(--neon-green);margin-bottom:8px;">⚡ Abrir Billetera Web3</h3>
+            <p style="color:#cbd5e1;margin-bottom:16px;">Abre directo tu billetera sin copiar ni pegar:</p>
+            <a class="wallet-launch-link" id="mmDeepLink" href="https://metamask.app.link/dapp/figueredo56.github.io/ZAARD-Arcade/index-lucky.html" target="_blank" rel="noopener noreferrer">
+                <span>🦊 MetaMask</span><span>↗</span>
+            </a>
+            <a class="wallet-launch-link" id="twDeepLink" href="https://link.trustwallet.com/open_url?coin_id=20000714&url=https%3A%2F%2Ffigueredo56.github.io%2FZAARD-Arcade%2Findex-lucky.html" target="_blank" rel="noopener noreferrer">
+                <span>🛡️ Trust Wallet</span><span>↗</span>
+            </a>
+            <a class="wallet-launch-link" href="https://app.binance.com/en/download" target="_blank" rel="noopener noreferrer">
+                <span>🟡 Binance Web3 Wallet</span><span>↗</span>
+            </a>
+            <button onclick="closeWalletModal()" style="margin-top:8px;background:transparent;border:1px solid rgba(255,255,255,0.25);color:#cbd5e1;padding:8px 16px;border-radius:8px;cursor:pointer;">Cerrar</button>
+        </div>
+    </div>
+
     <!-- HEADER & NAVEGACIÓN -->
     <header>
         <div class="brand">
@@ -534,7 +630,7 @@
                 <i class="fas fa-network-wired" style="color:var(--neon-blue);"></i> Ecosistema
             </button>
             <button class="tab-btn" onclick="switchTab(event, 'tab-zard')">
-                <i class="fas fa-coins" style="color:var(--gold);"></i> ZARD
+                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791940828941-906fd2a3d85625f79d066e5b033f6011.png" alt="ZARD" style="width:16px;height:16px;border-radius:50%;object-fit:cover;"> ZARD
             </button>
             <button class="tab-btn panga-tab" onclick="switchTab(event, 'tab-panga')">
                 <i class="fas fa-fire" style="color:var(--neon-green);"></i> PANGA
@@ -552,8 +648,11 @@
                 <option value="es" selected>🇪🇸 Español</option>
                 <option value="en">🇬🇧 English</option>
             </select>
-            <button class="wallet-btn" onclick="alert('Conectando proveedor Web3 inyectado...')">
-                <i class="fas fa-wallet"></i> Conectar
+            <button class="wallet-btn" id="connectBtn" onclick="connectWallet()">
+                <i class="fas fa-wallet"></i> <span id="connectBtnLabel">Conectar</span>
+            </button>
+            <button class="disconnect-btn" id="disconnectBtn" onclick="disconnectWallet()">
+                <i class="fas fa-power-off"></i> Desconectar
             </button>
         </div>
     </header>
@@ -572,7 +671,7 @@
                 <div class="electric-card-body">
                     <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1794687559048-16ebac67278e144f98b264e40bf5690d.png" alt="Banner Ancho Ecosistema" style="width: 100%; max-height: 380px; object-fit: cover; border-radius: 14px; border: 2px solid var(--gold); margin-bottom: 25px; box-shadow: 0 0 35px rgba(212,175,55,0.45); background: #000;">
                     
-                    <h2 style="color: var(--neon-green); font-size: 2.3rem; margin-bottom: 15px; text-shadow: 0 0 12px rgba(0,255,102,0.6);">
+                    <h2 style="color: var(--neon-green); font-size: clamp(1.6rem, 2.8vw, 2.4rem); margin-bottom: 15px; text-shadow: 0 0 12px rgba(0,255,102,0.6);">
                         📊 ZAARD TRACKER · RASTREO ACTIVO & SEGURIDAD WEB3
                     </h2>
                     <p style="color: var(--text-purple); font-size: 1.15rem; max-width: 950px; margin: 0 auto 30px auto; line-height: 1.6;">
@@ -581,7 +680,7 @@
 
                     <div class="features-grid">
                         <div class="feature-box">
-                            <i class="fas fa-coins" style="color: var(--gold);"></i>
+                            <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791940828941-906fd2a3d85625f79d066e5b033f6011.png" alt="ZARD" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:1px solid var(--gold);margin-bottom:10px;">
                             <h4>ZARD Token Core</h4>
                             <p>El motor, la fuerza y la columna vertebral que da el poder absoluto al ecosistema. Monitoreo integral de liquidez, órdenes de compra/venta y paridades en PancakeSwap con un blindaje inquebrantable.</p>
                         </div>
@@ -602,8 +701,9 @@
                         </div>
                     </div>
 
-                    <a href="https://figueredo56.github.io/ZAARD-Arcade/index-lucky.html" target="_blank" rel="noopener noreferrer" class="arcade-banner-bar">
-                        ⚡🎲 Pon a prueba tus conocimientos y gana token del ecosistema (ZAARD Arcade Lucky) ↗⚡
+                    <a href="https://figueredo56.github.io/ZAARD-Arcade/index-lucky.html?guest=true" target="_blank" rel="noopener noreferrer" class="arcade-banner-bar" onclick="localStorage.setItem('zaard_guest_mode','true')">
+                        ⚡🎲 Pon a prueba tus conocimientos y gana token del ecosistema (ZAARD Arcade Lucky) ↗⚡<br>
+                        <span class="guest-pill">🎮 MODO INVITADO ACTIVADO · PRUEBA EL JUEGO Y ANÍMATE</span>
                     </a>
                 </div>
             </div>
@@ -631,14 +731,25 @@
                 <canvas class="electric-spark-canvas"></canvas>
 
                 <div class="electric-card-body">
-                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
-                        <div>
-                            <h2><i class="fas fa-coins" style="color:var(--gold);"></i> ZARD Token Analytics & Liquidity Core</h2>
-                            <div class="contract-pill">CA: 0xE2879d1172215E728472D7827586bd2796aFA3fB</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 16px;">
+                        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+                            <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791940828941-906fd2a3d85625f79d066e5b033f6011.png" alt="Logo ZARD" style="width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);box-shadow:0 0 16px rgba(212,175,55,0.6);">
+                            <div>
+                                <h2><i class="fas fa-coins" style="color:var(--gold);"></i> ZARD Token Analytics & Liquidity Core</h2>
+                                <div class="contract-pill">CA: 0xE2879d1172215E728472D7827586bd2796aFA3fB</div>
+                            </div>
                         </div>
                         <div>
                             <a href="https://pancakeswap.finance/swap?outputCurrency=0xE2879d1172215E728472D7827586bd2796aFA3fB" target="_blank" rel="noopener noreferrer" class="action-btn" style="padding: 10px 20px;">Swap BNB ⇄ ZARD</a>
                         </div>
+                    </div>
+
+                    <div class="balance-bar">
+                        <div>
+                            <span style="color:#94a3b8;font-size:0.88rem;display:block;">Balance ZARD</span>
+                            <span class="balance-amount" id="bal-zard">Conecta tu billetera</span>
+                        </div>
+                        <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0xe2879d1172215e728472d7827586bd2796afa3fb&binanceChainId=56&chain=bsc" target="_blank" rel="noopener noreferrer" class="action-btn" style="padding:9px 16px;font-size:0.8rem;">Ver Token ZARD en Web3 ↗</a>
                     </div>
 
                     <div style="width: 100%; height: 500px; border-radius: 12px; overflow: hidden; border: 1px solid var(--gold); background: #000; margin-bottom: 25px;">
@@ -662,11 +773,13 @@
                         <h4 style="color: var(--text-purple); font-family:'Orbitron'; font-size:0.95rem; margin-bottom: 10px;">📊 Comparación de Valor en Vivo</h4>
                         <div class="price-compare-table">
                             <div class="price-comp-card">
+                                <img src="https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png" alt="BNB" class="compare-logo">
                                 <span style="font-size:0.8rem; color:#94a3b8; display:block;">vs BNB</span>
                                 <strong style="color:var(--gold); font-size:1.05rem;">0.000013 BNB</strong>
                             </div>
                             <div class="price-comp-card">
-                                <span style="font-size:0.8rem; color:#94a3b8; display:block;">vs BTC (BTCB)</span>
+                                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791940828941-906fd2a3d85625f79d066e5b033f6011.png" alt="ZARD" class="compare-logo">
+                                <span style="font-size:0.8rem; color:#94a3b8; display:block;">ZARD</span>
                                 <strong style="color:#f6851b; font-size:1.05rem;">0.00000012 BTC</strong>
                             </div>
                             <div class="price-comp-card">
@@ -716,14 +829,23 @@
                 <canvas class="electric-spark-canvas"></canvas>
 
                 <div class="electric-card-body">
-                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 16px;">
                         <div>
                             <h2><i class="fas fa-fire" style="color:var(--neon-green);"></i> PANGA Token & GameFi Analytics</h2>
                             <div class="contract-pill" style="border-color: var(--neon-green);">CA: 0x4a6c3ea9e7132ad217c31f8252119f08c801366e</div>
                         </div>
-                        <div>
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                            <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0x4a6c3ea9e7132ad217c31f8252119f08c801366e&binanceChainId=56&chain=bsc" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: rgba(0,255,204,0.16); border: 1px solid #00ffcc; color:#00ffcc; padding: 10px 16px;">Token Web3 ↗</a>
                             <a href="https://pancakeswap.finance/swap?outputCurrency=0x4a6c3ea9e7132ad217c31f8252119f08c801366e" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: linear-gradient(135deg, var(--neon-green), var(--neon-blue)); color:#030107; padding: 10px 20px;">Swap BNB ⇄ PANGA</a>
                         </div>
+                    </div>
+
+                    <div class="balance-bar">
+                        <div>
+                            <span style="color:#94a3b8;font-size:0.88rem;display:block;">Balance PANGA</span>
+                            <span class="balance-amount" id="bal-panga">Conecta tu billetera</span>
+                        </div>
+                        <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0x4a6c3ea9e7132ad217c31f8252119f08c801366e&binanceChainId=56&chain=bsc" target="_blank" rel="noopener noreferrer" class="action-btn" style="padding:9px 16px;font-size:0.8rem;">Ir al Token PANGA en Web3 ↗</a>
                     </div>
 
                     <div style="width: 100%; height: 500px; border-radius: 12px; overflow: hidden; border: 1px solid var(--neon-green); background: #000; margin-bottom: 25px;">
@@ -745,6 +867,7 @@
                         <h4 style="color: var(--text-purple); font-family:'Orbitron'; font-size:0.95rem; margin-bottom: 10px;">📊 Comparación de Valor en Vivo</h4>
                         <div class="price-compare-table">
                             <div class="price-comp-card">
+                                <img src="https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png" alt="BNB" class="compare-logo">
                                 <span style="font-size:0.8rem; color:#94a3b8; display:block;">vs BNB</span>
                                 <strong style="color:var(--neon-green); font-size:1.05rem;">0.000011 BNB</strong>
                             </div>
@@ -760,6 +883,7 @@
                     </div>
 
                     <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 25px;">
+                        <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0x4a6c3ea9e7132ad217c31f8252119f08c801366e&binanceChainId=56&chain=bsc" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: rgba(0,255,204,0.15); border: 1px solid #00ffcc; color:#00ffcc;">Ver en Binance Web3</a>
                         <a href="https://pancakeswap.finance/swap?inputCurrency=0x4a6c3ea9e7132ad217c31f8252119f08c801366e&outputCurrency=0xE2879d1172215E728472D7827586bd2796aFA3fB" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: linear-gradient(135deg, #a855f7, #ec4899); color:#fff;">Swap PANGA ⇄ ZARD</a>
                         <a href="https://dexscreener.com/bsc/0x4a6c3ea9e7132ad217c31f8252119f08c801366e" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: rgba(0,255,102,0.2); border: 1px solid var(--neon-green); color:var(--neon-green);">📈 Ver en DexScreener Full ↗</a>
                     </div>
@@ -799,14 +923,23 @@
                 <canvas class="electric-spark-canvas"></canvas>
 
                 <div class="electric-card-body">
-                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 16px;">
                         <div>
                             <h2><i class="fas fa-shield-alt" style="color:#f72585;"></i> ZARED Token Security Analytics</h2>
                             <div class="contract-pill" style="border-color: #f72585;">CA: 0xfc2aca08fc64e51793c32e9088fc43a57d39690e</div>
                         </div>
-                        <div>
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                            <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0xfc2aca08fc64e51793c32e9088fc43a57d39690e&binanceChainId=56&chain=bsc" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: rgba(0,255,204,0.16); border: 1px solid #00ffcc; color:#00ffcc; padding: 10px 16px;">Token Web3 ↗</a>
                             <a href="https://pancakeswap.finance/swap?outputCurrency=0xfc2aca08fc64e51793c32e9088fc43a57d39690e" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: linear-gradient(135deg, #f72585, #b084cc); color:#fff; padding: 10px 20px;">Swap BNB ⇄ ZARED</a>
                         </div>
+                    </div>
+
+                    <div class="balance-bar">
+                        <div>
+                            <span style="color:#94a3b8;font-size:0.88rem;display:block;">Balance ZARED</span>
+                            <span class="balance-amount" id="bal-zared">Conecta tu billetera</span>
+                        </div>
+                        <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0xfc2aca08fc64e51793c32e9088fc43a57d39690e&binanceChainId=56&chain=bsc" target="_blank" rel="noopener noreferrer" class="action-btn" style="padding:9px 16px;font-size:0.8rem;">Ir al Token ZARED en Web3 ↗</a>
                     </div>
 
                     <div style="width: 100%; height: 500px; border-radius: 12px; overflow: hidden; border: 1px solid #f72585; background: #000; margin-bottom: 25px;">
@@ -828,6 +961,7 @@
                         <h4 style="color: var(--text-purple); font-family:'Orbitron'; font-size:0.95rem; margin-bottom: 10px;">📊 Comparación de Valor en Vivo</h4>
                         <div class="price-compare-table">
                             <div class="price-comp-card">
+                                <img src="https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png" alt="BNB" class="compare-logo">
                                 <span style="font-size:0.8rem; color:#94a3b8; display:block;">vs BNB</span>
                                 <strong style="color:#f72585; font-size:1.05rem;">0.000012 BNB</strong>
                             </div>
@@ -843,6 +977,7 @@
                     </div>
 
                     <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 25px;">
+                        <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0xfc2aca08fc64e51793c32e9088fc43a57d39690e&binanceChainId=56&chain=bsc" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: rgba(0,255,204,0.15); border: 1px solid #00ffcc; color:#00ffcc;">Ver en Binance Web3</a>
                         <a href="https://pancakeswap.finance/swap?inputCurrency=0xfc2aca08fc64e51793c32e9088fc43a57d39690e&outputCurrency=0xE2879d1172215E728472D7827586bd2796aFA3fB" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: linear-gradient(135deg, #f72585, #4cc9f0); color:#fff;">Swap ZARED ⇄ ZARD</a>
                         <a href="https://dexscreener.com/bsc/0xfc2aca08fc64e51793c32e9088fc43a57d39690e" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: rgba(247,37,133,0.2); border: 1px solid #f72585; color:#f72585;">📈 Ver en DexScreener Full ↗</a>
                     </div>
@@ -882,14 +1017,23 @@
                 <canvas class="electric-spark-canvas"></canvas>
 
                 <div class="electric-card-body">
-                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 16px;">
                         <div>
                             <h2><i class="fas fa-bolt" style="color:#06d6a0;"></i> ZYM Protocol Analytics</h2>
                             <div class="contract-pill" style="border-color: #06d6a0;">CA: 0x3984bd80e73777f2e790892435338d032b987bc7</div>
                         </div>
-                        <div>
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                            <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0x3984bd80e73777f2e790892435338d032b987bc7&binanceChainId=56&chain=bsc" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: rgba(0,255,204,0.16); border: 1px solid #00ffcc; color:#00ffcc; padding: 10px 16px;">Token Web3 ↗</a>
                             <a href="https://pancakeswap.finance/swap?outputCurrency=0x3984bd80e73777f2e790892435338d032b987bc7" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: linear-gradient(135deg, #06d6a0, #00f2fe); color:#030107; padding: 10px 20px;">Swap BNB ⇄ ZYM</a>
                         </div>
+                    </div>
+
+                    <div class="balance-bar">
+                        <div>
+                            <span style="color:#94a3b8;font-size:0.88rem;display:block;">Balance ZYM</span>
+                            <span class="balance-amount" id="bal-zym">Conecta tu billetera</span>
+                        </div>
+                        <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0x3984bd80e73777f2e790892435338d032b987bc7&binanceChainId=56&chain=bsc" target="_blank" rel="noopener noreferrer" class="action-btn" style="padding:9px 16px;font-size:0.8rem;">Ir al Token ZYM en Web3 ↗</a>
                     </div>
 
                     <div style="width: 100%; height: 500px; border-radius: 12px; overflow: hidden; border: 1px solid #06d6a0; background: #000; margin-bottom: 25px;">
@@ -911,6 +1055,7 @@
                         <h4 style="color: var(--text-purple); font-family:'Orbitron'; font-size:0.95rem; margin-bottom: 10px;">📊 Comparación de Valor en Vivo</h4>
                         <div class="price-compare-table">
                             <div class="price-comp-card">
+                                <img src="https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png" alt="BNB" class="compare-logo">
                                 <span style="font-size:0.8rem; color:#94a3b8; display:block;">vs BNB</span>
                                 <strong style="color:#06d6a0; font-size:1.05rem;">0.000010 BNB</strong>
                             </div>
@@ -926,6 +1071,7 @@
                     </div>
 
                     <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 25px;">
+                        <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0x3984bd80e73777f2e790892435338d032b987bc7&binanceChainId=56&chain=bsc" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: rgba(0,255,204,0.15); border: 1px solid #00ffcc; color:#00ffcc;">Ver en Binance Web3</a>
                         <a href="https://pancakeswap.finance/swap?inputCurrency=0x3984bd80e73777f2e790892435338d032b987bc7&outputCurrency=0xE2879d1172215E728472D7827586bd2796aFA3fB" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: linear-gradient(135deg, #06d6a0, #7b2cbf); color:#fff;">Swap ZYM ⇄ ZARD</a>
                         <a href="https://dexscreener.com/bsc/0x3984bd80e73777f2e790892435338d032b987bc7" target="_blank" rel="noopener noreferrer" class="action-btn" style="background: rgba(6,214,160,0.2); border: 1px solid #06d6a0; color:#06d6a0;">📈 Ver en DexScreener Full ↗</a>
                     </div>
@@ -963,8 +1109,15 @@
         <p>&copy; 2026 <span>ZAARD INNOVATION</span>. Todos los derechos reservados. | Ecosistema Multitoken desarrollado bajo <span>ZAARD XENOCRYPT</span>.</p>
     </footer>
 
-    <!-- SCRIPTS DE CONTROL + MOTOR ELÉCTRICO GLOBAL -->
+    <!-- SCRIPTS DE CONTROL + CONEXIÓN/DESCONEXIÓN + BALANCES + MOTOR ELÉCTRICO -->
     <script>
+        const TOKENS = {
+            zard: { ca: '0xE2879d1172215E728472D7827586bd2796aFA3fB', symbol: 'ZARD' },
+            panga: { ca: '0x4a6c3ea9e7132ad217c31f8252119f08c801366e', symbol: 'PANGA' },
+            zared: { ca: '0xfc2aca08fc64e51793c32e9088fc43a57d39690e', symbol: 'ZARED' },
+            zym: { ca: '0x3984bd80e73777f2e790892435338d032b987bc7', symbol: 'ZYM' }
+        };
+
         function enterDashboard() {
             const splash = document.getElementById('splash-screen');
             splash.style.opacity = '0';
@@ -980,6 +1133,92 @@
 
             if (window.refreshElectricCanvases) {
                 setTimeout(window.refreshElectricCanvases, 50);
+            }
+        }
+
+        function openWalletModal() {
+            const noProto = window.location.href.replace(/^https?:\/\//, '');
+            document.getElementById('mmDeepLink').href = 'https://metamask.app.link/dapp/' + noProto;
+            document.getElementById('twDeepLink').href = 'https://link.trustwallet.com/open_url?coin_id=20000714&url=' + encodeURIComponent(window.location.href);
+            document.getElementById('walletModal').classList.add('open');
+        }
+
+        function closeWalletModal() {
+            document.getElementById('walletModal').classList.remove('open');
+        }
+
+        function formatTokenHex(hexVal, decimals) {
+            if (!hexVal || hexVal === '0x') return '0.00';
+            const raw = BigInt(hexVal);
+            const div = 10n ** BigInt(decimals);
+            const whole = raw / div;
+            const frac = (raw % div).toString().padStart(decimals, '0').slice(0, 4);
+            return Number(`${whole}.${frac}`).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
+        }
+
+        async function readBalance(tokenAddr, ownerAddr) {
+            let decimals = 18;
+            try {
+                const dRes = await fetch('https://bsc-dataseed.binance.org/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'eth_call', params: [{ to: tokenAddr, data: '0x313ce567' }, 'latest'] })
+                });
+                const dJson = await dRes.json();
+                if (dJson.result && dJson.result !== '0x') decimals = Number(BigInt(dJson.result));
+            } catch (_) {}
+
+            const data = '0x70a08231' + ownerAddr.toLowerCase().replace(/^0x/, '').padStart(64, '0');
+            const bRes = await fetch('https://bsc-dataseed.binance.org/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ jsonrpc: '2.0', id: 2, method: 'eth_call', params: [{ to: tokenAddr, data }, 'latest'] })
+            });
+            const bJson = await bRes.json();
+            return formatTokenHex(bJson.result, decimals);
+        }
+
+        async function loadBalances(account) {
+            for (const [key, t] of Object.entries(TOKENS)) {
+                const el = document.getElementById('bal-' + key);
+                if (!el) continue;
+                el.textContent = 'Cargando...';
+                try {
+                    const amt = await readBalance(t.ca, account);
+                    el.textContent = `${amt} ${t.symbol}`;
+                } catch (_) {
+                    el.textContent = `0.00 ${t.symbol}`;
+                }
+            }
+        }
+
+        function disconnectWallet() {
+            document.getElementById('connectBtnLabel').textContent = 'Conectar';
+            document.getElementById('disconnectBtn').style.display = 'none';
+            for (const key of Object.keys(TOKENS)) {
+                const el = document.getElementById('bal-' + key);
+                if (el) el.textContent = 'Conecta tu billetera';
+            }
+        }
+
+        async function connectWallet() {
+            if (!window.ethereum) {
+                openWalletModal();
+                return;
+            }
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                if (accounts && accounts[0]) {
+                    try {
+                        await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x38' }] });
+                    } catch (_) {}
+                    document.getElementById('connectBtnLabel').textContent = `${accounts[0].slice(0, 6)}...${accounts[0].slice(-4)}`;
+                    document.getElementById('disconnectBtn').style.display = 'inline-flex';
+                    closeWalletModal();
+                    await loadBalances(accounts[0]);
+                }
+            } catch (_) {
+                openWalletModal();
             }
         }
 

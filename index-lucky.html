@@ -3,17 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZAARD Finance - Arena de Predicción Profesional</title>
+    <title>ZAARD Lucky Arena - Predicción BNB & Recompensas ZARD</title>
     <style>
+        :root {
+            --bg-dark: #06030d;
+            --card-bg: rgba(20, 10, 42, 0.92);
+            --neon-purple: #c084fc;
+            --neon-cyan: #22d3ee;
+            --neon-pink: #f472b6;
+            --neon-green: #34d399;
+            --neon-red: #fb7185;
+            --neon-gold: #f59e0b;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
         body {
-            /* Fondo de bienvenida aplicado en todo el body para que abarque fuera del contenedor */
-            background: linear-gradient(rgba(10, 4, 20, 0.78), rgba(5, 2, 10, 0.92)), url('https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png');
+            background: radial-gradient(circle at 50% 0%, rgba(147, 51, 234, 0.28), transparent 60%),
+                        linear-gradient(rgba(8, 3, 18, 0.84), rgba(4, 2, 10, 0.95)),
+                        url('https://photos.pinksale.finance/file/pinksale-logo-upload/1790375348672-4de629a77b910ca4b3f245dda1b233f0.png');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -24,57 +37,72 @@
             align-items: center;
             overflow-x: hidden;
         }
+
         .navbar {
             width: 100%;
             max-width: 1200px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            background: rgba(20, 10, 35, 0.9);
-            border-bottom: 1px solid #4a1e7a;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            padding: 14px 20px;
+            background: rgba(18, 8, 36, 0.92);
+            border-bottom: 1px solid rgba(192, 132, 252, 0.5);
+            box-shadow: 0 4px 25px rgba(147, 51, 234, 0.35);
+            backdrop-filter: blur(10px);
             z-index: 10;
         }
+
         .logo-area {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            color: #d8b4fe;
+            font-weight: 800;
+            font-size: 1.05rem;
+            color: #e9d5ff;
+            letter-spacing: 0.6px;
         }
+
         .logo-area img {
-            width: 35px;
-            height: 35px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            border: 1px solid #a855f7;
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 12px rgba(34, 211, 238, 0.6);
         }
+
         .nav-controls {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             align-items: center;
+            flex-wrap: wrap;
         }
+
         .lang-badge {
-            background: #1e1138;
-            color: #fff;
-            border: 1px solid #7c3aed;
+            background: rgba(30, 17, 56, 0.95);
+            color: #22d3ee;
+            border: 1px solid rgba(34, 211, 238, 0.5);
             padding: 6px 12px;
             border-radius: 8px;
             font-size: 0.85rem;
             font-weight: bold;
         }
+
         .btn-wallet {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+            color: #041014;
             border: none;
             padding: 8px 16px;
             border-radius: 8px;
-            font-weight: bold;
+            font-weight: 800;
             cursor: pointer;
-            transition: 0.3s;
+            box-shadow: 0 0 16px rgba(16, 185, 129, 0.45);
+            transition: 0.25s;
         }
-        .btn-wallet:hover { opacity: 0.9; }
+
+        .btn-wallet:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0 24px rgba(34, 211, 238, 0.7);
+        }
 
         .screen {
             width: 100%;
@@ -85,6 +113,7 @@
             align-items: center;
             flex: 1;
         }
+
         .hidden { display: none !important; }
 
         #screenWelcome {
@@ -93,75 +122,358 @@
         }
 
         .welcome-card-box {
-            background: rgba(18, 8, 35, 0.88);
-            border: 2px solid #a855f7;
-            border-radius: 16px;
+            background: rgba(18, 8, 38, 0.9);
+            border: 2px solid var(--neon-purple);
+            border-radius: 18px;
             padding: 30px;
-            max-width: 720px;
+            max-width: 740px;
             width: 100%;
-            box-shadow: 0 0 35px rgba(168, 85, 247, 0.5), inset 0 0 20px rgba(216, 180, 254, 0.15);
-            backdrop-filter: blur(6px);
+            box-shadow: 0 0 40px rgba(168, 85, 247, 0.5), inset 0 0 24px rgba(34, 211, 238, 0.12);
+            backdrop-filter: blur(8px);
         }
 
-        /* Banner central rectangular grande */
+        .floating-logo-container {
+            text-align: center;
+            margin-bottom: 14px;
+        }
+
+        .floating-logo {
+            width: 82px;
+            height: 82px;
+            border-radius: 50%;
+            border: 3px solid var(--neon-cyan);
+            object-fit: cover;
+            animation: floatGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes floatGlow {
+            0% { transform: translateY(0px); box-shadow: 0 0 18px var(--neon-cyan); }
+            50% { transform: translateY(-8px); box-shadow: 0 0 30px var(--neon-purple); }
+            100% { transform: translateY(0px); box-shadow: 0 0 18px var(--neon-cyan); }
+        }
+
+        .welcome-card-box h1 {
+            font-size: 1.55rem;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .welcome-desc {
+            color: #e9d5ff;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 14px;
+            text-align: center;
+        }
+
+        .rules-list-welcome {
+            background: rgba(12, 6, 24, 0.9);
+            border: 1px solid rgba(192, 132, 252, 0.5);
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-bottom: 18px;
+            font-size: 0.84rem;
+            color: #e9d5ff;
+            line-height: 1.55;
+        }
+
+        .rules-list-welcome li {
+            margin-bottom: 5px;
+        }
+
+        .btn-action {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #9333ea, #06b6d4);
+            color: #fff;
+            border: none;
+            padding: 13px;
+            font-size: 1rem;
+            font-weight: 800;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 0 24px rgba(147, 51, 234, 0.65);
+            transition: 0.25s;
+            text-align: center;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 35px rgba(34, 211, 238, 0.75);
+        }
+
+        .loading-box { text-align: center; padding: 60px 20px; }
+
+        .spinner {
+            width: 64px;
+            height: 64px;
+            border: 5px solid rgba(168, 85, 247, 0.25);
+            border-top: 5px solid var(--neon-cyan);
+            border-right: 5px solid var(--neon-purple);
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+            margin: 0 auto 20px auto;
+            box-shadow: 0 0 25px rgba(34, 211, 238, 0.4);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .arena-container {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            width: 100%;
+        }
+
+        .top-bar-arena {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: rgba(18, 8, 38, 0.9);
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(192, 132, 252, 0.5);
+            box-shadow: 0 0 20px rgba(147, 51, 234, 0.25);
+        }
+
+        .card-panel {
+            background: var(--card-bg);
+            border: 1.5px solid rgba(192, 132, 252, 0.55);
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 0 30px rgba(147, 51, 234, 0.3), inset 0 0 18px rgba(34, 211, 238, 0.06);
+            backdrop-filter: blur(8px);
+        }
+
+        .market-chart-box {
+            background: linear-gradient(180deg, rgba(12, 6, 26, 0.95), rgba(5, 2, 12, 0.98));
+            border-radius: 12px;
+            border: 1px solid rgba(34, 211, 238, 0.45);
+            box-shadow: inset 0 0 20px rgba(34, 211, 238, 0.12);
+            position: relative;
+            height: 205px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        canvas { width: 100%; height: 100%; display: block; }
+
+        .price-big {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--neon-green);
+            text-shadow: 0 0 12px rgba(52, 211, 153, 0.55);
+        }
+
+        .payout-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(52, 211, 153, 0.45);
+            color: #a7f3d0;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            margin-bottom: 10px;
+            width: 100%;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .timer-badge {
+            background: rgba(46, 16, 101, 0.9);
+            color: #67e8f9;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            border: 1px solid rgba(34, 211, 238, 0.5);
+            box-shadow: 0 0 12px rgba(34, 211, 238, 0.25);
+        }
+
+        .bet-buttons {
+            display: flex;
+            gap: 14px;
+            margin-top: 10px;
+        }
+
+        .btn-sube {
+            flex: 1;
+            background: linear-gradient(135deg, #059669, #34d399);
+            color: #03150e;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(52, 211, 153, 0.45);
+            transition: 0.2s;
+        }
+
+        .btn-sube:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 28px rgba(52, 211, 153, 0.75);
+        }
+
+        .btn-baja {
+            flex: 1;
+            background: linear-gradient(135deg, #dc2626, #fb7185);
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(251, 113, 133, 0.45);
+            transition: 0.2s;
+        }
+
+        .btn-baja:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 28px rgba(251, 113, 133, 0.75);
+        }
+
+        .order-book {
+            max-height: 105px;
+            overflow-y: auto;
+            font-size: 0.76rem;
+            background: rgba(10, 4, 20, 0.85);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            border-radius: 8px;
+            padding: 6px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 8px;
+            border-bottom: 1px solid rgba(124, 58, 237, 0.2);
+        }
+
+        .order-green { color: #34d399; font-weight: bold; }
+        .order-red { color: #fb7185; font-weight: bold; }
+
+        .ecosystem-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 14px;
+            margin-top: 12px;
+        }
+
+        .token-pill-card {
+            background: rgba(12, 6, 26, 0.92);
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: 0.25s;
+        }
+
+        .token-pill-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .token-pill-card img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .card-panga {
+            border: 1.5px solid rgba(245, 158, 11, 0.65);
+            box-shadow: 0 0 22px rgba(245, 158, 11, 0.22);
+        }
+        .card-panga img { border: 2px solid var(--neon-gold); box-shadow: 0 0 14px rgba(245, 158, 11, 0.6); }
+
+        .card-zared {
+            border: 1.5px solid rgba(244, 114, 182, 0.65);
+            box-shadow: 0 0 22px rgba(244, 114, 182, 0.22);
+        }
+        .card-zared img { border: 2px solid var(--neon-pink); box-shadow: 0 0 14px rgba(244, 114, 182, 0.6); }
+
+        .card-zym {
+            border: 1.5px solid rgba(192, 132, 252, 0.65);
+            box-shadow: 0 0 22px rgba(192, 132, 252, 0.22);
+        }
+        .card-zym img { border: 2px solid var(--neon-purple); box-shadow: 0 0 14px rgba(192, 132, 252, 0.6); }
+
         .middle-banner-deco {
             width: 100%;
-            min-height: 240px;
-            background: linear-gradient(135deg, rgba(28, 12, 52, 0.95), rgba(12, 5, 25, 0.98));
-            border: 2px solid #a855f7;
+            min-height: 220px;
+            background: linear-gradient(135deg, rgba(28, 12, 56, 0.95), rgba(10, 5, 24, 0.98));
+            border: 2px solid var(--neon-purple);
             border-radius: 16px;
             display: flex;
             flex-direction: row;
             align-items: center;
             justify-content: space-around;
-            gap: 25px;
-            box-shadow: 0 0 45px rgba(168, 85, 247, 0.6), inset 0 0 25px rgba(168, 85, 247, 0.2);
-            position: relative;
-            overflow: hidden;
-            padding: 25px 35px;
+            gap: 24px;
+            flex-wrap: wrap;
+            box-shadow: 0 0 40px rgba(168, 85, 247, 0.5), inset 0 0 24px rgba(34, 211, 238, 0.14);
+            padding: 24px 32px;
         }
+
         .middle-banner-deco img {
-            width: 190px;
-            height: 190px;
+            width: 165px;
+            height: 165px;
             object-fit: contain;
-            filter: drop-shadow(0 0 25px rgba(168, 85, 247, 0.95));
+            filter: drop-shadow(0 0 24px rgba(34, 211, 238, 0.75));
             animation: floatGlow 3s ease-in-out infinite;
         }
+
         .middle-banner-content {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            gap: 12px;
+            gap: 10px;
             flex: 1;
-        }
-        .middle-banner-title {
-            color: #f3e8ff;
-            font-size: 1.3rem;
-            font-weight: bold;
-            letter-spacing: 1px;
-            text-shadow: 0 0 12px #a855f7;
-        }
-        .middle-banner-text {
-            color: #d8b4fe;
-            font-size: 0.93rem;
-            line-height: 1.45;
+            min-width: 240px;
         }
 
-        /* Banner inferior un poco más grande con efecto de chispas */
+        .middle-banner-title {
+            color: #f3e8ff;
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            text-shadow: 0 0 14px var(--neon-purple);
+        }
+
+        .middle-banner-text {
+            color: #d8b4fe;
+            font-size: 0.94rem;
+            line-height: 1.5;
+        }
+
         .bottom-full-banner {
             width: 100%;
             background: linear-gradient(135deg, rgba(22, 9, 45, 0.96), rgba(8, 3, 18, 0.99));
-            border: 2px solid #c084fc;
-            border-radius: 14px;
-            padding: 25px 35px;
+            border: 2px solid var(--neon-purple);
+            border-radius: 16px;
+            padding: 24px 32px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 25px;
+            gap: 24px;
+            flex-wrap: wrap;
             box-shadow: 0 0 40px rgba(192, 132, 252, 0.45), inset 0 0 22px rgba(168, 85, 247, 0.2);
             position: relative;
             overflow: hidden;
         }
+
         .bottom-full-banner::before, .bottom-full-banner::after {
             content: '';
             position: absolute;
@@ -169,258 +481,105 @@
             height: 14px;
             background: #fff;
             border-radius: 50%;
-            box-shadow: 0 0 18px 6px #f43f5e, 0 0 35px 12px #fbbf24;
+            box-shadow: 0 0 18px 6px #22d3ee, 0 0 35px 12px #c084fc;
             animation: sparkGlow 1.5s infinite alternate;
         }
+
         .bottom-full-banner::before { top: 10px; left: 12px; }
         .bottom-full-banner::after { bottom: 10px; right: 12px; }
 
         @keyframes sparkGlow {
-            0% { transform: scale(0.8); opacity: 0.6; filter: hue-rotate(0deg); }
-            100% { transform: scale(1.3); opacity: 1; filter: hue-rotate(45deg); }
+            0% { transform: scale(0.8); opacity: 0.6; }
+            100% { transform: scale(1.35); opacity: 1; }
         }
 
         .bottom-full-banner img {
-            width: 130px;
-            height: 130px;
+            width: 125px;
+            height: 125px;
             object-fit: contain;
             filter: drop-shadow(0 0 18px rgba(192, 132, 252, 0.95));
         }
-        .bottom-full-text-area {
-            flex: 1;
-        }
+
+        .bottom-full-text-area { flex: 1; min-width: 240px; }
+
         .bottom-full-title {
             color: #fae8ff;
-            font-size: 1.2rem;
-            font-weight: bold;
+            font-size: 1.15rem;
+            font-weight: 800;
             margin-bottom: 6px;
-            text-shadow: 0 0 10px #a855f7;
+            text-shadow: 0 0 10px var(--neon-cyan);
         }
+
         .bottom-full-desc {
             color: #d8b4fe;
             font-size: 0.9rem;
-            line-height: 1.45;
+            line-height: 1.5;
         }
 
-        /* Contenedor de los 3 botones de enlace oficiales debajo del banner inferior */
         .footer-nav-links {
             display: flex;
-            gap: 15px;
+            gap: 14px;
+            flex-wrap: wrap;
             width: 100%;
-            margin-top: 5px;
+            margin-top: 4px;
         }
+
         .footer-link-btn {
             flex: 1;
+            min-width: 220px;
             background: linear-gradient(135deg, #2e1065, #1e1138);
             border: 1px solid #9333ea;
             color: #e9d5ff;
             text-align: center;
-            padding: 12px 10px;
+            padding: 12px 14px;
             border-radius: 10px;
             font-size: 0.85rem;
             font-weight: bold;
             text-decoration: none;
             box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
+            transition: 0.25s;
         }
+
         .footer-link-btn:hover {
             background: linear-gradient(135deg, #3b1d6e, #2e1065);
-            border-color: #c084fc;
+            border-color: var(--neon-cyan);
             transform: translateY(-2px);
-            box-shadow: 0 0 20px rgba(192, 132, 252, 0.5);
+            box-shadow: 0 0 22px rgba(34, 211, 238, 0.45);
             color: #fff;
         }
-
-        .floating-logo-container {
-            text-align: center;
-            margin-bottom: 12px;
-        }
-        .floating-logo {
-            width: 75px;
-            height: 75px;
-            border-radius: 50%;
-            border: 3px solid #a855f7;
-            object-fit: cover;
-            animation: floatGlow 3s ease-in-out infinite;
-        }
-        @keyframes floatGlow {
-            0% { transform: translateY(0px); box-shadow: 0 0 15px #34d399; }
-            50% { transform: translateY(-8px); box-shadow: 0 0 25px #f87171; }
-            100% { transform: translateY(0px); box-shadow: 0 0 15px #34d399; }
-        }
-
-        .welcome-card-box h1 {
-            font-size: 1.55rem;
-            color: #f3e8ff;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px #a855f7;
-            text-align: center;
-        }
-        .welcome-desc {
-            color: #e9d5ff;
-            font-size: 0.88rem;
-            line-height: 1.45;
-            margin-bottom: 12px;
-            text-align: justify;
-        }
-        .rules-list-welcome {
-            background: rgba(14, 7, 26, 0.85);
-            border: 1px solid #7c3aed;
-            border-radius: 10px;
-            padding: 10px 16px;
-            margin-bottom: 15px;
-            font-size: 0.78rem;
-            color: #d8b4fe;
-            line-height: 1.4;
-        }
-        .rules-list-welcome li {
-            margin-bottom: 4px;
-        }
-
-        .btn-action {
-            display: block;
-            width: 100%;
-            background: linear-gradient(135deg, #9333ea, #6b21a8);
-            color: white;
-            border: none;
-            padding: 12px;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(147, 51, 234, 0.7);
-            transition: 0.3s;
-            text-align: center;
-        }
-        .btn-action:hover { transform: scale(1.02); }
-
-        .loading-box { text-align: center; padding: 50px; }
-        .spinner {
-            width: 60px; height: 60px;
-            border: 5px solid #3b0764;
-            border-top: 5px solid #a855f7;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px auto;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .arena-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 100%;
-        }
-        .card-panel {
-            background: rgba(22, 12, 40, 0.9);
-            border: 1px solid #a855f7;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 0 25px rgba(168, 85, 247, 0.3);
-        }
-
-        .market-chart-box {
-            background: rgba(10, 4, 20, 0.75);
-            border-radius: 8px;
-            border: 1px solid #9333ea;
-            position: relative;
-            height: 170px;
-            margin-bottom: 10px;
-            overflow: hidden;
-        }
-        canvas { width: 100%; height: 100%; display: block; }
-
-        .price-big {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #34d399;
-            text-shadow: 0 0 8px rgba(52, 211, 153, 0.4);
-        }
-
-        .timer-badge {
-            background: #2e1065;
-            color: #e9d5ff;
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 0.95rem;
-            border: 1px solid #7c3aed;
-        }
-
-        .bet-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 10px;
-        }
-        .btn-sube {
-            flex: 1; background: #059669; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: 0.2s;
-        }
-        .btn-sube:hover { background: #047857; }
-        .btn-baja {
-            flex: 1; background: #dc2626; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: 0.2s;
-        }
-        .btn-baja:hover { background: #b91c1c; }
-
-        .order-book {
-            max-height: 100px;
-            overflow-y: auto;
-            font-size: 0.75rem;
-            background: rgba(10, 4, 20, 0.75);
-            border: 1px solid #4a1e7a;
-            border-radius: 6px;
-            padding: 6px;
-        }
-        .order-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 3px 6px;
-            border-bottom: 1px solid #1e1138;
-        }
-        .order-green { color: #34d399; font-weight: bold; }
-        .order-red { color: #f87171; font-weight: bold; }
 
         .mode-badge {
             display: inline-block;
             padding: 5px 12px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.84rem;
             font-weight: bold;
         }
+
         .guest-mode { background: #d97706; color: #fff; }
-        .live-mode { background: #7c3aed; color: #fff; }
+        .live-mode { background: #7c3aed; color: #fff; box-shadow: 0 0 14px rgba(124, 58, 237, 0.6); }
 
         .result-modal, .wallet-modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(10, 4, 20, 0.88);
+            background: rgba(8, 3, 18, 0.9);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
         }
-        .result-box {
-            background: #1a0f30;
-            border: 2px solid #a855f7;
-            padding: 30px;
-            border-radius: 16px;
+
+        .result-box, .wallet-box {
+            background: #160c28;
+            border: 2px solid var(--neon-purple);
+            padding: 28px;
+            border-radius: 18px;
             text-align: center;
-            max-width: 400px;
+            width: 90%;
+            max-width: 420px;
             box-shadow: 0 0 40px rgba(168, 85, 247, 0.6);
         }
-        .wallet-box {
-            background: #160c28;
-            border: 2px solid #9333ea;
-            padding: 25px;
-            border-radius: 16px;
-            width: 90%;
-            max-width: 380px;
-            text-align: center;
-            box-shadow: 0 0 30px rgba(147, 51, 234, 0.5);
-        }
+
         .wallet-option {
             background: #251242;
             border: 1px solid #7c3aed;
@@ -432,12 +591,12 @@
             cursor: pointer;
             width: 100%;
             transition: 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
         }
-        .wallet-option:hover { background: #3b1d6e; border-color: #a855f7; }
+
+        .wallet-option:hover {
+            background: #3b1d6e;
+            border-color: var(--neon-cyan);
+        }
     </style>
 </head>
 <body>
@@ -445,10 +604,10 @@
     <div class="navbar">
         <div class="logo-area">
             <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791248681417-56c377de956c1c3a7b33918e7ed78ba7.png" alt="Logo">
-            <span>ZAARD FINANCE</span>
+            <span>ZAARD LUCKY ARENA</span>
         </div>
         <div class="nav-controls">
-            <div class="lang-badge">🇪🇸 ES</div>
+            <div class="lang-badge">BSC • 0.0001 BNB ➔ 0.001 ZARD</div>
             <button class="btn-wallet" id="connectWalletBtn" onclick="abrirSelectorBilletera()">Conectar Billetera</button>
         </div>
     </div>
@@ -459,19 +618,19 @@
             <div class="floating-logo-container">
                 <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791432184680-906fd2a3d85625f79d066e5b033f6011.png" alt="Logo Flotante" class="floating-logo">
             </div>
-            <h1>Bienvenido al Núcleo de Predicción y Trading ZAARD</h1>
+            <h1>ZAARD LUCKY — Arena de Predicción BNB / ZARD</h1>
             <p class="welcome-desc">
-                Estás ingresando al protocolo descentralizado de alta precisión de <strong>ZAARD Innovation</strong>. Nuestra plataforma combina análisis de velas en tiempo real, transparencia on-chain y recompensas automatizadas del ecosistema. Pon a prueba tus habilidades en rondas cronometradas de 1 minuto y demuestra tu capacidad analítica.
+                Predice el movimiento de <strong>BNB</strong> en rondas de 60 segundos. Apuesta <strong>0.0001 BNB</strong> y gana <strong>0.001 ZARD</strong> desde el contrato pagadero <strong>ZAARD_Arcade_Payout</strong>.
             </p>
             <div class="rules-list-welcome">
                 <ul style="list-style-position: inside;">
-                    <li><strong>Mecánica del Reto:</strong> Predice si el mercado de BNB subirá (Call) o bajará (Put).</li>
-                    <li><strong>Costo de Operación:</strong> 0.0001 BNB enviados al contrato del creador (`0x84f5...dc8`).</li>
-                    <li><strong>Recompensa del Contrato:</strong> Gana recompensas en ZARD del pool activo si tu pronóstico es correcto.</li>
-                    <li><strong>Transparencia On-Chain:</strong> Registro exacto y verificable en cada ronda.</li>
+                    <li><strong>Apuesta:</strong> 0.0001 BNB hacia <code>0x84f5...cdc8</code>.</li>
+                    <li><strong>Contrato Pagadero:</strong> <code>0x327f9B551EbC850891111EE394741709294CC1A8</code>.</li>
+                    <li><strong>Premio:</strong> 0.001 ZARD (Contrato ZARD: <code>0xE287...3fB</code>).</li>
+                    <li><strong>Ecosistema:</strong> Visualiza también los tokens <strong>PANGA</strong>, <strong>ZARED</strong> y <strong>ZYM</strong>.</li>
                 </ul>
             </div>
-            <button class="btn-action" onclick="iniciarTransicion()">🚀 Aceptar el Reto y Entrar al Sistema</button>
+            <button class="btn-action" onclick="iniciarTransicion()">⚡ Entrar a la Arena Lucky</button>
         </div>
     </div>
 
@@ -479,44 +638,51 @@
     <div id="screenLoading" class="screen hidden">
         <div class="loading-box">
             <div class="spinner"></div>
-            <h2 style="color: #c084fc; margin-bottom: 10px;">Sincronizando Velas y Contrato ZARD...</h2>
-            <p style="color: #a78bfa;">Conectando flujos de precios BNB y el contrato inteligente con nodos de liquidez...</p>
+            <h2 style="color: var(--neon-cyan); margin-bottom: 10px;">Cargando Gráficas BNB & ZARD...</h2>
+            <p style="color: #d8b4fe;">Sincronizando motor de velas y contrato pagadero 0x327f...C1A8...</p>
         </div>
     </div>
 
-    <!-- Pantalla 3: Arena de Apuestas Estructurada Verticalmente -->
+    <!-- Pantalla 3: Arena Lucky -->
     <div id="screenArena" class="screen hidden">
-        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; background: rgba(20,10,35,0.85); padding: 10px 15px; border-radius: 10px; border: 1px solid #7c3aed;">
+        <div class="top-bar-arena">
             <div>
                 <span id="badgeMode" class="mode-badge guest-mode">Modo Invitado (Simulación Segura)</span>
             </div>
-            <div style="display: flex; gap: 15px; align-items: center;">
+            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
                 <div class="timer-badge">⏳ Ronda: <span id="countdown">60</span>s</div>
-                <button onclick="cambiarModo()" class="btn-wallet" id="btnSwitchMode" style="font-size: 0.85rem; padding: 6px 12px;">Activar Modo Apuesta</button>
+                <button onclick="cambiarModo()" class="btn-wallet" id="btnSwitchMode" style="font-size: 0.85rem; padding: 7px 13px;">Activar Modo Apuesta</button>
             </div>
         </div>
 
         <div class="arena-container">
-            <!-- Arriba: Panel de Apuestas BNB/USD -->
+            <!-- Panel de Apuestas BNB -->
             <div class="card-panel">
-                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px; border-bottom: 1px solid rgba(168,85,247,0.3); padding-bottom: 8px;">
-                    <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790286366724-9003585f30626b9963bd86a5cf26c8ca.png" alt="Icono Arena" style="width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 0 8px #a855f7);">
-                    <span style="font-size: 1rem; font-weight: bold; color: #f3e8ff; letter-spacing: 0.5px;">ZAARD ARENA - PREDICCIÓN PROFESIONAL BNB</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                    <span style="font-size: 0.95rem; font-weight: bold; color: #e9d5ff;">📈 BNB/USD Live Chart & Zona de Apuestas</span>
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; border-bottom: 1px solid rgba(192, 132, 252, 0.3); padding-bottom: 10px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790286366724-9003585f30626b9963bd86a5cf26c8ca.png" alt="Icono Arena" style="width: 34px; height: 34px; object-fit: contain; filter: drop-shadow(0 0 10px var(--neon-cyan));">
+                        <span style="font-size: 1.05rem; font-weight: 800; color: #f3e8ff;">📈 BNB/USD Live Chart — Apuesta 0.0001 BNB</span>
+                    </div>
                     <span class="price-big" id="priceDisplayBnb">614.25 $</span>
                 </div>
+
+                <div class="payout-pill">
+                    <span>🎯 Apuesta: <strong>0.0001 BNB</strong> ➔ <code>0x84f529525fae84b1f1d7ea66939592094426cdc8</code></span>
+                    <span>🏆 Premio: <strong style="color:#34d399;">0.001 ZARD</strong> • Vault: <code>0x327f...C1A8</code></span>
+                </div>
+
                 <div class="market-chart-box">
                     <canvas id="candleCanvasBnb"></canvas>
                 </div>
-                <div style="margin-bottom: 8px;">
-                    <span style="font-size: 0.78rem; color: #c084fc; font-weight: bold;">Libro de Órdenes BNB:</span>
+
+                <div style="margin-bottom: 10px;">
+                    <span style="font-size: 0.78rem; color: var(--neon-cyan); font-weight: bold;">Libro de Órdenes BNB:</span>
                     <div class="order-book" id="orderBookBnb"></div>
                 </div>
+
                 <div class="bet-buttons">
-                    <button class="btn-sube" onclick="realizarApuesta('SUBE')">📈 SUBE (CALL)</button>
-                    <button class="btn-baja" onclick="realizarApuesta('BAJA')">📉 BAJA (PUT)</button>
+                    <button class="btn-sube" onclick="realizarApuesta('SUBE')">📈 SUBE (CALL) • 0.0001 BNB</button>
+                    <button class="btn-baja" onclick="realizarApuesta('BAJA')">📉 BAJA (PUT) • 0.0001 BNB</button>
                 </div>
             </div>
 
@@ -524,39 +690,78 @@
             <div class="middle-banner-deco">
                 <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1791494105996-e3366dcac4d9846d38bbb175e71b1538.png" alt="ZAARD Decorativo">
                 <div class="middle-banner-content">
-                    <div class="middle-banner-title">⚡ ZAARD REWARD ARENA CONTRACT ⚡</div>
-                    <div class="middle-banner-text">Conectando alta liquidez, precisión analítica y pagos garantizados del contrato inteligente en la red BNB. Apuesta: 0.0001 BNB.</div>
+                    <div class="middle-banner-title">⚡ ZAARD_Arcade_Payout (0x327f...C1A8) ⚡</div>
+                    <div class="middle-banner-text">
+                        Contrato pagadero compartido para los juegos del ecosistema. Recompensa por victoria: <strong>0.001 ZARD</strong> (Token ZARD: <code>0xE2879d1172215E728472D7827586bd2796aFA3fB</code>).
+                    </div>
                 </div>
             </div>
 
-            <!-- Abajo: Panel Analítico ZARD Token -->
+            <!-- Panel Analítico ZARD Token -->
             <div class="card-panel">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                    <span style="font-size: 0.95rem; font-weight: bold; color: #e9d5ff;">💎 ZARD Token Analytics (0x973b...d38)</span>
-                    <span class="price-big" style="color: #c084fc;" id="priceDisplayZard">0.000060 $</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; border-bottom: 1px solid rgba(34, 211, 238, 0.25); padding-bottom: 10px;">
+                    <span style="font-size: 1rem; font-weight: 800; color: #67e8f9;">💎 ZARD Token Live Chart (0xE287...3fB)</span>
+                    <span class="price-big" style="color: var(--neon-purple);" id="priceDisplayZard">0.000060 $</span>
                 </div>
+
                 <div class="market-chart-box">
                     <canvas id="candleCanvasZard"></canvas>
                 </div>
-                <div style="margin-bottom: 4px;">
-                    <span style="font-size: 0.78rem; color: #c084fc; font-weight: bold;">Libro de Órdenes ZARD Token:</span>
+
+                <div>
+                    <span style="font-size: 0.78rem; color: var(--neon-purple); font-weight: bold;">Actividad de Premios ZARD (0.001 ZARD):</span>
                     <div class="order-book" id="orderBookZard"></div>
                 </div>
             </div>
 
-            <!-- Banner inferior ampliado con efecto de chispas -->
-            <div class="bottom-full-banner">
-                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790287451706-4593a246bbbf27b508770c328ab883c0.png" alt="Ecosistema Zard">
-                <div class="bottom-full-text-area">
-                    <div class="bottom-full-title">🚀 ALTA VELOCIDAD Y LIQUIDEZ VERIFICADA EN LA BLOCKCHAIN 🚀</div>
-                    <div class="bottom-full-desc">Cada ronda ejecutada fortalece el pool de recompensas del ecosistema, garantizando transparencia absoluta, pagos directos a la cartera creadora y máxima emoción en cada operación.</div>
+            <!-- Escaparate Visual: PANGA, ZARED y ZYM -->
+            <div class="card-panel">
+                <h3 style="font-size: 1rem; color: #f3e8ff; margin-bottom: 4px;">✨ Tokens del Ecosistema ZAARD (PANGA • ZARED • ZYM)</h3>
+                <p style="font-size: 0.82rem; color: #cbd5e1; margin-bottom: 10px;">
+                    Tokens destacados del ecosistema (la apuesta del juego se mantiene exclusivamente en BNB ➔ 0.001 ZARD).
+                </p>
+                <div class="ecosystem-showcase">
+                    <div class="token-pill-card card-panga">
+                        <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790484633328-559fdd3c13098c92f8a665ac39a838c2.png" alt="PANGA">
+                        <div>
+                            <div style="font-weight: 800; color: #fbbf24; font-size: 1rem;">PANGA</div>
+                            <div style="font-size: 0.74rem; color: #e2e8f0; word-break: break-all;">0x4a6c3ea9e7132ad217c31f8252119f08c801366e</div>
+                        </div>
+                    </div>
+
+                    <div class="token-pill-card card-zared">
+                        <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1794605349763-3b36fe22e2048e05bbf50f8bdf231392.png" alt="ZARED">
+                        <div>
+                            <div style="font-weight: 800; color: #f472b6; font-size: 1rem;">ZARED</div>
+                            <div style="font-size: 0.74rem; color: #e2e8f0; word-break: break-all;">0xfc2aca08fc64e51793c32e9088fc43a57d39690e</div>
+                        </div>
+                    </div>
+
+                    <div class="token-pill-card card-zym">
+                        <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1793917735714-d84b28c0d04f3063f454cbc1d8a062fb.png" alt="ZYM">
+                        <div>
+                            <div style="font-weight: 800; color: #c084fc; font-size: 1rem;">ZYM</div>
+                            <div style="font-size: 0.74rem; color: #e2e8f0; word-break: break-all;">0x3984bd80e73777f2e790892435338d032b987bc7</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Las 3 etiquetas de navegación solicitadas debajo de la imagen -->
+            <!-- Banner inferior -->
+            <div class="bottom-full-banner">
+                <img src="https://photos.pinksale.finance/file/pinksale-logo-upload/1790287451706-4593a246bbbf27b508770c328ab883c0.png" alt="Ecosistema Zard">
+                <div class="bottom-full-text-area">
+                    <div class="bottom-full-title">🚀 ARENA LUCKY CON CONTRATO PAGADERO ZARD 🚀</div>
+                    <div class="bottom-full-desc">
+                        Apuestas directas de 0.0001 BNB y recompensas de 0.001 ZARD respaldadas por el contrato <code>0x327f9B551EbC850891111EE394741709294CC1A8</code> en BNB Smart Chain.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enlaces del ecosistema -->
             <div class="footer-nav-links">
                 <a href="https://figueredo56.github.io/zaard-innovation-dapp/" target="_blank" class="footer-link-btn">🌐 REGRESAR A ZAARD FINANCE</a>
-                <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0x973ba2c1dccd0820f1e026d6b1f01c55c4085d38&binanceChainId=56&chain=bsc" target="_blank" class="footer-link-btn">🪙 VER TOKEN EN BINANCE WEB3</a>
+                <a href="https://app.binance.com/uni-qr/web3-token-details?utm_medium=share&tokenCA=0xE2879d1172215E728472D7827586bd2796aFA3fB&binanceChainId=56&chain=bsc" target="_blank" class="footer-link-btn">💎 VER ZARD EN BINANCE WEB3</a>
                 <a href="https://figueredo56.github.io/zaard-tracker/" target="_blank" class="footer-link-btn">📊 ZAARD TRACKER</a>
             </div>
         </div>
@@ -575,33 +780,38 @@
     <!-- Modal de Resultado de la Ronda -->
     <div id="resultModal" class="result-modal hidden">
         <div class="result-box">
-            <h2 id="resultTitle" style="margin-bottom: 15px; color: #34d399;">¡Resultado de la Ronda!</h2>
-            <p id="resultDesc" style="color: #e9d5ff; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5;"></p>
+            <h2 id="resultTitle" style="margin-bottom: 14px; color: #34d399;">¡Resultado de la Ronda!</h2>
+            <p id="resultDesc" style="color: #e9d5ff; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.55;"></p>
             <button class="btn-action" onclick="cerrarModalResultado()">Continuar Operando</button>
         </div>
     </div>
 
     <script>
+        // CONFIGURACIÓN DEL JUEGO Y CONTRATOS
+        const WALLET_CREADORA = "0x84f529525fae84b1f1d7ea66939592094426cdc8";
+        const ZARD_TOKEN_CONTRACT = "0xE2879d1172215E728472D7827586bd2796aFA3fB";
+        const ZAARD_VAULT_CONTRACT = "0x327f9B551EbC850891111EE394741709294CC1A8";
+        const BET_WEI_HEX = "0x38D7EA4C68000"; // 0.0001 BNB
+        const PRIZE_ZARD_AMOUNT = "0.001 ZARD";
+
         let modoActual = 'invitado';
-        const walletCreadora = "0x84f529525fae84b1f1d7ea66939592094426cdc8";
         let cuentaConectada = null;
-        
         let timeLeft = 60;
         let temporizadorActivo = false;
         let intervaloTimer = null;
-        let apuestaActiva = null; 
+        let apuestaActiva = null;
+        let preciosActuales = { BNB: 614.25, ZARD: 0.000060 };
 
         function iniciarTemporizadorRonda() {
-            if (temporizadorActivo) return; 
+            if (temporizadorActivo) return;
             temporizadorActivo = true;
             timeLeft = 60;
-            
             document.getElementById('countdown').innerText = timeLeft;
 
             intervaloTimer = setInterval(() => {
                 timeLeft--;
                 document.getElementById('countdown').innerText = timeLeft;
-                
+
                 if (timeLeft <= 0) {
                     clearInterval(intervaloTimer);
                     temporizadorActivo = false;
@@ -616,26 +826,26 @@
             setTimeout(() => {
                 document.getElementById('screenLoading').classList.add('hidden');
                 document.getElementById('screenArena').classList.remove('hidden');
-                initCanvas('candleCanvasBnb', 614.25, 'priceDisplayBnb', 0.0008, 2);
-                initCanvas('candleCanvasZard', 0.000060, 'priceDisplayZard', 0.002, 6);
+                initCanvas('candleCanvasBnb', 614.25, 'priceDisplayBnb', 0.0009, 2, '#22d3ee');
+                initCanvas('candleCanvasZard', 0.000060, 'priceDisplayZard', 0.0022, 6, '#c084fc');
                 initOrderBooks();
-            }, 4000);
+            }, 2200);
         }
 
         function initOrderBooks() {
             const listBnb = document.getElementById('orderBookBnb');
             const listZard = document.getElementById('orderBookZard');
             const sampleWallets = ["0x4A...9b21", "0x8F...11c4", "0x2C...e490", "0x9E...31a8", "0x7D...55aa"];
-            
-            for(let i=0; i<4; i++) {
+
+            for (let i = 0; i < 4; i++) {
                 addOrder(listBnb, sampleWallets, "0.0001 BNB");
-                addOrder(listZard, sampleWallets, "ZARD");
+                addRewardOrder(listZard, sampleWallets);
             }
 
             setInterval(() => {
-                if(listBnb && listZard) {
+                if (listBnb && listZard) {
                     addOrder(listBnb, sampleWallets, "0.0001 BNB");
-                    addOrder(listZard, sampleWallets, "ZARD");
+                    addRewardOrder(listZard, sampleWallets);
                 }
             }, 3500);
         }
@@ -645,33 +855,43 @@
             const isSube = Math.random() > 0.45;
             const typeText = isSube ? `SUBE (${unit})` : `BAJA (${unit})`;
             const cssClass = isSube ? "order-green" : "order-red";
-            
+
             const div = document.createElement('div');
             div.className = "order-item";
             div.innerHTML = `<span>${wallet}</span> <span class="${cssClass}">${typeText}</span>`;
-            
+
             container.prepend(div);
-            if(container.children.length > 5) {
+            if (container.children.length > 5) {
                 container.removeChild(container.lastChild);
             }
         }
 
-        let preciosActuales = { BNB: 614.25, ZARD: 0.000060 };
+        function addRewardOrder(container, wallets) {
+            const wallet = wallets[Math.floor(Math.random() * wallets.length)];
+            const div = document.createElement('div');
+            div.className = "order-item";
+            div.innerHTML = `<span>${wallet}</span> <span class="order-green">+${PRIZE_ZARD_AMOUNT} (Vault)</span>`;
 
-        function initCanvas(canvasId, basePrice, priceDisplayId, volatility, decimals) {
+            container.prepend(div);
+            if (container.children.length > 5) {
+                container.removeChild(container.lastChild);
+            }
+        }
+
+        function initCanvas(canvasId, basePrice, priceDisplayId, volatility, decimals, accentColor) {
             const canvas = document.getElementById(canvasId);
-            if(!canvas) return;
+            if (!canvas) return;
             const ctx = canvas.getContext('2d');
-            
+
             let candles = [];
             let currentP = basePrice;
 
-            for(let i=0; i<25; i++) {
+            for (let i = 0; i < 28; i++) {
                 let open = currentP + (Math.random() - 0.5) * (basePrice * volatility);
                 let close = open + (Math.random() - 0.48) * (basePrice * (volatility * 0.9));
-                let high = Math.max(open, close) + Math.random() * (basePrice * (volatility * 0.4));
-                let low = Math.min(open, close) - Math.random() * (basePrice * (volatility * 0.4));
-                candles.push({open, close, high, low});
+                let high = Math.max(open, close) + Math.random() * (basePrice * (volatility * 0.45));
+                let low = Math.min(open, close) - Math.random() * (basePrice * (volatility * 0.45));
+                candles.push({ open, close, high, low });
                 currentP = close;
             }
 
@@ -681,15 +901,25 @@
                 last.close = newClose;
                 last.high = Math.max(last.high, newClose);
                 last.low = Math.min(last.low, newClose);
-                
+
                 let assetKey = canvasId.includes('Bnb') ? 'BNB' : 'ZARD';
                 preciosActuales[assetKey] = newClose;
-                
+
                 document.getElementById(priceDisplayId).innerText = newClose.toFixed(decimals) + " $";
 
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
                 canvas.width = canvas.offsetWidth;
                 canvas.height = canvas.offsetHeight;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                ctx.strokeStyle = 'rgba(192, 132, 252, 0.08)';
+                ctx.lineWidth = 1;
+                for (let g = 1; g < 4; g++) {
+                    const yGrid = (canvas.height / 4) * g;
+                    ctx.beginPath();
+                    ctx.moveTo(0, yGrid);
+                    ctx.lineTo(canvas.width, yGrid);
+                    ctx.stroke();
+                }
 
                 let candleWidth = canvas.width / candles.length;
                 let maxH = Math.max(...candles.map(c => c.high));
@@ -698,66 +928,87 @@
 
                 candles.forEach((c, index) => {
                     let x = index * candleWidth + candleWidth / 2;
-                    let yHigh = canvas.height - ((c.high - minL) / range) * (canvas.height - 25) - 12;
-                    let yLow = canvas.height - ((c.low - minL) / range) * (canvas.height - 25) - 12;
-                    let yOpen = canvas.height - ((c.open - minL) / range) * (canvas.height - 25) - 12;
-                    let yClose = canvas.height - ((c.close - minL) / range) * (canvas.height - 25) - 12;
+                    let yHigh = canvas.height - ((c.high - minL) / range) * (canvas.height - 28) - 14;
+                    let yLow = canvas.height - ((c.low - minL) / range) * (canvas.height - 28) - 14;
+                    let yOpen = canvas.height - ((c.open - minL) / range) * (canvas.height - 28) - 14;
+                    let yClose = canvas.height - ((c.close - minL) / range) * (canvas.height - 28) - 14;
 
                     let isGreen = c.close >= c.open;
-                    ctx.strokeStyle = isGreen ? '#34d399' : '#f87171';
-                    ctx.fillStyle = isGreen ? '#34d399' : '#f87171';
+                    let color = isGreen ? '#34d399' : '#fb7185';
 
-                    ctx.lineWidth = 1;
+                    ctx.save();
+                    ctx.shadowColor = isGreen ? 'rgba(52, 211, 153, 0.55)' : 'rgba(251, 113, 133, 0.55)';
+                    ctx.shadowBlur = 8;
+                    ctx.strokeStyle = color;
+                    ctx.fillStyle = color;
+
+                    ctx.lineWidth = 1.4;
                     ctx.beginPath();
                     ctx.moveTo(x, yHigh);
                     ctx.lineTo(x, yLow);
                     ctx.stroke();
 
                     let rectY = Math.min(yOpen, yClose);
-                    let rectH = Math.max(Math.abs(yClose - yOpen), 1.5);
-                    ctx.fillRect(x - candleWidth / 4, rectY, (candleWidth / 2), rectH);
+                    let rectH = Math.max(Math.abs(yClose - yOpen), 2);
+                    ctx.fillRect(x - candleWidth / 4, rectY, candleWidth / 2, rectH);
+                    ctx.restore();
                 });
+
+                const lastCandle = candles[candles.length - 1];
+                const yLast = canvas.height - ((lastCandle.close - minL) / range) * (canvas.height - 28) - 14;
+                ctx.strokeStyle = accentColor;
+                ctx.setLineDash([4, 4]);
+                ctx.beginPath();
+                ctx.moveTo(0, yLast);
+                ctx.lineTo(canvas.width, yLast);
+                ctx.stroke();
+                ctx.setLineDash([]);
             }, 600);
         }
 
         function realizarApuesta(direccion) {
             let precioActual = preciosActuales.BNB;
-            apuestaActiva = { activo: 'BNB', direccion, precioInicio: precioActual };
-            
+            apuestaActiva = {
+                activo: 'BNB',
+                direccion,
+                precioInicio: precioActual,
+                roundId: Date.now()
+            };
+
             iniciarTemporizadorRonda();
 
             if (modoActual === 'invitado') {
-                alert(`[SIMULACIÓN] Apuesta registrada en BNB (${direccion}) por 0.0001 BNB al precio de ${precioActual.toFixed(2)}$. ¡El temporizador de 60s ha comenzado a correr!`);
+                alert(`[SIMULACIÓN] Apuesta en BNB (${direccion}) por 0.0001 BNB a ${precioActual.toFixed(2)}$. Premio potencial: ${PRIZE_ZARD_AMOUNT}.`);
             } else {
                 if (window.ethereum) {
                     const transactionParameters = {
-                        to: walletCreadora,
+                        to: WALLET_CREADORA,
                         from: cuentaConectada || window.ethereum.selectedAddress,
-                        value: '0x38D7EA4C68000', // 0.0001 BNB en hexadecimal wei
+                        value: BET_WEI_HEX
                     };
-                    
+
                     window.ethereum.request({ method: 'eth_sendTransaction', params: [transactionParameters] })
-                    .then((txHash) => {
-                        alert(`¡Apuesta real de 0.0001 BNB enviada con éxito! Hash: ${txHash}. Posición en BNB (${direccion}) activa.`);
-                    })
-                    .catch((err) => { 
-                        console.log(err);
-                        alert("Transacción cancelada o rechazada por el usuario."); 
-                        apuestaActiva = null; 
-                        clearInterval(intervaloTimer);
-                        temporizadorActivo = false;
-                        timeLeft = 60;
-                        document.getElementById('countdown').innerText = timeLeft;
-                    });
+                        .then((txHash) => {
+                            alert(`¡Apuesta de 0.0001 BNB enviada! Tx: ${txHash}. Espera el cierre de la ronda para optar por ${PRIZE_ZARD_AMOUNT}.`);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            alert("Transacción cancelada o rechazada.");
+                            apuestaActiva = null;
+                            clearInterval(intervaloTimer);
+                            temporizadorActivo = false;
+                            timeLeft = 60;
+                            document.getElementById('countdown').innerText = timeLeft;
+                        });
                 } else {
-                    alert("No se detectó ninguna billetera Web3. Conecta MetaMask o Binance Web3 Wallet.");
+                    alert("Conecta MetaMask o Binance Web3 Wallet para apostar en modo real.");
                     abrirSelectorBilletera();
                 }
             }
         }
 
         function verificarResultadoRonda() {
-            if (!apuestaActiva) return; 
+            if (!apuestaActiva) return;
 
             let precioFinal = preciosActuales.BNB;
             let precioInicio = apuestaActiva.precioInicio;
@@ -771,16 +1022,15 @@
             if (acerto) {
                 titleEl.style.color = "#34d399";
                 titleEl.innerText = "🎉 ¡VICTORIA EN LA RONDA!";
-                descEl.innerHTML = `Tu predicción en <strong>BNB</strong> (${apuestaActiva.direccion}) fue correcta.<br>Precio de entrada: ${precioInicio.toFixed(2)}$ <br>Precio de cierre: ${precioFinal.toFixed(2)}$<br><br><strong>¡Has ganado la recompensa de la ronda asignada por el contrato inteligente!</strong>`;
+                descEl.innerHTML = `Tu predicción <strong>${apuestaActiva.direccion}</strong> en BNB fue correcta (${precioInicio.toFixed(2)}$ ➔ ${precioFinal.toFixed(2)}$).<br>Recompensa: <strong>${PRIZE_ZARD_AMOUNT}</strong>.<br><small style="color:#67e8f9;">Contrato Pagadero: <code>${ZAARD_VAULT_CONTRACT}</code></small>`;
             } else {
-                titleEl.style.color = "#f87171";
-                titleEl.innerText = "❌ DERROTA EN LA RONDA";
-                descEl.innerHTML = `El mercado se movió en contra de tu pronóstico en <strong>BNB</strong> (${apuestaActiva.direccion}).<br>Precio de entrada: ${precioInicio.toFixed(2)}$ <br>Precio de cierre: ${precioFinal.toFixed(2)}$<br><br>¡Sigue analizando las velas y prueba en la siguiente ronda!`;
+                titleEl.style.color = "#fb7185";
+                titleEl.innerText = "❌ RONDA SIN ACIERTO";
+                descEl.innerHTML = `El mercado cerró en <strong>${precioFinal.toFixed(2)}$</strong> frente a tu entrada de <strong>${precioInicio.toFixed(2)}$</strong> (${apuestaActiva.direccion}). ¡Inténtalo en la siguiente ronda!`;
             }
 
             modal.classList.remove('hidden');
-            apuestaActiva = null; 
-            
+            apuestaActiva = null;
             timeLeft = 60;
             document.getElementById('countdown').innerText = timeLeft;
         }
@@ -801,18 +1051,18 @@
             cerrarSelectorBilletera();
             if (typeof window.ethereum !== 'undefined') {
                 window.ethereum.request({ method: 'eth_requestAccounts' })
-                .then(accounts => {
-                    cuentaConectada = accounts[0];
-                    let shortAddr = cuentaConectada.substring(0, 6) + "..." + cuentaConectada.substring(38);
-                    document.getElementById('connectWalletBtn').innerText = (tipo === 'binance' ? "🟡 " : "🦊 ") + shortAddr;
-                    alert("¡Billetera conectada y autorizada para interactuar con los contratos!");
-                })
-                .catch(err => {
-                    console.log(err);
-                    alert("Permiso denegado o error al conectar con la billetera.");
-                });
+                    .then(accounts => {
+                        cuentaConectada = accounts[0];
+                        let shortAddr = cuentaConectada.substring(0, 6) + "..." + cuentaConectada.substring(cuentaConectada.length - 4);
+                        document.getElementById('connectWalletBtn').innerText = (tipo === 'binance' ? "🟡 " : "🦊 ") + shortAddr;
+                        alert("¡Billetera conectada!");
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        alert("Permiso denegado o error al conectar.");
+                    });
             } else {
-                alert("Por favor abre esta página dentro del navegador integrado de MetaMask, Binance Web3 Wallet o una extensión compatible.");
+                alert("Abre esta página dentro del navegador de MetaMask, Binance Web3 Wallet o Trust Wallet.");
             }
         }
 
@@ -820,7 +1070,7 @@
             if (modoActual === 'invitado') {
                 modoActual = 'apuesta';
                 document.getElementById('badgeMode').className = "mode-badge live-mode";
-                document.getElementById('badgeMode').innerText = "Modo Apuesta Real (Web3)";
+                document.getElementById('badgeMode').innerText = "Modo Apuesta Real (0.0001 BNB)";
                 document.getElementById('btnSwitchMode').innerText = "Cambiar a Modo Invitado";
                 abrirSelectorBilletera();
             } else {
